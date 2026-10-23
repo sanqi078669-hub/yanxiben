@@ -1,13 +1,14 @@
 import { zipSync, unzipSync, strToU8, strFromU8 } from "fflate";
 import { createHash, randomUUID, randomBytes } from "node:crypto";
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, unlinkSync, existsSync } from "node:fs";
 import path from "node:path";
 import { all, one, run, transaction, db, dataDir } from "../../lib/db";
 import { assert, unpack } from "../entries/service";
-import { entrySchema, settingsSchema, fields } from "../../lib/model";
+import { fields } from "../../lib/model";
+import { z } from "zod";
 import { initKnowledgeTools } from "../entries/knowledge";
 import { initAudit } from "../ai/audit";
-import { costSchema } from "../ai/pricing";
+import { validateBackupData } from "./backup-validation";
 const tables = [
   "entries",
   "attachments",
@@ -23,6 +24,13 @@ const tables = [
   "ai_audit_extras",
 ] as const;
 const digest = (b: Uint8Array) => createHash("sha256").update(b).digest("hex");
+function backupJson(bytes: Uint8Array, name: string) {
+  try {
+    return JSON.parse(strFromU8(bytes));
+  } catch {
+    assert(false, 400, "INVALID_BACKUP", `备份 JSON 无效：${name}`);
+  }
+}
 export function backup(owner: string) {
   initKnowledgeTools();
   initAudit();
@@ -112,7 +120,7 @@ export function markdownExport(owner: string) {
     return zipSync(files);
   });
 }
-export function restore(
+export async function restore(
   bytes: Uint8Array,
   username: string,
   passwordHash: string,
@@ -153,17 +161,28 @@ export function restore(
     "INVALID_BACKUP",
     "备份缺少清单",
   );
-  const m = JSON.parse(strFromU8(files["manifest.json"]));
-  assert(
-    m.schemaVersion === 1 && Array.isArray(m.files),
-    400,
-    "INVALID_BACKUP",
-    "备份版本不兼容",
-  );
+  const manifest = z
+    .object({
+      schemaVersion: z.literal(1),
+      counts: z.record(z.string(), z.number().int().nonnegative()),
+      files: z.array(
+        z
+          .object({
+            name: z.string(),
+            size: z.number().int().nonnegative(),
+            sha256: z.string().regex(/^[a-f0-9]{64}$/),
+          })
+          .strict(),
+      ),
+    })
+    .passthrough()
+    .safeParse(backupJson(files["manifest.json"], "manifest.json"));
+  assert(manifest.success, 400, "INVALID_BACKUP", "备份版本不兼容");
+  const m = manifest.data;
   const expected = new Set(["manifest.json"]);
   for (const f of m.files) {
     assert(
-      typeof f.name === "string" &&
+      !expected.has(f.name) &&
         (f.name === "data.json" || /^attachments\/[0-9a-f-]{36}$/.test(f.name)),
     );
     const b = files[f.name];
@@ -175,11 +194,28 @@ export function restore(
     );
     expected.add(f.name);
   }
-  assert(Object.keys(files).every((n) => expected.has(n)));
-  const data = JSON.parse(strFromU8(files["data.json"])),
-    owner = data.profile.id;
-  assert(/^[0-9a-f-]{36}$/.test(owner));
-  settingsSchema.parse(data.profile.settings);
+  assert(
+    expected.has("data.json") &&
+      Object.keys(files).every((n) => expected.has(n)),
+    400,
+    "INVALID_BACKUP",
+    "备份文件清单不完整",
+  );
+  const data = backupJson(files["data.json"], "data.json");
+  assert(
+    data && typeof data === "object" && !Array.isArray(data),
+    400,
+    "INVALID_BACKUP",
+    "备份数据无效",
+  );
+  assert(
+    Object.keys(data).every(
+      (t) => t === "profile" || (tables as readonly string[]).includes(t),
+    ),
+    400,
+    "INVALID_BACKUP",
+    "备份含未知数据表",
+  );
   for (const optional of ["knowledge_merges", "ai_audit", "ai_audit_extras"]) {
     if (data[optional] === undefined && m.counts[optional] === undefined) {
       data[optional] = [];
@@ -195,121 +231,64 @@ export function restore(
     m.counts.knowledge_aliases = 0;
   }
   for (const t of tables) {
-    assert(Array.isArray(data[t]) && data[t].length === m.counts[t]);
-    for (const row of data[t])
-      assert(row.owner === owner, 400, "INVALID_BACKUP", "备份归属不一致");
-  }
-  for (const e of data.entries) {
-    const payload = entrySchema.parse(JSON.parse(e.payload));
     assert(
-      payload.type === e.type &&
-        payload.subject === e.subject &&
-        payload.body === e.body &&
-        payload.title === e.title &&
-        payload.status === e.status,
+      Array.isArray(data[t]) && data[t].length === m.counts[t],
+      400,
+      "INVALID_BACKUP",
+      `备份行数不符：${t}`,
     );
-    for (const a of payload.attachments)
-      assert(data.attachments.some((f: any) => f.id === a.id));
-    for (const k of payload.knowledgeIds)
+  }
+  await validateBackupData(data, files);
+  const owner = data.profile.id as string;
+  const written: string[] = [];
+  try {
+    transaction(() => {
       assert(
-        data.knowledge.some(
-          (n: any) => n.id === k && n.subject === payload.subject,
-        ),
-      );
-    for (const c of payload.contexts)
-      if (c.sentence_entry_id)
-        assert(
-          data.entries.some(
-            (n: any) => n.id === c.sentence_entry_id && n.type === "SENTENCE",
-          ),
-        );
-  }
-  for (const alias of data.knowledge_aliases) {
-    assert(
-      typeof alias.name === "string" &&
-        alias.name.length > 0 &&
-        alias.name.length <= 100,
-    );
-    assert(
-      data.knowledge.some(
-        (node: any) => node.id === alias.node_id && node.owner === owner,
-      ),
-    );
-  }
-  for (const audit of data.ai_audit) {
-    assert(
-      typeof audit.model === "string" &&
-        typeof audit.host === "string" &&
-        typeof audit.feedback === "string",
-    );
-    if (audit.result !== null) {
-      const result = JSON.parse(audit.result);
-      assert(
-        result && typeof result === "object" && !Array.isArray(result),
+        !one("SELECT id FROM users LIMIT 1"),
         400,
-        "INVALID_BACKUP",
-        "AI 建议记录格式无效",
+        "NOT_EMPTY",
+        "恢复仅允许在空白 DATA_DIR 中执行",
       );
-    }
-  }
-  for (const extra of data.ai_audit_extras) {
-    assert(
-      data.ai_audit.some((row: any) => row.id === extra.id),
-      400,
-      "INVALID_BACKUP",
-      "费用依据缺少对应调用记录",
-    );
-    const payload = JSON.parse(extra.payload);
-    if (payload.cost !== null) costSchema.parse(payload.cost);
-  }
-  for (const merge of data.knowledge_merges) {
-    const payload = JSON.parse(merge.payload);
-    assert(
-      payload.before && payload.after && typeof payload.aliasId === "string",
-      400,
-      "INVALID_BACKUP",
-      "知识点合并日志格式无效",
-    );
-  }
-  for (const a of data.attachments) {
-    assert(/^[0-9a-f-]{36}$/.test(a.id));
-    const b = files["attachments/" + a.id];
-    assert(b && digest(b) === a.sha256 && b.length === a.size);
-  }
-  transaction(() => {
-    db.exec("PRAGMA defer_foreign_keys=ON");
-    run(
-      "INSERT INTO users VALUES(?,?,?,?)",
-      owner,
-      username,
-      passwordHash,
-      JSON.stringify(data.profile.settings),
-    );
-    for (const t of tables) {
-      const cols = (db.prepare(`PRAGMA table_info(${t})`).all() as any[]).map(
-        (c) => c.name,
+      db.exec("PRAGMA defer_foreign_keys=ON");
+      run(
+        "INSERT INTO users VALUES(?,?,?,?)",
+        owner,
+        username,
+        passwordHash,
+        JSON.stringify(data.profile.settings),
       );
-      for (const row of data[t]) {
-        assert(
-          Object.keys(row).length === cols.length &&
-            cols.every((c) => c in row),
+      for (const t of tables) {
+        const cols = (db.prepare(`PRAGMA table_info(${t})`).all() as any[]).map(
+          (c) => c.name,
         );
-        db.prepare(
-          `INSERT INTO ${t} (${cols.join(",")}) VALUES (${cols.map(() => "?").join(",")})`,
-        ).run(...cols.map((c) => row[c]));
+        for (const row of data[t]) {
+          assert(
+            Object.keys(row).length === cols.length &&
+              cols.every((c) => c in row),
+          );
+          db.prepare(
+            `INSERT INTO ${t} (${cols.join(",")}) VALUES (${cols.map(() => "?").join(",")})`,
+          ).run(...cols.map((c) => row[c]));
+        }
       }
-    }
-    assert(!db.prepare("PRAGMA foreign_key_check").all().length);
-    for (const a of data.attachments)
-      writeFileSync(
-        path.join(dataDir, "attachments", a.id),
-        files["attachments/" + a.id],
-      );
-  });
-  writeFileSync(
-    path.join(dataDir, "session-secret"),
-    randomBytes(48).toString("hex"),
-    { mode: 0o600 },
-  );
+      assert(!db.prepare("PRAGMA foreign_key_check").all().length);
+      for (const a of data.attachments) {
+        const filename = path.join(dataDir, "attachments", a.id);
+        writeFileSync(filename, files["attachments/" + a.id], { flag: "wx" });
+        written.push(filename);
+      }
+      const secret = path.join(dataDir, "session-secret");
+      if (!existsSync(secret)) {
+        writeFileSync(secret, randomBytes(48).toString("hex"), {
+          mode: 0o600,
+          flag: "wx",
+        });
+        written.push(secret);
+      }
+    });
+  } catch (error) {
+    for (const filename of written.reverse()) unlinkSync(filename);
+    throw error;
+  }
   return { owner, counts: m.counts };
 }

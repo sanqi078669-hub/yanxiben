@@ -6,6 +6,7 @@ import os from "node:os";
 import { randomUUID, createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { zipSync, unzipSync, strToU8, strFromU8 } from "fflate";
+import sharp from "sharp";
 process.env.DATA_DIR = mkdtempSync(path.join(os.tmpdir(), "yanxi-test-"));
 const { db, one, run, all, dataDir } = await import("../src/lib/db");
 const {
@@ -331,12 +332,13 @@ test("软删除隐藏搜索与队列，恢复后计划暂停且保留历史", ()
     1,
   );
 });
-test("完整备份包含图片、关系与历史，隔离目录恢复成功", () => {
+test("完整备份包含图片、关系与历史，隔离目录恢复成功", async () => {
   const id = randomUUID(),
-    bytes = Buffer.from(
-      "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a0ioAAAAASUVORK5CYII=",
-      "base64",
-    );
+    bytes = await sharp({
+      create: { width: 1, height: 1, channels: 3, background: "white" },
+    })
+      .png()
+      .toBuffer();
   writeFileSync(path.join(dataDir, "attachments", id), bytes);
   run(
     "INSERT INTO attachments VALUES(?,?,?,?,?,?,?)",
@@ -437,8 +439,8 @@ test("完整备份包含图片、关系与历史，隔离目录恢复成功", ()
   assert.deepEqual(readFileSync(path.join(target, "attachments", id)), bytes);
   restored.close();
 });
-test("拒绝覆盖已有数据库", () => {
-  assert.throws(() => restore(backup(owner), "new", "hash"), /空白/);
+test("拒绝覆盖已有数据库", async () => {
+  await assert.rejects(() => restore(backup(owner), "new", "hash"), /空白/);
 });
 test("Markdown 导出含本地附件相对路径", () => {
   const files = unzipSync(markdownExport(owner));

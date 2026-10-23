@@ -167,10 +167,17 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
     const r = await upload(f);
     assert.equal(r.status, 200);
     attachmentId = (await r.json()).data.id;
-    assert.equal(
-      (await call("attachments/" + attachmentId + "/content")).status,
-      200,
-    );
+    const content = await call("attachments/" + attachmentId + "/content");
+    assert.equal(content.status, 200);
+    assert.equal(content.headers.get("content-type"), "image/png");
+    assert.equal(content.headers.get("x-content-type-options"), "nosniff");
+    assert.match(content.headers.get("content-security-policy") || "", /default-src 'none'; sandbox/);
+    assert.match(content.headers.get("content-disposition") || "", /^inline;/);
+    const download = await call("attachments/" + attachmentId + "/content?download=1");
+    assert.match(download.headers.get("content-disposition") || "", /^attachment;/);
+    run("UPDATE attachments SET mime='text/html' WHERE id=?", attachmentId);
+    assert.equal((await call("attachments/" + attachmentId + "/content")).status, 415);
+    run("UPDATE attachments SET mime='image/png' WHERE id=?", attachmentId);
     assert.equal(
       (
         await call(

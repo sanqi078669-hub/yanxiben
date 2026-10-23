@@ -644,6 +644,12 @@ async function handler(
         owner,
       );
       assert(a, 404, "RESOURCE_NOT_FOUND", "附件不存在");
+      assert(
+        ["image/jpeg", "image/png", "image/webp"].includes(a.mime),
+        415,
+        "UNSUPPORTED_ATTACHMENT",
+        "附件格式不受支持",
+      );
       return new NextResponse(
         readFileSync(path.join(dataDir, "attachments", id)),
         {
@@ -651,6 +657,10 @@ async function handler(
             "Content-Type": a.mime,
             "Cache-Control": "private, no-store",
             "X-Content-Type-Options": "nosniff",
+            "Content-Security-Policy": "default-src 'none'; sandbox",
+            "Content-Disposition": req.nextUrl.searchParams.get("download") === "1"
+              ? `attachment; filename="${id}"`
+              : `inline; filename="${id}"`,
           },
         },
       );

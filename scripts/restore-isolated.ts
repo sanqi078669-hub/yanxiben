@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { restore } from "../src/modules/data-management/backup";
 try {
   const input = JSON.parse(readFileSync(0, "utf8"));
-  const result = restore(
+  const result = await restore(
     readFileSync(input.file),
     input.username,
     input.passwordHash,

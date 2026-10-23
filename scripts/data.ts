@@ -23,7 +23,7 @@ if (command === "backup") {
   )
     throw new Error("请指定新的 DATA_DIR 和至少 12 位 RESTORE_PASSWORD");
   console.log(
-    restore(
+    await restore(
       readFileSync(file),
       process.env.RESTORE_USERNAME || "student",
       bcrypt.hashSync(process.env.RESTORE_PASSWORD, 12),
