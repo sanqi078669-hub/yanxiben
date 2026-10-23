@@ -10,6 +10,7 @@ import {
 } from "../../lib/model";
 import { localDate, schedule } from "../review/schedule";
 import { z } from "zod";
+import type { EntryList, EntryListItem } from "../../lib/api-types";
 import { reviewAttemptSchema } from "../../lib/review-contract";
 export class AppError extends Error {
   constructor(
@@ -36,7 +37,7 @@ export function settings(owner: string) {
 }
 export function unpack(row: Record<string, any>): Entry {
   const { payload, ...rest } = row;
-  return { ...rest, ...JSON.parse(payload) } as Entry;
+  return { ...rest, ...entrySchema.parse(JSON.parse(payload)) } as Entry;
 }
 export function getEntry(owner: string, id: string, deleted = false) {
   const row = one(
@@ -48,7 +49,10 @@ export function getEntry(owner: string, id: string, deleted = false) {
   assert(row, 404, "RESOURCE_NOT_FOUND", "记录不存在");
   return unpack(row);
 }
-export function entries(owner: string, q: URLSearchParams) {
+const listColumns = `id,owner,type,title,subject,status,substr(body,1,200) body,
+  coalesce(json_extract(payload,'$.source'),'') source,version,created_at,updated_at,deleted_at,
+  json_extract(payload,'$.details.lemma') lemma,json_extract(payload,'$.details.part_of_speech') partOfSpeech`;
+export function entries(owner: string, q: URLSearchParams): EntryList {
   const limit = z.coerce
     .number()
     .int()
@@ -61,44 +65,68 @@ export function entries(owner: string, q: URLSearchParams) {
     .min(1)
     .max(1000000)
     .parse(q.get("page") ?? 1);
-  let rows = all(
-    "SELECT * FROM entries WHERE owner=? AND deleted_at IS " +
-      (q.get("trash") === "1" ? "NOT NULL" : "NULL") +
-      " ORDER BY updated_at DESC,id",
-    owner,
-  ).map(unpack);
-  for (const key of ["type", "subject", "status"] as const) {
-    if (q.get(key)) rows = rows.filter((e) => e[key] === q.get(key));
-  }
+  const where = [
+    "owner=?",
+    "deleted_at IS " + (q.get("trash") === "1" ? "NOT NULL" : "NULL"),
+  ];
+  const args: (string | number)[] = [owner];
+  for (const key of ["type", "subject", "status"])
+    if (q.get(key)) {
+      where.push(key + "=?");
+      args.push(q.get(key)!);
+    }
   if (q.get("q")) {
-    const query = q.get("q")!.toLowerCase();
-    rows = rows.filter((e) =>
-      [
-        e.title,
-        e.body,
-        e.summary,
-        e.source,
-        JSON.stringify(e.details),
-        JSON.stringify(e.contexts),
-      ]
-        .join(" ")
-        .toLowerCase()
-        .includes(query),
+    where.push(
+      "id IN (SELECT entry_id FROM entry_search WHERE owner=? AND instr(document,?)>0)",
     );
+    args.push(owner, q.get("q")!.toLowerCase());
   }
-  if (q.get("knowledge"))
-    rows = rows.filter((e) => e.knowledgeIds.includes(q.get("knowledge")!));
-  if (q.get("error"))
-    rows = rows.filter((e) => e.errors.includes(q.get("error")!));
-  if (q.get("tag"))
-    rows = rows.filter((e) =>
-      e.tags.includes(q.get("tag")!.trim().toLowerCase()),
-    );
-  return {
-    items: rows.slice((page - 1) * limit, page * limit),
-    total: rows.length,
-    page,
+  for (const filter of ["knowledge", "error", "tag"])
+    if (q.get(filter)) {
+      where.push(
+        "id IN (SELECT entry_id FROM entry_filter_values WHERE owner=? AND kind=? AND value=?)",
+      );
+      args.push(
+        owner,
+        filter,
+        filter === "tag" ? q.get(filter)!.trim().toLowerCase() : q.get(filter)!,
+      );
+    }
+  const predicate = where.join(" AND ");
+  const total = one(
+    "SELECT count(*) n FROM entries WHERE " + predicate,
+    ...args,
+  )!.n as number;
+  const items = all(
+    `SELECT ${listColumns} FROM entries WHERE ${predicate} ORDER BY updated_at DESC,id LIMIT ? OFFSET ?`,
+    ...args,
     limit,
+    (page - 1) * limit,
+  ) as EntryListItem[];
+  return { items, total, page, limit };
+}
+export function dashboard(owner: string) {
+  const queue = reviewQueue(owner);
+  const counts = one(
+    "SELECT count(*) total,coalesce(sum(status='INBOX'),0) inbox FROM entries WHERE owner=? AND deleted_at IS NULL",
+    owner,
+  ) as { total: number; inbox: number };
+  return {
+    ...counts,
+    queue,
+    recent: all(
+      `SELECT ${listColumns} FROM entries WHERE owner=? AND deleted_at IS NULL ORDER BY updated_at DESC,id LIMIT 5`,
+      owner,
+    ),
+    studied: one(
+      "SELECT count(*) n FROM logs WHERE owner=? AND local_date=?",
+      owner,
+      queue.date,
+    )!.n,
+    byType: all(
+      "SELECT type,count(*) n FROM entries WHERE owner=? AND deleted_at IS NULL GROUP BY type",
+      owner,
+    ),
   };
 }
 function validate(owner: string, input: unknown, previous?: Entry) {
@@ -328,18 +356,49 @@ export function addReview(owner: string, entryId: string, practice = false) {
   return one("SELECT * FROM reviews WHERE id=?", id)!;
 }
 export function reviewQueue(owner: string) {
-  const s = settings(owner);
+  const s = settings(owner),
+    date = localDate(s.timezone);
+  const predicate =
+    "r.owner=? AND e.owner=? AND e.deleted_at IS NULL AND r.stage<>'PAUSED' AND r.due_on<=?";
   const rows = all(
-    "SELECT r.* FROM reviews r JOIN entries e ON e.id=r.entry_id WHERE r.owner=? AND e.deleted_at IS NULL AND r.stage<>'PAUSED' AND r.due_on<=? ORDER BY r.due_on,CASE WHEN (SELECT l.rating FROM logs l WHERE l.review_id=r.id ORDER BY l.created_at DESC LIMIT 1) IN ('AGAIN','HARD') THEN 0 ELSE 1 END,r.id",
+    `WITH eligible AS MATERIALIZED (
+      SELECT r.*,CASE WHEN (SELECT l.rating FROM logs l WHERE l.review_id=r.id ORDER BY l.created_at DESC LIMIT 1) IN ('AGAIN','HARD') THEN 0 ELSE 1 END priority
+      FROM reviews r JOIN entries e ON e.id=r.entry_id WHERE ${predicate}
+    ), due AS (SELECT * FROM eligible ORDER BY due_on,priority,id LIMIT ?)
+    SELECT due.*,(SELECT count(*) FROM eligible) queue_total,e.payload entry_payload,e.version entry_version,e.created_at entry_created,e.updated_at entry_updated
+    FROM due JOIN entries e ON e.id=due.entry_id ORDER BY due.due_on,due.priority,due.id`,
     owner,
-    localDate(s.timezone),
+    owner,
+    date,
+    s.dailyLimit,
   );
+  const total = rows[0]?.queue_total ?? 0;
   return {
-    items: rows
-      .slice(0, s.dailyLimit)
-      .map((r) => ({ ...r, entry: getEntry(owner, r.entry_id) })),
-    total: rows.length,
-    date: localDate(s.timezone),
+    items: rows.map((row) => {
+      const {
+        entry_payload,
+        entry_version,
+        entry_created,
+        entry_updated,
+        priority: _priority,
+        queue_total: _total,
+        ...r
+      } = row;
+      return {
+        ...r,
+        entry: {
+          ...entrySchema.parse(JSON.parse(entry_payload)),
+          id: r.entry_id,
+          owner: r.owner,
+          version: entry_version,
+          created_at: entry_created,
+          updated_at: entry_updated,
+          deleted_at: null,
+        } as Entry,
+      };
+    }),
+    total,
+    date,
   };
 }
 export function hintReviewVersion(owner: string, entryId: string) {

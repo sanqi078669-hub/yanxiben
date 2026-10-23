@@ -11,6 +11,7 @@ import rehypeKatex from "rehype-katex";
 import { rememberLibraryPosition } from "./libraryPosition";
 
 import { names, fields, type Entry } from "../lib/model";
+import type { EntryListItem } from "../lib/api-types";
 type Any = Record<string, any>;
 import { api } from "../lib/request";
 export { api } from "../lib/request";
@@ -61,7 +62,17 @@ export function Row({
   action,
   returnTo,
 }: {
-  e: Entry;
+  e: Pick<
+    EntryListItem,
+    | "id"
+    | "type"
+    | "title"
+    | "body"
+    | "subject"
+    | "source"
+    | "updated_at"
+    | "status"
+  >;
   action?: React.ReactNode;
   returnTo?: string;
 }) {

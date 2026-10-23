@@ -220,7 +220,7 @@ export default function LibraryPage({
         {loading || q !== debouncedQ ? (
           <p role="status">正在查找记录…</p>
         ) : data?.items.length ? (
-          data.items.map((e: Entry) =>
+          data.items.map((e) =>
             mode === "trash" ? (
               <div className="entry-row" key={e.id}>
                 <TypeIcon type={e.type} />

@@ -1,10 +1,11 @@
 import { z } from "zod";
 import { createHash } from "node:crypto";
-import { all } from "../../lib/db";
+import { all, one } from "../../lib/db";
 import { getEntry, assert } from "../entries/service";
 import { complete } from "./provider";
 import { limited } from "./service";
 import type { Entry } from "../../lib/model";
+import { searchTokens as tokens } from "../../lib/search";
 
 const excerpt = (e: Entry) => ({
   id: e.id,
@@ -15,13 +16,6 @@ const excerpt = (e: Entry) => ({
   tags: e.tags,
   errors: e.errors,
 });
-function tokens(text: string) {
-  return new Set(
-    (text.toLowerCase().match(/[a-z0-9]+|[\u4e00-\u9fff]{2}/g) || []).filter(
-      (t) => t.length > 1,
-    ),
-  );
-}
 export function relatedPreview(
   owner: string,
   id: string,
@@ -30,40 +24,49 @@ export function relatedPreview(
   const entry = getEntry(owner, z.string().uuid().parse(id));
   assert(!entry.deleted_at, 404, "RESOURCE_NOT_FOUND", "记录已删除");
   const words = tokens(entry.body + " " + entry.title + " " + entry.summary);
-  const rows = all(
-    "SELECT * FROM entries WHERE owner=? AND deleted_at IS NULL AND id<>? AND subject=? ORDER BY updated_at DESC",
-    owner,
-    id,
-    entry.subject,
-  );
-  const basicCandidates = rows
-    .map((row) => ({ ...row, ...JSON.parse(row.payload) }) as Entry)
-    .map((e) => ({
-      e,
-      score:
-        e.knowledgeIds.filter((k) => entry.knowledgeIds.includes(k)).length *
-          5 +
-        e.tags.filter((t) => entry.tags.includes(t)).length * 3 +
-        [...tokens(e.body + " " + e.title + " " + e.summary)].filter((w) =>
-          words.has(w),
-        ).length,
-    }))
-    .filter((v) => v.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 8)
-    .map(({ e }) => excerpt(e));
-  // Use the configured language model for semantic comparison instead of requiring
-  // a second embedding service. Include records without lexical overlap.
+  const predicate =
+    "e.owner=? AND e.deleted_at IS NULL AND e.id<>? AND e.subject=?";
+  const args = [owner, id, entry.subject];
+  const total = one(
+    `SELECT count(*) n FROM entries e WHERE ${predicate}`,
+    ...args,
+  )!.n as number;
+  const select = `e.id,e.title,e.subject,substr(e.body,1,1800) body,substr(coalesce(json_extract(e.payload,'$.summary'),''),1,600) summary,
+    coalesce(json_extract(e.payload,'$.tags'),'[]') tags_json,coalesce(json_extract(e.payload,'$.errors'),'[]') errors_json`;
+  const decode = (row: Record<string, any>) => ({
+    id: row.id as string,
+    title: row.title as string,
+    subject: row.subject as string,
+    body: row.body as string,
+    summary: row.summary as string,
+    tags: JSON.parse(row.tags_json) as string[],
+    errors: JSON.parse(row.errors_json) as string[],
+  });
+  const basicCandidates = all(
+    `SELECT ${select},
+    (SELECT count(*) FROM json_each(e.payload,'$.knowledgeIds') WHERE value IN (SELECT value FROM json_each(?)))*5+
+    (SELECT count(*) FROM json_each(e.payload,'$.tags') WHERE value IN (SELECT value FROM json_each(?)))*3+
+    lexical_score(e.body||' '||e.title||' '||coalesce(json_extract(e.payload,'$.summary'),''),?) score
+    FROM entries e WHERE ${predicate} ORDER BY score DESC,e.updated_at DESC,e.id LIMIT 8`,
+    JSON.stringify(entry.knowledgeIds),
+    JSON.stringify(entry.tags),
+    JSON.stringify([...words]),
+    ...args,
+  )
+    .filter((row) => row.score > 0)
+    .map(decode);
+  const recent =
+    mode === "semantic"
+      ? all(
+          `SELECT ${select} FROM entries e WHERE ${predicate} ORDER BY e.updated_at DESC,e.id LIMIT 40`,
+          ...args,
+        ).map(decode)
+      : [];
   const candidates =
     mode === "semantic"
       ? [
           ...new Map(
-            [
-              ...basicCandidates,
-              ...rows.map((row) =>
-                excerpt({ ...row, ...JSON.parse(row.payload) } as Entry),
-              ),
-            ].map((e) => [e.id, e]),
+            [...basicCandidates, ...recent].map((e) => [e.id, e]),
           ).values(),
         ].slice(0, 40)
       : basicCandidates;
@@ -72,7 +75,7 @@ export function relatedPreview(
     candidates,
     basicIds: basicCandidates.map((e) => e.id),
     mode,
-    total: rows.length,
+    total,
     scope:
       mode === "semantic"
         ? "同科目基础候选加最近更新记录，最多40条；通过当前语言模型比较语义，不使用外部嵌入服务。超出窗口的记录未参与本次比较。"

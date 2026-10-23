@@ -9,6 +9,7 @@
 | `data.ts` | 备份/隔离恢复：`npm run backup -- <文件>`、`npm run restore -- <文件>` |
 | `maintenance.ts` | 清理与维护：`npm run maintenance -- <操作>` |
 | `build-workers.mjs` | 编译独立恢复 worker，dev/build 自动执行；生产运行保留生成的 `runtime/` |
+| `build.mjs` | 在临时 DATA_DIR 中运行 Next 生产构建，避免收集页面数据时触发真实数据库迁移 |
 | `verify-production-restore.mjs` | 构建后 `npm run test:production`：隔离生产安装、恢复、重启、停止及清理验收，使用 npm 离线缓存 |
 | `qa-seed.ts` | 在 `test-results/` 下指定的独立 DATA_DIR 中生成测试数据：`npx tsx scripts/qa-seed.ts` |
 | `benchmark.ts` | 独立临时数据库性能检查：`npx tsx scripts/benchmark.ts` |

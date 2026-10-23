@@ -10,7 +10,7 @@ export function BatchTags({
   items,
   reload,
 }: {
-  items: Entry[];
+  items: Pick<Entry, "id" | "version" | "title">[];
   reload: () => unknown;
 }) {
   const [operation, setOperation] = useState<"tags" | "pause">("tags"),

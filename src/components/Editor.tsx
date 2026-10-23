@@ -30,6 +30,7 @@ import {
 } from "../lib/model";
 import { api, MD, TypeIcon, Badge, useLoad, ErrorBox } from "./NotebookShared";
 import { readEnvelope } from "../lib/request";
+import type { EntryList } from "../lib/api-types";
 type Any = Record<string, any>;
 const blank = (type: EntryInput["type"]): EntryInput => ({
   type,
@@ -85,7 +86,7 @@ export default function Editor({
   );
   const { data: nodes } = useLoad<any[]>(() => api("knowledge-nodes"));
   const { data: existingWords } = useLoad(
-    () => api("entries?type=VOCABULARY&limit=100"),
+    () => api<EntryList>("entries?type=VOCABULARY&limit=100"),
     [],
   );
   useEffect(() => {
@@ -638,11 +639,10 @@ export default function Editor({
             {e.type === "VOCABULARY" && (
               <>
                 {existingWords?.items.some(
-                  (x: Entry) =>
+                  (x) =>
                     x.id !== id &&
-                    x.details.lemma?.toLowerCase() ===
-                      e.details.lemma?.toLowerCase() &&
-                    x.details.part_of_speech === e.details.part_of_speech,
+                    x.lemma?.toLowerCase() === e.details.lemma?.toLowerCase() &&
+                    (x.partOfSpeech ?? "") === (e.details.part_of_speech ?? ""),
                 ) && (
                   <p className="tip">
                     资料库中已有相同词条与词性，可追加语境，也可保留独立记录。

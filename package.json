@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/build-workers.mjs && next dev --hostname 127.0.0.1",
-    "build": "node scripts/build-workers.mjs && next build",
+    "build": "node scripts/build-workers.mjs && node scripts/build.mjs",
     "start": "next start --hostname 127.0.0.1",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test tests/*.test.ts",

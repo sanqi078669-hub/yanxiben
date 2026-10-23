@@ -12,6 +12,7 @@ import {
   assert,
   settings,
   entries,
+  dashboard,
   getEntry,
   createEntry,
   updateEntry,
@@ -335,24 +336,7 @@ async function handler(
         return ok(v);
       }
     }
-    if (p === "dashboard" && method === "GET") {
-      const active = entries(owner, new URLSearchParams("limit=100"));
-      return ok({
-        total: active.total,
-        inbox: entries(owner, new URLSearchParams("status=INBOX")).total,
-        queue: reviewQueue(owner),
-        recent: active.items.slice(0, 5),
-        studied: one(
-          "SELECT count(*) n FROM logs WHERE owner=? AND local_date=?",
-          owner,
-          reviewQueue(owner).date,
-        )!.n,
-        byType: all(
-          "SELECT type,count(*) n FROM entries WHERE owner=? AND deleted_at IS NULL GROUP BY type",
-          owner,
-        ),
-      });
-    }
+    if (p === "dashboard" && method === "GET") return ok(dashboard(owner));
     if (p === "entries/batch-tags" && method === "POST")
       return ok(batchTags(owner, await json()));
     if (p === "entries/batch-review-preview" && method === "POST")
