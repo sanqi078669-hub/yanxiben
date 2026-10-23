@@ -303,6 +303,30 @@ test("提示后不得评价熟练；旧调度版本拒绝写入", () => {
     0,
   );
 });
+
+test("复习答案 50k 边界接受，超限失败后原键可修正重试且只写一次", () => {
+  const e = createEntry(owner, input()),
+    r = addReview(owner, e.id);
+  const body = {
+    expectedVersion: 1,
+    mode: "PRACTICE",
+    rating: "GOOD",
+    hintUsed: false,
+    answerMd: "x".repeat(50001),
+  };
+  assert.throws(() => attempt(owner, r.id, body, "length-boundary"));
+  assert.equal(
+    one("SELECT count(*) n FROM logs WHERE review_id=?", r.id)!.n,
+    0,
+  );
+  const accepted = { ...body, answerMd: body.answerMd.slice(0, 50000) };
+  const result = attempt(owner, r.id, accepted, "length-boundary");
+  assert.deepEqual(attempt(owner, r.id, accepted, "length-boundary"), result);
+  assert.equal(
+    one("SELECT count(*) n FROM logs WHERE review_id=?", r.id)!.n,
+    1,
+  );
+});
 test("软删除隐藏搜索与队列，恢复后计划暂停且保留历史", () => {
   const e = createEntry(owner, input()),
     r = addReview(owner, e.id);

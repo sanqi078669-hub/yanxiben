@@ -10,6 +10,7 @@ import {
 } from "../../lib/model";
 import { localDate, schedule } from "../review/schedule";
 import { z } from "zod";
+import { reviewAttemptSchema } from "../../lib/review-contract";
 export class AppError extends Error {
   constructor(
     public status: number,
@@ -347,17 +348,7 @@ export function attempt(
   input: unknown,
   key: string,
 ) {
-  const body = z
-    .object({
-      expectedVersion: z.number().int(),
-      mode: z.enum(["SCHEDULED", "PRACTICE"]),
-      rating: z.enum(["AGAIN", "HARD", "GOOD", "EASY"]),
-      hintUsed: z.boolean(),
-      answerMd: z.string().max(50000),
-      errorCauses: z.array(z.enum(errors as [string, ...string[]])).max(6).optional(),
-    })
-    .strict()
-    .parse(input);
+  const body = reviewAttemptSchema.parse(input);
   assert(key && key.length <= 200, 400, "VALIDATION_ERROR", "缺少幂等请求标识");
   assert(
     !(body.hintUsed && body.rating === "EASY"),
