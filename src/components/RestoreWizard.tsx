@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { api } from "./NotebookShared";
+import { api, request } from "../lib/request";
 type Preview = {
   id: string;
   counts: Record<string, number>;
@@ -88,14 +88,12 @@ export function RestoreWizard() {
                 const form = new FormData();
                 form.set("file", file!);
                 form.set("password", password);
-                const r = await fetch("/api/v1/data/restore-preview", {
-                  method: "POST",
-                  headers: { "X-Requested-With": "yanxiben" },
-                  body: form,
-                });
-                const b = await r.json();
-                if (!r.ok) throw new Error(b.error?.message || "恢复校验失败");
-                setPreview(b.data);
+                setPreview(
+                  await request<Preview>("data/restore-preview", {
+                    method: "POST",
+                    body: form,
+                  }),
+                );
                 setPassword("");
               } catch (e) {
                 setError((e as Error).message);

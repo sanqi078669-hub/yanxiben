@@ -1,14 +1,14 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, writeFileSync } from "node:fs";
+import { mkdtempSync, writeFileSync, unlinkSync, readFileSync } from "node:fs";
 import { randomUUID, randomBytes } from "node:crypto";
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import path from "node:path";
 import os from "node:os";
 import bcrypt from "bcryptjs";
 import sharp from "sharp";
 process.env.DATA_DIR = mkdtempSync(path.join(os.tmpdir(), "yanxi-http-"));
-const { run, dataDir } = await import("../src/lib/db");
+const { run, one, dataDir } = await import("../src/lib/db");
 const { defaults } = await import("../src/lib/model");
 const password = randomBytes(18).toString("hex");
 for (const username of ["alpha", "beta"])
@@ -116,17 +116,52 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
     otherCookie = r2.headers.get("set-cookie")!.split(";")[0];
   });
   await t.test("AI 配置接口鉴权、CSRF与密钥不回传", async () => {
-    assert.equal((await call("ai/config",undefined,"GET",{Cookie:""})).status,401);
-    const profile={id:randomUUID(),name:"fixture",base:"https://example.com",model:"fixture",vision:false,key:"synthetic-secret"};
-    assert.equal((await call("ai/config",{action:"save",profile},"POST",{"X-Requested-With":""})).status,403);
-    const saved=await call("ai/config",{action:"save",profile});assert.equal(saved.status,200);assert(!(await saved.text()).includes(profile.key));
-    const other=await call("ai/config",undefined,"GET",{Cookie:otherCookie});assert.equal((await other.json()).data.profiles.length,0);
+    assert.equal(
+      (await call("ai/config", undefined, "GET", { Cookie: "" })).status,
+      401,
+    );
+    const profile = {
+      id: randomUUID(),
+      name: "fixture",
+      base: "https://example.com",
+      model: "fixture",
+      vision: false,
+      key: "synthetic-secret",
+    };
+    assert.equal(
+      (
+        await call("ai/config", { action: "save", profile }, "POST", {
+          "X-Requested-With": "",
+        })
+      ).status,
+      403,
+    );
+    const saved = await call("ai/config", { action: "save", profile });
+    assert.equal(saved.status, 200);
+    assert(!(await saved.text()).includes(profile.key));
+    const other = await call("ai/config", undefined, "GET", {
+      Cookie: otherCookie,
+    });
+    assert.equal((await other.json()).data.profiles.length, 0);
   });
   await t.test("AI目标变更保护与关闭状态不发送外部请求", async () => {
-    assert.equal((await call("ai/study",{})).status,409);
-    const status=(await (await call("ai/status")).json()).data;assert.equal(status.ready,false);
-    const request={action:"organize",entry:{type:"MATH",subject:"高等数学",title:"fixture",body:"x"},consent:true,target:status.target};
-    assert.equal((await call("ai/study",request,"POST",{"X-AI-Target":status.target})).status,503);
+    assert.equal((await call("ai/study", {})).status, 409);
+    const status = (await (await call("ai/status")).json()).data;
+    assert.equal(status.ready, false);
+    const request = {
+      action: "organize",
+      entry: { type: "MATH", subject: "高等数学", title: "fixture", body: "x" },
+      consent: true,
+      target: status.target,
+    };
+    assert.equal(
+      (
+        await call("ai/study", request, "POST", {
+          "X-AI-Target": status.target,
+        })
+      ).status,
+      503,
+    );
   });
   await t.test("伪装图片被拒绝，真实图片可上传且需要鉴权", async () => {
     const fake = new FormData();
@@ -171,12 +206,23 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
     assert.equal(content.status, 200);
     assert.equal(content.headers.get("content-type"), "image/png");
     assert.equal(content.headers.get("x-content-type-options"), "nosniff");
-    assert.match(content.headers.get("content-security-policy") || "", /default-src 'none'; sandbox/);
+    assert.match(
+      content.headers.get("content-security-policy") || "",
+      /default-src 'none'; sandbox/,
+    );
     assert.match(content.headers.get("content-disposition") || "", /^inline;/);
-    const download = await call("attachments/" + attachmentId + "/content?download=1");
-    assert.match(download.headers.get("content-disposition") || "", /^attachment;/);
+    const download = await call(
+      "attachments/" + attachmentId + "/content?download=1",
+    );
+    assert.match(
+      download.headers.get("content-disposition") || "",
+      /^attachment;/,
+    );
     run("UPDATE attachments SET mime='text/html' WHERE id=?", attachmentId);
-    assert.equal((await call("attachments/" + attachmentId + "/content")).status, 415);
+    assert.equal(
+      (await call("attachments/" + attachmentId + "/content")).status,
+      415,
+    );
     run("UPDATE attachments SET mime='image/png' WHERE id=?", attachmentId);
     assert.equal(
       (
@@ -299,6 +345,41 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
     assert.equal(e.review.stage, "PAUSED");
     assert.equal(e.history.length, 1);
   });
+  await t.test(
+    "缺失会话密钥返回初始化指令；已有账号 init 可补建且保留密码",
+    async () => {
+      const before = one(
+        "SELECT password FROM users WHERE username='alpha'",
+      )!.password;
+      unlinkSync(path.join(dataDir, "session-secret"));
+      const failed = await call("settings");
+      assert.equal(failed.status, 503);
+      const body = await failed.json();
+      assert.equal(body.error.code, "NOT_INITIALIZED");
+      assert.match(body.error.message, /npm run init/);
+      const initialized = spawnSync(
+        process.execPath,
+        ["--import", "tsx", "scripts/init.ts"],
+        {
+          encoding: "utf8",
+          env: { ...process.env, INIT_USERNAME: "alpha" },
+          windowsHide: true,
+        },
+      );
+      assert.equal(initialized.status, 0, initialized.stderr);
+      assert.equal(
+        one("SELECT password FROM users WHERE username='alpha'")!.password,
+        before,
+      );
+      assert.ok(
+        readFileSync(path.join(dataDir, "session-secret"), "utf8").length >= 32,
+      );
+      assert.equal((await call("settings")).status, 401);
+      const login = await call("auth/login", { username: "alpha", password });
+      assert.equal(login.status, 200);
+      cookie = login.headers.get("set-cookie")!.split(";")[0];
+    },
+  );
   await t.test("退出撤销服务器会话，旧 Cookie 不可重放", async () => {
     assert.equal((await call("auth/logout", {})).status, 200);
     assert.equal((await call("entries")).status, 401);

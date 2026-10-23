@@ -1,4 +1,5 @@
 "use client";
+import { api } from "../lib/request";
 import { useState } from "react";
 import Link from "next/link";
 import { aiApi } from "./AiTools";
@@ -165,24 +166,10 @@ export function AiRelated({
                   setBusy(true);
                   setError("");
                   try {
-                    const r = await fetch(
-                      "/api/v1/entries/" + entryId + "/relations",
-                      {
-                        method: "POST",
-                        headers: {
-                          "Content-Type": "application/json",
-                          "X-Requested-With": "yanxiben",
-                        },
-                        body: JSON.stringify({
-                          targetId: m.id,
-                          type: "SIMILAR",
-                        }),
-                      },
-                    );
-                    if (!r.ok)
-                      throw new Error(
-                        (await r.json()).error?.message || "关联失败",
-                      );
+                    await api("entries/" + entryId + "/relations", {
+                      targetId: m.id,
+                      type: "SIMILAR",
+                    });
                     setLinked((v) => [...v, m.id]);
                     onLinked();
                   } catch (e) {

@@ -1,4 +1,5 @@
 "use client";
+import { api } from "../lib/request";
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { aiApi } from "./AiTools";
@@ -386,18 +387,8 @@ export function AiStudy({
                           .filter(Boolean)
                           .join("\n\n");
                       }
-                      const r = await fetch("/api/v1/entries", {
-                        method: "POST",
-                        headers: {
-                          "Content-Type": "application/json",
-                          "X-Requested-With": "yanxiben",
-                        },
-                        body: JSON.stringify(draft),
-                      });
-                      const json = await r.json();
-                      if (!r.ok)
-                        throw new Error(json.error?.message || "保存失败");
-                      setCreatedId(json.data.id);
+                      const created = await api("entries", draft);
+                      setCreatedId(created.id);
                     } catch (e) {
                       setError((e as Error).message);
                     } finally {

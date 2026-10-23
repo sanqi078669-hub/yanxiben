@@ -1,4 +1,5 @@
 "use client";
+import { api } from "../lib/request";
 import { useEffect, useRef, useState } from "react";
 import type { EntryInput } from "../lib/model";
 import { draftPrefix, readDraft, type Draft } from "../lib/drafts";
@@ -17,11 +18,8 @@ export function useEntryDraft(
   const slot = useRef("");
   useEffect(() => {
     let active = true;
-    fetch("/api/v1/auth/identity")
-      .then(async (r) => {
-        if (!r.ok) throw new Error();
-        return (await r.json()).data.owner as string;
-      })
+    api<{ owner: string }>("auth/identity")
+      .then((r) => r.owner)
       .then((value) => {
         if (active) setOwner(value);
       })

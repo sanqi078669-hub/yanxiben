@@ -5,6 +5,14 @@ import bcrypt from "bcryptjs";
 import { dataDir, one, run } from "../src/lib/db";
 import { defaults } from "../src/lib/model";
 const username = process.env.INIT_USERNAME || "student";
+if (!existsSync(path.join(dataDir, "session-secret"))) {
+  writeFileSync(
+    path.join(dataDir, "session-secret"),
+    randomBytes(48).toString("hex"),
+    { mode: 0o600, flag: "wx" },
+  );
+  console.log("已生成缺失的会话密钥；此前的浏览器会话需要重新登录。");
+}
 if (one("SELECT id FROM users WHERE username=?", username)) {
   console.log("账号已存在，未修改密码。");
   process.exit(0);
@@ -12,12 +20,6 @@ if (one("SELECT id FROM users WHERE username=?", username)) {
 const password =
   process.env.INIT_PASSWORD || randomBytes(12).toString("base64url");
 if (password.length < 12) throw new Error("密码至少 12 位");
-if (!existsSync(path.join(dataDir, "session-secret")))
-  writeFileSync(
-    path.join(dataDir, "session-secret"),
-    randomBytes(48).toString("hex"),
-    { mode: 0o600 },
-  );
 run(
   "INSERT INTO users VALUES(?,?,?,?)",
   randomUUID(),

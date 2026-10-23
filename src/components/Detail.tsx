@@ -11,6 +11,7 @@ import { names, errors, type Entry } from "../lib/model";
 import {
   api,
   MD,
+  OptionsView,
   TypeIcon,
   Badge,
   Empty,
@@ -19,6 +20,7 @@ import {
   AttachmentImages,
   Analysis,
   HistoryRow,
+  RevisionContent,
 } from "./NotebookShared";
 type Any = Record<string, any>;
 export default function Detail({
@@ -94,11 +96,7 @@ export default function Detail({
             </div>
             <MD>{e.body}</MD>
             {e.type === "CS" && e.details.options_json && (
-              <MD>
-                {JSON.parse(e.details.options_json)
-                  .map((s: string) => "- " + s)
-                  .join("\n")}
-              </MD>
+              <OptionsView raw={e.details.options_json} />
             )}
             <AttachmentImages e={e} role="PROMPT" />
           </section>
@@ -149,8 +147,7 @@ export default function Detail({
                     {new Date(r.created_at).toLocaleString("zh-CN")} ·{" "}
                     {r.reason}
                   </summary>
-                  <MD>{JSON.parse(r.snapshot).body}</MD>
-                  <Analysis e={JSON.parse(r.snapshot)} />
+                  <RevisionContent raw={r.snapshot} />
                 </details>
               ))
             ) : (

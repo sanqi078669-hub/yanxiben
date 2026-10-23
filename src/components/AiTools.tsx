@@ -5,19 +5,15 @@ import { providerPresets } from "../modules/ai/presets";
 import { extractionPatch, type Extraction } from "../modules/ai/contracts";
 import { names, type EntryInput } from "../lib/model";
 
-export async function aiApi(path: string, body?: unknown) {
-  const response = await fetch("/api/v1/ai/" + path, {
-    method: body ? "POST" : "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Requested-With": "yanxiben",
-      ...((body as any)?.target ? { "X-AI-Target": (body as any).target } : {}),
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-  const data = await response.json();
-  if (!response.ok) throw new Error(data.error?.message || "AI 请求失败");
-  return data.data;
+import { api } from "../lib/request";
+export function aiApi(path: string, body?: unknown) {
+  const target = (body as { target?: string } | undefined)?.target;
+  return api(
+    "ai/" + path,
+    body,
+    undefined,
+    target ? { "X-AI-Target": target } : undefined,
+  );
 }
 export function AiSettings() {
   const [config, setConfig] = useState<any>(null),

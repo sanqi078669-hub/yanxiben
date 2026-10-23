@@ -29,6 +29,7 @@ import {
   type EntryInput,
 } from "../lib/model";
 import { api, MD, TypeIcon, Badge, useLoad, ErrorBox } from "./NotebookShared";
+import { readEnvelope } from "../lib/request";
 type Any = Record<string, any>;
 const blank = (type: EntryInput["type"]): EntryInput => ({
   type,
@@ -62,6 +63,8 @@ export default function Editor({
   const [e, setE] = useState<EntryInput>(blank(initial)),
     [version, setVersion] = useState(0),
     [loaded, setLoaded] = useState(!id),
+    [loadError, setLoadError] = useState(""),
+    [loadAttempt, setLoadAttempt] = useState(0),
     [state, setState] = useState("未保存"),
     [error, setError] = useState(""),
     [conflict, setConflict] = useState<Entry | null>(null),
@@ -73,7 +76,13 @@ export default function Editor({
     dirty = useRef(false),
     latest = useRef(e);
   latest.current = e;
-  const draft = useEntryDraft(e, id || "new", version, loaded, saved.current);
+  const draft = useEntryDraft(
+    e,
+    id || "new",
+    version,
+    loaded && !loadError,
+    saved.current,
+  );
   const { data: nodes } = useLoad<any[]>(() => api("knowledge-nodes"));
   const { data: existingWords } = useLoad(
     () => api("entries?type=VOCABULARY&limit=100"),
@@ -81,21 +90,39 @@ export default function Editor({
   );
   useEffect(() => {
     if (!id) return;
+    let active = true;
+    setLoaded(false);
+    setLoadError("");
     api("entries/" + id)
       .then((r) => {
+        if (!active) return;
         const base = blank(r.type);
         for (const key of Object.keys(base)) (base as Any)[key] = r[key];
         saved.current = JSON.stringify(base);
         setE(base);
         setVersion(r.version);
-        setLoaded(true);
         setState("已保存到本地服务");
       })
-      .catch((e) => setError(e.message));
-  }, [id]);
+      .catch((e) => {
+        if (active) setLoadError(e.message);
+      })
+      .finally(() => {
+        if (active) setLoaded(true);
+      });
+    return () => {
+      active = false;
+    };
+  }, [id, loadAttempt]);
   const save = useCallback(
     async (manual = false) => {
-      if (saving.current || conflict || draft.pending.length) return false;
+      if (
+        !loaded ||
+        loadError ||
+        saving.current ||
+        conflict ||
+        draft.pending.length
+      )
+        return false;
       saving.current = true;
       setBusy(true);
       setError("");
@@ -140,10 +167,10 @@ export default function Editor({
         setBusy(false);
       }
     },
-    [id, version, conflict, router, draft.pending.length],
+    [id, version, conflict, router, draft.pending.length, loaded, loadError],
   );
   useEffect(() => {
-    if (!loaded) return;
+    if (!loaded || loadError) return;
     dirty.current = JSON.stringify(e) !== saved.current;
     if (
       !id ||
@@ -156,7 +183,16 @@ export default function Editor({
     setState("尚有更改，等待保存…");
     const timer = setTimeout(() => save(false), 1500);
     return () => clearTimeout(timer);
-  }, [e, loaded, id, save, conflict, restoredDraft, draft.pending.length]);
+  }, [
+    e,
+    loaded,
+    loadError,
+    id,
+    save,
+    conflict,
+    restoredDraft,
+    draft.pending.length,
+  ]);
   useEffect(() => {
     const leave = (ev: BeforeUnloadEvent) => {
       if (dirty.current) {
@@ -203,13 +239,15 @@ export default function Editor({
           );
         xhr.onerror = () => reject(new Error("上传失败，请重新选择文件重试"));
         xhr.onload = () => {
-          try {
-            const r = JSON.parse(xhr.responseText);
-            if (xhr.status >= 400) reject(new Error(r.error.message));
-            else resolve(r.data);
-          } catch {
-            reject(new Error("上传失败"));
-          }
+          readEnvelope(
+            new Response(xhr.responseText, {
+              status: xhr.status,
+              headers: {
+                "Content-Type": xhr.getResponseHeader("Content-Type") || "",
+                "X-Request-Id": xhr.getResponseHeader("X-Request-Id") || "",
+              },
+            }),
+          ).then(resolve, reject);
         };
         xhr.send(form);
       });
@@ -230,6 +268,19 @@ export default function Editor({
         <ErrorBox text={error} />
         <div className="loading">正在读取记录…</div>
       </>
+    );
+  if (loadError)
+    return (
+      <section className="panel form-panel">
+        <h1>无法读取这条记录</h1>
+        <ErrorBox text={loadError} />
+        <button className="button" onClick={() => setLoadAttempt((v) => v + 1)}>
+          重试读取
+        </button>
+        <Link className="button outline" href="/library">
+          返回资料库
+        </Link>
+      </section>
     );
   return (
     <>

@@ -7,7 +7,8 @@ import Detail from "./Detail";
 import LibraryPage from "./LibraryPage";
 import Today from "./Today";
 import Login from "./Login";
-import { api, Empty } from "./NotebookShared";
+import { api, Empty, ErrorBox } from "./NotebookShared";
+import { RequestError } from "../lib/request";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -24,6 +25,7 @@ import {
   Settings,
   LogOut,
   CheckCircle2,
+  CircleAlert,
 } from "lucide-react";
 
 import { clearBrowserDrafts } from "../lib/drafts";
@@ -35,19 +37,49 @@ export default function Notebook() {
   const pathname = usePathname(),
     router = useRouter();
   const [profile, setProfile] = useState<typeof defaults | null>(null),
-    [ready, setReady] = useState(false);
-  const [notice, setNotice] = useState("");
+    [ready, setReady] = useState(false),
+    [profileError, setProfileError] = useState(""),
+    [loadAttempt, setLoadAttempt] = useState(0);
+  const [notice, setNotice] = useState<{
+    message: string;
+    tone: "success" | "error";
+  } | null>(null);
   useEffect(() => {
+    let active = true;
+    setReady(false);
+    setProfileError("");
     api<typeof defaults>("settings")
-      .then(setProfile)
-      .catch(() => setProfile(null))
-      .finally(() => setReady(true));
-  }, []);
-  const notify = (s: string) => {
-    setNotice(s);
-    setTimeout(() => setNotice(""), 5000);
+      .then((p) => {
+        if (active) setProfile(p);
+      })
+      .catch((error) => {
+        if (!active) return;
+        if (error instanceof RequestError && error.status === 401)
+          setProfile(null);
+        else setProfileError(error.message);
+      })
+      .finally(() => {
+        if (active) setReady(true);
+      });
+    return () => {
+      active = false;
+    };
+  }, [loadAttempt]);
+  const notify = (message: string, tone: "success" | "error" = "success") => {
+    setNotice({ message, tone });
+    setTimeout(() => setNotice(null), 5000);
   };
   if (!ready) return <div className="loading">研习本 · 正在打开学习空间…</div>;
+  if (profileError)
+    return (
+      <main className="panel form-panel">
+        <h1>暂时无法打开学习空间</h1>
+        <ErrorBox text={profileError} />
+        <button className="button" onClick={() => setLoadAttempt((v) => v + 1)}>
+          重试连接
+        </button>
+      </main>
+    );
   if (!profile)
     return (
       <Login
@@ -201,9 +233,16 @@ export default function Notebook() {
         </footer>
       </div>
       {notice && (
-        <div role="status" className="toast">
-          <CheckCircle2 size={18} />
-          {notice}
+        <div
+          role={notice.tone === "error" ? "alert" : "status"}
+          className={"toast " + notice.tone}
+        >
+          {notice.tone === "error" ? (
+            <CircleAlert size={18} />
+          ) : (
+            <CheckCircle2 size={18} />
+          )}
+          {notice.message}
         </div>
       )}
       <nav className="mobile-nav">

@@ -12,31 +12,14 @@ import { rememberLibraryPosition } from "./libraryPosition";
 
 import { names, fields, type Entry } from "../lib/model";
 type Any = Record<string, any>;
-export async function api<T = any>(
-  p: string,
-  body?: unknown,
-  method?: string,
-  headers?: Record<string, string>,
-): Promise<T> {
-  const res = await fetch("/api/v1/" + p, {
-    method: method || (body ? "POST" : "GET"),
-    headers: {
-      "Content-Type": "application/json",
-      "X-Requested-With": "yanxiben",
-      ...headers,
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-  const data = await res.json();
-  if (!res.ok) {
-    const e = new Error(data.error?.message || "请求失败") as Error & {
-      code: string;
-    };
-    e.code = data.error?.code;
-    throw e;
-  }
-  return data.data;
-}
+import { api } from "../lib/request";
+export { api } from "../lib/request";
+import {
+  parseViewJson,
+  historyViewSchema,
+  snapshotViewSchema,
+} from "../lib/view-data";
+import { parseOptions } from "./OptionsEditor";
 export function MD({ children }: { children?: string }) {
   return (
     <div className="markdown">
@@ -213,7 +196,11 @@ export function Analysis({ e }: { e: Entry }) {
   );
 }
 export function HistoryRow({ h }: { h: Any }) {
-  const p = JSON.parse(h.payload);
+  const p = parseViewJson(h.payload, historyViewSchema);
+  if (!p)
+    return (
+      <ErrorBox text="本条复习历史已损坏，暂时无法显示；其余记录仍可查看。" />
+    );
   return (
     <details className="history-row">
       <summary>
@@ -238,5 +225,25 @@ export function HistoryRow({ h }: { h: Any }) {
         下一次：{p.after.due_on} · {p.algorithmVersion}
       </p>
     </details>
+  );
+}
+
+export function OptionsView({ raw }: { raw: string }) {
+  const options = parseOptions(raw);
+  return options ? (
+    <MD>{options.map((s) => "- " + s).join("\n")}</MD>
+  ) : (
+    <ErrorBox text="选项格式已损坏，请在编辑页修正。" />
+  );
+}
+export function RevisionContent({ raw }: { raw: string }) {
+  const entry = parseViewJson(raw, snapshotViewSchema);
+  return entry ? (
+    <>
+      <MD>{entry.body}</MD>
+      <Analysis e={entry} />
+    </>
+  ) : (
+    <ErrorBox text="本条历史快照已损坏，暂时无法显示；其余版本仍可查看。" />
   );
 }

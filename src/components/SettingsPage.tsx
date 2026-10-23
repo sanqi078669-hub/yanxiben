@@ -10,6 +10,7 @@ import { AiSettings } from "./AiTools";
 import { AiHistory } from "./AiHistory";
 
 import { defaults } from "../lib/model";
+import { requestResponse } from "../lib/request";
 import { api, ErrorBox } from "./NotebookShared";
 type Any = Record<string, any>;
 export default function SettingsPage({
@@ -32,7 +33,7 @@ export default function SettingsPage({
     setBusy(true);
     setError("");
     try {
-      const r = await fetch("/api/v1/exports", {
+      const r = await requestResponse("exports", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -41,7 +42,6 @@ export default function SettingsPage({
         },
         body: JSON.stringify({ type, password: exportPassword }),
       });
-      if (!r.ok) throw new Error((await r.json()).error.message);
       const url = URL.createObjectURL(await r.blob());
       const a = document.createElement("a");
       a.href = url;

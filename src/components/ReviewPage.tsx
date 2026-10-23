@@ -13,6 +13,7 @@ import { names, errors } from "../lib/model";
 import {
   api,
   MD,
+  OptionsView,
   TypeIcon,
   Badge,
   Empty,
@@ -413,11 +414,7 @@ export default function ReviewPage({
             <MD>{current.entry.body}</MD>
             {current.entry.type === "CS" &&
               current.entry.details.options_json && (
-                <MD>
-                  {JSON.parse(current.entry.details.options_json)
-                    .map((s: string) => "- " + s)
-                    .join("\n")}
-                </MD>
+                <OptionsView raw={current.entry.details.options_json} />
               )}
             <AttachmentImages e={current.entry} role="PROMPT" />
             {!revealed && (

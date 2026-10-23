@@ -22,7 +22,7 @@ export default function LibraryPage({
   notify,
 }: {
   mode: string;
-  notify: (s: string) => void;
+  notify: (s: string, tone?: "success" | "error") => void;
 }) {
   const {
     q,
@@ -238,7 +238,7 @@ export default function LibraryPage({
                       notify("已恢复记录，复习计划保持暂停");
                       reload();
                     } catch (e) {
-                      notify((e as Error).message);
+                      notify((e as Error).message, "error");
                     }
                   }}
                 >

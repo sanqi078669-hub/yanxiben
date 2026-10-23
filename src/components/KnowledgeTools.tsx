@@ -1,18 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 type Node = { id: string; name: string; subject: string; archived: number };
-async function request(path: string, body?: unknown) {
-  const r = await fetch("/api/v1/knowledge-tools/" + path, {
-    method: body ? "POST" : "GET",
-    headers: {
-      "Content-Type": "application/json",
-      "X-Requested-With": "yanxiben",
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
-  const b = await r.json();
-  if (!r.ok) throw new Error(b.error?.message || "操作失败");
-  return b.data;
+import { api } from "../lib/request";
+function request(path: string, body?: unknown) {
+  return api("knowledge-tools/" + path, body);
 }
 export function KnowledgeTools({
   nodes,

@@ -1,4 +1,5 @@
 "use client";
+import { request } from "../lib/request";
 import { useEffect, useState } from "react";
 import { subjects, errors } from "../lib/model";
 import type { learningStatistics } from "../modules/review/statistics";
@@ -18,16 +19,10 @@ export function LearningStatistics() {
     const controller = new AbortController();
     setData(null);
     setError("");
-    fetch(
-      "/api/v1/reviews/statistics?" +
-        new URLSearchParams({ from, to, subject, mode }),
+    request<Statistics>(
+      "reviews/statistics?" + new URLSearchParams({ from, to, subject, mode }),
       { signal: controller.signal },
     )
-      .then(async (r) => {
-        const b = await r.json();
-        if (!r.ok) throw new Error(b.error?.message || "统计读取失败");
-        return b.data;
-      })
       .then(setData)
       .catch((e) => {
         if (!controller.signal.aborted) setError(e.message);
