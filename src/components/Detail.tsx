@@ -1,4 +1,5 @@
 "use client";
+import "katex/dist/katex.min.css";
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -8,20 +9,17 @@ import { AiStudy } from "./AiStudy";
 import { AiRelated } from "./AiRelated";
 
 import { names, errors, type Entry } from "../lib/model";
+import { api } from "../lib/request";
+import { MD } from "./Markdown";
 import {
-  api,
-  MD,
   OptionsView,
-  TypeIcon,
-  Badge,
-  Empty,
-  useLoad,
-  ErrorBox,
   AttachmentImages,
   Analysis,
   HistoryRow,
   RevisionContent,
-} from "./NotebookShared";
+} from "./EntryContent";
+import { TypeIcon, Badge, Empty, ErrorBox } from "./ui";
+import { useLoad } from "./useLoad";
 type Any = Record<string, any>;
 export default function Detail({
   id,

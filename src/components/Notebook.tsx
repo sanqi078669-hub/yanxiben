@@ -1,13 +1,29 @@
 "use client";
-import Editor from "./Editor";
-import SettingsPage from "./SettingsPage";
-import KnowledgePage from "./KnowledgePage";
-import ReviewPage from "./ReviewPage";
-import Detail from "./Detail";
-import LibraryPage from "./LibraryPage";
-import Today from "./Today";
+import dynamic from "next/dynamic";
+const Editor = dynamic(() => import("./Editor"), {
+  loading: () => <p role="status">正在打开页面…</p>,
+});
+const SettingsPage = dynamic(() => import("./SettingsPage"), {
+  loading: () => <p role="status">正在打开页面…</p>,
+});
+const KnowledgePage = dynamic(() => import("./KnowledgePage"), {
+  loading: () => <p role="status">正在打开页面…</p>,
+});
+const ReviewPage = dynamic(() => import("./ReviewPage"), {
+  loading: () => <p role="status">正在打开页面…</p>,
+});
+const Detail = dynamic(() => import("./Detail"), {
+  loading: () => <p role="status">正在打开页面…</p>,
+});
+const LibraryPage = dynamic(() => import("./LibraryPage"), {
+  loading: () => <p role="status">正在打开页面…</p>,
+});
+const Today = dynamic(() => import("./Today"), {
+  loading: () => <p role="status">正在打开页面…</p>,
+});
 import Login from "./Login";
-import { api, Empty, ErrorBox } from "./NotebookShared";
+import { api } from "../lib/request";
+import { Empty, ErrorBox } from "./ui";
 import { RequestError } from "../lib/request";
 
 import { useEffect, useState } from "react";

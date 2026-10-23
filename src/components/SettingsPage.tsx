@@ -12,7 +12,8 @@ import { AiHistory } from "./AiHistory";
 
 import { defaults } from "../lib/model";
 import { requestResponse } from "../lib/request";
-import { api, ErrorBox } from "./NotebookShared";
+import { api } from "../lib/request";
+import { ErrorBox } from "./ui";
 type Any = Record<string, any>;
 export default function SettingsPage({
   profile,

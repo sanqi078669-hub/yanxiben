@@ -9,7 +9,7 @@ import {
   HistoryRow,
   OptionsView,
   RevisionContent,
-} from "../src/components/NotebookShared";
+} from "../src/components/EntryContent";
 
 test("损坏历史、选项及快照仅显示本条错误，不在渲染时抛异常", () => {
   for (const raw of ["{", "{}", "[]", "null"]) {

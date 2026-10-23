@@ -116,6 +116,42 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
     );
     otherCookie = r2.headers.get("set-cookie")!.split(";")[0];
   });
+  await t.test("资源分发统一鉴权、错误封装与方法边界", async () => {
+    for (const resource of [
+      "dashboard",
+      "knowledge-nodes",
+      "reviews/queue",
+      "data/backup-status",
+      "ai/budget",
+      "auth/identity",
+    ]) {
+      assert.equal((await call(resource)).status, 200, resource);
+      assert.equal(
+        (await call(resource, undefined, "GET", { Cookie: "" })).status,
+        401,
+        resource,
+      );
+    }
+    for (const [resource, method] of [
+      ["missing-resource", "GET"],
+      ["constructor", "GET"],
+      ["__proto__", "GET"],
+      ["review-items", "GET"],
+      ["ai/config", "DELETE"],
+    ]) {
+      const response = await call(resource, undefined, method);
+      assert.equal(response.status, 404);
+      const envelope = await response.json();
+      assert.equal(envelope.error.code, "RESOURCE_NOT_FOUND");
+      assert.ok(envelope.meta.requestId);
+    }
+    assert.equal(
+      (await call("knowledge-nodes", {}, "POST", { "X-Requested-With": "" }))
+        .status,
+      403,
+    );
+    assert.equal((await call("ai/study", {})).status, 409);
+  });
   await t.test("AI 配置接口鉴权、CSRF与密钥不回传", async () => {
     assert.equal(
       (await call("ai/config", undefined, "GET", { Cookie: "" })).status,
@@ -352,6 +388,11 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
     });
     assert.equal(r.status, 200);
     entryId = (await r.json()).data.id;
+    const preview = await call("entries/batch-review-preview", [
+      { id: entryId, version: 1 },
+    ]);
+    assert.equal(preview.status, 200);
+    assert.equal((await preview.json()).data[0].id, entryId);
     assert.equal(
       (
         await call("entries/" + entryId, undefined, "GET", {

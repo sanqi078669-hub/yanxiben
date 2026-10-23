@@ -1,4 +1,5 @@
 "use client";
+import "katex/dist/katex.min.css";
 import { useEffect, useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -28,7 +29,10 @@ import {
   type Entry,
   type EntryInput,
 } from "../lib/model";
-import { api, MD, TypeIcon, Badge, useLoad, ErrorBox } from "./NotebookShared";
+import { api } from "../lib/request";
+import { MD } from "./Markdown";
+import { TypeIcon, Badge, ErrorBox } from "./ui";
+import { useLoad } from "./useLoad";
 import { readEnvelope } from "../lib/request";
 import type { EntryList } from "../lib/api-types";
 type Any = Record<string, any>;

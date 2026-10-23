@@ -13,7 +13,9 @@ import {
 } from "lucide-react";
 
 import { names, types, defaults, type Entry } from "../lib/model";
-import { api, TypeIcon, Empty, Row, useLoad, ErrorBox } from "./NotebookShared";
+import { api } from "../lib/request";
+import { TypeIcon, Empty, Row, ErrorBox } from "./ui";
+import { useLoad } from "./useLoad";
 type Any = Record<string, any>;
 export default function Today({ profile }: { profile: typeof defaults }) {
   const { data: d, error } = useLoad(() => api("dashboard"));

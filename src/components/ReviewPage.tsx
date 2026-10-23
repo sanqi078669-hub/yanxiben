@@ -1,4 +1,5 @@
 "use client";
+import "katex/dist/katex.min.css";
 import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -18,19 +19,16 @@ import {
   submissionWasRejected,
 } from "../lib/review-contract";
 import { names, errors } from "../lib/model";
+import { api } from "../lib/request";
+import { MD } from "./Markdown";
 import {
-  api,
-  MD,
   OptionsView,
-  TypeIcon,
-  Badge,
-  Empty,
-  useLoad,
-  ErrorBox,
   AttachmentImages,
   Analysis,
   HistoryRow,
-} from "./NotebookShared";
+} from "./EntryContent";
+import { TypeIcon, Badge, Empty, ErrorBox } from "./ui";
+import { useLoad } from "./useLoad";
 type Any = Record<string, any>;
 export default function ReviewPage({
   notify,

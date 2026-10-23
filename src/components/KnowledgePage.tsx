@@ -11,7 +11,9 @@ import { LearningStatistics } from "./LearningStatistics";
 import { KnowledgeTools } from "./KnowledgeTools";
 
 import { subjects } from "../lib/model";
-import { api, Badge, Empty, useLoad, ErrorBox } from "./NotebookShared";
+import { api } from "../lib/request";
+import { Badge, Empty, ErrorBox } from "./ui";
+import { useLoad } from "./useLoad";
 type Any = Record<string, any>;
 export default function KnowledgePage({
   notify,

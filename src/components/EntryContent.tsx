@@ -1,145 +1,17 @@
 "use client";
-import { useEffect, useState, useRef, useCallback } from "react";
 import Link from "next/link";
-
-import { BookOpen, ArrowUpRight } from "lucide-react";
-import Markdown from "react-markdown";
-import remarkGfm from "remark-gfm";
-import remarkMath from "remark-math";
-import rehypeKatex from "rehype-katex";
-
-import { rememberLibraryPosition } from "./libraryPosition";
-
-import { names, fields, type Entry } from "../lib/model";
-import type { EntryListItem } from "../lib/api-types";
-type Any = Record<string, any>;
+import { fields, type Entry } from "../lib/model";
 import { api } from "../lib/request";
-export { api } from "../lib/request";
 import {
   parseViewJson,
   historyViewSchema,
   snapshotViewSchema,
 } from "../lib/view-data";
 import { parseOptions } from "./OptionsEditor";
-export function MD({ children }: { children?: string }) {
-  return (
-    <div className="markdown">
-      <Markdown
-        remarkPlugins={[remarkGfm, remarkMath]}
-        rehypePlugins={[[rehypeKatex, { trust: false, strict: "ignore" }]]}
-      >
-        {children || "尚未填写"}
-      </Markdown>
-    </div>
-  );
-}
-const icons = { MATH: "∑", CS: "⌘", VOCABULARY: "Aa", SENTENCE: "“ ”" };
-export function TypeIcon({ type }: { type: keyof typeof names }) {
-  return (
-    <span className={"type-icon " + type.toLowerCase()}>{icons[type]}</span>
-  );
-}
-export function Badge({ children }: { children: React.ReactNode }) {
-  return <span className="badge">{children}</span>;
-}
-export function Empty({
-  title = "这里还是一张白纸",
-  text = "把值得再想一次的题目，收进你的研习本。",
-}: {
-  title?: string;
-  text?: string;
-}) {
-  return (
-    <div className="empty">
-      <BookOpen size={35} />
-      <h3>{title}</h3>
-      <p>{text}</p>
-    </div>
-  );
-}
-export function Row({
-  e,
-  action,
-  returnTo,
-}: {
-  e: Pick<
-    EntryListItem,
-    | "id"
-    | "type"
-    | "title"
-    | "body"
-    | "subject"
-    | "source"
-    | "updated_at"
-    | "status"
-  >;
-  action?: React.ReactNode;
-  returnTo?: string;
-}) {
-  return (
-    <div className="entry-row">
-      <TypeIcon type={e.type} />
-      <Link
-        href={
-          "/entries/" +
-          e.id +
-          (returnTo ? "?returnTo=" + encodeURIComponent(returnTo) : "")
-        }
-        className="entry-main"
-        data-entry-id={e.id}
-        onClick={() => {
-          if (returnTo) rememberLibraryPosition(returnTo, e.id);
-        }}
-      >
-        <h3>{e.title || e.body.slice(0, 45) || "图片记录"}</h3>
-        <p>
-          {e.subject}
-          <span>·</span>
-          {e.source || names[e.type]}
-          <span>·</span>
-          {new Date(e.updated_at).toLocaleDateString("zh-CN")}
-        </p>
-      </Link>
-      <Badge>{e.status === "INBOX" ? "待整理" : "已整理"}</Badge>
-      {action || <ArrowUpRight size={18} className="muted" />}
-    </div>
-  );
-}
-export function useLoad<T = Any>(fn: () => Promise<T>, deps: unknown[] = []) {
-  const [data, setData] = useState<T | null>(null),
-    [error, setError] = useState("");
-  const generation = useRef(0);
-  const [loading, setLoading] = useState(true);
-  const reload = useCallback(() => {
-    const request = ++generation.current;
-    setLoading(true);
-    setError("");
-    return fn()
-      .then((result) => {
-        if (request === generation.current) setData(result);
-      })
-      .catch((e) => {
-        if (request === generation.current) setError(e.message);
-      })
-      .finally(() => {
-        if (request === generation.current) setLoading(false);
-      });
-  }, deps);
-  useEffect(() => {
-    reload();
-    return () => {
-      generation.current++;
-    };
-  }, [reload]);
-  return { data, error, reload, setData, loading };
-}
-export function ErrorBox({ text, id }: { text: string; id?: string }) {
-  return text ? (
-    <div className="error" role="alert" id={id}>
-      {text}
-    </div>
-  ) : null;
-}
+import { MD } from "./Markdown";
+import { Badge, ErrorBox } from "./ui";
+import { useLoad } from "./useLoad";
+type Any = Record<string, any>;
 export function AttachmentImages({ e, role }: { e: Entry; role: string }) {
   return (
     <div className="reading-images">
@@ -238,7 +110,6 @@ export function HistoryRow({ h }: { h: Any }) {
     </details>
   );
 }
-
 export function OptionsView({ raw }: { raw: string }) {
   const options = parseOptions(raw);
   return options ? (

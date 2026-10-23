@@ -4,7 +4,8 @@ import { useState } from "react";
 import { BookOpen, ArrowRight } from "lucide-react";
 
 import { defaults } from "../lib/model";
-import { api, ErrorBox } from "./NotebookShared";
+import { api } from "../lib/request";
+import { ErrorBox } from "./ui";
 type Any = Record<string, any>;
 export default function Login({
   onLogin,

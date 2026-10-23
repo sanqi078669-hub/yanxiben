@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { api } from "./NotebookShared";
+import { api } from "../lib/request";
 import type { Entry } from "../lib/model";
 type Receipt = {
   id: string;

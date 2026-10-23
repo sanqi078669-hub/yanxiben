@@ -15,7 +15,9 @@ import type { EntryList, KnowledgeNode } from "../lib/api-types";
 import { useLibraryPosition } from "./libraryPosition";
 
 import { names, types, subjects, errors, type Entry } from "../lib/model";
-import { api, TypeIcon, Empty, Row, useLoad, ErrorBox } from "./NotebookShared";
+import { api } from "../lib/request";
+import { TypeIcon, Empty, Row, ErrorBox } from "./ui";
+import { useLoad } from "./useLoad";
 type Any = Record<string, any>;
 export default function LibraryPage({
   mode,
