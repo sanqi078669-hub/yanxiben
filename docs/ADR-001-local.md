@@ -1,0 +1,40 @@
+# ADR-001：先交付可本地验证的持久化应用
+
+日期：2026-10-21。状态：本地实施选择，正式部署前重新评审。
+
+## 环境与决策
+
+工作区只有需求说明书；已有 Node.js 24.19，未检测到 PostgreSQL、psql 或 Docker。为了直接验证学习流程，沿用说明书的 Next.js / React / TypeScript，数据库暂选 Node 内置 SQLite，附件使用本地私有磁盘。未注册 Sites 项目，未上传代码或学习数据到公网。
+
+依赖版本经 npm registry 和官方文档核实后写入 package.json / package-lock.json。认证选用 iron-session + bcryptjs，另以数据库 sessions 表提供服务器撤销能力。
+
+## 与原设计的差异
+
+| 项目 | 本地实现 | 正式版工作 |
+| --- | --- | --- |
+| 数据库 | SQLite，WAL、外键、事务；启动时执行幂等 v1 建表 | PostgreSQL / Prisma 迁移、双环境验证与回滚 |
+| 详情与关联字段 | 四类详情及标签/知识引用/附件引用采用经 Zod 校验的 JSON payload；关系、知识树、附件、复习、历史单独建表 | 视规模迁移为设计中的细分关系表和复合外键 |
+| 搜索 | 用户内记录读取后文本包含筛选与页码分页，单次最多 100 条返回 | 参数化数据库搜索、游标、中文索引及固定数据集压测 |
+| 导出 | 同步 ZIP，用户二次验证密码；无持久导出任务 | 大容量流式导出、导出任务、有效期、幂等结果缓存 |
+| 上传 | 同步完整校验后才写入有效附件记录；失败不返回成功 | 扩展 PENDING/FAILED 生命周期和对象存储 |
+| 备份 | 用户级备份、摘要检查、隔离空库恢复 | 异地定时备份、7 日/4 周保留、告警和 RPO/RTO 演练 |
+| 自动保存 | 已创建记录 1.5 秒防抖；新记录首次手动保存 | 真机弱网、跨端交互走查 |
+| 维护 | 停服后 CLI 清理孤立文件和指定回收站记录 | 维护窗口调度、审计基础设施 |
+| 关联选择 | 界面提供最近 100 条记录选择，API 支持合法 UUID 关联 | 大型资料库服务端搜索选择器 |
+| 生词去重 | 当前界面对最近 100 条词条给出提示，不限制独立创建 | 全量索引的归一化 lemma / 词性重复提示 |
+
+上述差异没有更改原需求文件，也不声称完全通过原文件的正式上线验收。核心事务规则、权限隔离、答案隐藏、软删除恢复、日历调度等按照设计实现并测试。
+
+## 模块边界
+
+`src/app` 提供页面壳和 HTTP 入口；入口负责会话和参数校验。`src/modules/entries` 承载记录与复习事务，`src/modules/review/schedule.ts` 为不依赖数据库的调度函数；`src/modules/data-management` 承载备份恢复；`src/lib/db.ts` 封装 SQLite 访问。客户端不直接接触数据库。
+
+当前仅首版幂等建表，不支持未来任意数据库版本自动升级。下一次 schema 变更必须增加显式迁移，并先验证旧数据备份的转换路径。
+
+## 官方参考
+
+- [Next.js 安装与运行](https://nextjs.org/docs/app/getting-started/installation)
+- [Node.js SQLite](https://nodejs.org/api/sqlite.html)
+- [iron-session](https://github.com/vvo/iron-session)
+
+API 具体使用同时核对了已安装 Next.js 包中的 route-handler 与 useSearchParams 文档。

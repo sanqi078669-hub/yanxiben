@@ -1,0 +1,28 @@
+# Dependencies and generated output
+node_modules/
+.next/
+out/
+coverage/
+next-env.d.ts
+*.tsbuildinfo
+
+# Local data, credentials and backups
+/data/
+/data-*/
+/test-results/
+/backups/
+.env*
+!.env.example
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+*.pem
+*.key
+
+# Logs and editor/OS artifacts
+*.log
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
