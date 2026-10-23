@@ -485,10 +485,23 @@ export default function ReviewPage({
                 </button>
                 <button
                   className="text-button"
-                  onClick={() => {
-                    setHint(true);
-                    setAiHint(true);
-                    setRevealed(true);
+                  disabled={busy || !!pending.current}
+                  onClick={async () => {
+                    setBusy(true);
+                    try {
+                      await api(`review-items/${current.id}/hint`, {
+                        expectedVersion:
+                          restoredVersion.current ?? current.version,
+                      });
+                      setHint(true);
+                      setAiHint(true);
+                      setRevealed(true);
+                      if (rating === "EASY") setRating("GOOD");
+                    } catch (e) {
+                      setError((e as Error).message);
+                    } finally {
+                      setBusy(false);
+                    }
                   }}
                 >
                   需要提示，先看看思路

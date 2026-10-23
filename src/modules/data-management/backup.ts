@@ -24,6 +24,7 @@ const tables = [
   "knowledge_merges",
   "ai_audit",
   "ai_audit_extras",
+  "entry_hint_usage",
 ] as const;
 const digest = (b: Uint8Array) => createHash("sha256").update(b).digest("hex");
 function backupJson(bytes: Uint8Array, name: string) {
@@ -166,7 +167,11 @@ export async function restore(
   );
   const manifest = z
     .object({
-      schemaVersion: z.union([z.literal(1), z.literal(BACKUP_FORMAT_VERSION)]),
+      schemaVersion: z.union([
+        z.literal(1),
+        z.literal(2),
+        z.literal(BACKUP_FORMAT_VERSION),
+      ]),
       counts: z.record(z.string(), z.number().int().nonnegative()),
       files: z.array(
         z

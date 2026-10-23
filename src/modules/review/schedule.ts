@@ -32,6 +32,16 @@ export function schedule(
     stage_index,
     success_streak,
     due_on: next.toISOString().slice(0, 10),
-    stage: success_streak >= 3 && stage_index >= 3 ? "MAINTENANCE" : "LEARNING",
+    stage: activeStage({ stage_index, success_streak }),
   };
+}
+export function activeStage(current: {
+  stage_index: number;
+  success_streak: number;
+}) {
+  return current.stage_index < 0
+    ? "NEW"
+    : current.success_streak >= 3 && current.stage_index >= 3
+      ? "MAINTENANCE"
+      : "LEARNING";
 }

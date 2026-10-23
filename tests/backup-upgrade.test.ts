@@ -9,7 +9,7 @@ import { zipSync, strToU8 } from "fflate";
 process.env.DATA_DIR = mkdtempSync(
   path.join(os.tmpdir(), "yanxi-backup-upgrade-"),
 );
-const { upgradeBackup } =
+const { upgradeBackup, BACKUP_FORMAT_VERSION } =
   await import("../src/modules/data-management/backup-upgrade");
 
 test("备份升级只补齐 v1 已知默认值，v2 不猜测修补", () => {
@@ -22,14 +22,14 @@ test("备份升级只补齐 v1 已知默认值，v2 不猜测修补", () => {
   assert.equal(data.ai_audit[0].feedback, "");
   const newer = { knowledge: [{}] };
   upgradeBackup(newer, { schemaVersion: 2, counts: {} });
-  assert.deepEqual(newer, { knowledge: [{}] });
+  assert.deepEqual(newer, { knowledge: [{}], entry_hint_usage: [] });
   assert.throws(
     () => upgradeBackup({}, { schemaVersion: 999, counts: {} }),
     /不支持/,
   );
 });
 
-test("固定 v1 fixture 恢复后可编辑、复习并导出 v2，未知缺列仍拒绝", () => {
+test("固定 v1 fixture 恢复后可编辑、复习并导出当前格式，未知缺列仍拒绝", () => {
   const fixture = JSON.parse(
     readFileSync("tests/fixtures/backup-v1.json", "utf8"),
   );
@@ -76,8 +76,8 @@ test("固定 v1 fixture 恢复后可编辑、复习并导出 v2，未知缺列�
         attempt(result.owner, review.id, { expectedVersion: 1, mode: 'SCHEDULED', rating: 'GOOD', hintUsed: false, answerMd: '2x' }, 'fixture-attempt');
         const files = unzipSync(backup(result.owner));
         const manifest = JSON.parse(strFromU8(files['manifest.json']));
-        if (manifest.schemaVersion !== 2 || manifest.counts.logs !== 1) throw Error('export failed');
-        console.log('v1-restored-edited-reviewed-exported-v2');
+        if (manifest.schemaVersion !== ${BACKUP_FORMAT_VERSION} || manifest.counts.logs !== 1) throw Error('export failed');
+        console.log('v1-restored-edited-reviewed-current');
       } catch(error) {
         if (${invalid} && error.code === 'INVALID_BACKUP' && one('SELECT count(*) n FROM users').n === 0) { console.log('invalid-rejected-without-data'); }
         else throw error;
@@ -101,7 +101,7 @@ test("固定 v1 fixture 恢复后可编辑、复习并导出 v2，未知缺列�
       result.stdout,
       invalid
         ? /invalid-rejected-without-data/
-        : /v1-restored-edited-reviewed-exported-v2/,
+        : /v1-restored-edited-reviewed-current/,
     );
   }
 });

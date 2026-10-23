@@ -319,6 +319,108 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
     const h = await (await call("reviews/history")).json();
     assert.equal(h.data.length, 1);
   });
+  await t.test("MAINTENANCE 暂停后恢复仍为长期巩固", async () => {
+    run(
+      "UPDATE reviews SET stage='MAINTENANCE',stage_index=3,success_streak=3,version=20 WHERE id=?",
+      reviewId,
+    );
+    assert.equal(
+      (
+        await call(
+          "review-items/" + reviewId,
+          { expectedVersion: 20, paused: true },
+          "PATCH",
+        )
+      ).status,
+      200,
+    );
+    assert.equal(
+      one("SELECT stage FROM reviews WHERE id=?", reviewId)!.stage,
+      "PAUSED",
+    );
+    assert.equal(
+      (
+        await call(
+          "review-items/" + reviewId,
+          { expectedVersion: 21, paused: false },
+          "PATCH",
+        )
+      ).status,
+      200,
+    );
+    assert.equal(
+      one("SELECT stage FROM reviews WHERE id=?", reviewId)!.stage,
+      "MAINTENANCE",
+    );
+  });
+  await t.test(
+    "服务端提示状态不能通过谎报 false 绕过，跨账号提示标记拒绝",
+    async () => {
+      const entry = (
+        await (
+          await call("entries", {
+            type: "MATH",
+            subject: "高等数学",
+            title: "提示验收",
+            body: "求导",
+          })
+        ).json()
+      ).data;
+      const review = (
+        await (
+          await call("review-items", { entryId: entry.id, practice: true })
+        ).json()
+      ).data;
+      assert.equal(
+        (
+          await call(
+            `review-items/${review.id}/hint`,
+            { expectedVersion: 1 },
+            "POST",
+            { Cookie: otherCookie },
+          )
+        ).status,
+        404,
+      );
+      assert.equal(
+        (await call(`review-items/${review.id}/hint`, { expectedVersion: 1 }))
+          .status,
+        200,
+      );
+      const body = {
+        expectedVersion: 1,
+        mode: "PRACTICE",
+        rating: "EASY",
+        hintUsed: false,
+        answerMd: "answer",
+      };
+      assert.equal(
+        (
+          await call(`review-items/${review.id}/attempts`, body, "POST", {
+            "Idempotency-Key": "hint-lying",
+          })
+        ).status,
+        400,
+      );
+      assert.equal(
+        (
+          await call(
+            `review-items/${review.id}/attempts`,
+            { ...body, rating: "GOOD" },
+            "POST",
+            { "Idempotency-Key": "hint-good" },
+          )
+        ).status,
+        200,
+      );
+      assert.equal(
+        JSON.parse(
+          one("SELECT payload FROM logs WHERE review_id=?", review.id)!.payload,
+        ).hintUsed,
+        true,
+      );
+    },
+  );
   await t.test("导出需要重新验证密码，正确密码返回 ZIP", async () => {
     assert.equal(
       (await call("exports", { type: "BACKUP", password: "incorrect" })).status,

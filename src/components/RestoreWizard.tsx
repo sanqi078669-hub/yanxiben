@@ -20,6 +20,7 @@ const labels: Record<string, string> = {
   knowledge_merges: "知识点合并记录",
   ai_audit: "AI 调用与反馈",
   ai_audit_extras: "费用依据",
+  entry_hint_usage: "本轮提示使用记录",
 };
 export function RestoreWizard() {
   const [last, setLast] = useState<string | null>(null),

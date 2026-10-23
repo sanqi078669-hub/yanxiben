@@ -342,6 +342,50 @@ export function reviewQueue(owner: string) {
     date: localDate(s.timezone),
   };
 }
+export function hintReviewVersion(owner: string, entryId: string) {
+  getEntry(owner, entryId);
+  return (
+    (one(
+      "SELECT version FROM reviews WHERE owner=? AND entry_id=?",
+      owner,
+      entryId,
+    )?.version as number | undefined) ?? 0
+  );
+}
+export function recordEntryHint(
+  owner: string,
+  entryId: string,
+  expectedVersion: number,
+) {
+  return transaction(() => {
+    assert(
+      hintReviewVersion(owner, entryId) === expectedVersion,
+      409,
+      "VERSION_CONFLICT",
+      "复习计划已变化，请刷新后重新请求提示",
+    );
+    run(
+      "INSERT OR REPLACE INTO entry_hint_usage VALUES(?,?,?,?)",
+      owner,
+      entryId,
+      expectedVersion,
+      new Date().toISOString(),
+    );
+    return true;
+  });
+}
+export function serverHintUsed(
+  owner: string,
+  entryId: string,
+  reviewVersion: number,
+) {
+  return !!one(
+    "SELECT entry_id FROM entry_hint_usage WHERE owner=? AND entry_id=? AND review_version IN (0,?)",
+    owner,
+    entryId,
+    reviewVersion,
+  );
+}
 export function attempt(
   owner: string,
   id: string,
@@ -378,6 +422,14 @@ export function attempt(
       | undefined;
     assert(r, 404, "RESOURCE_NOT_FOUND", "复习项不存在");
     const reviewedEntry = getEntry(owner, r.entry_id);
+    const hintUsed =
+      body.hintUsed || serverHintUsed(owner, r.entry_id, r.version);
+    assert(
+      !(hintUsed && body.rating === "EASY"),
+      400,
+      "VALIDATION_ERROR",
+      "本轮已使用提示，不能选择熟练",
+    );
     assert(
       r.version === body.expectedVersion,
       409,
@@ -432,6 +484,7 @@ export function attempt(
       day,
       JSON.stringify({
         ...body,
+        hintUsed,
         errorSnapshot: reviewedEntry.errors,
         before: r,
         after,
@@ -447,6 +500,12 @@ export function attempt(
       hash,
       JSON.stringify(result),
       new Date().toISOString(),
+    );
+    run(
+      "DELETE FROM entry_hint_usage WHERE owner=? AND entry_id=? AND review_version<=?",
+      owner,
+      r.entry_id,
+      r.version,
     );
     return result;
   });

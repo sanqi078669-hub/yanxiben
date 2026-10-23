@@ -14,6 +14,7 @@ const { extract, limited, study } = await import("../src/modules/ai/service");
 const { extractionPatch } = await import("../src/modules/ai/contracts");
 const { run, dataDir } = await import("../src/lib/db");
 const { defaults } = await import("../src/lib/model");
+const { createEntry } = await import("../src/modules/entries/service");
 const owner = randomUUID(),
   other = randomUUID(),
   profileId = randomUUID();
@@ -145,11 +146,13 @@ test("错因分析需要原作答，并严格限制错因分类", async () => {
   );
 });
 test("分级提示不发送答案、总结或原解法，限制三级", async () => {
+  const saved = createEntry(owner, draft);
   for (const hintLevel of [1, 2, 3]) {
     const value = await study(
       owner,
       {
         action: "hint",
+        entryId: saved.id,
         entry: {
           ...draft,
           summary: "SECRET_ANSWER",
@@ -307,13 +310,31 @@ test("真实协议构造与结构校验，状态不暴露密钥", async () => {
   );
 });
 test("确认后切换模型会阻止旧目标请求，关闭AI不回退环境配置", async () => {
-  let called=false;
-  await assert.rejects(()=>complete("test",{},z.object({ok:z.literal(true)}),[],async()=>{called=true;return success({ok:true})();},owner,"0".repeat(64)));
-  assert.equal(called,false);
-  process.env.AI_BASE_URL="https://example.com";process.env.AI_MODEL="environment";process.env.AI_API_KEY="fixture";
-  saveConfig(owner,{action:"activate",id:null});assert.equal(aiStatus(owner).ready,false);
-  saveConfig(owner,{action:"activate",id:profileId});
-  delete process.env.AI_BASE_URL;delete process.env.AI_MODEL;delete process.env.AI_API_KEY;
+  let called = false;
+  await assert.rejects(() =>
+    complete(
+      "test",
+      {},
+      z.object({ ok: z.literal(true) }),
+      [],
+      async () => {
+        called = true;
+        return success({ ok: true })();
+      },
+      owner,
+      "0".repeat(64),
+    ),
+  );
+  assert.equal(called, false);
+  process.env.AI_BASE_URL = "https://example.com";
+  process.env.AI_MODEL = "environment";
+  process.env.AI_API_KEY = "fixture";
+  saveConfig(owner, { action: "activate", id: null });
+  assert.equal(aiStatus(owner).ready, false);
+  saveConfig(owner, { action: "activate", id: profileId });
+  delete process.env.AI_BASE_URL;
+  delete process.env.AI_MODEL;
+  delete process.env.AI_API_KEY;
 });
 test("服务失败、截断、无效结构不会返回伪成功或泄露响应", async () => {
   for (const transport of [
@@ -392,8 +413,10 @@ test("图片识别检查归属及明确同意，输出完整选项", async () =>
   assert.throws(() => extractionPatch(value, "MATH"));
 });
 import { providerError, providerPresets } from "../src/modules/ai/presets";
-test("服务商预设使用HTTPS，失败分类不展示上游敏感消息",()=>{
-  assert(providerPresets.every(p=>new URL(p.base).protocol==="https:"));
-  assert.match(providerError(401),/认证/);assert.match(providerError(404),/不存在/);
-  assert.match(providerError(429),/限流/);assert.match(providerError(503),/暂时不可用/);
+test("服务商预设使用HTTPS，失败分类不展示上游敏感消息", () => {
+  assert(providerPresets.every((p) => new URL(p.base).protocol === "https:"));
+  assert.match(providerError(401), /认证/);
+  assert.match(providerError(404), /不存在/);
+  assert.match(providerError(429), /限流/);
+  assert.match(providerError(503), /暂时不可用/);
 });

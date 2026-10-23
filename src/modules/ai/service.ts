@@ -3,7 +3,12 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import sharp from "sharp";
 import { one, dataDir } from "../../lib/db";
-import { assert } from "../entries/service";
+import {
+  assert,
+  getEntry,
+  hintReviewVersion,
+  recordEntryHint,
+} from "../entries/service";
 import {
   extractionSchema,
   studyRequest,
@@ -50,6 +55,18 @@ export async function study(
 ) {
   const input = studyRequest.parse(raw),
     material = studyMaterial(input.entry, input.action);
+  let hintVersion: number | undefined;
+  if (input.action === "hint") {
+    assert(input.entryId, 400, "AI_ENTRY_REQUIRED", "提示需要绑定已保存的记录");
+    const entry = getEntry(owner, input.entryId);
+    assert(
+      JSON.stringify(studyMaterial(entry, "hint")) === JSON.stringify(material),
+      409,
+      "VERSION_CONFLICT",
+      "记录已变化，请刷新后请求提示",
+    );
+    hintVersion = hintReviewVersion(owner, input.entryId);
+  }
   if (input.action === "english")
     assert(
       ["VOCABULARY", "SENTENCE"].includes(input.entry.type),
@@ -100,10 +117,13 @@ export async function study(
       input.target,
     ),
   );
+  if (hintVersion !== undefined)
+    recordEntryHint(owner, input.entryId!, hintVersion);
   if (input.action === "feedback") {
     result.rating = safeRating(result.rating, input.hintUsed);
-    result.feedback=readableFeedback(result.feedback);
-    for(const field of ["strengths","missing","warnings"]) result[field]=result[field].map(readableFeedback);
+    result.feedback = readableFeedback(result.feedback);
+    for (const field of ["strengths", "missing", "warnings"])
+      result[field] = result[field].map(readableFeedback);
   }
   return result;
 }

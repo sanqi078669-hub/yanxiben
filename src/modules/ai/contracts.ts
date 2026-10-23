@@ -98,9 +98,14 @@ export const feedbackSchema = z
 export function safeRating(rating: string, hintUsed: boolean) {
   return hintUsed && rating === "EASY" ? "GOOD" : rating;
 }
-export function readableFeedback(text:string) {
-  return text.replace(/hintUsed\s*=\s*true/g,"本次使用过提示").replace(/hintUsed\s*=\s*false/g,"本次未使用提示")
-    .replace(/\bEASY\b/g,"熟练").replace(/\bGOOD\b/g,"掌握").replace(/\bHARD\b/g,"困难").replace(/\bAGAIN\b/g,"不会");
+export function readableFeedback(text: string) {
+  return text
+    .replace(/hintUsed\s*=\s*true/g, "本次使用过提示")
+    .replace(/hintUsed\s*=\s*false/g, "本次未使用提示")
+    .replace(/\bEASY\b/g, "熟练")
+    .replace(/\bGOOD\b/g, "掌握")
+    .replace(/\bHARD\b/g, "困难")
+    .replace(/\bAGAIN\b/g, "不会");
 }
 export const englishSchema = z
   .object({
@@ -174,6 +179,7 @@ export function studyMaterial(e: EntryInput, action: StudyAction = "organize") {
 export const studyRequest = z
   .object({
     action: z.enum(studyActions),
+    entryId: z.string().uuid().optional(),
     entry: entrySchema,
     answer: z.string().max(10000).default(""),
     hintUsed: z.boolean().default(false),

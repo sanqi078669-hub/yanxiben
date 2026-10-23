@@ -22,7 +22,7 @@ export function AiStudy({
   hintUsed = false,
   onRating,
 }: {
-  entry: EntryInput;
+  entry: EntryInput & { id?: string };
   actions: StudyAction[];
   onApply?: (patch: Partial<EntryInput>) => void;
   onHint?: () => void;
@@ -158,6 +158,7 @@ export function AiStudy({
                 const value = await aiApi("study", {
                   action,
                   entry: base,
+                  ...(entry.id ? { entryId: entry.id } : {}),
                   hintLevel,
                   answer,
                   hintUsed,

@@ -19,7 +19,9 @@ import {
   addReview,
   reviewQueue,
   attempt,
+  recordEntryHint,
 } from "../../../../modules/entries/service";
+import { activeStage } from "../../../../modules/review/schedule";
 import { settingsSchema, subjects } from "../../../../lib/model";
 import { publicConfig, saveConfig } from "../../../../modules/ai/config";
 import { aiStatus, complete } from "../../../../modules/ai/provider";
@@ -546,6 +548,12 @@ async function handler(
       return ok(addReview(owner, b.entryId, b.practice));
     }
     if (parts[0] === "review-items" && parts[1]) {
+      if (parts[2] === "hint" && method === "POST") {
+        const b = z.object({ expectedVersion: z.number().int() }).strict().parse(await json());
+        const r = one("SELECT * FROM reviews WHERE owner=? AND id=?", owner, parts[1]);
+        assert(r, 404, "RESOURCE_NOT_FOUND", "复习项不存在");
+        return ok(recordEntryHint(owner, r.entry_id, b.expectedVersion));
+      }
       if (parts[2] === "attempts" && method === "POST")
         return ok(
           attempt(
@@ -577,7 +585,7 @@ async function handler(
             );
             run(
               "UPDATE reviews SET stage=?,version=version+1 WHERE id=?",
-              b.paused ? "PAUSED" : r.stage_index < 0 ? "NEW" : "LEARNING",
+              b.paused ? "PAUSED" : activeStage(r as { stage_index: number; success_streak: number }),
               r.id,
             );
             return true;

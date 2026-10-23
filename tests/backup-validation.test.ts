@@ -80,6 +80,9 @@ function fixture(): Record<string, any> {
     },
   ];
   data.reviews = [structuredClone(r)];
+  data.entry_hint_usage = [
+    { owner, entry_id: entryId, review_version: 1, used_at: now },
+  ];
   data.logs = [
     {
       id: logId,
@@ -259,4 +262,8 @@ test("合法备份恢复 JSON、复习与真实图片", async () => {
   assert.equal(one("SELECT count(*) n FROM users")!.n, 1);
   assert.equal(one("SELECT count(*) n FROM logs")!.n, 1);
   assert.equal(one("SELECT mime FROM attachments")!.mime, "image/png");
+  assert.equal(
+    one("SELECT review_version FROM entry_hint_usage")!.review_version,
+    1,
+  );
 });

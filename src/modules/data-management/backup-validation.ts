@@ -175,6 +175,9 @@ const result = z
   })
   .strict();
 export const backupRowSchemas = {
+  entry_hint_usage: z
+    .object({ owner: id, entry_id: id, review_version: integer, used_at: time })
+    .strict(),
   entries: entryRow,
   attachments: z
     .object({
@@ -297,7 +300,11 @@ export async function validateBackupData(
         );
       const v = row.data as any;
       const key =
-        table === "idempotency" ? JSON.stringify([v.scope, v.key]) : v.id;
+        table === "entry_hint_usage"
+          ? JSON.stringify([v.entry_id, v.review_version])
+          : table === "idempotency"
+            ? JSON.stringify([v.scope, v.key])
+            : v.id;
       if (v.owner !== owner || seen.has(key))
         invalid(`${table}[${index}] owner/id`);
       seen.add(key);
@@ -350,6 +357,8 @@ export async function validateBackupData(
       invalid("relations references");
   for (const r of parsed.reviews)
     if (!has("entries", r.entry_id)) invalid("reviews entry");
+  for (const h of parsed.entry_hint_usage)
+    if (!has("entries", h.entry_id)) invalid("entry_hint_usage references");
   for (const r of parsed.logs) {
     const p = r.payload;
     if (

@@ -138,7 +138,7 @@ test("失败步骤连同版本与记录回滚，已完成步骤可安全续跑",
           steps: [
             ...migrations,
             {
-              version: 3,
+              version: DATABASE_VERSION + 1,
               name: "failure-test",
               up: (db) => {
                 db.exec("CREATE TABLE partial_work(id TEXT)");

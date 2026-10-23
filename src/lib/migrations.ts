@@ -37,6 +37,14 @@ export const migrations: Migration[] = [
         );
     },
   },
+  {
+    version: 3,
+    name: "review-hint-usage-v3",
+    up: (db) =>
+      db.exec(
+        `CREATE TABLE entry_hint_usage(owner TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,entry_id TEXT NOT NULL REFERENCES entries(id) ON DELETE CASCADE,review_version INTEGER NOT NULL,used_at TEXT NOT NULL,PRIMARY KEY(owner,entry_id,review_version))`,
+      ),
+  },
 ];
 const current = migrations.at(-1)!.version;
 export const DATABASE_VERSION = current;
