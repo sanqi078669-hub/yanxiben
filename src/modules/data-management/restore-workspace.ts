@@ -13,18 +13,7 @@ const children = (runtimeState.yanxiRestoreChildren ??= new Map<
   string,
   ChildProcess
 >());
-function init() {
-  run(
-    "CREATE TABLE IF NOT EXISTS restore_workspaces(id TEXT PRIMARY KEY,owner TEXT NOT NULL,folder TEXT NOT NULL,counts TEXT NOT NULL,created TEXT NOT NULL,url TEXT,pid INTEGER)",
-  );
-  if (
-    !all("PRAGMA table_info(restore_workspaces)").some((c) => c.name === "pid")
-  )
-    run("ALTER TABLE restore_workspaces ADD COLUMN pid INTEGER");
-  run(
-    "CREATE TABLE IF NOT EXISTS backup_status(owner TEXT PRIMARY KEY,created TEXT NOT NULL)",
-  );
-}
+function init() { /* Schema is initialized centrally by lib/db. */ }
 export function backupStatus(owner: string) {
   init();
   return (

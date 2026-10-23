@@ -4,14 +4,7 @@ import { all, one, run, transaction } from "../../lib/db";
 import { assert, unpack } from "./service";
 const hash = (value: unknown) =>
   createHash("sha256").update(JSON.stringify(value)).digest("hex");
-export function initKnowledgeTools() {
-  run(
-    "CREATE TABLE IF NOT EXISTS knowledge_aliases(id TEXT PRIMARY KEY,owner TEXT NOT NULL REFERENCES users(id),node_id TEXT NOT NULL REFERENCES knowledge(id),name TEXT NOT NULL)",
-  );
-  run(
-    "CREATE TABLE IF NOT EXISTS knowledge_merges(id TEXT PRIMARY KEY,owner TEXT NOT NULL REFERENCES users(id),payload TEXT NOT NULL,undone INTEGER NOT NULL DEFAULT 0)",
-  );
-}
+export function initKnowledgeTools() { /* Schema is initialized centrally by lib/db. */ }
 export function knowledgeAliases(owner: string) {
   initKnowledgeTools();
   return all(

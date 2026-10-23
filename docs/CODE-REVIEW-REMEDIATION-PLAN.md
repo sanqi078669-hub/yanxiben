@@ -35,8 +35,8 @@
 | --- | --- | --- | --- | --- |
 | FIX-01 | 建立本地可回退基线与敏感文件排除 | P1-1 | A | 本地已完成；远端待外部条件 |
 | FIX-02 | 完整校验恢复输入并约束附件响应 | P1-3 | A | 已完成 |
-| FIX-03 | 统一数据库迁移与旧备份兼容策略 | P1-2 | A | 进行中 |
-| FIX-04 | 统一请求错误、JSON 解析与页面错误恢复 | P2-4、P2-5 | B | 待实施 |
+| FIX-03 | 统一数据库迁移与旧备份兼容策略 | P1-2 | A | 已完成 |
+| FIX-04 | 统一请求错误、JSON 解析与页面错误恢复 | P2-4、P2-5 | B | 进行中 |
 | FIX-05 | 统一复习长度契约并解除失败提交锁死 | P2-6 | B | 待实施 |
 | FIX-06 | 服务端记录提示使用，修复暂停阶段恢复 | P2-7、P2-11 | B | 待实施 |
 | FIX-07 | 恢复工作区生产可用、超时、停止与清理 | P2-3 | C | 待实施 |
@@ -220,3 +220,12 @@ CI 执行安装、lint、format、typecheck、test、build 和生产依赖高危
 - `npm run typecheck`、`npm run build` 通过；`node --import tsx --test tests/backup-validation.test.ts tests/core.test.ts tests/restore-workspace.test.ts tests/http.test.ts`：54/54 通过（含子测试）。
 - 覆盖摘要正确的坏日志/快照/幂等 JSON、阶段枚举/越界/不一致、缺失/跨归属引用、坏选项、非法关联、HTML/SVG MIME、伪装图片、重复 ID，以及正常图片恢复、文件冲突回滚和 HTTP 响应头/下载/非法 MIME 拦截。
 - 原核心测试的 PNG fixture 无法被严格解码，已替换为 sharp 生成的有效 PNG；没有放松实际解码校验。测试仅使用隔离临时目录，未修改个人题库。旧版本字段转换由 FIX-03 继续完成。
+
+### FIX-03 验证记录（2026-10-23）
+
+- `src/lib/schema.ts`、`migrations.ts` 集中管理核心及扩展 schema；数据库导入时先完成有序迁移，业务模块不再执行分散 DDL。数据库版本为 2，记录于 schema_migrations 和 user_version，不再无条件写回 1。
+- 识别既有无迁移记录的 v1 结构；仅补已知兼容字段 restore_workspaces.pid、ai_audit.feedback、knowledge.archived。未知旧表/列、缺失基础表、未来版本和不一致迁移记录在写入前拒绝。每步变更与迁移记录同事务，失败步骤可回滚并续跑。
+- 升级既有数据库前自动在私有 DATA_DIR/migration-backups 创建 SQLite 一致性快照；文件级测试确认快照保留旧版本和原记录。所有演练使用临时目录，没有启动个人题库的迁移。
+- 新导出备份格式为 2，另记 databaseVersion；读取支持 v1、v2。v1 仅转换明确的旧扩展表和字段默认值，随后执行完整校验；未知缺列不会自动填空。导入使用白名单表和已验证字段，移除数据库列数完全相等要求。
+- 固定 `tests/fixtures/backup-v1.json` 为合成历史结构样例，测试恢复后编辑、计划复习和再次导出 v2；另测未知缺列拒绝、未来版本拒绝、重复启动和失败回滚。
+- `npm run typecheck`、`npm run build` 通过；`npm test` 全部 107/107 通过。无远端 CI 验证。后续新增 schema 应追加迁移，不修改已应用步骤。

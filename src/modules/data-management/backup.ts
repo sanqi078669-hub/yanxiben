@@ -9,6 +9,8 @@ import { z } from "zod";
 import { initKnowledgeTools } from "../entries/knowledge";
 import { initAudit } from "../ai/audit";
 import { validateBackupData } from "./backup-validation";
+import { BACKUP_FORMAT_VERSION, upgradeBackup } from "./backup-upgrade";
+import { DATABASE_VERSION } from "../../lib/migrations";
 const tables = [
   "entries",
   "attachments",
@@ -58,7 +60,8 @@ export function backup(owner: string) {
     files["manifest.json"] = strToU8(
       JSON.stringify(
         {
-          schemaVersion: 1,
+          schemaVersion: BACKUP_FORMAT_VERSION,
+          databaseVersion: DATABASE_VERSION,
           appVersion: "0.1.0",
           exportedAt: new Date().toISOString(),
           counts,
@@ -163,7 +166,7 @@ export async function restore(
   );
   const manifest = z
     .object({
-      schemaVersion: z.literal(1),
+      schemaVersion: z.union([z.literal(1), z.literal(BACKUP_FORMAT_VERSION)]),
       counts: z.record(z.string(), z.number().int().nonnegative()),
       files: z.array(
         z
@@ -216,20 +219,7 @@ export async function restore(
     "INVALID_BACKUP",
     "备份含未知数据表",
   );
-  for (const optional of ["knowledge_merges", "ai_audit", "ai_audit_extras"]) {
-    if (data[optional] === undefined && m.counts[optional] === undefined) {
-      data[optional] = [];
-      m.counts[optional] = 0;
-    }
-  }
-  // v1 backups created before aliases were introduced remain readable.
-  if (
-    data.knowledge_aliases === undefined &&
-    m.counts.knowledge_aliases === undefined
-  ) {
-    data.knowledge_aliases = [];
-    m.counts.knowledge_aliases = 0;
-  }
+  upgradeBackup(data, m);
   for (const t of tables) {
     assert(
       Array.isArray(data[t]) && data[t].length === m.counts[t],
@@ -258,17 +248,16 @@ export async function restore(
         JSON.stringify(data.profile.settings),
       );
       for (const t of tables) {
-        const cols = (db.prepare(`PRAGMA table_info(${t})`).all() as any[]).map(
-          (c) => c.name,
-        );
+        // Use accepted row keys, validated above; no SQL identifiers originate in the archive.
+        const allowed = db
+          .prepare(`PRAGMA table_info(${t})`)
+          .all()
+          .map((c) => c.name as string);
         for (const row of data[t]) {
-          assert(
-            Object.keys(row).length === cols.length &&
-              cols.every((c) => c in row),
-          );
+          const keys = allowed.filter((c) => Object.hasOwn(row, c));
           db.prepare(
-            `INSERT INTO ${t} (${cols.join(",")}) VALUES (${cols.map(() => "?").join(",")})`,
-          ).run(...cols.map((c) => row[c]));
+            `INSERT INTO ${t} (${keys.join(",")}) VALUES (${keys.map(() => "?").join(",")})`,
+          ).run(...keys.map((c) => row[c]));
         }
       }
       assert(!db.prepare("PRAGMA foreign_key_check").all().length);

@@ -3,11 +3,7 @@ import { z } from "zod";
 import { one, run, transaction } from "../../lib/db";
 import { getEntry, updateEntry, assert } from "./service";
 
-function init() {
-  run(
-    "CREATE TABLE IF NOT EXISTS batch_edits(id TEXT PRIMARY KEY,owner TEXT NOT NULL,payload TEXT NOT NULL)",
-  );
-}
+function init() { /* Schema is initialized centrally by lib/db. */ }
 const selection = z
   .array(
     z

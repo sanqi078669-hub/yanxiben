@@ -20,11 +20,7 @@ export const costSchema = z
     price: priceSchema,
   })
   .strict();
-function init() {
-  run(
-    "CREATE TABLE IF NOT EXISTS ai_prices(owner TEXT NOT NULL,model TEXT NOT NULL,host TEXT NOT NULL,payload TEXT NOT NULL,PRIMARY KEY(owner,model,host))",
-  );
-}
+function init() { /* Schema is initialized centrally by lib/db. */ }
 export function priceList(owner: string) {
   init();
   return all("SELECT payload FROM ai_prices WHERE owner=?", owner).map((r) =>

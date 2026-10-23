@@ -7,16 +7,8 @@ import { aiUsage } from "./usage";
 export { aiUsage } from "./usage";
 import type { AiAuditRecord } from "../../lib/ai-audit-types";
 import { estimate } from "./pricing";
-function extras() {
-  run(
-    "CREATE TABLE IF NOT EXISTS ai_audit_extras(id TEXT PRIMARY KEY,owner TEXT NOT NULL,payload TEXT NOT NULL)",
-  );
-}
-function init() {
-  run(
-    `CREATE TABLE IF NOT EXISTS ai_audit(id TEXT PRIMARY KEY,owner TEXT NOT NULL,action TEXT NOT NULL,model TEXT NOT NULL,host TEXT NOT NULL,created_at TEXT NOT NULL,duration INTEGER NOT NULL,status TEXT NOT NULL,tokens INTEGER,result TEXT,feedback TEXT NOT NULL DEFAULT '')`,
-  );
-}
+function extras() { /* Schema is initialized centrally by lib/db. */ }
+function init() { /* Schema is initialized centrally by lib/db. */ }
 export async function audited<T>(
   owner: string,
   action: string,
