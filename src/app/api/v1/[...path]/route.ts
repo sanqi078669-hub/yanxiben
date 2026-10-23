@@ -52,6 +52,7 @@ import {
   auditFeedback,
 } from "../../../../modules/ai/audit";
 import { priceList, savePrice } from "../../../../modules/ai/pricing";
+import { budgetStatus } from "../../../../modules/ai/budget";
 import {
   knowledgeAliases,
   knowledgeMerges,
@@ -192,6 +193,7 @@ async function handler(
         return ok(await previewRestore(owner, upload, { signal: req.signal }));
       } finally { await upload.dispose(); }
     }
+    if (p === "ai/budget" && method === "GET") return ok(budgetStatus(owner));
     if (p === "ai/prices" && method === "GET") return ok(priceList(owner));
     if (p === "ai/prices" && method === "POST")
       return ok(savePrice(owner, await json()));

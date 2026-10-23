@@ -12,6 +12,7 @@ next-env.d.ts
 /data-*/
 /test-results/
 /backups/
+/.private-secrets/
 .env*
 !.env.example
 *.sqlite

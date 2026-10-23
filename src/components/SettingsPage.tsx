@@ -1,5 +1,6 @@
 "use client";
 import { AiPrices } from "./AiPrices";
+import { AiBudget } from "./AiBudget";
 import { RestoreWizard } from "./RestoreWizard";
 import { useState } from "react";
 
@@ -69,6 +70,7 @@ export default function SettingsPage({
       <ErrorBox text={error} />
       <AiSettings />
       <AiPrices />
+      <AiBudget />
       <RestoreWizard />
       <details className="panel form-panel">
         <summary>查看 AI 调用历史与反馈</summary>

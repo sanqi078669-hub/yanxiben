@@ -27,6 +27,7 @@ export function AiSettings() {
     model: "",
     vision: false,
     tokenParameter: "max_tokens",
+    maxOutputTokens: 4000,
     key: "",
   });
   const [draft, setDraft] = useState<ReturnType<typeof empty> | null>(null);
@@ -147,7 +148,8 @@ export function AiSettings() {
               <b>{p.name}</b>
               <span>
                 {p.model} · {new URL(p.base).host} ·{" "}
-                {p.vision ? "支持图片" : "仅文本"}
+                {p.vision ? "支持图片" : "仅文本"} · 输出上限{" "}
+                {p.maxOutputTokens} tokens
               </span>
               <button
                 className="text-button"
@@ -171,12 +173,29 @@ export function AiSettings() {
         <form
           onSubmit={async (e) => {
             e.preventDefault();
-            const { id, name, base, model, vision, tokenParameter, key } =
-              draft;
+            const {
+              id,
+              name,
+              base,
+              model,
+              vision,
+              tokenParameter,
+              maxOutputTokens,
+              key,
+            } = draft;
             if (
               await command({
                 action: "save",
-                profile: { id, name, base, model, vision, tokenParameter, key },
+                profile: {
+                  id,
+                  name,
+                  base,
+                  model,
+                  vision,
+                  tokenParameter,
+                  maxOutputTokens,
+                  key,
+                },
               })
             )
               setDraft(null);
@@ -283,6 +302,22 @@ export function AiSettings() {
               </option>
             </select>
           </label>
+          <label>
+            输出 token 上限
+            <select
+              value={draft.maxOutputTokens}
+              onChange={(e) =>
+                setDraft({ ...draft, maxOutputTokens: Number(e.target.value) })
+              }
+            >
+              <option value={4000}>4,000（默认）</option>
+              <option value={8000}>8,000</option>
+              <option value={16000}>16,000</option>
+            </select>
+          </label>
+          <p className="muted">
+            请确认模型支持所选上限；提高上限可能增加费用与等待时间。截断不会自动重试或写入学习内容。
+          </p>
           <div className="ai-actions">
             <button className="button" disabled={busy}>
               保存配置

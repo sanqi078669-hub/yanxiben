@@ -6,6 +6,8 @@
 | [本地架构决策](ADR-001-local.md) | 本地实现与设计方案的差异 |
 | [基础功能测试报告](TEST-REPORT.md) | 原有功能阶段性验收 |
 | [AI 验收报告](AI-ACCEPTANCE.md) | AI 功能验证、57 项回归结果及已知限制 |
+| [AI 配置边界验收](AI-CONFIGURATION-BOUNDARIES.md) | FIX-10 输出长度、主密钥迁移、公网连接及每日预算 |
+| [查询性能验收](QUERY-PERFORMANCE.md) | FIX-09 同数据算法对照、查询次数及增长限制 |
 | [后续改进清单](IMPROVEMENT-PLAN.md) | 改进编号、优先级、实施方向与验收标准 |
 | [代码审查修复计划](CODE-REVIEW-REMEDIATION-PLAN.md) | 本次审查问题的修复顺序、实施方案、验收标准与进度记录 |
 | [脚本说明](../scripts/README.md) | 启动、维护及手动验证命令 |

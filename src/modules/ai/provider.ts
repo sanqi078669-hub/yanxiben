@@ -4,6 +4,8 @@ import { activeConfig } from "./config";
 import { createHash } from "node:crypto";
 import { aiUsage } from "./usage";
 import { providerError } from "./presets";
+import { publicFetch, publicTarget } from "./network";
+import { reserveBudget } from "./budget";
 
 export function aiConfig(owner?: string) {
   if (owner)
@@ -16,6 +18,7 @@ export function aiConfig(owner?: string) {
         host: "",
         vision: false,
         tokenParameter: "max_tokens",
+        maxOutputTokens: 4000,
       }
     );
   const base = process.env.AI_BASE_URL?.trim() || "";
@@ -33,9 +36,7 @@ export function aiConfig(owner?: string) {
     !url.password &&
     !url.search &&
     !url.hash &&
-    (url.protocol === "https:" ||
-      (url.protocol === "http:" &&
-        ["localhost", "127.0.0.1", "[::1]"].includes(url.hostname)));
+    url.protocol === "https:";
   return {
     base,
     model,
@@ -44,12 +45,20 @@ export function aiConfig(owner?: string) {
     host: valid ? url!.host : "",
     vision: process.env.AI_VISION === "true",
     tokenParameter: "max_tokens",
+    maxOutputTokens: 4000,
   };
 }
 export function aiStatus(owner?: string) {
   const config = aiConfig(owner),
-    { ready, host, model, vision } = config;
-  return { ready, host, model, vision, target: configTarget(config) };
+    { ready, host, model, vision, maxOutputTokens } = config;
+  return {
+    ready,
+    host,
+    model,
+    vision,
+    maxOutputTokens,
+    target: configTarget(config),
+  };
 }
 function configTarget(config: ReturnType<typeof aiConfig>) {
   return createHash("sha256")
@@ -59,6 +68,7 @@ function configTarget(config: ReturnType<typeof aiConfig>) {
         config.model,
         config.vision,
         config.tokenParameter,
+        config.maxOutputTokens,
       ]),
     )
     .digest("hex");
@@ -69,7 +79,7 @@ export async function complete<T>(
   input: unknown,
   schema: z.ZodType<T>,
   images: string[] = [],
-  transport: typeof fetch = fetch,
+  transport: typeof fetch = publicFetch,
   owner?: string,
   target?: string,
 ): Promise<T> {
@@ -92,10 +102,20 @@ export async function complete<T>(
       "AI_NO_VISION",
       "当前模型未启用图片识别，请在设置中选择支持图片的模型并开启图片能力",
     );
+  publicTarget(config.base);
+  const usage: NonNullable<ReturnType<typeof aiUsage.getStore>> =
+    aiUsage.getStore() || { tokens: null, input: null, output: null };
+  const settle = owner
+    ? reserveBudget(owner, config.model, config.host)
+    : undefined;
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 45000);
+  const timer = setTimeout(
+    () => controller.abort(),
+    (45000 * config.maxOutputTokens) / 4000,
+  );
   try {
-    const response = await transport(
+    const send = transport === fetch ? publicFetch : transport;
+    const response = await send(
       config.base.replace(/\/$/, "") + "/chat/completions",
       {
         method: "POST",
@@ -108,7 +128,7 @@ export async function complete<T>(
         body: JSON.stringify({
           model: config.model,
           stream: false,
-          [config.tokenParameter]: 4000,
+          [config.tokenParameter]: config.maxOutputTokens,
           messages: [
             {
               role: "system",
@@ -153,13 +173,31 @@ export async function complete<T>(
       chunks.push(value);
     }
     const payload = JSON.parse(Buffer.concat(chunks).toString("utf8"));
-    const usage = aiUsage.getStore();
-    if(usage) {
-      usage.input=Number.isSafeInteger(payload.usage?.prompt_tokens)&&payload.usage.prompt_tokens>=0?payload.usage.prompt_tokens:null;
-      usage.output=Number.isSafeInteger(payload.usage?.completion_tokens)&&payload.usage.completion_tokens>=0?payload.usage.completion_tokens:null;
+    if (usage) {
+      usage.input =
+        Number.isSafeInteger(payload.usage?.prompt_tokens) &&
+        payload.usage.prompt_tokens >= 0
+          ? payload.usage.prompt_tokens
+          : null;
+      usage.output =
+        Number.isSafeInteger(payload.usage?.completion_tokens) &&
+        payload.usage.completion_tokens >= 0
+          ? payload.usage.completion_tokens
+          : null;
     }
-    if (usage && Number.isSafeInteger(payload.usage?.total_tokens) && payload.usage.total_tokens >= 0) usage.tokens = payload.usage.total_tokens;
+    if (
+      usage &&
+      Number.isSafeInteger(payload.usage?.total_tokens) &&
+      payload.usage.total_tokens >= 0
+    )
+      usage.tokens = payload.usage.total_tokens;
     const choice = payload.choices?.[0];
+    if (choice?.finish_reason === "length")
+      throw new AppError(
+        502,
+        "AI_OUTPUT_TRUNCATED",
+        "AI 输出达到长度上限，本次可能已计费，未写入学习内容。可提高输出上限或缩短材料后手动重试",
+      );
     if (
       choice?.finish_reason !== "stop" ||
       typeof choice.message?.content !== "string" ||
@@ -178,5 +216,10 @@ export async function complete<T>(
     );
   } finally {
     clearTimeout(timer);
+    if (settle) {
+      const cost = settle(usage.input, usage.output);
+      const context = aiUsage.getStore();
+      if (context) context.cost = cost;
+    }
   }
 }

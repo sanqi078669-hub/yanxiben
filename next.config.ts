@@ -1,6 +1,21 @@
 import type { NextConfig } from "next";
 const config: NextConfig = {
   serverExternalPackages: ["node:sqlite"],
+  outputFileTracingExcludes: {
+    "/*": [
+      "./data/**/*",
+      "./data-*/**/*",
+      "./test-results/**/*",
+      "./backups/**/*",
+      "./.private-secrets/**/*",
+      "./.env*",
+      "./**/*.key",
+      "./**/*.pem",
+      "./**/*.sqlite*",
+      "./**/*.db",
+      "./**/*.db-*",
+    ],
+  },
   async headers() {
     return [
       {

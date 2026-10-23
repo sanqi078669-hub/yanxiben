@@ -103,6 +103,14 @@ export const migrations: Migration[] = [
       INSERT OR IGNORE INTO entry_filter_values SELECT new.owner,new.id,'knowledge',value FROM json_each(new.payload,'$.knowledgeIds'); END;
   `),
   },
+  {
+    version: 7,
+    name: "ai-daily-budget-v7",
+    up: (db) => db.exec(`
+      CREATE TABLE ai_daily_budget(owner TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,day TEXT NOT NULL,currency TEXT NOT NULL,calls INTEGER NOT NULL,spent REAL NOT NULL,unknown INTEGER NOT NULL,PRIMARY KEY(owner,day,currency));
+      CREATE TABLE ai_budget_active(owner TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,id TEXT NOT NULL,expires INTEGER NOT NULL);
+    `),
+  },
 ];
 const current = migrations.at(-1)!.version;
 export const DATABASE_VERSION = current;

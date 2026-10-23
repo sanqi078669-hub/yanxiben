@@ -17,6 +17,7 @@
 | `ai-study-smoke.ts` | 整理、错因、提示、点评、英语、变式的真实调用验证 |
 | `ai-related-smoke.ts` | 相似题真实调用验证 |
 | `ai-diagnosis-smoke.ts` | 学习诊断真实调用验证 |
+| `verify-ai-boundaries.ts` | `node --import tsx scripts/verify-ai-boundaries.ts --source-data test-results/qa-interactive --live`，克隆旧隔离配置，DeepSeek 长输出/截断/预算验收；会产生真实调用费用 |
 
 AI 脚本使用 `npx tsx scripts/<脚本名>.ts --live` 显式启用真实调用，使用本机账号已配置的模型并可能产生费用。学习助手可额外传 `--action organize|analyze|hint|feedback|english|variant`（选择其中一个值）。CI 不运行真实调用脚本。
 

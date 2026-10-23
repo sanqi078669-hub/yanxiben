@@ -7,8 +7,12 @@ import { aiUsage } from "./usage";
 export { aiUsage } from "./usage";
 import type { AiAuditRecord } from "../../lib/ai-audit-types";
 import { estimate } from "./pricing";
-function extras() { /* Schema is initialized centrally by lib/db. */ }
-function init() { /* Schema is initialized centrally by lib/db. */ }
+function extras() {
+  /* Schema is initialized centrally by lib/db. */
+}
+function init() {
+  /* Schema is initialized centrally by lib/db. */
+}
 export async function audited<T>(
   owner: string,
   action: string,
@@ -20,7 +24,7 @@ export async function audited<T>(
     started = Date.now(),
     created_at = new Date().toISOString(),
     config = aiStatus(owner),
-    usage = {
+    usage: NonNullable<ReturnType<typeof aiUsage.getStore>> = {
       tokens: null as number | null,
       input: null as number | null,
       output: null as number | null,
@@ -28,13 +32,16 @@ export async function audited<T>(
   return aiUsage.run(usage, async () => {
     try {
       const result = await work();
-      const cost = estimate(
-        owner,
-        config.model,
-        config.host,
-        usage.input,
-        usage.output,
-      );
+      const cost =
+        usage.cost === undefined
+          ? estimate(
+              owner,
+              config.model,
+              config.host,
+              usage.input,
+              usage.output,
+            )
+          : usage.cost;
       transaction(() => {
         run(
           "INSERT INTO ai_audit VALUES(?,?,?,?,?,?,?,?,?,?,?)",
@@ -59,20 +66,38 @@ export async function audited<T>(
       });
       return { ...result, audit: { id, model: config.model, created_at } };
     } catch (error) {
-      run(
-        "INSERT INTO ai_audit VALUES(?,?,?,?,?,?,?,?,?,?,?)",
-        id,
-        owner,
-        action,
-        config.model,
-        config.host,
-        created_at,
-        Date.now() - started,
-        "failed",
-        usage.tokens,
-        null,
-        "",
-      );
+      transaction(() => {
+        run(
+          "INSERT INTO ai_audit VALUES(?,?,?,?,?,?,?,?,?,?,?)",
+          id,
+          owner,
+          action,
+          config.model,
+          config.host,
+          created_at,
+          Date.now() - started,
+          "failed",
+          usage.tokens,
+          null,
+          "",
+        );
+        const cost =
+          usage.cost === undefined
+            ? estimate(
+                owner,
+                config.model,
+                config.host,
+                usage.input,
+                usage.output,
+              )
+            : usage.cost;
+        run(
+          "INSERT INTO ai_audit_extras VALUES(?,?,?)",
+          id,
+          owner,
+          JSON.stringify({ cost }),
+        );
+      });
       throw error;
     }
   });

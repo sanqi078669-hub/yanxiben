@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { randomBytes, createCipheriv, createDecipheriv } from "node:crypto";
+import { randomBytes, createCipheriv } from "node:crypto";
 import {
   existsSync,
   readFileSync,
@@ -10,6 +10,9 @@ import {
 import path from "node:path";
 import { dataDir } from "../../lib/db";
 import { assert } from "../entries/service";
+import { publicTarget } from "./network";
+import { masterKey, decryptWithKey } from "./master-key";
+import { aiLimitsSchema, defaultAiLimits } from "../../lib/ai-limits";
 
 const profileSchema = z
   .object({
@@ -34,12 +37,27 @@ const profileSchema = z
     tokenParameter: z
       .enum(["max_tokens", "max_completion_tokens"])
       .default("max_tokens"),
+    maxOutputTokens: z
+      .union([z.literal(4000), z.literal(8000), z.literal(16000)])
+      .default(4000),
     key: z.string().trim().max(500).optional(),
   })
   .strict();
 export type Profile = z.infer<typeof profileSchema>;
-type Stored = Omit<Profile, "key"> & { encrypted: string };
-type Config = { activeId: string | null; profiles: Stored[] };
+const storedConfigSchema = z
+  .object({
+    activeId: z.string().uuid().nullable(),
+    profiles: z
+      .array(
+        profileSchema
+          .omit({ key: true })
+          .extend({ encrypted: z.string().min(1) }),
+      )
+      .max(10),
+    limits: aiLimitsSchema.default(defaultAiLimits),
+  })
+  .strict();
+type Config = z.infer<typeof storedConfigSchema>;
 const directory = path.join(dataDir, "ai-private");
 function filename(owner: string) {
   return path.join(directory, z.string().uuid().parse(owner) + ".json");
@@ -47,35 +65,26 @@ function filename(owner: string) {
 function read(owner: string): Config {
   const file = filename(owner);
   return existsSync(file)
-    ? JSON.parse(readFileSync(file, "utf8"))
-    : { activeId: null, profiles: [] };
-}
-function secret() {
-  mkdirSync(directory, { recursive: true });
-  const file = path.join(directory, "encryption-key");
-  if (!existsSync(file))
-    writeFileSync(file, randomBytes(32), { flag: "wx", mode: 0o600 });
-  return readFileSync(file);
+    ? storedConfigSchema.parse(JSON.parse(readFileSync(file, "utf8")))
+    : { activeId: null, profiles: [], limits: { ...defaultAiLimits } };
 }
 function encrypt(value: string) {
   const iv = randomBytes(12),
-    cipher = createCipheriv("aes-256-gcm", secret(), iv);
+    cipher = createCipheriv("aes-256-gcm", masterKey(dataDir, true), iv);
   const content = Buffer.concat([cipher.update(value, "utf8"), cipher.final()]);
   return Buffer.concat([iv, cipher.getAuthTag(), content]).toString("base64");
 }
 function decrypt(value: string) {
-  const b = Buffer.from(value, "base64"),
-    cipher = createDecipheriv("aes-256-gcm", secret(), b.subarray(0, 12));
-  cipher.setAuthTag(b.subarray(12, 28));
-  return Buffer.concat([
-    cipher.update(b.subarray(28)),
-    cipher.final(),
-  ]).toString("utf8");
+  return decryptWithKey(value, masterKey(dataDir, false));
+}
+export function configuredLimits(owner: string) {
+  return read(owner).limits;
 }
 export function publicConfig(owner: string) {
   const c = read(owner);
   return {
     activeId: c.activeId,
+    limits: c.limits,
     profiles: c.profiles.map(({ encrypted, ...p }) => ({
       ...p,
       hasKey: !!encrypted,
@@ -94,6 +103,7 @@ export function activeConfig(owner: string) {
     vision: p.vision,
     host: new URL(p.base).host,
     tokenParameter: p.tokenParameter,
+    maxOutputTokens: p.maxOutputTokens,
   };
 }
 export function saveConfig(owner: string, raw: unknown) {
@@ -107,12 +117,16 @@ export function saveConfig(owner: string, raw: unknown) {
         })
         .strict(),
       z.object({ action: z.literal("remove"), id: z.string().uuid() }).strict(),
+      z
+        .object({ action: z.literal("limits"), limits: aiLimitsSchema })
+        .strict(),
     ])
     .parse(raw);
   const c = read(owner);
   if (command.action === "save") {
     const { key, ...p } = command.profile,
       old = c.profiles.find((v) => v.id === p.id);
+    publicTarget(p.base);
     assert(
       key || (old && old.base === p.base),
       400,
@@ -135,6 +149,8 @@ export function saveConfig(owner: string, raw: unknown) {
       "模型配置不存在",
     );
     c.activeId = command.id;
+  } else if (command.action === "limits") {
+    c.limits = command.limits;
   } else {
     c.profiles = c.profiles.filter((v) => v.id !== command.id);
     if (c.activeId === command.id) c.activeId = null;

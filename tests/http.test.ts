@@ -144,6 +144,53 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
       Cookie: otherCookie,
     });
     assert.equal((await other.json()).data.profiles.length, 0);
+    assert.equal(
+      (await call("ai/budget", undefined, "GET", { Cookie: "" })).status,
+      401,
+    );
+    const limits = { dailyCalls: 7, dailyCost: { amount: 1, currency: "CNY" } };
+    assert.equal(
+      (
+        await call("ai/config", { action: "limits", limits }, "POST", {
+          "X-Requested-With": "",
+        })
+      ).status,
+      403,
+    );
+    assert.equal(
+      (await call("ai/config", { action: "limits", limits })).status,
+      200,
+    );
+    assert.deepEqual(
+      (await (await call("ai/budget")).json()).data.limits,
+      limits,
+    );
+    assert.equal(
+      (
+        await (
+          await call("ai/budget", undefined, "GET", { Cookie: otherCookie })
+        ).json()
+      ).data.limits.dailyCalls,
+      100,
+    );
+    assert.equal(
+      (
+        await call("ai/config", {
+          action: "save",
+          profile: { ...profile, base: "https://127.0.0.1" },
+        })
+      ).status,
+      400,
+    );
+    assert.equal(
+      (
+        await call("ai/config", {
+          action: "save",
+          profile: { ...profile, maxOutputTokens: 50000 },
+        })
+      ).status,
+      400,
+    );
   });
   await t.test(
     "无 Content-Length 的 chunked JSON 与图片超限均返回 413",
