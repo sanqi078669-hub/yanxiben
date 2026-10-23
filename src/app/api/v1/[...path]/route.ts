@@ -41,6 +41,9 @@ import {
   previewRestore,
   launchRestore,
   stopRestore,
+  restoreWorkspaces,
+  deleteRestore,
+  restoreControl,
 } from "../../../../modules/data-management/restore-workspace";
 import {
   audited,
@@ -110,6 +113,7 @@ async function handler(
         { data, meta: { requestId } },
         { headers: { "Cache-Control": "no-store" } },
       );
+    if (p === "internal/restore-control") return ok(restoreControl(method, req.headers.get("x-restore-control")));
     if (p === "auth/login" && method === "POST") {
       const b = z
         .object({
@@ -187,7 +191,12 @@ async function handler(
     if (p === "data/restore-launch" && method === "POST")
       return ok(await launchRestore(owner, await json()));
     if (p === "data/restore-stop" && method === "POST")
-      return ok(stopRestore(owner, await json()));
+      return ok(await stopRestore(owner, await json()));
+    if (p === "data/restore-workspaces" && method === "GET") return ok(restoreWorkspaces(owner));
+    if (p === "data/restore-delete" && method === "POST") {
+      const b = z.object({ id: z.string().uuid(), confirm: z.literal(true) }).strict().parse(await json());
+      return ok(deleteRestore(owner, { id: b.id }));
+    }
     if (p === "data/restore-preview" && method === "POST") {
       const form = await req.formData(),
         file = form.get("file"),
@@ -208,7 +217,7 @@ async function handler(
         "密码不正确",
       );
       return ok(
-        await previewRestore(owner, new Uint8Array(await file.arrayBuffer())),
+        await previewRestore(owner, new Uint8Array(await file.arrayBuffer()), { signal: req.signal }),
       );
     }
     if (p === "ai/prices" && method === "GET") return ok(priceList(owner));

@@ -1,11 +1,18 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { api, request } from "../lib/request";
 type Preview = {
   id: string;
   counts: Record<string, number>;
   folder: string;
   username: string;
+};
+type Workspace = {
+  id: string;
+  created: string;
+  counts: Record<string, number>;
+  url: string | null;
+  running: boolean;
 };
 const labels: Record<string, string> = {
   entries: "学习记录",
@@ -23,6 +30,10 @@ const labels: Record<string, string> = {
   entry_hint_usage: "本轮提示使用记录",
 };
 export function RestoreWizard() {
+  const previewRequest = useRef<AbortController | null>(null);
+  const [spaces, setSpaces] = useState<Workspace[]>([]);
+  const refreshSpaces = () =>
+    api<Workspace[]>("data/restore-workspaces").then(setSpaces);
   const [last, setLast] = useState<string | null>(null),
     [file, setFile] = useState<File | null>(null),
     [password, setPassword] = useState(""),
@@ -36,8 +47,12 @@ export function RestoreWizard() {
         .then((r) => setLast(r.created))
         .catch((e) => setError(e.message));
     refresh();
+    refreshSpaces().catch((e) => setError(e.message));
     window.addEventListener("backup-generated", refresh);
-    return () => window.removeEventListener("backup-generated", refresh);
+    return () => {
+      window.removeEventListener("backup-generated", refresh);
+      previewRequest.current?.abort();
+    };
   }, []);
   return (
     <section className="panel form-panel">
@@ -87,18 +102,27 @@ export function RestoreWizard() {
               setError("");
               try {
                 const form = new FormData();
+                const controller = new AbortController();
+                previewRequest.current = controller;
                 form.set("file", file!);
                 form.set("password", password);
                 setPreview(
                   await request<Preview>("data/restore-preview", {
                     method: "POST",
                     body: form,
+                    signal: controller.signal,
                   }),
                 );
                 setPassword("");
+                await refreshSpaces();
               } catch (e) {
-                setError((e as Error).message);
+                setError(
+                  previewRequest.current?.signal.aborted
+                    ? "恢复校验已取消，原数据不受影响。"
+                    : (e as Error).message,
+                );
               } finally {
+                previewRequest.current = null;
                 setBusy(false);
               }
             }}
@@ -131,6 +155,7 @@ export function RestoreWizard() {
                       { id: preview.id, confirm: true },
                     );
                     setUrl(r.url);
+                    await refreshSpaces();
                   } catch (e) {
                     setError((e as Error).message);
                   } finally {
@@ -145,6 +170,14 @@ export function RestoreWizard() {
         </fieldset>
       </details>
       {busy && <p role="status">正在处理恢复，请保持页面打开…</p>}
+      {busy && previewRequest.current && (
+        <button
+          className="button outline"
+          onClick={() => previewRequest.current?.abort()}
+        >
+          取消本次恢复校验
+        </button>
+      )}
       {error && <p role="alert">{error}</p>}
       {url && (
         <p role="status">
@@ -160,6 +193,7 @@ export function RestoreWizard() {
               try {
                 await api("data/restore-stop", { id: preview!.id });
                 setUrl("");
+                await refreshSpaces();
               } catch (e) {
                 setError((e as Error).message);
               } finally {
@@ -171,6 +205,92 @@ export function RestoreWizard() {
           </button>
         </p>
       )}
+      <details>
+        <summary>管理已有恢复工作区（{spaces.length}）</summary>
+        <p>
+          未启动的预览保留 7
+          天，在下次校验时清理；启动过的空间仅手动删除。删除只影响选定的隔离目录，请先导出需要保留的学习内容。
+        </p>
+        <button
+          className="text-button"
+          disabled={busy}
+          onClick={() => refreshSpaces().catch((e) => setError(e.message))}
+        >
+          刷新工作区列表
+        </button>
+        {spaces.map((space) => (
+          <section className="panel" key={space.id}>
+            <p>
+              {new Date(space.created).toLocaleString()} ·{" "}
+              {space.counts.entries || 0} 条记录 ·{" "}
+              {space.running ? "服务运行中" : "服务已停止"}
+            </p>
+            {space.running && space.url && (
+              <a href={space.url} target="_blank" rel="noreferrer">
+                打开恢复空间
+              </a>
+            )}
+            <button
+              className="button outline"
+              disabled={busy}
+              onClick={async () => {
+                setBusy(true);
+                setError("");
+                try {
+                  if (space.running) {
+                    await api("data/restore-stop", { id: space.id });
+                    if (space.id === preview?.id) setUrl("");
+                  } else {
+                    const result = await api<{ url: string }>(
+                      "data/restore-launch",
+                      { id: space.id, confirm: true },
+                    );
+                    if (space.id === preview?.id) setUrl(result.url);
+                  }
+                  await refreshSpaces();
+                } catch (e) {
+                  setError((e as Error).message);
+                } finally {
+                  setBusy(false);
+                }
+              }}
+            >
+              {space.running ? "停止服务，保留数据" : "启动此恢复空间"}
+            </button>
+            <button
+              className="text-button"
+              disabled={busy || space.running}
+              onClick={async () => {
+                if (
+                  !confirm(
+                    "删除此隔离工作区及其备份副本？不能撤销，请先导出需要保留的内容；当前主空间不受影响。",
+                  )
+                )
+                  return;
+                setBusy(true);
+                setError("");
+                try {
+                  await api("data/restore-delete", {
+                    id: space.id,
+                    confirm: true,
+                  });
+                  if (space.id === preview?.id) {
+                    setPreview(null);
+                    setUrl("");
+                  }
+                  await refreshSpaces();
+                } catch (e) {
+                  setError((e as Error).message);
+                } finally {
+                  setBusy(false);
+                }
+              }}
+            >
+              删除工作区
+            </button>
+          </section>
+        ))}
+      </details>
     </section>
   );
 }
