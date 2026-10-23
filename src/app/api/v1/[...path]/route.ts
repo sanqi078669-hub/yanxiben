@@ -64,6 +64,7 @@ import {
   markdownExport,
 } from "../../../../modules/data-management/backup";
 export const runtime = "nodejs";
+import { checkBodyLength, readJson, readImageForm, readRestoreUpload, JSON_BODY_LIMIT, IMAGE_BODY_LIMIT, RESTORE_BODY_LIMIT } from "../../../../modules/http/body";
 export const dynamic = "force-dynamic";
 async function handler(
   req: NextRequest,
@@ -91,23 +92,9 @@ async function handler(
         "CSRF",
         "缺少同源请求校验",
       );
-      const size = Number(req.headers.get("content-length") || 0);
-      assert(
-        size <= (p === "data/restore-preview" ? 201 : 12) * 1024 * 1024,
-        413,
-        "FILE_TOO_LARGE",
-        "请求过大",
-      );
+      checkBodyLength(req, p === "data/restore-preview" ? RESTORE_BODY_LIMIT : p === "attachments" ? IMAGE_BODY_LIMIT : JSON_BODY_LIMIT);
     }
-    const json = async () => {
-      const raw = await req.text();
-      assert(raw.length <= 1024 * 1024, 413, "FILE_TOO_LARGE", "内容过长");
-      try {
-        return JSON.parse(raw);
-      } catch {
-        throw new AppError(400, "VALIDATION_ERROR", "无效 JSON");
-      }
-    };
+    const json = () => readJson(req);
     const ok = (data: unknown) =>
       NextResponse.json(
         { data, meta: { requestId } },
@@ -198,27 +185,11 @@ async function handler(
       return ok(deleteRestore(owner, { id: b.id }));
     }
     if (p === "data/restore-preview" && method === "POST") {
-      const form = await req.formData(),
-        file = form.get("file"),
-        password = form.get("password");
-      assert(
-        file instanceof File && typeof password === "string",
-        400,
-        "INVALID_BACKUP",
-        "请选择 ZIP 并验证当前密码",
-      );
-      assert(
-        await bcrypt.compare(
-          password,
-          one("SELECT password FROM users WHERE id=?", owner)!.password,
-        ),
-        403,
-        "INVALID_PASSWORD",
-        "密码不正确",
-      );
-      return ok(
-        await previewRestore(owner, new Uint8Array(await file.arrayBuffer()), { signal: req.signal }),
-      );
+      const { password, upload } = await readRestoreUpload(req);
+      try {
+        assert(await bcrypt.compare(password, one("SELECT password FROM users WHERE id=?", owner)!.password), 403, "INVALID_PASSWORD", "密码不正确");
+        return ok(await previewRestore(owner, upload, { signal: req.signal }));
+      } finally { await upload.dispose(); }
     }
     if (p === "ai/prices" && method === "GET") return ok(priceList(owner));
     if (p === "ai/prices" && method === "POST")
@@ -603,7 +574,7 @@ async function handler(
       }
     }
     if (p === "attachments" && method === "POST") {
-      const form = await req.formData();
+      const form = await readImageForm(req);
       const f = form.get("file");
       assert(f instanceof File, 400, "VALIDATION_ERROR", "请选择图片");
       assert(

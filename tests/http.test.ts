@@ -7,6 +7,7 @@ import path from "node:path";
 import os from "node:os";
 import bcrypt from "bcryptjs";
 import sharp from "sharp";
+import { request as httpRequest } from "node:http";
 process.env.DATA_DIR = mkdtempSync(path.join(os.tmpdir(), "yanxi-http-"));
 const { run, one, dataDir } = await import("../src/lib/db");
 const { defaults } = await import("../src/lib/model");
@@ -144,6 +145,53 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
     });
     assert.equal((await other.json()).data.profiles.length, 0);
   });
+  await t.test(
+    "无 Content-Length 的 chunked JSON 与图片超限均返回 413",
+    async () => {
+      const send = (p: string, size: number, contentType: string) =>
+        new Promise<number>((resolve, reject) => {
+          let completed = false;
+          const req = httpRequest(
+            base + "/api/v1/" + p,
+            {
+              method: "POST",
+              headers: {
+                "Transfer-Encoding": "chunked",
+                "Content-Type": contentType,
+                "X-Requested-With": "yanxiben",
+                Origin: base,
+                Cookie: cookie,
+              },
+            },
+            (res) => {
+              res.resume();
+              res.on("end", () => {
+                completed = true;
+                resolve(res.statusCode!);
+                req.destroy();
+              });
+            },
+          );
+          req.on("error", (error) => {
+            if (!completed) reject(error);
+          });
+          req.write(Buffer.alloc(size, 120));
+          req.end();
+        });
+      assert.equal(
+        await send("entries", 1024 * 1024 + 1, "application/json"),
+        413,
+      );
+      assert.equal(
+        await send(
+          "attachments",
+          12 * 1024 * 1024 + 1,
+          "multipart/form-data; boundary=test",
+        ),
+        413,
+      );
+    },
+  );
   await t.test("AI目标变更保护与关闭状态不发送外部请求", async () => {
     assert.equal((await call("ai/study", {})).status, 409);
     const status = (await (await call("ai/status")).json()).data;

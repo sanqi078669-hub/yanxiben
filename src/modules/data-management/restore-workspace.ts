@@ -13,6 +13,7 @@ import { randomUUID, randomBytes, timingSafeEqual } from "node:crypto";
 import { z } from "zod";
 import { dataDir, one, run, all } from "../../lib/db";
 import { assert, AppError } from "../entries/service";
+import type { DiskUpload } from "../http/body";
 
 const state = globalThis as typeof globalThis & {
   yanxiRestoreChildren?: Map<string, ChildProcess>;
@@ -109,7 +110,8 @@ export function restoreControl(method: string, supplied: string | null) {
   const expected = process.env.RESTORE_CONTROL_TOKEN || "";
   assert(
     expected.length === 64 &&
-      typeof supplied === "string" && /^[a-f0-9]{64}$/.test(supplied) &&
+      typeof supplied === "string" &&
+      /^[a-f0-9]{64}$/.test(supplied) &&
       timingSafeEqual(Buffer.from(expected), Buffer.from(supplied)),
     404,
     "NOT_FOUND",
@@ -184,11 +186,12 @@ export function cleanupRestoreWorkspaces(owner: string, now = Date.now()) {
 }
 export async function previewRestore(
   owner: string,
-  bytes: Uint8Array,
+  bytes: Uint8Array | DiskUpload,
   options: { signal?: AbortSignal; timeoutMs?: number } = {},
 ) {
+  const size = bytes instanceof Uint8Array ? bytes.length : bytes.size;
   assert(
-    bytes.length > 0 && bytes.length <= 200 * 1024 * 1024,
+    size > 0 && size <= 200 * 1024 * 1024,
     413,
     "TOO_LARGE",
     "备份大小应为 1 字节至 200 MB",
@@ -210,7 +213,9 @@ export async function previewRestore(
     target = path.join(folder, "data");
   mkdirSync(folder, { recursive: true });
   try {
-    writeFileSync(archive, bytes, { mode: 0o600, flag: "wx" });
+    if (bytes instanceof Uint8Array)
+      writeFileSync(archive, bytes, { mode: 0o600, flag: "wx" });
+    else await bytes.moveTo(archive);
     const counts = await new Promise<Record<string, number>>(
       (resolve, reject) => {
         const child = spawn(process.execPath, [worker], {

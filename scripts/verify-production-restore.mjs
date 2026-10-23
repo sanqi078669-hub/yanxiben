@@ -3,6 +3,7 @@ import {
   mkdtempSync,
   cpSync,
   readFileSync,
+  readdirSync,
   writeFileSync,
   existsSync,
   mkdirSync,
@@ -215,6 +216,7 @@ try {
   const preview = await call("data/restore-preview", form);
   workspaceId = preview.data.id;
   assert.equal(preview.data.counts.entries, 1);
+  assert.deepEqual(readdirSync(path.join(target, "upload-tmp")), []);
   occupiedPort = createServer();
   await new Promise((resolve) => {
     occupiedPort.once("error", () => resolve());
