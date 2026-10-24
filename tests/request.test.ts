@@ -100,3 +100,52 @@ test("请求共享 JSON/FormData/目标头，网络错误可辨识", async (t) =
       !error.message.includes("internal network message"),
   );
 });
+
+test("共享请求覆盖等待响应与读取正文的超时，并保留主动取消", async (t) => {
+  // AbortSignal.timeout timers do not themselves keep Node's test process alive.
+  const keepAlive = setInterval(() => {}, 1000);
+  t.after(() => clearInterval(keepAlive));
+  t.mock.method(
+    globalThis,
+    "fetch",
+    async (_url: unknown, init: RequestInit) =>
+      new Promise<Response>((_resolve, reject) => {
+        init.signal!.addEventListener(
+          "abort",
+          () => reject(init.signal!.reason),
+          { once: true },
+        );
+      }),
+  );
+  await assert.rejects(() => request("settings", { timeoutMs: 5 }), {
+    code: "REQUEST_TIMEOUT",
+  });
+  const caller = new AbortController();
+  const cancelled = request("settings", {
+    signal: caller.signal,
+    timeoutMs: 1000,
+  });
+  caller.abort(new DOMException("Cancelled by test", "AbortError"));
+  await assert.rejects(() => cancelled, { name: "AbortError" });
+  t.mock.restoreAll();
+  t.mock.method(
+    globalThis,
+    "fetch",
+    async (_url: unknown, init: RequestInit) =>
+      new Response(
+        new ReadableStream({
+          start(controller) {
+            init.signal!.addEventListener(
+              "abort",
+              () => controller.error(init.signal!.reason),
+              { once: true },
+            );
+          },
+        }),
+        { headers: { "Content-Type": "application/json" } },
+      ),
+  );
+  await assert.rejects(() => request("settings", { timeoutMs: 5 }), {
+    code: "REQUEST_TIMEOUT",
+  });
+});

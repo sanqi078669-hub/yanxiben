@@ -40,5 +40,5 @@
 - `scripts/verify-ai-boundaries.ts --source-data test-results/qa-interactive --live` 克隆已有隔离配置并只发送合成材料；原配置摘要及旧密钥文件未改变，个人题库未读取。
 - DeepSeek / deepseek-flash：完整返回 180 条合成文本、6,911 字符、4,808 输出 token；4,000 上限真实截断且费用记录保留；达到次数和估算费用阈值后未再发送。报告 `test-results/ai-boundaries-live.json` 为忽略的本地证据。
 - 费用测试采用**合成的每百万 token 1 CNY 单价**，验证计算和拦截，不代表官方实时价格。
-- 浏览器：保存每日次数为已用次数，连接测试被拦截且显示请求编号；恢复限制，密钥留空保存 8,000 上限，真实连接通过，今日用量刷新为 3 次。截图 `screenshots/fix10-ai-budget-limit.png`、`screenshots/fix10-ai-settings.png`。
+- 浏览器：保存每日次数为已用次数，连接测试被拦截且显示请求编号；恢复限制，密钥留空保存 8,000 上限，真实连接通过，今日用量刷新为 3 次。截图 `screenshots/fix10-ai-budget-limit.jpg`、`screenshots/fix10-ai-settings.jpg`。
 - 其他供应商仍只通过通用协议模拟，未真实联调。真实长输出只验证 DeepSeek，未对每种模型能力做自动发现。

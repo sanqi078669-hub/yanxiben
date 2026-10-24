@@ -136,7 +136,7 @@ export async function diagnose(
   );
   const readable = (text: string) => {
     for (const e of preview.material.entries)
-      text = text.replaceAll(e.id, e.title || "未命名记录");
+      text = text.replaceAll(e.id, () => e.title || "未命名记录");
     const labels: Record<string, string> = {
       sampleSize: "采样作答次数",
       attempts: "作答次数",

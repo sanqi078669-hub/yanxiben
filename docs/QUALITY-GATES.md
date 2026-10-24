@@ -44,8 +44,8 @@ c8 使用 all=true，包含整个 src 下 .ts/.tsx，exclude=[]；未加载文�
 
 - `useLoad` 改为按 URL 加载，明确依赖 path；保留请求代次与卸载保护。草稿清理函数稳定，补齐保存与会话持久化依赖。
 - AI 生成时的材料快照、pending 的界面状态、恢复预览取消入口改用 React state；请求锁、AbortController 和待重试原请求仍保留在 ref，界面不在 render 读取 ref。编辑器最近内容在布局 effect 同步，已保存快照单独驱动草稿显示。
-- 浏览器一次合成 HTML 503 → 刷新 → 恢复答案和 pending → 原请求重试成功。代理只记录幂等键摘要，两次一致；数据库仅新增一条主动练习历史，到期日仍为 2099-01-01。证据 fix12-review-retry.png、忽略的 fix12-pending-requests.json。
-- 隔离账号 DeepSeek 辅助整理成功；修改合成题面后立即禁用采纳并提示重新生成，自动保存成功。截图 fix12-ai-stale-suggestion.png；没有使用个人题库。
+- 浏览器一次合成 HTML 503 → 刷新 → 恢复答案和 pending → 原请求重试成功。代理只记录幂等键摘要，两次一致；数据库仅新增一条主动练习历史，到期日仍为 2099-01-01。证据 fix12-review-retry.jpg、忽略的 fix12-pending-requests.json。
+- 隔离账号 DeepSeek 辅助整理成功；修改合成题面后立即禁用采纳并提示重新生成，自动保存成功。截图 fix12-ai-stale-suggestion.jpg；没有使用个人题库。
 - Markdown 测试直接渲染 react-markdown → remark-math → rehype-katex → KaTeX 0.19.0，覆盖行内、积分分式、矩阵、分段函数、非法公式、HTML 与不可信公式链接。保留已有 KaTeX override，未未经验证降到依赖声明中的旧版本；这组回归验证现有组合，不承诺所有宏命令兼容。
 - 完整 141/141 自动化与覆盖率门槛通过；lint、格式、类型、生产构建通过；esbuild 升级后再次通过完整测试和无开发依赖生产恢复、启动、父进程重启、停止、删除验收。
 

@@ -38,7 +38,7 @@
 
 导出快照生成早于本轮新增题目，所以恢复空间的 1 条与原空间的 2 条不同，是固定快照的预期结果。异常重试、跨账号隔离、MIME 与 ETag、畸形恢复、流式上限、旧库/旧备份、提示约束等复用对应自动化和 FIX-02～13 的已记录浏览器证据。
 
-截图：[窄屏详情](screenshots/fix14-detail-640.png)、[练习完成](screenshots/fix14-review-completed-640.png)、[恢复空间](screenshots/fix14-restored-space.png)、[本地日期](screenshots/fix13-statistics-local-date.png)。忽略的 `fix14-browser-data-check.json` 记录最终数量和真实调用状态，不含答案或密钥。
+截图：[窄屏详情](screenshots/fix14-detail-640.jpg)、[练习完成](screenshots/fix14-review-completed-640.jpg)、[恢复空间](screenshots/fix14-restored-space.jpg)、[本地日期](screenshots/fix13-statistics-local-date.jpg)。忽略的 `fix14-browser-data-check.json` 记录最终数量和真实调用状态，不含答案或密钥。
 
 ## 最终性能复核
 

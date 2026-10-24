@@ -64,23 +64,38 @@ test("读取按实际字节累计；缺失和伪造小 Content-Length 均不能�
 });
 
 test("JSON 非法编码、损坏内容及中断均返回明确错误", async () => {
-  await assert.rejects(
-    () => readJson(streamRequest([new Uint8Array([255])]).request),
-    { status: 400 },
-  );
-  await assert.rejects(() => readJson(streamRequest([encode("{")]).request), {
+  const json = (parts: Uint8Array[]) =>
+    streamRequest(parts, { "Content-Type": "application/json; charset=utf-8" })
+      .request;
+  await assert.rejects(() => readJson(json([new Uint8Array([255])])), {
     status: 400,
   });
-  assert.deepEqual(
-    await readJson(streamRequest([encode('{"ok":true}')]).request),
-    { ok: true },
-  );
+  await assert.rejects(() => readJson(json([encode("{")])), {
+    status: 400,
+  });
+  assert.deepEqual(await readJson(json([encode('{"ok":true}')])), { ok: true });
   const controller = new AbortController();
   controller.abort();
   await assert.rejects(
     () => readBody(streamRequest([], {}, controller.signal).request, 10),
     { status: 499 },
   );
+});
+test("JSON 接口拒绝缺失或错误 Content-Type", async () => {
+  for (const headers of [
+    {},
+    { "Content-Type": "text/plain" },
+    { "Content-Type": "application/json-evil" },
+  ]) {
+    await assert.rejects(
+      () =>
+        readJson(
+          streamRequest([encode("{}")], headers as Record<string, string>)
+            .request,
+        ),
+      { status: 415, code: "UNSUPPORTED_MEDIA_TYPE" },
+    );
+  }
 });
 function form(file: string, extra = false) {
   const data = new FormData();

@@ -2,7 +2,7 @@
 
 整理日期：2026-10-23。
 
-最新全仓审查：备份容量、运行权限、长任务与二次验证等新问题正在按[安全审查追加修复](SECURITY-REVIEW-20261024.md)推进。原 FIX-01～14 的“已完成”不代表这些新发现已经解决。
+最新全仓审查：备份容量、运行权限、长任务、二次验证、图片处理与恢复边界的代码修复及本地验收见[安全审查追加修复](SECURITY-REVIEW-20261024.md)。SEC-01～07 已完成当前本地实现及可执行验证；权限跨平台实机证据、历史归档和公网专项仍待完成。SEC-08 常规缺陷已修复，不能将全部 P3 建议视为关闭。原 FIX-01～14 的“已完成”仅适用于上一轮范围。
 
 2026-10-24 追加审查：用户补充的七项剩余问题及本轮处理见[追加审查记录](REMAINING-REVIEW-20261024.md)。下方 FIX-01～14 保留上一轮本地验收范围；个人用户 Git 配置、主库正式升级、旧密钥清理和公网 CSP 等未完成事项不能据此视为关闭。
 
@@ -240,14 +240,14 @@ CI 执行安装、lint、format、typecheck、test、build 和生产依赖高危
 - 历史、版本、选项使用结构校验后渲染，坏条目显示局部错误；新增当前 Next 文档所规定的 app/error.tsx（retry 属性）。编辑器加载失败退出 loading，显示重试/返回，禁止保存未加载内容；异步加载有过期结果保护。
 - 根入口只将 401 视为未登录，503/网络/协议错误展示可重试故障页。session-secret 缺失返回 503 NOT_INITIALIZED；已有账号运行 init 可补建会话密钥并保留密码。错误通知使用错误图标和 alert。
 - `npm run typecheck`、`npm run build`、全量 `npm test`：111/111 通过。新增覆盖非 JSON 413/503、坏成功响应、网络失败、请求头/FormData、损坏 UI 数据，以及 HTTP 缺失密钥 → init 补建 → 旧 Cookie 失效 → 重新登录。
-- 隔离生产环境 3128 浏览器验证：不存在记录的编辑页展示错误和 requestId，重试后仍可操作；临时移开隔离环境 session-secret 后展示初始化指令，恢复文件并点击重试可重新连接，不误导到登录页。截图：`docs/screenshots/fix04-editor-error.png`、`fix04-initialization-error.png`。个人题库未参与测试。
+- 隔离生产环境 3128 浏览器验证：不存在记录的编辑页展示错误和 requestId，重试后仍可操作；临时移开隔离环境 session-secret 后展示初始化指令，恢复文件并点击重试可重新连接，不误导到登录页。截图：`docs/screenshots/fix04-editor-error.jpg`、`fix04-initialization-error.jpg`。个人题库未参与测试。
 
 ### FIX-05 验证记录（2026-10-23）
 
 - `review-contract.ts` 提供服务端/会话/表单共用的 50,000 字符上限及提交 schema。textarea 显示字数；超限不能发起新提交。旧版最多 100,000 字符草稿通过只读兼容路径恢复，超长原文保存在 recoveryAnswer，重复刷新不丢失、不静默截断，缩短后恢复普通保存。
 - 明确未写入的 400/413/415/422 和已知版本/计划冲突会解除 pending 并保留答案，提供“放弃本次提交，继续编辑”入口；计划冲突须明确转主动练习后才能重新提交。网络/5xx 等结果不确定时保留原 body 和幂等键，提示先核对同一请求，不能直接换键制造重复提交。
 - 类型检查、生产构建通过；复习会话与核心定向测试 25/25 通过，包括长度边界、失败后修正重试、重复提交去重和旧超长草稿多次恢复。
-- 隔离浏览器实测读取后计划变为未到期 → 400 → 原答案保留且输入框可编辑 → 修改答案 → 转主动练习 → 成功。数据库核对仅一条练习历史，原计划日期不变。截图：`docs/screenshots/fix05-review-edit-after-rejection.png`。
+- 隔离浏览器实测读取后计划变为未到期 → 400 → 原答案保留且输入框可编辑 → 修改答案 → 转主动练习 → 成功。数据库核对仅一条练习历史，原计划日期不变。截图：`docs/screenshots/fix05-review-edit-after-rejection.jpg`。
 
 ### FIX-06 验证记录（2026-10-23）
 
@@ -292,7 +292,7 @@ CI 执行安装、lint、format、typecheck、test、build 和生产依赖高危
 - 迁移 7 保存每日计数/费用与活动请求，按用户时区，跨进程事务预留。每日次数默认 100；费用阈值要求匹配单价/币种且无未知费用，达到后阻止后续调用，单次仍可能越过剩余额度，界面明确告知。
 - 类型检查、无警告生产构建、完整 138/138 自动化通过；新增网络、密钥、截断、跨进程预算及 HTTP 权限测试。生产安装/恢复/父进程重启/停止/清理再次通过。
 - DeepSeek 实测：4,808 输出 token、6,911 字符完整返回；4,000 token 真实截断保留费用；次数及费用阈值不再发送。费用采用合成单价，仅验证机制。原隔离配置摘要不变、个人题库未使用；其他供应商未真实联调。
-- 浏览器保存次数阈值后连接测试正确拦截；密钥留空保存 8,000 上限后真实连接通过，用量刷新为 3 次。截图 fix10-ai-budget-limit.png、fix10-ai-settings.png。
+- 浏览器保存次数阈值后连接测试正确拦截；密钥留空保存 8,000 上限后真实连接通过，用量刷新为 3 次。截图 fix10-ai-budget-limit.jpg、fix10-ai-settings.jpg。
 - 追加修复：Next 服务端文件追踪曾包含私有数据路径；现显式排除，并在 build 脚本检查追踪清单，残留私有文件则失败。新产物检查通过，未发布旧产物。个人库版本仍为 3、升级前快照仍为 2。
 
 ### FIX-11 验证记录（2026-10-23）
@@ -302,7 +302,7 @@ CI 执行安装、lint、format、typecheck、test、build 和生产依赖高危
 - Notebook 使用 next/dynamic 按页面加载，拆出 ui、useLoad、Markdown 和 EntryContent，删除 NotebookShared 耦合入口。Login 仅依赖请求和基础 UI；KaTeX 样式移到实际使用公式的详情/编辑/复习页面。现有页面错误边界保留，懒加载提供状态提示。
 - 类型检查、生产构建和完整 139/139 自动化通过；最终路由补充边界后 HTTP 17/17 再次通过。生产无开发依赖恢复、启动、父进程重启、停止和清理再次通过。
 - 本地 QA 静态资源代理记录真实浏览器请求，不记录 API 正文/凭据：首次登录页 9 个 JS、JS/CSS 响应体共 182,090 字节，无 Markdown/KaTeX 重包；进入今日页累计 10 个 JS，仍无重包；首次进入详情才请求重包（127,492 响应体字节）及公式 CSS。最大片段原始大小由 664,041 降至 429,345 字节；这不是 gzip 体积或整站总大小比较。
-- 浏览器登录、今日、详情、编辑、复习直接访问与刷新正常，复习作答区可用。合成记录未修改；截图 fix11-review-lazy-loaded.png。记录见 test-results/fix11-login-assets.json、fix11-today-assets.json、fix11-detail-assets.json。脚本 client-asset-probe.mjs 可复用；后续页面访问中的缓存不作为首次登录证明。
+- 浏览器登录、今日、详情、编辑、复习直接访问与刷新正常，复习作答区可用。合成记录未修改；截图 fix11-review-lazy-loaded.jpg。记录见 test-results/fix11-login-assets.json、fix11-today-assets.json、fix11-detail-assets.json。脚本 client-asset-probe.mjs 可复用；后续页面访问中的缓存不作为首次登录证明。
 - 拆分时发现批量复习预览属于 entries URL，已放入对应资源处理器并补真实 HTTP 200 断言，避免仅按业务名称分组导致路由丢失。
 
 ### FIX-12 验证记录（2026-10-23）
@@ -311,7 +311,7 @@ CI 执行安装、lint、format、typecheck、test、build 和生产依赖高危
 - 清理死代码和压缩格式，简化 useLoad 为 URL 依赖；修复 render 读取 ref 的 AI 快照/pending/恢复取消状态，补齐保存和会话持久化依赖，保留原请求及幂等键。
 - lint、格式、类型、生产构建通过；完整 141/141 通过。全源码行/语句 41.02%、分支 82.91%、函数 74.79%；设整体 40/40/80/70 门槛并为关键文件设 90–95% 行门槛，正向及低覆盖反向检查通过。未排除业务源码；组件和原始 HTTP 处理器覆盖限制明确记录在 QUALITY-GATES.md。
 - 实际 Markdown/公式链覆盖行内、块级、矩阵、分段、非法/不可信输入；现有 KaTeX 0.19 override 保留并通过回归，没有盲目降级。
-- 浏览器合成 503 → 刷新恢复 → 同键重试，只新增一条练习、原到期日不变；DeepSeek 整理后修改题面，采纳立即禁用且自动保存正常。截图 fix12-review-retry.png、fix12-ai-stale-suggestion.png；仅合成隔离数据。
+- 浏览器合成 503 → 刷新恢复 → 同键重试，只新增一条练习、原到期日不变；DeepSeek 整理后修改题面，采纳立即禁用且自动保存正常。截图 fix12-review-retry.jpg、fix12-ai-stale-suggestion.jpg；仅合成隔离数据。
 - 生产依赖审计 0 漏洞。esbuild 升到 0.28.2，tsx 共用修复版，升级后完整测试及生产恢复全流程通过。开发依赖仍有 braces 无补丁漏洞链造成的 5 个 high 包条目，未执行建议的 Next 配置降级；影响、官方公告、处置及 lint 规则取舍均在 QUALITY-GATES.md 明确列出，不宣称所有依赖零风险。
 
 ### FIX-13 验证记录（2026-10-24）
@@ -322,7 +322,7 @@ CI 执行安装、lint、format、typecheck、test、build 和生产依赖高危
 - 附件 private,no-cache + 内容 ETag，每次鉴权/MIME/文件读取后才返回 304；HTTP 验证同内容 304、字节改变 200/新 ETag、非法 MIME 415、跨账号 404、未登录 401（均含条件请求）。不采用跳过鉴权的 max-age。
 - 补无密钥 .env.example，限定 Node >=24.19 <25 / npm 11；所有文本 LF，生成 next-env.d.ts 保持忽略且 typecheck 先 typegen。未擅自选择开源许可；README、ADR、原改进计划和历史报告已区分原时点与最新状态。修正 Prettier 的 data-\* 忽略规则，避免误跳过 data-management 源码。
 - 今日审计发现 Zod 高危项，4.3.6 升至修复版 4.6.7。升级回归暴露旧草稿 z.undefined 的缺省差异，已显式 optional，旧超长答案多次刷新/缩短再次通过；未保留临时诊断日志。最终完整 144/144 通过；行/语句 41.40%、分支 82.97%、函数 75.20%，全部门槛通过；lint、format、typecheck、build 通过，生产无开发依赖恢复全流程通过。
-- 最新完整/生产 npm audit 均返回 0；braces 开发链依然安装 3.0.3，保留原公告风险说明，不将审计不再报告等同于升级修复。证据及官方公告见 QUALITY-GATES.md。浏览器下载完整备份成功、生成时间更新，截图 fix13-statistics-local-date.png、fix13-export-generated.png。仅使用隔离 QA 数据；远端 CI 仍未执行。
+- 最新完整/生产 npm audit 均返回 0；braces 开发链依然安装 3.0.3，保留原公告风险说明，不将审计不再报告等同于升级修复。证据及官方公告见 QUALITY-GATES.md。浏览器下载完整备份成功、生成时间更新，截图 fix13-statistics-local-date.jpg、fix13-export-generated.jpg。仅使用隔离 QA 数据；远端 CI 仍未执行。
 
 ### FIX-14 验证记录（2026-10-24）
 
@@ -333,4 +333,4 @@ CI 执行安装、lint、format、typecheck、test、build 和生产依赖高危
 - 浏览器将 FIX-13 已下载旧 ZIP 恢复到独立空间，校验 1 条记录/2 条历史，启动 3200 并登录回读；原 QA 空间保留新增后的 2 条/3 次历史。随后从原页停止隔离服务并确认“服务已停止”，保留私有恢复目录供复核。生产测试另验证删除清理及主服务重启重连。
 - 最终 1 万题/10 万日志、30 样本暖缓存同轮对照 P95：列表 182.12→0.65ms，搜索 191.39→64.78ms，队列 101.77→51.48ms，统计 483.78→433.34ms，首页 551.77→64.95ms。不是 HTTP/并发/图片或完整设计容量；20 万日志历史增长证据仍保留。
 - 只读核对个人库仍为 v3、升级前快照仍两份，后续构建未再次升级个人库；当前新库 schema v8。原始命令/数据记录位于忽略的 clean-install-acceptance.json、production-restore-acceptance.json、benchmark-comparison-10000.json、fix14-browser-data-check.json。
-- 最终报告 REMEDIATION-ACCEPTANCE.md 已区分已完成、待外部条件、未实测与容量/费用/同步导出边界；截图 fix14-detail-640.png、fix14-review-completed-640.png、fix14-restored-space.png。FIX-14 本地完成；远端仓库/CI、许可选择待用户后续决定，其他供应商真实调用/手机真机/真实 200% 未实测。
+- 最终报告 REMEDIATION-ACCEPTANCE.md 已区分已完成、待外部条件、未实测与容量/费用/同步导出边界；截图 fix14-detail-640.jpg、fix14-review-completed-640.jpg、fix14-restored-space.jpg。FIX-14 本地完成；远端仓库/CI、许可选择待用户后续决定，其他供应商真实调用/手机真机/真实 200% 未实测。

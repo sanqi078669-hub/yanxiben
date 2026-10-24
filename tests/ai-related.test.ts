@@ -177,4 +177,18 @@ test("学习诊断不发作答原文，空历史拒绝，统计不跨账号", as
     await diagnose(owner, { digest: p.digest, consent: true }, transport),
     output,
   );
+  const literalTitle = "$& / $' / $`";
+  updateEntry(owner, source.id, {
+    expectedVersion: source.version,
+    title: literalTitle,
+  });
+  output.summary = `记录：${source.id}。`;
+  output.recommendations[0].reason = source.id;
+  const literalResult = await diagnose(
+    owner,
+    { digest: diagnosisPreview(owner).digest, consent: true },
+    transport,
+  );
+  assert.equal(literalResult.summary, `记录：${literalTitle}。`);
+  assert.equal(literalResult.recommendations[0].reason, literalTitle);
 });

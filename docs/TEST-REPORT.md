@@ -33,7 +33,7 @@
 6. 填写独立作答、展开解析、评价并提交，显示“这次练习已经保存”。
 7. 返回今日学习，核对待复习 0、累计收集 1、今日已练习 1。
 
-浏览器记录标题为“【示例】等价无穷小：先看运算结构”，来源与作答都标注为本地验证内容。首页截图见 `screenshots/today.png`。
+浏览器记录标题为“【示例】等价无穷小：先看运算结构”，来源与作答都标注为本地验证内容。首页截图见 `screenshots/today.jpg`。
 
 ## 本轮自测发现与修复
 
@@ -63,7 +63,7 @@
 5. 今日页面显示待复习 0、今日已练习 3、累计收集仍为 4。
 6. 打开空白新建页后直接返回今日学习，没有误报未保存，也没有产生空记录。
 
-408 选项和数学公式在浏览器正常显示。证据截图：`screenshots/self-test-review.png`。
+408 选项和数学公式在浏览器正常显示。证据截图：`screenshots/self-test-review.jpg`。
 
 ### 功能合理性结论
 
@@ -110,4 +110,4 @@
 
 用户确认的验收范围：真实模型只验收 DeepSeek；OpenAI、通义等仅协议与配置验证，真实供应商未实测。缩放采用 640 CSS 像素等效重排；真实浏览器 200% 和手机真机未实测。费用按用户配置的标准价估算，未计缓存折扣等，不代替账单。
 
-验收截图：[语义比较](screenshots/final-semantic-result.png)、[批量暂停部分成功](screenshots/final-batch-pause-640.png)、[手机 AI 结果](screenshots/final-ai-mobile.png)。
+验收截图：[语义比较](screenshots/final-semantic-result.jpg)、[批量暂停部分成功](screenshots/final-batch-pause-640.jpg)、[手机 AI 结果](screenshots/final-ai-mobile.jpg)。

@@ -73,6 +73,16 @@ export async function readBody(request: Request, limit: number) {
   return Buffer.concat(chunks);
 }
 export async function readJson(request: Request) {
+  assert(
+    request.headers
+      .get("content-type")
+      ?.split(";", 1)[0]
+      .trim()
+      .toLowerCase() === "application/json",
+    415,
+    "UNSUPPORTED_MEDIA_TYPE",
+    "JSON 接口需要 application/json 请求类型",
+  );
   const bytes = await readBody(request, JSON_BODY_LIMIT);
   try {
     return JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes));
