@@ -1,7 +1,7 @@
 "use client";
+/* eslint-disable @next/next/no-img-element -- Private attachments require the browser's session cookie, which the public image optimizer does not forward. */
 import Link from "next/link";
 import { fields, type Entry } from "../lib/model";
-import { api } from "../lib/request";
 import {
   parseViewJson,
   historyViewSchema,
@@ -34,7 +34,7 @@ export function AttachmentImages({ e, role }: { e: Entry; role: string }) {
   );
 }
 export function SentenceLink({ id }: { id: string }) {
-  const { data, error } = useLoad(() => api("entries/" + id), [id]);
+  const { data, error } = useLoad("entries/" + id);
   if (error)
     return (
       <small className="muted">

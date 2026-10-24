@@ -8,7 +8,7 @@ import { spawnSync } from "node:child_process";
 import { zipSync, unzipSync, strToU8, strFromU8 } from "fflate";
 import sharp from "sharp";
 process.env.DATA_DIR = mkdtempSync(path.join(os.tmpdir(), "yanxi-test-"));
-const { db, one, run, all, dataDir } = await import("../src/lib/db");
+const { one, run, dataDir } = await import("../src/lib/db");
 const {
   createEntry,
   updateEntry,

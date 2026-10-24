@@ -14,7 +14,6 @@ import { defaults } from "../lib/model";
 import { requestResponse } from "../lib/request";
 import { api } from "../lib/request";
 import { ErrorBox } from "./ui";
-type Any = Record<string, any>;
 export default function SettingsPage({
   profile,
   onSave,

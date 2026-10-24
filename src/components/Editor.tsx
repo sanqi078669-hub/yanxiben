@@ -1,6 +1,13 @@
 "use client";
+/* eslint-disable @next/next/no-img-element -- Private attachments require the browser's session cookie, which the public image optimizer does not forward. */
 import "katex/dist/katex.min.css";
-import { useEffect, useState, useRef, useCallback } from "react";
+import {
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+  useLayoutEffect,
+} from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -51,13 +58,7 @@ const blank = (type: EntryInput["type"]): EntryInput => ({
   errors: [],
   attachments: [],
 });
-export default function Editor({
-  id,
-  notify,
-}: {
-  id?: string;
-  notify: (s: string) => void;
-}) {
+export default function Editor({ id }: { id?: string }) {
   const [captureStep, setCaptureStep] = useState(0);
   const [restoredDraft, setRestoredDraft] = useState(false);
   const router = useRouter(),
@@ -76,22 +77,25 @@ export default function Editor({
     [preview, setPreview] = useState(false),
     [uploading, setUploading] = useState(false),
     [busy, setBusy] = useState(false);
-  const saved = useRef(JSON.stringify(e)),
+  const [savedValue, setSavedValue] = useState(() => JSON.stringify(e));
+  const saved = useRef(savedValue),
     saving = useRef(false),
     dirty = useRef(false),
     latest = useRef(e);
-  latest.current = e;
+  useLayoutEffect(() => {
+    latest.current = e;
+  }, [e]);
   const draft = useEntryDraft(
     e,
     id || "new",
     version,
     loaded && !loadError,
-    saved.current,
+    savedValue,
   );
-  const { data: nodes } = useLoad<any[]>(() => api("knowledge-nodes"));
-  const { data: existingWords } = useLoad(
-    () => api<EntryList>("entries?type=VOCABULARY&limit=100"),
-    [],
+  const { clear: clearDraft, pending: pendingDrafts } = draft;
+  const { data: nodes } = useLoad<any[]>("knowledge-nodes");
+  const { data: existingWords } = useLoad<EntryList>(
+    "entries?type=VOCABULARY&limit=100",
   );
   useEffect(() => {
     if (!id) return;
@@ -104,6 +108,7 @@ export default function Editor({
         const base = blank(r.type);
         for (const key of Object.keys(base)) (base as Any)[key] = r[key];
         saved.current = JSON.stringify(base);
+        setSavedValue(saved.current);
         setE(base);
         setVersion(r.version);
         setState("已保存到本地服务");
@@ -125,7 +130,7 @@ export default function Editor({
         loadError ||
         saving.current ||
         conflict ||
-        draft.pending.length
+        pendingDrafts.length
       )
         return false;
       saving.current = true;
@@ -144,7 +149,8 @@ export default function Editor({
           id ? "PATCH" : "POST",
         );
         saved.current = JSON.stringify(snapshot);
-        draft.clear();
+        setSavedValue(saved.current);
+        clearDraft();
         setRestoredDraft(false);
         dirty.current = JSON.stringify(latest.current) !== saved.current;
         setVersion(result.version);
@@ -172,7 +178,16 @@ export default function Editor({
         setBusy(false);
       }
     },
-    [id, version, conflict, router, draft.pending.length, loaded, loadError],
+    [
+      id,
+      version,
+      conflict,
+      router,
+      pendingDrafts.length,
+      clearDraft,
+      loaded,
+      loadError,
+    ],
   );
   useEffect(() => {
     if (!loaded || loadError) return;
@@ -394,6 +409,7 @@ export default function Editor({
               for (const key of Object.keys(base))
                 (base as Any)[key] = (conflict as Any)[key];
               saved.current = JSON.stringify(base);
+              setSavedValue(saved.current);
               setE(base);
               setVersion(conflict.version);
               setConflict(null);

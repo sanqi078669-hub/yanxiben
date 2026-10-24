@@ -47,7 +47,7 @@ export function AiStudy({
       alive.current = false;
     };
   }, []);
-  const snapshot = useRef("");
+  const [snapshot, setSnapshot] = useState("");
   const [previous, setPrevious] = useState<Record<string, unknown> | null>(
     null,
   );
@@ -136,14 +136,14 @@ export function AiStudy({
               (action === "feedback" && !answer.trim())
             }
             onClick={async () => {
-              snapshot.current = current;
+              setSnapshot(current);
               setVariantAnswer("");
               setShowSolution(false);
               setCreatedId("");
               setBusy(true);
               setError("");
               if (result) {
-                const { audit, ...content } = result;
+                const { audit: _audit, ...content } = result;
                 setPrevious(content);
               }
               setResult(null);
@@ -229,7 +229,7 @@ export function AiStudy({
             <>
               <button
                 className="button"
-                disabled={current !== snapshot.current}
+                disabled={current !== snapshot}
                 onClick={() => {
                   onApply({
                     title: result.title,
@@ -248,7 +248,7 @@ export function AiStudy({
               </button>
               <p>
                 知识点建议仅展示，可在知识地图中自行创建。
-                {current !== snapshot.current
+                {current !== snapshot
                   ? "输入已变化，请重新生成。"
                   : "确认后沿用表单的保存机制。"}
               </p>
@@ -257,7 +257,7 @@ export function AiStudy({
           {onApply && action === "analyze" && (
             <button
               className="button"
-              disabled={current !== snapshot.current}
+              disabled={current !== snapshot}
               onClick={() => {
                 onApply({
                   summary: [
@@ -291,7 +291,7 @@ export function AiStudy({
               {onRating && (
                 <button
                   className="button"
-                  disabled={current !== snapshot.current}
+                  disabled={current !== snapshot}
                   onClick={() =>
                     onRating(
                       hintUsed && result.rating === "EASY"
@@ -318,7 +318,7 @@ export function AiStudy({
               {onApply && (
                 <button
                   className="button"
-                  disabled={current !== snapshot.current}
+                  disabled={current !== snapshot}
                   onClick={() => {
                     onApply({
                       summary: [
@@ -366,7 +366,7 @@ export function AiStudy({
               ) : (
                 <button
                   className="button"
-                  disabled={busy || current !== snapshot.current}
+                  disabled={busy || current !== snapshot}
                   onClick={async () => {
                     setBusy(true);
                     setError("");

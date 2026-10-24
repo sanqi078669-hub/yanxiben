@@ -31,6 +31,8 @@ const labels: Record<string, string> = {
 };
 export function RestoreWizard() {
   const previewRequest = useRef<AbortController | null>(null);
+  const [previewBusy, setPreviewBusy] = useState(false);
+  const [checkedAt, setCheckedAt] = useState(() => Date.now());
   const [spaces, setSpaces] = useState<Workspace[]>([]);
   const refreshSpaces = () =>
     api<Workspace[]>("data/restore-workspaces").then(setSpaces);
@@ -44,7 +46,10 @@ export function RestoreWizard() {
   useEffect(() => {
     const refresh = () =>
       api<{ created: string | null }>("data/backup-status")
-        .then((r) => setLast(r.created))
+        .then((r) => {
+          setLast(r.created);
+          setCheckedAt(Date.now());
+        })
         .catch((e) => setError(e.message));
     refresh();
     refreshSpaces().catch((e) => setError(e.message));
@@ -61,7 +66,7 @@ export function RestoreWizard() {
         上次生成完整备份：{last ? new Date(last).toLocaleString() : "尚无记录"}
         。生成记录不代表 ZIP 已保存到安全位置，请核对下载文件。
       </p>
-      {(!last || Date.now() - Date.parse(last) > 7 * 86400000) && (
+      {(!last || checkedAt - Date.parse(last) > 7 * 86400000) && (
         <p role="status">
           建议现在生成一份完整备份，并保存在本机以外的安全位置。
         </p>
@@ -104,6 +109,7 @@ export function RestoreWizard() {
                 const form = new FormData();
                 const controller = new AbortController();
                 previewRequest.current = controller;
+                setPreviewBusy(true);
                 form.set("file", file!);
                 form.set("password", password);
                 setPreview(
@@ -123,6 +129,7 @@ export function RestoreWizard() {
                 );
               } finally {
                 previewRequest.current = null;
+                setPreviewBusy(false);
                 setBusy(false);
               }
             }}
@@ -170,7 +177,7 @@ export function RestoreWizard() {
         </fieldset>
       </details>
       {busy && <p role="status">正在处理恢复，请保持页面打开…</p>}
-      {busy && previewRequest.current && (
+      {busy && previewBusy && (
         <button
           className="button outline"
           onClick={() => previewRequest.current?.abort()}

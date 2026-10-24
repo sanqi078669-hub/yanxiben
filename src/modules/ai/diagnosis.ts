@@ -53,8 +53,15 @@ export function diagnosisPreview(owner: string) {
       "仅最近200次练习，按不会/困难次数排序取最多20条记录；不代表完整学习能力评价",
     sampleSize: rows.length,
     distinctEntries: groups.size,
-    from: rows.length ? rows.map(r=>r.local_date as string).sort()[0] : null,
-    to: rows.length ? rows.map(r=>r.local_date as string).sort().at(-1) : null,
+    from: rows.length
+      ? rows.map((r) => r.local_date as string).sort()[0]
+      : null,
+    to: rows.length
+      ? rows
+          .map((r) => r.local_date as string)
+          .sort()
+          .at(-1)
+      : null,
     smallSample: rows.length < 10 || groups.size < 3,
     entries: [...groups.values()]
       .sort((a, b) => b.again + b.hard - (a.again + a.hard))
@@ -127,12 +134,33 @@ export async function diagnose(
     "AI_INVALID_REFERENCE",
     "AI 诊断引用无效，请重试",
   );
-  const readable=(text:string)=>{
-    for(const e of preview.material.entries)text=text.replaceAll(e.id,e.title||"未命名记录");
-    const labels:Record<string,string>={sampleSize:"采样作答次数",attempts:"作答次数",hints:"提示次数",practice:"主动练习次数",again:"不会次数",hard:"困难次数",good:"掌握次数",easy:"熟练次数",scope:"统计范围",entries:"题目统计"};
-    return text.replace(/\b(sampleSize|attempts|hints|practice|again|hard|good|easy|scope|entries)\b/g,k=>labels[k]);
+  const readable = (text: string) => {
+    for (const e of preview.material.entries)
+      text = text.replaceAll(e.id, e.title || "未命名记录");
+    const labels: Record<string, string> = {
+      sampleSize: "采样作答次数",
+      attempts: "作答次数",
+      hints: "提示次数",
+      practice: "主动练习次数",
+      again: "不会次数",
+      hard: "困难次数",
+      good: "掌握次数",
+      easy: "熟练次数",
+      scope: "统计范围",
+      entries: "题目统计",
+    };
+    return text.replace(
+      /\b(sampleSize|attempts|hints|practice|again|hard|good|easy|scope|entries)\b/g,
+      (k) => labels[k],
+    );
   };
-  result.summary=readable(result.summary);result.warnings=result.warnings.map(readable);
-  result.recommendations=result.recommendations.map(r=>({...r,title:readable(r.title),reason:readable(r.reason),nextStep:readable(r.nextStep)}));
+  result.summary = readable(result.summary);
+  result.warnings = result.warnings.map(readable);
+  result.recommendations = result.recommendations.map((r) => ({
+    ...r,
+    title: readable(r.title),
+    reason: readable(r.reason),
+    nextStep: readable(r.nextStep),
+  }));
   return result;
 }

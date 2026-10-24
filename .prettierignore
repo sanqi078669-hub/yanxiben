@@ -1,0 +1,19 @@
+node_modules/
+AGENTS.md
+.agents/
+.codex/
+.next/
+runtime/
+out/
+coverage/
+data/
+data-*/
+test-results/
+backups/
+.private-secrets/
+.env*
+package-lock.json
+next-env.d.ts
+*.tsbuildinfo
+# Preserve the original specification verbatim.
+docs/REQUIREMENTS.md

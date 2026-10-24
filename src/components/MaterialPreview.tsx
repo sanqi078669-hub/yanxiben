@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element -- Private attachments require the browser's session cookie, which the public image optimizer does not forward. */
 import { fields, names } from "../lib/model";
 import { parseOptions } from "./OptionsEditor";
 

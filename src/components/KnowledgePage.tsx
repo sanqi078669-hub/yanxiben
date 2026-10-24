@@ -14,17 +14,12 @@ import { subjects } from "../lib/model";
 import { api } from "../lib/request";
 import { Badge, Empty, ErrorBox } from "./ui";
 import { useLoad } from "./useLoad";
-type Any = Record<string, any>;
 export default function KnowledgePage({
   notify,
 }: {
   notify: (s: string) => void;
 }) {
-  const {
-    data: nodes,
-    error,
-    reload,
-  } = useLoad<any[]>(() => api("knowledge-nodes"));
+  const { data: nodes, error, reload } = useLoad<any[]>("knowledge-nodes");
   const [name, setName] = useState(""),
     [subject, setSubject] = useState("高等数学"),
     [parentId, setParent] = useState(""),

@@ -84,8 +84,11 @@ test("进程控制仅接受隔离实例私有令牌，不接受未知或畸形�
     delete process.env.RESTORE_CONTROL_TOKEN;
     assert.throws(() => restoreControl("GET", "a".repeat(64)), /接口不存在/);
     process.env.RESTORE_CONTROL_TOKEN = "a".repeat(64);
-    for (const value of [null, "b".repeat(64), "汉".repeat(64)]) assert.throws(() => restoreControl("POST", value), /接口不存在/);
-    assert.deepEqual(restoreControl("GET", "a".repeat(64)), { pid: process.pid });
+    for (const value of [null, "b".repeat(64), "汉".repeat(64)])
+      assert.throws(() => restoreControl("POST", value), /接口不存在/);
+    assert.deepEqual(restoreControl("GET", "a".repeat(64)), {
+      pid: process.pid,
+    });
     assert.throws(() => restoreControl("DELETE", "a".repeat(64)), /方法不支持/);
   } finally {
     if (previous === undefined) delete process.env.RESTORE_CONTROL_TOKEN;

@@ -20,7 +20,9 @@ export const costSchema = z
     price: priceSchema,
   })
   .strict();
-function init() { /* Schema is initialized centrally by lib/db. */ }
+function init() {
+  /* Schema is initialized centrally by lib/db. */
+}
 export function priceList(owner: string) {
   init();
   return all("SELECT payload FROM ai_prices WHERE owner=?", owner).map((r) =>

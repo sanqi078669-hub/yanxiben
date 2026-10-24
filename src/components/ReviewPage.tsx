@@ -1,6 +1,6 @@
 "use client";
 import "katex/dist/katex.min.css";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ArrowRight, Check, Clock, CheckCircle2, Eye } from "lucide-react";
@@ -64,18 +64,28 @@ export default function ReviewPage({
     [forcedPractice, setForcedPractice] = useState(false),
     [reviewConflict, setReviewConflict] = useState(false),
     [practiceItem, setPracticeItem] = useState<Any | null>(null);
+  const [pendingView, setPendingView] = useState<{
+    body: Any;
+    key: string;
+  } | null>(null);
   const isPractice = !!practice || forcedPractice;
   const key = useRef(crypto.randomUUID()),
     pending = useRef<{ body: Any; key: string } | null>(null);
+  const updatePending = useCallback(
+    (value: { body: Any; key: string } | null) => {
+      pending.current = value;
+      setPendingView(value);
+    },
+    [],
+  );
   const {
     data: queue,
     error: queueError,
     reload,
     setData: setQueue,
-  } = useLoad(() => api("reviews/queue"));
-  const { data: history, reload: reloadHistory } = useLoad<any[]>(() =>
-    api("reviews/history"),
-  );
+  } = useLoad("reviews/queue");
+  const { data: history, reload: reloadHistory } =
+    useLoad<any[]>("reviews/history");
   useEffect(() => {
     if (practice) {
       api("entries/" + practice)
@@ -138,7 +148,7 @@ export default function ReviewPage({
           setRating(saved.rating);
           setErrorCauses(saved.errorCauses ?? null);
           key.current = saved.key;
-          pending.current = saved.pending;
+          updatePending(saved.pending);
           restoredVersion.current = saved.version;
           setSessionMessage(
             "已恢复本标签页的作答与提示状态。队列已按服务器最新状态更新。",
@@ -166,53 +176,60 @@ export default function ReviewPage({
     queue,
     storageKey,
     scope,
+    updatePending,
   ]);
-  const saveSession = (request = pending.current) => {
-    if (!sessionOwner || !sessionReady || !current || completed || orphan)
-      return;
-    try {
-      sessionStorage.setItem(
-        storageKey,
-        JSON.stringify(
-          reviewSessionSnapshot({
-            owner: sessionOwner,
-            scope,
-            updated: Date.now(),
-            reviewId: current.id,
-            entryId: current.entry.id,
-            title: current.entry.title || "未命名记录",
-            version: restoredVersion.current ?? current.version,
-            mode: isPractice ? "PRACTICE" : "SCHEDULED",
-            answer,
-            revealed,
-            hint,
-            aiHint,
-            rating: rating as ReviewSession["rating"],
-            key: key.current,
-            pending: request as ReviewSession["pending"],
-            errorCauses,
-          }),
-        ),
-      );
-    } catch {
-      setSessionMessage("会话暂存失败，请保持页面打开并完成保存。");
-    }
-  };
+  const saveSession = useCallback(
+    (request = pending.current) => {
+      if (!sessionOwner || !sessionReady || !current || completed || orphan)
+        return;
+      try {
+        sessionStorage.setItem(
+          storageKey,
+          JSON.stringify(
+            reviewSessionSnapshot({
+              owner: sessionOwner,
+              scope,
+              updated: Date.now(),
+              reviewId: current.id,
+              entryId: current.entry.id,
+              title: current.entry.title || "未命名记录",
+              version: restoredVersion.current ?? current.version,
+              mode: isPractice ? "PRACTICE" : "SCHEDULED",
+              answer,
+              revealed,
+              hint,
+              aiHint,
+              rating: rating as ReviewSession["rating"],
+              key: key.current,
+              pending: request as ReviewSession["pending"],
+              errorCauses,
+            }),
+          ),
+        );
+      } catch {
+        setSessionMessage("会话暂存失败，请保持页面打开并完成保存。");
+      }
+    },
+    [
+      sessionOwner,
+      sessionReady,
+      current,
+      answer,
+      revealed,
+      hint,
+      aiHint,
+      rating,
+      errorCauses,
+      completed,
+      orphan,
+      scope,
+      storageKey,
+      isPractice,
+    ],
+  );
   useEffect(() => {
     saveSession();
-  }, [
-    sessionOwner,
-    sessionReady,
-    current,
-    answer,
-    revealed,
-    hint,
-    aiHint,
-    rating,
-    errorCauses,
-    completed,
-    orphan,
-  ]);
+  }, [saveSession]);
   useEffect(() => {
     document.body.classList.toggle("review-focus", focusMode);
     return () => document.body.classList.remove("review-focus");
@@ -229,7 +246,7 @@ export default function ReviewPage({
     setRating("GOOD");
     setErrorCauses(null);
     key.current = crypto.randomUUID();
-    pending.current = null;
+    updatePending(null);
     setSubmissionRejected(false);
   };
   return (
@@ -353,7 +370,7 @@ export default function ReviewPage({
               setPracticeItem({ ...fresh.review, entry: fresh });
               setForcedPractice(true);
               setReviewConflict(false);
-              pending.current = null;
+              updatePending(null);
               restoredVersion.current = null;
               key.current = crypto.randomUUID();
               setError("");
@@ -464,7 +481,7 @@ export default function ReviewPage({
                 placeholder="写下答案、推导过程或你的理解…（也可以先在纸上完成）"
                 value={answer}
                 maxLength={REVIEW_ANSWER_MAX_LENGTH}
-                disabled={busy || !!pending.current}
+                disabled={busy || !!pendingView}
                 onChange={(e) => setAnswer(e.target.value)}
               />
               <small>
@@ -483,7 +500,7 @@ export default function ReviewPage({
                 </button>
                 <button
                   className="text-button"
-                  disabled={busy || !!pending.current}
+                  disabled={busy || !!pendingView}
                   onClick={async () => {
                     setBusy(true);
                     try {
@@ -526,7 +543,7 @@ export default function ReviewPage({
                   核对思路 · 诚实评价这一次
                 </div>
                 <Analysis e={current.entry} />
-                {!busy && !pending.current && (
+                {!busy && !pendingView && (
                   <details>
                     <summary>需要核对？展开 AI 作答点评</summary>
                     <AiStudy
@@ -543,7 +560,7 @@ export default function ReviewPage({
                   <input
                     type="checkbox"
                     checked={hint}
-                    disabled={busy || !!pending.current || aiHint}
+                    disabled={busy || !!pendingView || aiHint}
                     onChange={(e) => {
                       setHint(e.target.checked);
                       if (e.target.checked && rating === "EASY")
@@ -552,7 +569,7 @@ export default function ReviewPage({
                   />
                   作答过程中使用了提示
                 </label>
-                <fieldset disabled={busy || !!pending.current}>
+                <fieldset disabled={busy || !!pendingView}>
                   <legend>本次作答的错因（选填、自评）</legend>
                   <label className="checkbox-label">
                     <input
@@ -597,9 +614,7 @@ export default function ReviewPage({
                       key={v}
                       className={rating === v ? "selected" : ""}
                       aria-pressed={rating === v}
-                      disabled={
-                        busy || !!pending.current || (hint && v === "EASY")
-                      }
+                      disabled={busy || !!pendingView || (hint && v === "EASY")}
                       onClick={() => setRating(v)}
                     >
                       <b>{l}</b>
@@ -611,7 +626,7 @@ export default function ReviewPage({
                   className="button full"
                   disabled={
                     busy ||
-                    (!pending.current &&
+                    (!pendingView &&
                       (answer.length > REVIEW_ANSWER_MAX_LENGTH ||
                         reviewConflict))
                   }
@@ -619,26 +634,26 @@ export default function ReviewPage({
                     setBusy(true);
                     setSubmissionRejected(false);
                     setError("");
-                    if (!pending.current)
-                      pending.current = {
-                        body: {
-                          expectedVersion:
-                            restoredVersion.current ?? current.version,
-                          mode: isPractice ? "PRACTICE" : "SCHEDULED",
-                          rating,
-                          hintUsed: hint,
-                          answerMd: answer,
-                          ...(errorCauses !== null ? { errorCauses } : {}),
-                        },
-                        key: key.current,
-                      };
-                    saveSession(pending.current);
+                    const submission = pending.current || {
+                      body: {
+                        expectedVersion:
+                          restoredVersion.current ?? current.version,
+                        mode: isPractice ? "PRACTICE" : "SCHEDULED",
+                        rating,
+                        hintUsed: hint,
+                        answerMd: answer,
+                        ...(errorCauses !== null ? { errorCauses } : {}),
+                      },
+                      key: key.current,
+                    };
+                    if (!pending.current) updatePending(submission);
+                    saveSession(submission);
                     try {
                       await api(
                         "review-items/" + current.id + "/attempts",
-                        pending.current.body,
+                        submission.body,
                         "POST",
-                        { "Idempotency-Key": pending.current.key },
+                        { "Idempotency-Key": submission.key },
                       );
                       notify("复习已保存");
                       reloadHistory();
@@ -662,7 +677,7 @@ export default function ReviewPage({
                       const rejected = submissionWasRejected(e);
                       if (rejected) {
                         setSubmissionRejected(true);
-                        pending.current = null;
+                        updatePending(null);
                         key.current = crypto.randomUUID();
                         saveSession(null);
                       }
@@ -687,7 +702,7 @@ export default function ReviewPage({
                 >
                   {busy
                     ? "正在保存…"
-                    : pending.current
+                    : pendingView
                       ? "重试保存本次复习"
                       : "完成本次复习"}
                   <Check size={17} />
@@ -704,7 +719,7 @@ export default function ReviewPage({
                     放弃本次提交，继续编辑
                   </button>
                 )}
-                {pending.current && !busy && (
+                {pendingView && !busy && (
                   <p role="status">
                     本次结果尚未确认，原答案和请求标识已保留。点击“重试保存本次复习”核对结果；成功后会解除等待。放弃本地重试不能撤销可能已保存的历史。
                   </p>

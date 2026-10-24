@@ -1,6 +1,7 @@
 // Local QA reverse proxy: records only static asset paths and byte counts.
 // Browser interactions remain manual or through the browser automation tool.
 import { createServer, request } from "node:http";
+import { createHash } from "node:crypto";
 import { readFileSync, readdirSync, writeFileSync, mkdirSync } from "node:fs";
 const port = Number(process.env.PROBE_PORT || 3130),
   upstream = Number(process.env.PROBE_UPSTREAM_PORT || 3128);
@@ -16,9 +17,36 @@ const heavy = readdirSync(".next/static/chunks").filter(
     ),
 );
 const assets = [];
+let failuresLeft = Number(process.env.PROBE_FAIL_ATTEMPTS || 0);
+if (!Number.isInteger(failuresLeft) || failuresLeft < 0 || failuresLeft > 5)
+  throw Error("Invalid QA fault count");
+const attempts = [];
 mkdirSync("test-results", { recursive: true });
 createServer((incoming, outgoing) => {
   const pathname = new URL(incoming.url, "http://127.0.0.1").pathname;
+  if (
+    incoming.method === "POST" &&
+    /^\/api\/v1\/review-items\/[^/]+\/attempts$/.test(pathname)
+  ) {
+    const simulatedFailure = failuresLeft > 0;
+    if (simulatedFailure) failuresLeft--;
+    attempts.push({
+      simulatedFailure,
+      keyHash: createHash("sha256")
+        .update(String(incoming.headers["idempotency-key"] || ""))
+        .digest("hex"),
+    });
+    writeFileSync(
+      "test-results/fix12-pending-requests.json",
+      JSON.stringify(attempts, null, 2),
+    );
+    if (simulatedFailure) {
+      incoming.resume();
+      outgoing.writeHead(503, { "Content-Type": "text/html" });
+      outgoing.end("<h1>Synthetic QA outage</h1>");
+      return;
+    }
+  }
   const proxy = request(
     {
       hostname: "127.0.0.1",

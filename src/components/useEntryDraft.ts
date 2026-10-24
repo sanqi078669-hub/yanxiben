@@ -1,6 +1,6 @@
 "use client";
 import { api } from "../lib/request";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import type { EntryInput } from "../lib/model";
 import { draftPrefix, readDraft, type Draft } from "../lib/drafts";
 
@@ -81,11 +81,11 @@ export function useEntryDraft(
     }
     setPending((v) => v.filter((item) => item.key !== key));
   }
-  function clear() {
+  const clear = useCallback(() => {
     try {
       if (slot.current) localStorage.removeItem(slot.current);
     } catch {}
     setMessage("");
-  }
+  }, []);
   return { pending, message, dismiss, clear, ready };
 }

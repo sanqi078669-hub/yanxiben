@@ -30,7 +30,7 @@ const { budgetStatus, reserveBudget } =
   await import("../src/modules/ai/budget");
 const { audited, auditList } = await import("../src/modules/ai/audit");
 const { savePrice } = await import("../src/modules/ai/pricing");
-const { run, dataDir } = await import("../src/lib/db");
+const { run } = await import("../src/lib/db");
 const { defaults } = await import("../src/lib/model");
 function account() {
   const owner = randomUUID(),

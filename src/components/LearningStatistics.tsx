@@ -7,10 +7,10 @@ type Statistics = ReturnType<typeof learningStatistics>;
 const fraction = (n: number, d: number) =>
   d ? `${n}/${d}（${Math.round((n / d) * 100)}%）` : "暂无样本";
 export function LearningStatistics() {
-  const [from, setFrom] = useState(
+  const [from, setFrom] = useState(() =>
       new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10),
     ),
-    [to, setTo] = useState(new Date().toISOString().slice(0, 10));
+    [to, setTo] = useState(() => new Date().toISOString().slice(0, 10));
   const [subject, setSubject] = useState(""),
     [mode, setMode] = useState("");
   const [data, setData] = useState<Statistics | null>(null),

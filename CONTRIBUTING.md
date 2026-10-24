@@ -11,9 +11,12 @@
 一次提交聚焦一个可验证的改动。修复问题时描述复现条件、变更后的行为和验证结果；修改文件路径或命令时同步更新文档引用。
 
 ```sh
+npm run lint
+npm run format:check
 npm run typecheck
 npm run build
-npm test
+npm run test:coverage
+npm run audit:production
 ```
 
 构建成功后再运行测试：HTTP 集成测试使用生产构建并占用本机 3127 端口。自动化测试使用独立临时数据库与模拟 AI 传输，不需要真实密钥。真实 AI 调用须单独显式启用，不纳入默认 CI。
@@ -27,4 +30,4 @@ npm test
 - 自定义 `DATA_DIR` 若放在项目内，须确保被忽略；`.gitignore` 不能保护已被跟踪的文件。
 - 仓库尚未指定开源许可证，不要擅自添加许可授权或虚构项目地址、维护者信息。
 
-GitHub 工作流在推送或 PR 时执行安装、类型检查、构建和测试。该工作流需上传到 GitHub 后才会运行，本地通过不代表云端已验证。
+GitHub 工作流将质量/审计、类型检查、构建/覆盖率测试分为独立任务。该工作流需上传到 GitHub 后才会运行，本地通过不代表云端已验证。覆盖范围、门槛和明确保留的开发依赖风险见 [质量门禁记录](docs/QUALITY-GATES.md)。

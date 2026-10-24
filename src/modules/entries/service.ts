@@ -4,7 +4,6 @@ import {
   entrySchema,
   fields,
   defaults,
-  errors,
   type Entry,
   type Review,
 } from "../../lib/model";
@@ -17,7 +16,6 @@ export class AppError extends Error {
     public status: number,
     public code: string,
     message: string,
-    public extra: unknown = null,
   ) {
     super(message);
   }
@@ -263,10 +261,10 @@ export function updateEntry(owner: string, id: string, input: unknown) {
     const {
       id: _id,
       owner: _owner,
-      version,
-      created_at,
-      updated_at,
-      deleted_at,
+      version: _version,
+      created_at: _created_at,
+      updated_at: _updated_at,
+      deleted_at: _deleted_at,
       ...old
     } = current;
     assert(

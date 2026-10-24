@@ -12,12 +12,18 @@ const option = (name: string, fallback: number, max: number) => {
 const records = option("--records", 10000, 100000),
   samples = option("--samples", 30, 100);
 import { randomUUID } from "node:crypto";
-const fixtureDirectory = mkdtempSync(path.join(os.tmpdir(), "yanxi-benchmark-"));
+const fixtureDirectory = mkdtempSync(
+  path.join(os.tmpdir(), "yanxi-benchmark-"),
+);
 process.env.DATA_DIR = fixtureDirectory;
 const { run, transaction, db, one, all } = await import("../src/lib/db");
 process.once("exit", () => {
   db.close();
-  if (path.dirname(path.resolve(fixtureDirectory)) === path.resolve(os.tmpdir()) && path.basename(fixtureDirectory).startsWith("yanxi-benchmark-"))
+  if (
+    path.dirname(path.resolve(fixtureDirectory)) ===
+      path.resolve(os.tmpdir()) &&
+    path.basename(fixtureDirectory).startsWith("yanxi-benchmark-")
+  )
     rmSync(fixtureDirectory, { recursive: true, force: true });
 });
 const { defaults, entrySchema } = await import("../src/lib/model");

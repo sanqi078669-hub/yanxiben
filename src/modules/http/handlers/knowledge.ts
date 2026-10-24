@@ -21,7 +21,7 @@ export async function knowledgeHandler(context: ApiContext) {
   if (p === "knowledge-tools/aliases" && method === "POST")
     return ok(addAlias(owner, await json()));
   if (p === "knowledge-tools/preview" && method === "GET") {
-    const { state, ...preview } = mergePreview(
+    const { state: _state, ...preview } = mergePreview(
       owner,
       req.nextUrl.searchParams.get("source") || "",
       req.nextUrl.searchParams.get("target") || "",

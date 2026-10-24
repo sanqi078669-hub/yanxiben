@@ -180,5 +180,9 @@ test("永久清理记录时不会留下阻塞删除的提示外键", () => {
   const { owner, entry } = setup();
   recordEntryHint(owner, entry.id, 0);
   run("DELETE FROM entries WHERE id=? AND owner=?", entry.id, owner);
-  assert.equal(one("SELECT count(*) n FROM entry_hint_usage WHERE entry_id=?", entry.id)!.n, 0);
+  assert.equal(
+    one("SELECT count(*) n FROM entry_hint_usage WHERE entry_id=?", entry.id)!
+      .n,
+    0,
+  );
 });

@@ -22,7 +22,6 @@ export function KnowledgeTools({
       { id: string; node_id: string; name: string }[]
     >([]),
     [preview, setPreview] = useState<any>(null),
-    [undo, setUndo] = useState(""),
     [error, setError] = useState(""),
     [message, setMessage] = useState(""),
     [busy, setBusy] = useState(false);
@@ -156,13 +155,12 @@ export function KnowledgeTools({
             disabled={busy}
             onClick={() =>
               act(async () => {
-                const r = await request("merge", {
+                await request("merge", {
                   sourceId: source,
                   targetId: target,
                   digest: preview.digest,
                   confirm: true,
                 });
-                setUndo(r.id);
                 setPreview(null);
                 setMessage("合并完成，可在关联内容未继续修改前撤销。");
               })
@@ -185,7 +183,6 @@ export function KnowledgeTools({
             onClick={() =>
               act(async () => {
                 await request("undo", { id: merge.id });
-                setUndo("");
                 setMessage("已撤销合并");
               })
             }

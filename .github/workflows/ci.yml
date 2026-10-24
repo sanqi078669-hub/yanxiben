@@ -9,7 +9,7 @@ permissions:
   contents: read
 
 jobs:
-  verify:
+  quality:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -21,6 +21,38 @@ jobs:
           node-version: "24"
           cache: npm
       - run: npm ci
-      - run: npm run build
+      - run: npm run lint
+      - run: npm run format:check
+      - run: npm audit --omit=dev --audit-level=high
+  types:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
       - run: npm run typecheck
-      - run: npm test
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+      # HTTP tests start the production build, so build must finish first.
+      - run: npm run build
+      - run: npm run test:coverage
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage
+          path: coverage/
+          if-no-files-found: error

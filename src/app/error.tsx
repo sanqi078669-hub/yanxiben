@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 
 export default function ErrorPage({
   retry,
@@ -13,9 +14,9 @@ export default function ErrorPage({
       <button className="button" onClick={retry}>
         重试加载页面
       </button>
-      <a className="button outline" href="/today">
+      <Link className="button outline" href="/today">
         返回今日学习
-      </a>
+      </Link>
     </main>
   );
 }

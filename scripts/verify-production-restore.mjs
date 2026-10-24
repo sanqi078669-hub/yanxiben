@@ -54,9 +54,8 @@ async function command(args, options = {}) {
     });
     child.once("close", (code) => {
       clearTimeout(timer);
-      code === 0
-        ? resolve(out)
-        : reject(new Error(`子命令失败 (${code})：${out}`));
+      if (code === 0) resolve(out);
+      else reject(new Error(`子命令失败 (${code})：${out}`));
     });
     if (options.input) child.stdin.end(options.input);
   });

@@ -8,7 +8,7 @@ import { unzipSync, strFromU8 } from "fflate";
 process.env.DATA_DIR = mkdtempSync(path.join(os.tmpdir(), "yanxi-usability-"));
 const { run, one } = await import("../src/lib/db");
 const { defaults, entrySchema } = await import("../src/lib/model");
-const { createEntry, updateEntry, getEntry, entries, trashEntry, addReview } =
+const { createEntry, updateEntry, entries, trashEntry, addReview } =
   await import("../src/modules/entries/service");
 const { markdownExport } =
   await import("../src/modules/data-management/backup");

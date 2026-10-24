@@ -8,7 +8,7 @@ import { Plus, Trash2, ChevronLeft, FileText, Target, X } from "lucide-react";
 import { AiStudy } from "./AiStudy";
 import { AiRelated } from "./AiRelated";
 
-import { names, errors, type Entry } from "../lib/model";
+import { names, type Entry } from "../lib/model";
 import { api } from "../lib/request";
 import { MD } from "./Markdown";
 import {
@@ -33,13 +33,13 @@ export default function Detail({
   const returnTo = /^\/(library|inbox)(\?|$)/.test(returnQuery)
     ? returnQuery
     : "/library";
-  const { data: e, error, reload } = useLoad(() => api("entries/" + id), [id]);
+  const { data: e, error, reload } = useLoad("entries/" + id);
   const [tab, setTab] = useState("analysis"),
     [revisions, setRevisions] = useState<any[]>([]),
     [target, setTarget] = useState(""),
     [relation, setRelation] = useState("SIMILAR"),
     [actionError, setActionError] = useState("");
-  const { data: choices } = useLoad(() => api("entries?limit=100"));
+  const { data: choices } = useLoad("entries?limit=100");
   const action = async (fn: () => Promise<unknown>, message: string) => {
     setActionError("");
     try {

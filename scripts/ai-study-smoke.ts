@@ -26,11 +26,23 @@ let entry = entrySchema.parse(
         },
       },
 );
-const entryId = process.argv.includes("--entry-id") ? process.argv[process.argv.indexOf("--entry-id") + 1] : undefined;
+const entryId = process.argv.includes("--entry-id")
+  ? process.argv[process.argv.indexOf("--entry-id") + 1]
+  : undefined;
 if (action === "hint") {
-  if (!entryId) throw new Error("提示实测需要 --entry-id，且应指向隔离测试目录中的本人记录");
+  if (!entryId)
+    throw new Error(
+      "提示实测需要 --entry-id，且应指向隔离测试目录中的本人记录",
+    );
   const saved = getEntry(owner, entryId);
-  entry = entrySchema.parse(Object.fromEntries(Object.keys(entrySchema.shape).map((key) => [key, saved[key as keyof typeof saved]])));
+  entry = entrySchema.parse(
+    Object.fromEntries(
+      Object.keys(entrySchema.shape).map((key) => [
+        key,
+        saved[key as keyof typeof saved],
+      ]),
+    ),
+  );
 }
 try {
   const result = await study(owner, {

@@ -14,11 +14,10 @@ import { BatchTags } from "./BatchTags";
 import type { EntryList, KnowledgeNode } from "../lib/api-types";
 import { useLibraryPosition } from "./libraryPosition";
 
-import { names, types, subjects, errors, type Entry } from "../lib/model";
+import { names, types, subjects, errors } from "../lib/model";
 import { api } from "../lib/request";
 import { TypeIcon, Empty, Row, ErrorBox } from "./ui";
 import { useLoad } from "./useLoad";
-type Any = Record<string, any>;
 export default function LibraryPage({
   mode,
   notify,
@@ -47,9 +46,7 @@ export default function LibraryPage({
     clearFilters,
     returnTo,
   } = useLibraryQuery(mode);
-  const { data: nodes } = useLoad<KnowledgeNode[]>(() =>
-    api("knowledge-nodes"),
-  );
+  const { data: nodes } = useLoad<KnowledgeNode[]>("knowledge-nodes");
   const query = new URLSearchParams({
     q: debouncedQ,
     type,
@@ -62,8 +59,7 @@ export default function LibraryPage({
     trash: mode === "trash" ? "1" : "0",
   }).toString();
   const { data, error, reload, loading } = useLoad<EntryList>(
-    () => api("entries?" + query),
-    [query],
+    "entries?" + query,
   );
   const hasFilters = !!(
     q ||

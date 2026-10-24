@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { providerPresets } from "../modules/ai/presets";
 import { extractionPatch, type Extraction } from "../modules/ai/contracts";
@@ -350,7 +350,7 @@ export function AiExtract({
     [busy, setBusy] = useState(false),
     [consent, setConsent] = useState(false),
     [result, setResult] = useState<Extraction | null>(null);
-  const snapshot = useRef("");
+  const [snapshot, setSnapshot] = useState("");
   const current = JSON.stringify(entry);
   useEffect(() => {
     aiApi("status")
@@ -404,7 +404,7 @@ export function AiExtract({
               images.length > 3
             }
             onClick={async () => {
-              snapshot.current = current;
+              setSnapshot(current);
               setBusy(true);
               setError("");
               setResult(null);
@@ -447,12 +447,12 @@ export function AiExtract({
               ⚠ {s}
             </p>
           ))}
-          {snapshot.current !== current && (
+          {snapshot !== current && (
             <p>表单已修改，请重新识别后再应用，避免覆盖新输入。</p>
           )}
           <button
             className="button"
-            disabled={snapshot.current !== current}
+            disabled={snapshot !== current}
             onClick={() => {
               try {
                 const patch = extractionPatch(

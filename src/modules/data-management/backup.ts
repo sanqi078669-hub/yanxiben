@@ -1,5 +1,5 @@
 import { zipSync, unzipSync, strToU8, strFromU8 } from "fflate";
-import { createHash, randomUUID, randomBytes } from "node:crypto";
+import { createHash, randomBytes } from "node:crypto";
 import { readFileSync, writeFileSync, unlinkSync, existsSync } from "node:fs";
 import path from "node:path";
 import { all, one, run, transaction, db, dataDir } from "../../lib/db";

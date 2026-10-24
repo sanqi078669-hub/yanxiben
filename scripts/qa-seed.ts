@@ -1,5 +1,5 @@
 import { randomUUID, randomBytes } from "node:crypto";
-import { existsSync, writeFileSync } from "node:fs";
+import { writeFileSync } from "node:fs";
 import path from "node:path";
 import bcrypt from "bcryptjs";
 if (

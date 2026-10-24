@@ -1,30 +1,33 @@
 "use client";
 import { useState, useRef, useCallback, useEffect } from "react";
-type Any = Record<string, any>;
-export function useLoad<T = Any>(fn: () => Promise<T>, deps: unknown[] = []) {
+import { api } from "../lib/request";
+export function useLoad<T = any>(path: string) {
   const [data, setData] = useState<T | null>(null),
     [error, setError] = useState("");
   const generation = useRef(0);
+  const active = useRef(false);
   const [loading, setLoading] = useState(true);
   const reload = useCallback(() => {
     const request = ++generation.current;
     setLoading(true);
     setError("");
-    return fn()
+    return api<T>(path)
       .then((result) => {
-        if (request === generation.current) setData(result);
+        if (active.current && request === generation.current) setData(result);
       })
       .catch((e) => {
-        if (request === generation.current) setError(e.message);
+        if (active.current && request === generation.current)
+          setError(e.message);
       })
       .finally(() => {
-        if (request === generation.current) setLoading(false);
+        if (active.current && request === generation.current) setLoading(false);
       });
-  }, deps);
+  }, [path]);
   useEffect(() => {
+    active.current = true;
     reload();
     return () => {
-      generation.current++;
+      active.current = false;
     };
   }, [reload]);
   return { data, error, reload, setData, loading };

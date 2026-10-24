@@ -4,7 +4,9 @@ import { all, one, run, transaction } from "../../lib/db";
 import { assert, unpack } from "./service";
 const hash = (value: unknown) =>
   createHash("sha256").update(JSON.stringify(value)).digest("hex");
-export function initKnowledgeTools() { /* Schema is initialized centrally by lib/db. */ }
+export function initKnowledgeTools() {
+  /* Schema is initialized centrally by lib/db. */
+}
 export function knowledgeAliases(owner: string) {
   initKnowledgeTools();
   return all(

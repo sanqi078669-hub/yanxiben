@@ -47,7 +47,6 @@ import {
 import { clearBrowserDrafts } from "../lib/drafts";
 
 import { defaults } from "../lib/model";
-type Any = Record<string, any>;
 export default function Notebook() {
   const queryParams = useSearchParams();
   const pathname = usePathname(),
@@ -222,9 +221,9 @@ export default function Notebook() {
             pathname === "/trash" ? (
             <LibraryPage mode={pathname.slice(1)} notify={notify} />
           ) : pathname === "/entries/new" ? (
-            <Editor notify={notify} />
+            <Editor />
           ) : pathname.startsWith("/entries/") && pathname.endsWith("/edit") ? (
-            <Editor id={pathname.split("/")[2]} notify={notify} />
+            <Editor id={pathname.split("/")[2]} />
           ) : pathname.startsWith("/entries/") ? (
             <Detail id={pathname.split("/")[2]} notify={notify} />
           ) : pathname === "/review" ? (

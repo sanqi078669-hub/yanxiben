@@ -106,7 +106,8 @@ export const migrations: Migration[] = [
   {
     version: 7,
     name: "ai-daily-budget-v7",
-    up: (db) => db.exec(`
+    up: (db) =>
+      db.exec(`
       CREATE TABLE ai_daily_budget(owner TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,day TEXT NOT NULL,currency TEXT NOT NULL,calls INTEGER NOT NULL,spent REAL NOT NULL,unknown INTEGER NOT NULL,PRIMARY KEY(owner,day,currency));
       CREATE TABLE ai_budget_active(owner TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,id TEXT NOT NULL,expires INTEGER NOT NULL);
     `),
