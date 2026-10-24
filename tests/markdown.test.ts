@@ -4,6 +4,32 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { MD } from "../src/components/Markdown";
 
+test("Markdown 仅渲染站内私有附件，外部图片和伪装地址不会自动请求", () => {
+  const attachment =
+    "/api/v1/attachments/12345678-1234-1234-1234-123456789abc/content";
+  for (const url of [
+    "https://example.invalid/pixel?data=synthetic",
+    "//example.invalid/pixel",
+    "data:image/svg+xml,test",
+    "blob:https://example.invalid/test",
+    attachment + "?redirect=external",
+    "/other-image.png",
+  ]) {
+    const html = renderToStaticMarkup(
+      createElement(MD, null, `![合成图片](${url})`),
+    );
+    assert.doesNotMatch(html, /<img|rel="preload"/);
+    assert.match(html, /外部图片未加载/);
+  }
+  const html = renderToStaticMarkup(
+    createElement(MD, null, `![附件](${attachment})`),
+  );
+  assert.match(html, /<img/);
+  assert.ok(html.includes(`src="${attachment}"`));
+  assert.match(html, /loading="lazy"/);
+  assert.match(html, /referrerPolicy="no-referrer"/i);
+});
+
 test("实际 Markdown/rehype/KaTeX 组合渲染行内、块级及复杂公式", () => {
   const inline = renderToStaticMarkup(
     createElement(MD, null, "求导 $f(x)=x^2$，结果为 $2x$。"),
