@@ -198,10 +198,10 @@ export async function readRestoreUpload(
     await Promise.all(writes);
     if (failure) throw failure;
     assert(
-      fileCount === 1 && fileBytes > 0 && password !== undefined,
+      fileCount === 1 && fileBytes > 0,
       400,
       "INVALID_BACKUP",
-      "请选择 ZIP 并验证当前密码",
+      "请选择完整备份 ZIP",
     );
     return { password, upload: new DiskUpload(folder, fileBytes) };
   } catch (error) {

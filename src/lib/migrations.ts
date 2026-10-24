@@ -123,6 +123,14 @@ migrations.push({
     expires INTEGER NOT NULL,PRIMARY KEY(owner,key_hash));
     CREATE INDEX export_expiry ON export_receipts(expires);`),
 });
+migrations.push({
+  version: 9,
+  name: "reauth-limits-v9",
+  up: (db) =>
+    db.exec(`CREATE TABLE reauth_limits(owner TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,failures INTEGER NOT NULL,blocked_until INTEGER NOT NULL,lease_until INTEGER NOT NULL,lease_id TEXT NOT NULL);
+    CREATE TABLE reauth_grants(key_hash TEXT PRIMARY KEY,owner TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,expires INTEGER NOT NULL);
+    CREATE INDEX reauth_grants_expiry ON reauth_grants(expires);`),
+});
 const current = migrations.at(-1)!.version;
 export const DATABASE_VERSION = current;
 const failure = (message: string): never => {

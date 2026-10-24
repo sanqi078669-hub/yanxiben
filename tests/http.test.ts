@@ -617,6 +617,12 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
       (await call("exports", { type: "BACKUP", password: "incorrect" })).status,
       401,
     );
+    assert.equal(
+      (await call("exports", { type: "BACKUP", password })).status,
+      429,
+    );
+    // Advance only this synthetic fixture out of backoff; production has no reset API.
+    run("DELETE FROM reauth_limits");
     for (const type of ["BACKUP", "MARKDOWN"]) {
       assert.equal((await call("exports", { type, password })).status, 400);
       const key = randomUUID();
@@ -639,6 +645,7 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
         ).status,
         401,
       );
+      run("DELETE FROM reauth_limits");
       assert.equal(
         (
           await call(
@@ -651,6 +658,52 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
         409,
       );
     }
+  });
+  await t.test("恢复上传前校验一次性凭据，跨账号和重放拒绝", async () => {
+    assert.equal((await call("data/restore-preview", {})).status, 403);
+    assert.equal(
+      (await call("auth/reauth", { password: "wrong", purpose: "RESTORE" }))
+        .status,
+      403,
+    );
+    assert.equal(
+      (
+        await call("auth/password", {
+          current: password,
+          password: "new-fixture-password",
+        })
+      ).status,
+      429,
+    );
+    run("DELETE FROM reauth_limits");
+    const grant = (
+      await (await call("auth/reauth", { password, purpose: "RESTORE" })).json()
+    ).data.token;
+    assert.equal(
+      (
+        await call("data/restore-preview", {}, "POST", {
+          Cookie: otherCookie,
+          "X-Restore-Authorization": grant,
+        })
+      ).status,
+      403,
+    );
+    assert.equal(
+      (
+        await call("data/restore-preview", {}, "POST", {
+          "X-Restore-Authorization": grant,
+        })
+      ).status,
+      400,
+    );
+    assert.equal(
+      (
+        await call("data/restore-preview", {}, "POST", {
+          "X-Restore-Authorization": grant,
+        })
+      ).status,
+      403,
+    );
   });
   await t.test("删除与恢复保持历史并暂停复习", async () => {
     assert.equal(

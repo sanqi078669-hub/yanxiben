@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
 import { createReadStream } from "node:fs";
 import { Readable } from "node:stream";
-import bcrypt from "bcryptjs";
 import { z } from "zod";
-import { one } from "../../../lib/db";
-import { assert } from "../../entries/service";
+import { consumeRestoreGrant, verifyCurrentPassword } from "../../auth/reauth";
 import {
   backupStatus,
   previewRestore,
@@ -35,17 +33,9 @@ export async function dataHandler(context: ApiContext) {
     return ok(deleteRestore(owner, { id: b.id }));
   }
   if (p === "data/restore-preview" && method === "POST") {
-    const { password, upload } = await readRestoreUpload(req);
+    consumeRestoreGrant(owner, req.headers.get("x-restore-authorization"));
+    const { upload } = await readRestoreUpload(req);
     try {
-      assert(
-        await bcrypt.compare(
-          password,
-          one("SELECT password FROM users WHERE id=?", owner)!.password,
-        ),
-        403,
-        "INVALID_PASSWORD",
-        "密码不正确",
-      );
       return ok(await previewRestore(owner, upload, { signal: req.signal }));
     } finally {
       await upload.dispose();
@@ -59,15 +49,11 @@ export async function dataHandler(context: ApiContext) {
       })
       .strict()
       .parse(await json());
-    assert(
-      await bcrypt.compare(
-        b.password,
-        one("SELECT password FROM users WHERE id=?", owner)!.password,
-      ),
-      401,
-      "UNAUTHENTICATED",
-      "请验证当前密码",
-    );
+    await verifyCurrentPassword(owner, b.password, {
+      status: 401,
+      code: "UNAUTHENTICATED",
+      message: "请验证当前密码",
+    });
     const artifact = await prepareExport(owner, b.type, idempotencyKey(req), {
       signal: req.signal,
     });

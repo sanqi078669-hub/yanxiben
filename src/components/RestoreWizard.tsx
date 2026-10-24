@@ -110,11 +110,16 @@ export function RestoreWizard() {
                 const controller = new AbortController();
                 previewRequest.current = controller;
                 setPreviewBusy(true);
+                const grant = await request<{ token: string }>("auth/reauth", {
+                  method: "POST",
+                  body: JSON.stringify({ password, purpose: "RESTORE" }),
+                  signal: controller.signal,
+                });
                 form.set("file", file!);
-                form.set("password", password);
                 setPreview(
                   await request<Preview>("data/restore-preview", {
                     method: "POST",
+                    headers: { "X-Restore-Authorization": grant.token },
                     body: form,
                     signal: controller.signal,
                   }),

@@ -110,13 +110,14 @@ async function stopServer() {
   server.kill();
   await closed;
 }
-async function call(p, body) {
+async function call(p, body, extraHeaders = {}) {
   const form = body instanceof FormData;
   const response = await fetch(base + "/api/v1/" + p, {
     method: body === undefined ? "GET" : "POST",
     headers: {
       "X-Requested-With": "yanxiben",
       Cookie: cookie,
+      ...extraHeaders,
       ...(!form && body !== undefined
         ? { "Content-Type": "application/json" }
         : {}),
@@ -230,7 +231,12 @@ try {
     new Blob([archive], { type: "application/zip" }),
     "fixture.zip",
   );
-  const preview = await call("data/restore-preview", form);
+  const grant = (await call("auth/reauth", { password, purpose: "RESTORE" }))
+    .data.token;
+  form.delete("password");
+  const preview = await call("data/restore-preview", form, {
+    "X-Restore-Authorization": grant,
+  });
   workspaceId = preview.data.id;
   assert.equal(preview.data.counts.entries, 1);
   assert.deepEqual(readdirSync(path.join(target, "upload-tmp")), []);
