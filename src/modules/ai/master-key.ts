@@ -1,6 +1,5 @@
 import {
   existsSync,
-  mkdirSync,
   readFileSync,
   readdirSync,
   unlinkSync,
@@ -9,6 +8,7 @@ import {
 import { createDecipheriv, randomBytes, randomUUID } from "node:crypto";
 import path from "node:path";
 import { AppError } from "../entries/service";
+import { privateDirectory } from "../../lib/private-files";
 
 const unavailable = () =>
   new AppError(
@@ -28,7 +28,7 @@ export function decryptWithKey(value: string, key: Buffer) {
 /** The data directory keeps only a reference, never the new master secret. */
 export function masterKey(dataDirectory: string, create: boolean) {
   const directory = path.join(dataDirectory, "ai-private");
-  mkdirSync(directory, { recursive: true });
+  privateDirectory(directory);
   const legacy = path.join(directory, "encryption-key"),
     reference = path.join(directory, "key-reference");
   let keyFile = process.env.AI_KEY_FILE
@@ -77,7 +77,7 @@ export function masterKey(dataDirectory: string, create: boolean) {
   if (existsSync(legacy)) {
     const key = readFileSync(legacy);
     verify(key);
-    mkdirSync(path.dirname(keyFile), { recursive: true });
+    privateDirectory(path.dirname(keyFile));
     try {
       writeFileSync(keyFile, key, { flag: "wx", mode: 0o600 });
     } catch (e) {
@@ -91,7 +91,7 @@ export function masterKey(dataDirectory: string, create: boolean) {
   }
   if (!existsSync(/* turbopackIgnore: true */ keyFile)) {
     if (!create || encrypted.length) throw unavailable();
-    mkdirSync(path.dirname(keyFile), { recursive: true });
+    privateDirectory(path.dirname(keyFile));
     try {
       writeFileSync(keyFile, randomBytes(32), { flag: "wx", mode: 0o600 });
     } catch (e) {

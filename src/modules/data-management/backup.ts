@@ -326,7 +326,10 @@ export async function restore(
       assert(!db.prepare("PRAGMA foreign_key_check").all().length);
       for (const a of data.attachments) {
         const filename = path.join(dataDir, "attachments", a.id);
-        writeFileSync(filename, files["attachments/" + a.id], { flag: "wx" });
+        writeFileSync(filename, files["attachments/" + a.id], {
+          flag: "wx",
+          mode: 0o600,
+        });
         written.push(filename);
       }
       const secret = path.join(dataDir, "session-secret");

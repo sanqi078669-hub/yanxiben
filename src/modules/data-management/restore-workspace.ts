@@ -1,11 +1,5 @@
 import { spawn, type ChildProcess } from "node:child_process";
-import {
-  mkdirSync,
-  writeFileSync,
-  readFileSync,
-  existsSync,
-  rmSync,
-} from "node:fs";
+import { writeFileSync, readFileSync, existsSync, rmSync } from "node:fs";
 import { createServer } from "node:net";
 import { createRequire } from "node:module";
 import path from "node:path";
@@ -15,6 +9,7 @@ import { dataDir, one, run, all } from "../../lib/db";
 import { assert, AppError } from "../entries/service";
 import type { DiskUpload } from "../http/body";
 import { BACKUP_ZIP_MAX_BYTES } from "../../lib/capacity";
+import { privateDirectory } from "../../lib/private-files";
 
 const state = globalThis as typeof globalThis & {
   yanxiRestoreChildren?: Map<string, ChildProcess>;
@@ -212,7 +207,8 @@ export async function previewRestore(
     folder = folderFor(id),
     archive = path.join(folder, "source.zip"),
     target = path.join(folder, "data");
-  mkdirSync(folder, { recursive: true });
+  privateDirectory(path.dirname(folder));
+  privateDirectory(folder);
   try {
     if (bytes instanceof Uint8Array)
       writeFileSync(archive, bytes, { mode: 0o600, flag: "wx" });
@@ -399,6 +395,7 @@ async function startRestore(owner: string, row: Record<string, any>) {
         port,
         attempt: retry + 1,
       }),
+      { mode: 0o600 },
     );
     const deadline = Date.now() + 15000;
     while (!failed && child.exitCode === null && Date.now() < deadline) {

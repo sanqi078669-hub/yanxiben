@@ -1,18 +1,13 @@
 import { z } from "zod";
 import { randomBytes, createCipheriv } from "node:crypto";
-import {
-  existsSync,
-  readFileSync,
-  writeFileSync,
-  renameSync,
-  mkdirSync,
-} from "node:fs";
+import { existsSync, readFileSync, writeFileSync, renameSync } from "node:fs";
 import path from "node:path";
 import { dataDir } from "../../lib/db";
 import { assert } from "../entries/service";
 import { publicTarget } from "./network";
 import { masterKey, decryptWithKey } from "./master-key";
 import { aiLimitsSchema, defaultAiLimits } from "../../lib/ai-limits";
+import { privateDirectory } from "../../lib/private-files";
 
 const profileSchema = z
   .object({
@@ -155,7 +150,7 @@ export function saveConfig(owner: string, raw: unknown) {
     c.profiles = c.profiles.filter((v) => v.id !== command.id);
     if (c.activeId === command.id) c.activeId = null;
   }
-  mkdirSync(directory, { recursive: true });
+  privateDirectory(directory);
   const file = filename(owner);
   writeFileSync(file + ".tmp", JSON.stringify(c), { mode: 0o600 });
   renameSync(file + ".tmp", file);

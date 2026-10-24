@@ -67,6 +67,7 @@ npm run start
 - `data/attachments/`：私有图片；浏览器访问必须登录并检查所有权。
 - `data/session-secret`：iron-session 加密密钥，不能公开。
 - 所有上述运行数据和凭据均被 `.gitignore` 排除。
+- 新建私有目录/文件按 POSIX 0700/0600 创建；数据库先私有预留，SQLite 再初始化。已有权限过宽时在服务端告警，不自动修改；Windows 权限取决于父目录 ACL，mode 不代替 ACL。不要将 DATA_DIR 放在其他用户可访问的共享目录，复制/迁移后应重新核验访问权限。
 - 会话由 iron-session 封装，并由数据库会话记录控制撤销。密码由 bcryptjs 哈希保存。
 - 写请求强制 `X-Requested-With: yanxiben`；存在 Origin 时还要求同源，缺少 Origin 不单独拒绝。浏览器跨站请求无法绕过自定义头预检，服务端不开放跨站 CORS。接口限制图片为 JPEG、PNG、WebP，并通过 sharp 解码重编码、去除元数据。
 - 附件使用 `private, no-cache` + ETag，每次重新鉴权后才允许 304；不允许共享缓存或免鉴权的短期缓存。

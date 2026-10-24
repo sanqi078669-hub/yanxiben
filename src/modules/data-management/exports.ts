@@ -1,5 +1,5 @@
 import { createHash, randomUUID } from "node:crypto";
-import { mkdirSync, readFileSync, writeFileSync, rmSync } from "node:fs";
+import { readFileSync, writeFileSync, rmSync } from "node:fs";
 import path from "node:path";
 import { z } from "zod";
 import { all, one, run, transaction, dataDir } from "../../lib/db";
@@ -7,6 +7,7 @@ import { assert } from "../entries/service";
 import { backup, markdownExport } from "./backup";
 import { recordBackup } from "./restore-workspace";
 import { checkCachedArchiveCapacity } from "./capacity";
+import { privateDirectory } from "../../lib/private-files";
 
 export const EXPORT_TTL = 7 * 86400000;
 export function exportArchive(
@@ -23,7 +24,7 @@ export function exportArchive(
   );
   const hash = createHash("sha256").update(key).digest("hex");
   const directory = path.join(dataDir, "export-cache");
-  mkdirSync(directory, { recursive: true });
+  privateDirectory(directory);
   const file = (id: string) =>
     path.join(directory, z.string().uuid().parse(id) + ".zip");
   const lookup = () =>

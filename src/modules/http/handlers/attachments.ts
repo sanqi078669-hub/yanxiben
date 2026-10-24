@@ -47,6 +47,7 @@ export async function attachmentsHandler(context: ApiContext) {
       mime = "image/" + (meta.format === "jpeg" ? "jpeg" : meta.format);
     writeFileSync(path.join(dataDir, "attachments", id), cleaned, {
       flag: "wx",
+      mode: 0o600,
     });
     run(
       "INSERT INTO attachments VALUES(?,?,?,?,?,?,?)",

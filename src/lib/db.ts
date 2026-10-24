@@ -1,13 +1,33 @@
 import { DatabaseSync } from "node:sqlite";
-import { mkdirSync } from "node:fs";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 import { migrateDatabase } from "./migrations";
+import {
+  privateDirectory,
+  reservePrivateFile,
+  inspectPrivateDirectory,
+  warnPrivatePermissions,
+} from "./private-files";
 export const dataDir = path.resolve(
   /* turbopackIgnore: true */ process.env.DATA_DIR ||
     path.join(process.cwd(), "data"),
 );
-mkdirSync(path.join(dataDir, "attachments"), { recursive: true });
+privateDirectory(dataDir);
+privateDirectory(path.join(dataDir, "attachments"));
+const databaseFile = path.join(dataDir, "yanxiben.sqlite");
+reservePrivateFile(databaseFile);
+for (const folder of [
+  "attachments",
+  "migration-backups",
+  "restore-workspaces",
+  "export-cache",
+  "ai-private",
+])
+  inspectPrivateDirectory(
+    path.join(/* turbopackIgnore: true */ dataDir, folder),
+  );
+for (const suffix of ["-wal", "-shm"])
+  warnPrivatePermissions(databaseFile + suffix);
 const globalDb = globalThis as unknown as { yanxiDb?: DatabaseSync };
 export const db = (globalDb.yanxiDb ??= new DatabaseSync(
   path.join(dataDir, "yanxiben.sqlite"),
@@ -26,11 +46,12 @@ migrateDatabase(db, {
     )
       return;
     const folder = path.join(dataDir, "migration-backups");
-    mkdirSync(folder, { recursive: true });
+    privateDirectory(folder);
     const target = path.join(
       folder,
       "before-" + Date.now() + "-" + randomUUID() + ".sqlite",
     );
+    reservePrivateFile(target);
     db.exec("VACUUM INTO '" + target.replaceAll("'", "''") + "'");
   },
 });
