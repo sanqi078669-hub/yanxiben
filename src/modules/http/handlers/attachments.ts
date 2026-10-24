@@ -11,6 +11,7 @@ import type { ApiContext } from "../context";
 import { ATTACHMENT_MAX_BYTES } from "../../../lib/capacity";
 import { checkAttachmentCapacity } from "../../data-management/capacity";
 import { withImageProcessing, withUpload } from "../../images/processing";
+import { enforceQuota } from "../../data-management/quota";
 export async function attachmentsHandler(context: ApiContext) {
   const { req, p, parts, method, owner, ok } = context;
   if (p === "attachments" && method === "POST") {
@@ -46,6 +47,7 @@ export async function attachmentsHandler(context: ApiContext) {
           .rotate()
           .toBuffer();
         checkAttachmentCapacity(cleaned.length);
+        enforceQuota(owner, cleaned.length);
         const id = randomUUID(),
           mime = "image/" + (meta.format === "jpeg" ? "jpeg" : meta.format);
         writeFileSync(path.join(dataDir, "attachments", id), cleaned, {

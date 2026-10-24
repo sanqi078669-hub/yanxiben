@@ -1,0 +1,5 @@
+[Unit]
+Description=Health disk and backup freshness
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /opt/yanxiben/current/deploy/monitor.sh

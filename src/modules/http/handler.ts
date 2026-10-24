@@ -7,6 +7,7 @@ import { readJson } from "./body";
 import { guardRequest, jsonOk, errorResponse } from "./middleware";
 import { resourceHandlers } from "./router";
 import { loginHandler } from "./handlers/login";
+import { enforceQuota, accountUsage } from "../data-management/quota";
 export async function handleRequest(
   req: NextRequest,
   ctx: { params: Promise<{ path: string[] }> },
@@ -17,6 +18,11 @@ export async function handleRequest(
       p = parts.join("/"),
       method = req.method;
     guardRequest(req, p);
+    if (p === "health" && method === "GET") {
+      const { one } = await import("../../lib/db");
+      one("SELECT 1");
+      return jsonOk(requestId, { status: "ok" });
+    }
     const context = {
       req,
       parts,
@@ -32,6 +38,18 @@ export async function handleRequest(
     if (p === "auth/login" && method === "POST")
       return await loginHandler(context);
     const { owner, session: s } = await authenticated();
+    if (p === "data/capacity" && method === "GET")
+      return context.ok({
+        ...accountUsage(owner),
+        restoreMode: process.env.RESTORE_MODE === "admin" ? "admin" : "local",
+      });
+    if (
+      !["GET", "HEAD"].includes(method) &&
+      !["auth", "exports", "data"].includes(parts[0])
+    )
+      enforceQuota(owner);
+    if (parts[0] === "ai" && process.env.AI_ENABLED === "0" && method !== "GET")
+      throw new AppError(403, "AI_DISABLED", "本实例尚未启用 AI，请联系维护人");
     const handler = Object.hasOwn(resourceHandlers, parts[0])
       ? resourceHandlers[parts[0]]
       : undefined;

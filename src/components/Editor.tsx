@@ -36,11 +36,10 @@ import {
   type Entry,
   type EntryInput,
 } from "../lib/model";
-import { api } from "../lib/request";
+import { api, uploadAttachment } from "../lib/request";
 import { MD } from "./Markdown";
 import { TypeIcon, Badge, ErrorBox } from "./ui";
 import { useLoad } from "./useLoad";
-import { readEnvelope } from "../lib/request";
 import type { EntryList } from "../lib/api-types";
 type Any = Record<string, any>;
 const blank = (type: EntryInput["type"]): EntryInput => ({
@@ -78,6 +77,15 @@ export default function Editor({ id }: { id?: string }) {
     [uploading, setUploading] = useState(false),
     [busy, setBusy] = useState(false);
   const [savedValue, setSavedValue] = useState(() => JSON.stringify(e));
+  const uploadRequest = useRef<AbortController | null>(null);
+  useEffect(() => {
+    setUploading(false);
+    return () => {
+      const request = uploadRequest.current;
+      uploadRequest.current = null;
+      request?.abort();
+    };
+  }, [id]);
   const saved = useRef(savedValue),
     saving = useRef(false),
     dirty = useRef(false),
@@ -240,46 +248,35 @@ export default function Editor({ id }: { id?: string }) {
   const change = (patch: Partial<EntryInput>) =>
     setE((v) => ({ ...v, ...patch }));
   async function upload(file: File) {
+    if (uploadRequest.current) return;
+    const controller = new AbortController();
+    uploadRequest.current = controller;
     setUploading(true);
     setError("");
     try {
-      const form = new FormData();
-      form.append("file", file);
-      const xhr = new XMLHttpRequest();
-      const result = await new Promise<Any>((resolve, reject) => {
-        xhr.open("POST", "/api/v1/attachments");
-        xhr.setRequestHeader("X-Requested-With", "yanxiben");
-        xhr.upload.onprogress = (ev) =>
-          setState(
-            "图片上传中 " +
-              (ev.lengthComputable
-                ? Math.round((ev.loaded / ev.total) * 100)
-                : 0) +
-              "%",
-          );
-        xhr.onerror = () => reject(new Error("上传失败，请重新选择文件重试"));
-        xhr.onload = () => {
-          readEnvelope(
-            new Response(xhr.responseText, {
-              status: xhr.status,
-              headers: {
-                "Content-Type": xhr.getResponseHeader("Content-Type") || "",
-                "X-Request-Id": xhr.getResponseHeader("X-Request-Id") || "",
-              },
-            }),
-          ).then(resolve, reject);
-        };
-        xhr.send(form);
+      const result = await uploadAttachment<{ id: string }>(file, {
+        signal: controller.signal,
+        onProgress: (percent) => {
+          if (uploadRequest.current === controller)
+            setState("图片上传中 " + percent + "%");
+        },
       });
+      if (uploadRequest.current !== controller) return;
       setE((v) => ({
         ...v,
         attachments: [...v.attachments, { id: result.id, role: "PROMPT" }],
       }));
       setState("图片已上传；请保存记录");
     } catch (err) {
-      setError((err as Error).message);
+      if (uploadRequest.current === controller) {
+        setError((err as Error).message);
+        setState("图片未添加，文字仍保留；可重新选择图片");
+      }
     } finally {
-      setUploading(false);
+      if (uploadRequest.current === controller) {
+        uploadRequest.current = null;
+        setUploading(false);
+      }
     }
   }
   if (!loaded)
@@ -544,6 +541,22 @@ export default function Editor({ id }: { id?: string }) {
                   }}
                 />
               </label>
+              {uploading && (
+                <button
+                  type="button"
+                  className="button outline small"
+                  onClick={() =>
+                    uploadRequest.current?.abort(
+                      new DOMException(
+                        "图片上传已取消，未保存文字仍保留",
+                        "AbortError",
+                      ),
+                    )
+                  }
+                >
+                  取消上传
+                </button>
+              )}
             </div>
             <div className="attachment-grid">
               {e.attachments.map((a) => (

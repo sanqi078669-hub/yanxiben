@@ -1,19 +1,23 @@
-import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { run } from "../../../lib/db";
 import { settings } from "../../entries/service";
 import { settingsSchema } from "../../../lib/model";
+import { newPasswordSchema } from "../../../lib/password-policy";
 import type { ApiContext } from "../context";
-import { verifyCurrentPassword, restoreGrant } from "../../auth/reauth";
+import {
+  verifyCurrentPassword,
+  restoreGrant,
+  changePassword,
+} from "../../auth/reauth";
 export async function accountHandler(context: ApiContext) {
   const { p, method, owner, s, json, ok } = context;
   if (p === "auth/identity" && method === "GET") return ok({ owner });
   if (p === "auth/reauth" && method === "POST") {
     const body = z
-      .object({ password: z.string().max(200), purpose: z.literal("RESTORE") })
+      .object({ password: z.string(), purpose: z.literal("RESTORE") })
       .strict()
       .parse(await json());
-    await verifyCurrentPassword(owner, body.password);
+    await verifyCurrentPassword(owner, body.password, { sid: s.sid! });
     return ok(restoreGrant(owner));
   }
   if (p === "auth/logout" && method === "POST") {
@@ -24,18 +28,12 @@ export async function accountHandler(context: ApiContext) {
   if (p === "auth/password" && method === "POST") {
     const b = z
       .object({
-        current: z.string().max(200),
-        password: z.string().min(12).max(200),
+        current: z.string(),
+        password: newPasswordSchema,
       })
       .strict()
       .parse(await json());
-    await verifyCurrentPassword(owner, b.current, { status: 400 });
-    run(
-      "UPDATE users SET password=? WHERE id=?",
-      await bcrypt.hash(b.password, 12),
-      owner,
-    );
-    run("DELETE FROM sessions WHERE owner=? AND id<>?", owner, s.sid!);
+    await changePassword(owner, s.sid!, b.current, b.password);
     return ok(true);
   }
   if (p === "settings") {

@@ -14,7 +14,9 @@ export function guardRequest(req: NextRequest, resource: string) {
   assert(
     !origin ||
       origin ===
-        new URL(req.nextUrl.protocol + "//" + req.headers.get("host")).origin,
+        (process.env.PUBLIC_ORIGIN ||
+          new URL(req.nextUrl.protocol + "//" + req.headers.get("host"))
+            .origin),
     403,
     "INVALID_ORIGIN",
     "请求来源不匹配",

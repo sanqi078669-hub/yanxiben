@@ -2,6 +2,9 @@ import { createHash, randomUUID } from "node:crypto";
 import { z } from "zod";
 import { all, one, run, transaction } from "../../lib/db";
 import { assert, unpack } from "./service";
+import { enforceAccountQuota } from "../data-management/quota";
+const rowBytes = (row: Record<string, unknown>) =>
+  Buffer.byteLength(JSON.stringify(row)) + 1;
 const hash = (value: unknown) =>
   createHash("sha256").update(JSON.stringify(value)).digest("hex");
 export function initKnowledgeTools() {
@@ -142,28 +145,83 @@ export function mergeKnowledge(owner: string, raw: unknown) {
     );
     const before = preview.state,
       now = new Date().toISOString();
-    for (const row of before.records) {
+    const aliasId = randomUUID(),
+      id = randomUUID();
+    const planned = before.records.map((row) => {
       const payload = JSON.parse(row.payload);
       payload.knowledgeIds = [
         ...new Set(
-          payload.knowledgeIds.map((id: string) =>
-            id === b.sourceId ? b.targetId : id,
+          payload.knowledgeIds.map((node: string) =>
+            node === b.sourceId ? b.targetId : node,
           ),
         ),
       ];
+      return {
+        ...row,
+        payload: JSON.stringify(payload),
+        version: row.version + 1,
+        updated_at: now,
+      };
+    });
+    const revisions = before.records.map((row) => ({
+      id: randomUUID(),
+      owner,
+      entry_id: row.id,
+      version: row.version,
+      snapshot: JSON.stringify(unpack(row)),
+      reason: "知识点合并前",
+      created_at: now,
+    }));
+    const alias = {
+      id: aliasId,
+      owner,
+      node_id: b.targetId,
+      name: before.source.name,
+    };
+    const estimatedAfter = {
+      nodes: [
+        { ...before.source, archived: 1 },
+        before.target,
+        ...before.children.map((node) => ({ ...node, parent_id: b.targetId })),
+      ],
+      records: planned,
+      aliases: [
+        ...before.aliases.map((item) => ({ ...item, node_id: b.targetId })),
+        alias,
+      ],
+    };
+    // Include full new history/receipt rows before writing. Knowledge UUID replacement
+    // cannot grow search/filter rows; ignore their possible shrinkage conservatively.
+    const growth =
+      revisions.reduce((sum, row) => sum + rowBytes(row), 0) +
+      rowBytes(alias) +
+      rowBytes({
+        id,
+        owner,
+        payload: JSON.stringify({ before, after: estimatedAfter, aliasId }),
+        undone: 0,
+      }) +
+      planned.reduce(
+        (sum, row, index) =>
+          sum + Math.max(0, rowBytes(row) - rowBytes(before.records[index])),
+        0,
+      );
+    enforceAccountQuota(owner, growth);
+    for (const [index, row] of before.records.entries()) {
+      const revision = revisions[index];
       run(
         "INSERT INTO revisions VALUES(?,?,?,?,?,?,?)",
-        randomUUID(),
+        revision.id,
         owner,
         row.id,
         row.version,
-        JSON.stringify(unpack(row)),
+        revision.snapshot,
         "知识点合并前",
         now,
       );
       run(
         "UPDATE entries SET payload=?,version=version+1,updated_at=? WHERE id=? AND owner=?",
-        JSON.stringify(payload),
+        planned[index].payload,
         now,
         row.id,
         owner,
@@ -186,7 +244,6 @@ export function mergeKnowledge(owner: string, raw: unknown) {
       b.sourceId,
       owner,
     );
-    const aliasId = randomUUID();
     run(
       "INSERT INTO knowledge_aliases VALUES(?,?,?,?)",
       aliasId,
@@ -210,13 +267,13 @@ export function mergeKnowledge(owner: string, raw: unknown) {
         (a) => a.node_id === b.sourceId || a.node_id === b.targetId,
       ),
     };
-    const id = randomUUID();
     run(
       "INSERT INTO knowledge_merges VALUES(?,?,?,0)",
       id,
       owner,
       JSON.stringify({ before, after, aliasId }),
     );
+    enforceAccountQuota(owner);
     return { id, affected: before.records.length };
   });
 }
@@ -297,6 +354,7 @@ export function undoKnowledgeMerge(owner: string, id: string) {
         owner,
       );
     run("UPDATE knowledge_merges SET undone=1 WHERE id=?", id);
+    enforceAccountQuota(owner);
     return true;
   });
 }

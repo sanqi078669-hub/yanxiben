@@ -1,0 +1,19 @@
+{$YANXI_DOMAIN} {
+    request_body {
+        max_size 12MB
+    }
+    reverse_proxy 127.0.0.1:3000 {
+        header_up Host {host}
+        header_up X-Yanxi-Proxy {$YANXI_PROXY_SECRET}
+        header_up X-Yanxi-Client-IP {remote_host}
+        header_up -X-Forwarded-For
+        transport http {
+            dial_timeout 5s
+            response_header_timeout 240s
+            read_timeout 240s
+            # Deployment template: Linux/Caddy and slow-upload validation pending.
+            # Upstream write wait, not the browser's total upload deadline (180s).
+            write_timeout 240s
+        }
+    }
+}

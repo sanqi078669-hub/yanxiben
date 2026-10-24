@@ -6,6 +6,7 @@ import { z } from "zod";
 import { dataDir, one } from "../../lib/db";
 import { AppError, assert } from "../entries/service";
 import { checkBackupCapacity } from "./capacity";
+import { cachedExport, reserveExport } from "./export-cache";
 
 const running = new Set<string>();
 export async function prepareExport(
@@ -21,6 +22,8 @@ export async function prepareExport(
     "导出需要 8–200 字符的幂等键",
   );
   assert(!options.signal?.aborted, 499, "EXPORT_CANCELLED", "导出已取消");
+  const previous = cachedExport(owner, type, key);
+  if (previous) return previous;
   assert(
     !running.has(owner) && running.size < 2,
     429,
@@ -35,6 +38,7 @@ export async function prepareExport(
     "导出组件未构建，请先运行 npm run build",
   );
   const candidateId = randomUUID();
+  const reservation = reserveExport(owner);
   running.add(owner);
   try {
     const fileId = await new Promise<string>((resolve, reject) => {
@@ -101,6 +105,12 @@ export async function prepareExport(
                 "存在超过 10 MiB 的附件，请缩小或移除后重试",
               ],
               IDEMPOTENCY_CONFLICT: [409, "同一导出键不能用于不同类型"],
+              EXPORT_CACHE_LIMIT: [
+                507,
+                "导出超过缓存剩余预算；已有导出仍可重放",
+              ],
+              EXPORT_DISK_LIMIT: [507, "导出磁盘预留空间不足，请联系维护人"],
+              EXPORT_CONFIG_INVALID: [503, "导出缓存配置无效，请联系维护人"],
             };
             const errorCode = Object.hasOwn(known, result.error?.code)
               ? result.error.code
@@ -117,7 +127,15 @@ export async function prepareExport(
           reject(new AppError(503, "EXPORT_FAILED", "导出组件响应无效"));
         }
       });
-      child.stdin.end(JSON.stringify({ owner, type, key, candidateId }));
+      child.stdin.end(
+        JSON.stringify({
+          owner,
+          type,
+          key,
+          candidateId,
+          reservedBytes: reservation.bytes,
+        }),
+      );
     });
     const hash = createHash("sha256").update(key).digest("hex");
     assert(
@@ -136,6 +154,7 @@ export async function prepareExport(
     checkBackupCapacity(0, size);
     return { filename, size };
   } finally {
+    reservation.release();
     running.delete(owner);
     if (
       !one("SELECT file_id FROM export_receipts WHERE file_id=?", candidateId)

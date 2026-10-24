@@ -1,0 +1,8 @@
+[Unit]
+Description=Encrypted offsite instance snapshot
+OnFailure=yanxiben-alert@%n.service
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /opt/yanxiben/current/deploy/backup.sh
+TimeoutStartSec=45min
+UMask=0077

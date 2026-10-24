@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { spawn, execFileSync } from "node:child_process";
-import { randomBytes } from "node:crypto";
+import { randomBytes, createHash } from "node:crypto";
+import { resolveCandidateCommit } from "./release-verification.mjs";
 import {
   mkdtempSync,
   mkdirSync,
@@ -16,10 +17,7 @@ const source = process.cwd();
 const npmCli = process.env.npm_execpath;
 assert(npmCli, "请通过 npm run test:clean 执行");
 const gitArgs = ["-c", `safe.directory=${source.replaceAll("\\", "/")}`];
-const commit = execFileSync("git", [...gitArgs, "rev-parse", "HEAD"], {
-  cwd: source,
-  encoding: "utf8",
-}).trim();
+const commit = resolveCandidateCommit(source, process.argv.slice(2));
 const tempRoot = realpathSync(os.tmpdir());
 const folder = mkdtempSync(path.join(tempRoot, "yanxi-clean-install-"));
 const workspace = path.join(folder, "workspace");
@@ -36,7 +34,9 @@ for (const name of Object.keys(env)) {
 env.DATA_DIR = path.join(folder, "private-data");
 env.INIT_USERNAME = "clean-qa";
 env.INIT_PASSWORD = randomBytes(24).toString("hex");
+env.CANDIDATE_COMMIT = commit;
 const results = [];
+let lockfileSha256;
 async function command(label, args) {
   console.log(`Checking: ${label}`);
   const started = Date.now();
@@ -72,10 +72,13 @@ try {
   const archive = path.join(folder, "source.tar");
   execFileSync(
     "git",
-    [...gitArgs, "archive", "--format=tar", `--output=${archive}`, "HEAD"],
+    [...gitArgs, "archive", "--format=tar", `--output=${archive}`, commit],
     { cwd: source },
   );
   execFileSync("tar", ["-xf", archive, "-C", workspace]);
+  lockfileSha256 = createHash("sha256")
+    .update(readFileSync(path.join(workspace, "package-lock.json")))
+    .digest("hex");
   await command("npm ci (fresh directory, offline cache)", [
     "ci",
     "--offline",
@@ -116,6 +119,7 @@ try {
       {
         checkedAt: new Date().toISOString(),
         commit,
+        lockfileSha256,
         node: process.version,
         results,
       },

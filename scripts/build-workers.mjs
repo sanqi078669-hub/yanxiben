@@ -19,3 +19,13 @@ await build({
   target: "node24",
 });
 console.log("Production export worker compiled.");
+await build({
+  entryPoints: ["scripts/export-cleanup.ts"],
+  outfile: "runtime/export-cleanup.mjs",
+  bundle: true,
+  platform: "node",
+  format: "esm",
+  packages: "external",
+  target: "node24",
+});
+console.log("Export cache cleanup module compiled.");

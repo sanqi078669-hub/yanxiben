@@ -3,6 +3,33 @@ import { createHash, randomBytes, randomUUID } from "node:crypto";
 import { z } from "zod";
 import { one, run, transaction } from "../../lib/db";
 import { AppError, assert } from "../entries/service";
+import { newPasswordSchema } from "../../lib/password-policy";
+
+function assertCredentialState(
+  owner: string,
+  credential: string,
+  sid: string | undefined,
+  now: number,
+) {
+  assert(
+    one(
+      "SELECT id FROM users WHERE id=? AND password=? AND NOT EXISTS(SELECT 1 FROM account_status WHERE owner=? AND disabled=1)",
+      owner,
+      credential,
+      owner,
+    ) &&
+      (!sid ||
+        one(
+          "SELECT id FROM sessions WHERE id=? AND owner=? AND expires>?",
+          sid,
+          owner,
+          now,
+        )),
+    401,
+    "UNAUTHENTICATED",
+    "凭据或会话已失效，请重新登录",
+  );
+}
 
 export async function verifyCurrentPassword(
   owner: string,
@@ -12,9 +39,10 @@ export async function verifyCurrentPassword(
     code?: string;
     message?: string;
     now?: () => number;
+    sid?: string;
   } = {},
 ) {
-  z.string().max(200).parse(password);
+  z.string().parse(password);
   const clock = options.now || Date.now,
     leaseId = randomUUID();
   transaction(() => {
@@ -46,8 +74,10 @@ export async function verifyCurrentPassword(
   try {
     const user = one("SELECT password FROM users WHERE id=?", owner);
     assert(user, 401, "UNAUTHENTICATED", "会话已失效，请重新登录");
+    assertCredentialState(owner, user.password, options.sid, clock());
     const valid = await bcrypt.compare(password, user.password);
     transaction(() => {
+      assertCredentialState(owner, user.password, options.sid, clock());
       const lease = one(
         "SELECT * FROM reauth_limits WHERE owner=? AND lease_id=?",
         owner,
@@ -79,7 +109,7 @@ export async function verifyCurrentPassword(
         options.code || "INVALID_PASSWORD",
         options.message || "当前密码不正确",
       );
-    return true;
+    return String(user.password);
   } finally {
     if (!finished)
       run(
@@ -88,6 +118,36 @@ export async function verifyCurrentPassword(
         leaseId,
       );
   }
+}
+export async function changePassword(
+  owner: string,
+  sid: string,
+  current: string,
+  password: string,
+) {
+  newPasswordSchema.parse(password);
+  const credential = await verifyCurrentPassword(owner, current, {
+    status: 400,
+    sid,
+  });
+  const next = await bcrypt.hash(password, 12);
+  transaction(() => {
+    assertCredentialState(owner, credential, sid, Date.now());
+    const result = run(
+      "UPDATE users SET password=? WHERE id=? AND password=?",
+      next,
+      owner,
+      credential,
+    );
+    assert(
+      result.changes === 1,
+      401,
+      "UNAUTHENTICATED",
+      "凭据已失效，请重新登录",
+    );
+    run("DELETE FROM sessions WHERE owner=? AND id<>?", owner, sid);
+    run("DELETE FROM reauth_grants WHERE owner=?", owner);
+  });
 }
 const hash = (token: string) =>
   createHash("sha256").update(token).digest("hex");

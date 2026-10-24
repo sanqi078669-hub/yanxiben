@@ -1,0 +1,7 @@
+[Unit]
+Description=Yanxiben operations alert
+[Service]
+Type=oneshot
+# Root-owned executable supplied by operator, receives unit name; must deliver
+# email/webhook/monitor event and return failure if delivery fails. No secrets in args.
+ExecStart=/etc/yanxiben/notify %i

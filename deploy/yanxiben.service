@@ -1,0 +1,24 @@
+[Unit]
+Description=Yanxiben single instance
+After=network.target
+OnFailure=yanxiben-alert@%n.service
+[Service]
+Type=simple
+User=yanxi
+Group=yanxi
+WorkingDirectory=/opt/yanxiben/current
+EnvironmentFile=/etc/yanxiben/app.env
+Environment=NODE_ENV=production
+ExecStart=/opt/node/bin/node node_modules/next/dist/bin/next start --hostname 127.0.0.1 --port 3000
+Restart=on-failure
+RestartSec=5
+KillSignal=SIGTERM
+TimeoutStopSec=60
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/yanxiben
+[Install]
+WantedBy=multi-user.target

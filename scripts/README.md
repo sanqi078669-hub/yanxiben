@@ -2,7 +2,7 @@
 
 除 PowerShell 启动脚本会自行定位项目根目录外，以下命令均从项目根目录执行。
 
-`build-workers.mjs` 同时生成 runtime/restore-worker.mjs 和 runtime/export-worker.mjs；生产交付应保留整个 runtime/。网页导出/恢复均使用普通 Node，不依赖 tsx；命令行维护脚本仍需要开发依赖。
+`build-workers.mjs` 生成 runtime/restore-worker.mjs、runtime/export-worker.mjs 和 runtime/export-cleanup.mjs；生产交付应保留整个 runtime/。网页导出/恢复及定时清理使用普通 Node；账号、实例和初始化 CLI 使用已列入生产依赖的 tsx。
 
 追加维护：`node --import tsx scripts/rehearse-upgrade.ts --source-data data` 只在私有副本演练迁移、查询、导出恢复，原库不升级；`npm run maintenance:snapshots` 默认预览保留策略，`--keep 3 --days 30 --apply` 才执行清理，至少保留一份，先停止应用并核对离线备份。两个工具均不会把题目正文或凭据打印到终端；演练目录与 ZIP 含私人数据，不能公开。
 
@@ -28,10 +28,16 @@
 
 AI 脚本使用 `npx tsx scripts/<脚本名>.ts --live` 显式启用真实调用，使用本机账号已配置的模型并可能产生费用。学习助手可额外传 `--action organize|analyze|hint|feedback|english|variant`（选择其中一个值）。CI 不运行真实调用脚本。
 
-提示实测另需 `--entry-id <本人已保存记录ID>`，应使用隔离 DATA_DIR；服务端会记录该轮提示使用。生产安装可在构建环境生成 `.next/` 和 `runtime/` 后，连同配置与依赖锁文件交付，目标环境 `npm ci --omit=dev`；设置页恢复不再依赖 tsx。初始化、命令行维护等 TypeScript 开发脚本仍需开发依赖，不要把它们与网页恢复 worker 的运行条件混淆。
+提示实测另需 `--entry-id <本人已保存记录ID>`，应使用隔离 DATA_DIR；服务端会记录该轮提示使用。生产安装可在构建环境生成 `.next/` 和 `runtime/` 后，连同配置示例、运维源码与依赖锁文件交付，目标环境 `npm ci --omit=dev`；设置页恢复不依赖 tsx。账号、实例及初始化 CLI 的 tsx 已纳入生产依赖，不能因此声称 eslint/TypeScript 等开发检查工具也会安装。
 
 备份、恢复、维护的完整前置条件见[项目说明](../README.md)，执行前不要省略数据隔离与备份步骤。脚本输出、临时凭据和报告产物放入已忽略的 `test-results/`，不要提交。
 
 `check-coverage.mjs` 由 `npm run test:coverage` 自动执行，检查整体及关键文件基线，报告位于 coverage/。`client-asset-probe.mjs` 可在隔离测试时设置 `PROBE_PORT`；`PROBE_FAIL_ATTEMPTS=1` 只注入一次复习提交 503，用于验证刷新重试，默认关闭。该代理不能替代正式服务，也不记录答案、Cookie 或原始幂等键。
 
-`npm run test:clean` 执行 `verify-clean-install.mjs`：从当前 Git HEAD 导出已提交源码（不包含未提交修改、运行数据或 .env），在系统临时目录离线 npm ci，再检查初始化/补密钥、lint/格式、首次构建前类型生成、构建、完整覆盖率和生产恢复。依赖离线缓存必须齐全；首次下载依赖可先在项目执行 npm ci。记录提交号及每条命令的退出状态到 test-results/clean-install-acceptance.json；关闭生产测试进程后按已验证的边界清理自身临时目录。远端 CI 仍需另行推送后执行。
+`npm run test:clean -- --commit <候选提交哈希>` 执行 `verify-clean-install.mjs`，必须显式指定已批准的提交哈希，不再默认 HEAD。脚本解析为完整提交并导出该源码（不包含未提交修改、运行数据或 .env），在系统临时目录离线 npm ci，再检查初始化/补密钥、lint/格式、首次构建前类型生成、构建、完整覆盖率和生产恢复。导出目录中的专项通过 CANDIDATE_COMMIT 记录同一提交号；记录锁文件 SHA-256 与每条命令结果。依赖离线缓存必须齐全；结果写入 test-results/clean-install-acceptance.json，关闭测试进程后清理自身临时目录。CI 接入另行批准。本准备阶段未执行两个专项。
+
+生产专项复制 src/ 以及 init/accounts/instance CLI 到临时生产安装目录；实际初始化合成账号、停用/启用、离线快照并校验，不能只靠 tsx 可导入判断。报告中的 tsx/esbuild/eslint/TypeScript 安装字段均读取实际文件状态，断言 tsx 存在且 eslint/TypeScript 不存在；esbuild 可作为 tsx 的传递生产依赖存在，不硬编码为未安装。其命令仅在第二步获准后运行。
+
+准备阶段可单独运行 `node --test scripts/release-verification.test.mjs`：检查候选参数解析，并在当前依赖环境对临时合成数据执行 CLI smoke；它不会运行 npm 安装、构建、生产服务或两个专项，不代表纯生产依赖安装已经通过。
+
+正式账号维护：npm run accounts -- create|reset|disable|enable|revoke 用户名，必须显式设置 DATA_DIR。全实例快照：npm run instance -- snapshot 全新目录 --offline（先停止所有写入）；校验：npm run instance -- verify 快照目录。加密异地定时任务与完整恢复见 docs/DEPLOYMENT.md。旧 backup/restore 命令是单用户学习ZIP操作，不是多账号实例备份。

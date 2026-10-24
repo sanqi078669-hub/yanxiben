@@ -20,7 +20,7 @@ npm run init
 npm run dev
 ```
 
-打开 <http://127.0.0.1:3000>。初始用户名为 `student`，随机密码保存在本机 `data/local-login.txt`；登录后可在设置中修改密码。
+打开 <http://127.0.0.1:3000>。初始用户名为 `student`，随机密码保存在本机 `data/credentials/随机UUID.txt`（init 输出路径，不输出密码）；登录后可在设置中修改密码，私密交付后删除对应凭据文件。
 
 应用默认仅本机访问，尚未完成公网部署验收。可选配置见 [.env.example](.env.example)；AI 服务需自行配置，调用可能产生费用。
 
@@ -37,6 +37,8 @@ npm test
 ```
 
 - [使用与维护指南](docs/USAGE.md)：使用流程、AI 配置、备份恢复和维护。
+- [受邀实例部署与运维](docs/DEPLOYMENT.md)：单机 SQLite / Caddy / systemd、多账号 CLI、加密异地备份、完整恢复、发布与回退；目前待正式服务器验收。
+- [本次上线准备验收](docs/LAUNCH-VERIFICATION-20261024.md) · [上线清单](docs/LAUNCH-CHECKLIST.md)。
 - [文档索引](docs/README.md)：需求、架构与验收记录。
 - [贡献说明](CONTRIBUTING.md) · [安全说明](SECURITY.md)。
 

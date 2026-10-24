@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { one, run, transaction } from "../../lib/db";
 import { getEntry, updateEntry, assert } from "./service";
+import { enforceAccountQuota } from "../data-management/quota";
 
 function init() {
   /* Schema is initialized centrally by lib/db. */
@@ -131,6 +132,11 @@ export function batchTags(owner: string, raw: unknown) {
     .parse(raw);
   const changes: { id: string; version: number; tags: string[] }[] = [],
     results: Result[] = [];
+  const id = randomUUID();
+  transaction(() => {
+    run("INSERT INTO batch_edits VALUES(?,?,?)", id, owner, "[]");
+    enforceAccountQuota(owner);
+  });
   for (const item of b.items) {
     try {
       const entry = getEntry(owner, item.id);
@@ -149,11 +155,27 @@ export function batchTags(owner: string, raw: unknown) {
         });
         continue;
       }
-      const saved = updateEntry(owner, item.id, {
-        expectedVersion: item.version,
-        tags: [...entry.tags, tag],
-        manual: true,
-      });
+      const saved = updateEntry(
+        owner,
+        item.id,
+        {
+          expectedVersion: item.version,
+          tags: [...entry.tags, tag],
+          manual: true,
+        },
+        (saved) => {
+          run(
+            "UPDATE batch_edits SET payload=? WHERE id=? AND owner=?",
+            JSON.stringify([
+              ...changes,
+              { id: item.id, version: saved.version, tags: entry.tags },
+            ]),
+            id,
+            owner,
+          );
+          enforceAccountQuota(owner);
+        },
+      );
       changes.push({ id: item.id, version: saved.version, tags: entry.tags });
       results.push({ id: item.id, ok: true, message: "已添加标签" });
     } catch (error) {
@@ -164,13 +186,6 @@ export function batchTags(owner: string, raw: unknown) {
       });
     }
   }
-  const id = randomUUID();
-  run(
-    "INSERT INTO batch_edits VALUES(?,?,?)",
-    id,
-    owner,
-    JSON.stringify(changes),
-  );
   return { id, results };
 }
 export function undoBatch(owner: string, raw: unknown) {
@@ -182,17 +197,31 @@ export function undoBatch(owner: string, raw: unknown) {
     owner,
   );
   assert(receipt, 404, "NOT_FOUND", "批量操作不存在或已撤销");
-  const remaining: unknown[] = [],
-    results: Result[] = [];
-  for (const change of JSON.parse(receipt.payload) as {
+  const results: Result[] = [];
+  let remaining = JSON.parse(receipt.payload) as {
     kind?: string;
     id: string;
     version: number;
     tags: string[];
     reviewId?: string;
     stage?: string;
-  }[]) {
+  }[];
+  if (!remaining.length)
+    run("DELETE FROM batch_edits WHERE id=? AND owner=?", b.id, owner);
+  for (const change of [...remaining]) {
     try {
+      const next = remaining.filter((item) => item !== change);
+      const finish = () => {
+        if (next.length)
+          run(
+            "UPDATE batch_edits SET payload=? WHERE id=? AND owner=?",
+            JSON.stringify(next),
+            b.id,
+            owner,
+          );
+        else run("DELETE FROM batch_edits WHERE id=? AND owner=?", b.id, owner);
+        enforceAccountQuota(owner);
+      };
       if (change.kind === "pause")
         transaction(() => {
           getEntry(owner, change.id);
@@ -213,16 +242,22 @@ export function undoBatch(owner: string, raw: unknown) {
             change.reviewId!,
             owner,
           );
+          finish();
         });
       else
-        updateEntry(owner, change.id, {
-          expectedVersion: change.version,
-          tags: change.tags,
-          manual: true,
-        });
+        updateEntry(
+          owner,
+          change.id,
+          {
+            expectedVersion: change.version,
+            tags: change.tags,
+            manual: true,
+          },
+          finish,
+        );
+      remaining = next;
       results.push({ id: change.id, ok: true, message: "已撤销" });
     } catch (error) {
-      remaining.push(change);
       results.push({
         id: change.id,
         ok: false,
@@ -230,13 +265,5 @@ export function undoBatch(owner: string, raw: unknown) {
       });
     }
   }
-  if (remaining.length)
-    run(
-      "UPDATE batch_edits SET payload=? WHERE id=? AND owner=?",
-      JSON.stringify(remaining),
-      b.id,
-      owner,
-    );
-  else run("DELETE FROM batch_edits WHERE id=? AND owner=?", b.id, owner);
   return { id: b.id, results };
 }

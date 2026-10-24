@@ -16,6 +16,7 @@ import { createServer } from "node:net";
 import { createHash } from "node:crypto";
 import { zipSync, strToU8 } from "fflate";
 import bcrypt from "bcryptjs";
+import { verifyAdminCli } from "./release-verification.mjs";
 
 const source = process.cwd();
 const npmCli = process.env.npm_execpath;
@@ -138,6 +139,10 @@ try {
   ])
     cpSync(file, path.join(folder, file));
   cpSync("runtime", path.join(folder, "runtime"), { recursive: true });
+  cpSync("src", path.join(folder, "src"), { recursive: true });
+  mkdirSync(path.join(folder, "scripts"));
+  for (const script of ["init.ts", "accounts.ts", "instance.ts"])
+    cpSync(path.join("scripts", script), path.join(folder, "scripts", script));
   cpSync(".next", path.join(folder, ".next"), {
     recursive: true,
     dereference: true,
@@ -159,8 +164,23 @@ try {
     ],
     { stdio: ["ignore", "pipe", "pipe"] },
   );
-  assert.equal(existsSync(path.join(folder, "node_modules/tsx")), false);
-  assert.equal(existsSync(path.join(folder, "node_modules/esbuild")), false);
+  // Account/instance administration is part of the production installation.
+  const installed = (name) =>
+    existsSync(path.join(folder, "node_modules", name));
+  const dependencies = {
+    tsxInstalled: installed("tsx"),
+    esbuildInstalled: installed("esbuild"),
+    eslintInstalled: installed("eslint"),
+    typescriptInstalled: installed("typescript"),
+  };
+  assert.equal(dependencies.tsxInstalled, true);
+  assert.equal(dependencies.eslintInstalled, false);
+  assert.equal(dependencies.typescriptInstalled, false);
+  const administrativeCli = await verifyAdminCli({
+    dataDirectory: path.join(folder, "cli-data"),
+    snapshotDirectory: path.join(folder, "cli-snapshot"),
+    command,
+  });
   const data = JSON.parse(
     readFileSync("tests/fixtures/backup-v1.json", "utf8"),
   );
@@ -277,9 +297,13 @@ try {
       {
         verifiedAt: new Date().toISOString(),
         node: process.version,
+        candidateCommit: process.env.CANDIDATE_COMMIT || null,
+        lockfileSha256: createHash("sha256")
+          .update(readFileSync(path.join(folder, "package-lock.json")))
+          .digest("hex"),
         productionDependenciesOnly: true,
-        tsxInstalled: false,
-        esbuildInstalled: false,
+        ...dependencies,
+        administrativeCli,
         compiledWorker: "passed",
         preview: "passed",
         occupiedPort: "passed",

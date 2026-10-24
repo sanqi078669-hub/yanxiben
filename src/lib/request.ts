@@ -32,6 +32,15 @@ const timeoutError = () =>
     0,
     "REQUEST_TIMEOUT",
   );
+export function requestTimeoutMs(path: string) {
+  return path.startsWith("ai/")
+    ? 210000
+    : path === "data/restore-preview" || path === "attachments"
+      ? 180000
+      : path === "exports"
+        ? 150000
+        : 30000;
+}
 export async function readEnvelope<T = any>(response: Response): Promise<T> {
   let body: any;
   const headerId = identifier(response.headers.get("x-request-id"));
@@ -70,16 +79,7 @@ export async function requestResponse(
   path: string,
   options: RequestOptions = {},
 ) {
-  const {
-    timeoutMs = path.startsWith("ai/")
-      ? 210000
-      : path === "data/restore-preview"
-        ? 180000
-        : path === "exports"
-          ? 150000
-          : 30000,
-    ...init
-  } = options;
+  const { timeoutMs = requestTimeoutMs(path), ...init } = options;
   const timeout = AbortSignal.timeout(timeoutMs);
   const signal = init.signal
     ? AbortSignal.any([init.signal, timeout])
@@ -120,5 +120,88 @@ export function api<T = any>(
     method: method || (body !== undefined ? "POST" : "GET"),
     headers,
     body: body !== undefined ? JSON.stringify(body) : undefined,
+  });
+}
+
+/** XHR preserves upload progress while sharing deadlines and response/error contracts. */
+export function uploadAttachment<T = any>(
+  file: File,
+  options: {
+    signal?: AbortSignal;
+    onProgress?: (percent: number) => void;
+  } = {},
+): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    let settled = false;
+    const finish = (error: unknown, value?: T) => {
+      if (settled) return;
+      settled = true;
+      options.signal?.removeEventListener("abort", abort);
+      xhr.onload = xhr.onerror = xhr.ontimeout = xhr.onabort = null;
+      xhr.upload.onprogress = null;
+      if (error) reject(error);
+      else resolve(value!);
+    };
+    const cancelled = () =>
+      options.signal?.reason ||
+      new DOMException("图片上传已取消，请重新选择文件重试", "AbortError");
+    const abort = () => {
+      const error = cancelled();
+      // Settle first so an abort racing load/JSON parsing cannot complete twice.
+      finish(error);
+      xhr.abort();
+    };
+    if (options.signal?.aborted) {
+      finish(cancelled());
+      return;
+    }
+    try {
+      xhr.open("POST", "/api/v1/attachments");
+      xhr.timeout = requestTimeoutMs("attachments");
+      xhr.setRequestHeader("X-Requested-With", "yanxiben");
+      xhr.upload.onprogress = (event) => {
+        if (!settled)
+          options.onProgress?.(
+            event.lengthComputable
+              ? Math.round((event.loaded / event.total) * 100)
+              : 0,
+          );
+      };
+      xhr.onerror = () =>
+        finish(
+          new RequestError(
+            "图片上传连接中断，请重新选择文件重试",
+            0,
+            "NETWORK_ERROR",
+          ),
+        );
+      xhr.ontimeout = () => finish(timeoutError());
+      xhr.onabort = () => finish(cancelled());
+      xhr.onload = () => {
+        try {
+          readEnvelope<T>(
+            new Response(xhr.responseText, {
+              status: xhr.status,
+              headers: {
+                "Content-Type": xhr.getResponseHeader("Content-Type") || "",
+                "X-Request-Id": xhr.getResponseHeader("X-Request-Id") || "",
+              },
+            }),
+          ).then(
+            (value) => finish(null, value),
+            (error) => finish(error),
+          );
+        } catch (error) {
+          finish(error);
+        }
+      };
+      options.signal?.addEventListener("abort", abort, { once: true });
+      const form = new FormData();
+      form.append("file", file);
+      xhr.send(form);
+    } catch (error) {
+      finish(error);
+    }
   });
 }

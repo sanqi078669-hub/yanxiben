@@ -8,6 +8,7 @@ try {
       type: z.enum(["BACKUP", "MARKDOWN"]),
       key: z.string().min(8).max(200),
       candidateId: z.string().uuid(),
+      reservedBytes: z.number().int().positive(),
     })
     .strict()
     .parse(JSON.parse(readFileSync(0, "utf8")));
@@ -17,6 +18,7 @@ try {
     input.key,
     Date.now(),
     input.candidateId,
+    input.reservedBytes,
   );
   process.stdout.write(JSON.stringify({ fileId: artifact.fileId }));
 } catch (error) {
@@ -26,6 +28,9 @@ try {
       "BACKUP_TOO_LARGE",
       "ATTACHMENT_TOO_LARGE",
       "IDEMPOTENCY_CONFLICT",
+      "EXPORT_CACHE_LIMIT",
+      "EXPORT_DISK_LIMIT",
+      "EXPORT_CONFIG_INVALID",
     ].includes(code)
   )
     console.error(

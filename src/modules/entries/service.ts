@@ -242,7 +242,12 @@ export function createEntry(owner: string, input: unknown) {
   );
   return getEntry(owner, id);
 }
-export function updateEntry(owner: string, id: string, input: unknown) {
+export function updateEntry(
+  owner: string,
+  id: string,
+  input: unknown,
+  beforeCommit?: (entry: Entry) => void,
+) {
   const { expectedVersion, manual, ...patch } = z
     .object({
       expectedVersion: z.number().int(),
@@ -304,7 +309,9 @@ export function updateEntry(owner: string, id: string, input: unknown) {
       id,
       owner,
     );
-    return getEntry(owner, id);
+    const saved = getEntry(owner, id);
+    beforeCommit?.(saved);
+    return saved;
   });
 }
 export function trashEntry(owner: string, id: string, restore = false) {

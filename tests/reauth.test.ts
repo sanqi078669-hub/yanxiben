@@ -1,4 +1,4 @@
-import { test } from "node:test";
+import { test, mock } from "node:test";
 import assert from "node:assert/strict";
 import { mkdtempSync } from "node:fs";
 import os from "node:os";
@@ -8,8 +8,12 @@ import bcrypt from "bcryptjs";
 process.env.DATA_DIR = mkdtempSync(path.join(os.tmpdir(), "yanxi-reauth-"));
 const { run, one } = await import("../src/lib/db");
 const { defaults } = await import("../src/lib/model");
-const { verifyCurrentPassword, restoreGrant, consumeRestoreGrant } =
-  await import("../src/modules/auth/reauth");
+const {
+  verifyCurrentPassword,
+  restoreGrant,
+  consumeRestoreGrant,
+  changePassword,
+} = await import("../src/modules/auth/reauth");
 function account() {
   const owner = randomUUID();
   run(
@@ -21,6 +25,130 @@ function account() {
   );
   return owner;
 }
+function login(owner: string) {
+  const sid = randomUUID();
+  run("INSERT INTO sessions VALUES(?,?,?)", sid, owner, Date.now() + 60000);
+  return sid;
+}
+test("改密在比较和哈希阶段拒绝重置、停用、撤销、过期及并发二次改密", async (t) => {
+  for (const stage of ["compare", "hash"] as const) {
+    for (const action of [
+      "reset",
+      "disable",
+      "revoke",
+      "expire",
+      "password",
+    ] as const) {
+      await t.test(`${stage}/${action}`, async () => {
+        const owner = account(),
+          sid = login(owner),
+          other = login(owner);
+        const grant = restoreGrant(owner);
+        let release!: () => void, entered!: () => void;
+        const waiting = new Promise<void>((resolve) => (entered = resolve));
+        const barrier = new Promise<void>((resolve) => (release = resolve));
+        const original = bcrypt[stage].bind(bcrypt);
+        const replacement = mock.method(
+          bcrypt,
+          stage,
+          async (...args: unknown[]) => {
+            entered();
+            await barrier;
+            return (original as (...values: unknown[]) => unknown)(...args);
+          },
+        );
+        try {
+          const pending = changePassword(
+            owner,
+            sid,
+            "synthetic-password",
+            "pending-password",
+          );
+          const rejected = assert.rejects(
+            pending,
+            (error) => (error as { code: string }).code === "UNAUTHENTICATED",
+          );
+          await waiting;
+          replacement.mock.restore();
+          if (action === "reset") {
+            run(
+              "UPDATE users SET password=? WHERE id=?",
+              bcrypt.hashSync("admin-password", 4),
+              owner,
+            );
+            run("DELETE FROM sessions WHERE owner=?", owner);
+          } else if (action === "disable") {
+            run("INSERT INTO account_status VALUES(?,1)", owner);
+          } else if (action === "revoke") {
+            run("DELETE FROM sessions WHERE id=?", sid);
+          } else if (action === "expire") {
+            run("UPDATE sessions SET expires=0 WHERE id=?", sid);
+          } else {
+            // A second request can complete while the first computes its new hash.
+            if (stage === "hash")
+              await changePassword(
+                owner,
+                other,
+                "synthetic-password",
+                "second-password",
+              );
+            else
+              run(
+                "UPDATE users SET password=? WHERE id=?",
+                bcrypt.hashSync("second-password", 4),
+                owner,
+              );
+          }
+          const expected = one(
+            "SELECT password FROM users WHERE id=?",
+            owner,
+          )!.password;
+          release();
+          await rejected;
+          assert.equal(
+            one("SELECT password FROM users WHERE id=?", owner)!.password,
+            expected,
+          );
+          assert.equal(bcrypt.compareSync("pending-password", expected), false);
+          // A rejected request must not consume unrelated recovery authorization.
+          if (stage === "hash" && action === "password")
+            assert.throws(
+              () => consumeRestoreGrant(owner, grant.token),
+              /过期或已使用/,
+            );
+          else consumeRestoreGrant(owner, grant.token);
+        } finally {
+          release();
+          replacement.mock.restore();
+        }
+      });
+    }
+  }
+});
+test("成功改密原子保留当前会话并撤销其他会话和全部恢复授权", async () => {
+  const owner = account(),
+    sid = login(owner);
+  login(owner);
+  const grant = restoreGrant(owner);
+  await changePassword(
+    owner,
+    sid,
+    "synthetic-password",
+    "replacement-password",
+  );
+  assert(
+    bcrypt.compareSync(
+      "replacement-password",
+      one("SELECT password FROM users WHERE id=?", owner)!.password,
+    ),
+  );
+  assert.equal(
+    one("SELECT count(*) n FROM sessions WHERE owner=?", owner)!.n,
+    1,
+  );
+  assert(one("SELECT id FROM sessions WHERE id=?", sid));
+  assert.throws(() => consumeRestoreGrant(owner, grant.token), /过期或已使用/);
+});
 test("二次验证按账号持久退避，成功清除失败计数且账号互不影响", async () => {
   const owner = account(),
     other = account();

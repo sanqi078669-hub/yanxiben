@@ -131,6 +131,14 @@ migrations.push({
     CREATE TABLE reauth_grants(key_hash TEXT PRIMARY KEY,owner TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,expires INTEGER NOT NULL);
     CREATE INDEX reauth_grants_expiry ON reauth_grants(expires);`),
 });
+migrations.push({
+  version: 10,
+  name: "account-status-v10",
+  up: (db) =>
+    db.exec(
+      `CREATE TABLE account_status(owner TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,disabled INTEGER NOT NULL DEFAULT 0);`,
+    ),
+});
 const current = migrations.at(-1)!.version;
 export const DATABASE_VERSION = current;
 const failure = (message: string): never => {

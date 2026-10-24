@@ -2,7 +2,7 @@
 import { AiPrices } from "./AiPrices";
 import { AiBudget } from "./AiBudget";
 import { RestoreWizard } from "./RestoreWizard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Check, FileText, Download } from "lucide-react";
 
@@ -14,6 +14,11 @@ import { defaults } from "../lib/model";
 import { requestResponse } from "../lib/request";
 import { api } from "../lib/request";
 import { ErrorBox } from "./ui";
+import {
+  newPasswordSchema,
+  newPasswordHint,
+  passwordBytes,
+} from "../lib/password-policy";
 export default function SettingsPage({
   profile,
   onSave,
@@ -23,6 +28,22 @@ export default function SettingsPage({
   onSave: (p: typeof defaults) => void;
   notify: (s: string) => void;
 }) {
+  const [capacity, setCapacity] = useState<{
+    bytes: number;
+    limit: number;
+    warning: boolean;
+    restoreMode: string;
+  } | null>(null);
+  useEffect(() => {
+    api<{
+      bytes: number;
+      limit: number;
+      warning: boolean;
+      restoreMode: string;
+    }>("data/capacity")
+      .then(setCapacity)
+      .catch(() => {});
+  }, []);
   const [s, setS] = useState(profile),
     [intervals, setIntervals] = useState(profile.intervals.join(",")),
     [error, setError] = useState(""),
@@ -76,10 +97,27 @@ export default function SettingsPage({
         </div>
       </div>
       <ErrorBox text={error} />
+      {capacity && (
+        <p className="tip">
+          当前账号数据约 {(capacity.bytes / 1048576).toFixed(1)}{" "}
+          MiB。正式受邀实例维护上限 80 MiB（含历史和附件），60 MiB 起预警。
+          {capacity.warning ? "已接近上限，请导出并联系维护人。" : ""}单附件 10
+          MiB；学习 ZIP 200 MiB；解压 500 MiB。
+        </p>
+      )}
       <AiSettings />
       <AiPrices />
       <AiBudget />
-      <RestoreWizard />
+      {capacity?.restoreMode === "admin" ? (
+        <section className="panel form-panel">
+          <h2>恢复学习数据</h2>
+          <p>
+            请联系维护人，通过私密渠道交付备份。管理员会在隔离环境校验并安排恢复，不会覆盖现用题库。
+          </p>
+        </section>
+      ) : capacity ? (
+        <RestoreWizard />
+      ) : null}
       <details className="panel form-panel">
         <summary>查看 AI 调用历史与反馈</summary>
         <AiHistory />
@@ -184,8 +222,8 @@ export default function SettingsPage({
               </button>
             </div>
             <div className="tip">
-              可使用上方恢复向导校验 ZIP
-              并打开独立学习空间；命令行恢复步骤保留在项目 README。
+              恢复方式见上方说明。ZIP 是当前账号的学习导出，不包含账号认证或 AI
+              密钥；实例灾难恢复由维护人负责。
             </div>
           </section>
           <form
@@ -193,6 +231,7 @@ export default function SettingsPage({
             onSubmit={async (e) => {
               e.preventDefault();
               try {
+                newPasswordSchema.parse(newPassword);
                 await api("auth/password", {
                   current: password,
                   password: newPassword,
@@ -228,6 +267,9 @@ export default function SettingsPage({
                 required
               />
             </label>
+            <p className="tip">
+              {newPasswordHint}。当前 {passwordBytes(newPassword)} 字节。
+            </p>
             <button className="button outline">修改密码</button>
           </form>
         </div>

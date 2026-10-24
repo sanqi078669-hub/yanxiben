@@ -16,6 +16,8 @@
     "test:production": "node scripts/verify-production-restore.mjs",
     "test:clean": "node scripts/verify-clean-install.mjs",
     "init": "tsx scripts/init.ts",
+    "accounts": "tsx scripts/accounts.ts",
+    "instance": "tsx scripts/instance.ts",
     "backup": "tsx scripts/data.ts backup",
     "restore": "tsx scripts/data.ts restore",
     "maintenance": "tsx scripts/maintenance.ts",
@@ -41,6 +43,7 @@
     "remark-gfm": "4.0.1",
     "remark-math": "6.0.0",
     "sharp": "0.35.5",
+    "tsx": "4.21.0",
     "zod": "4.6.7"
   },
   "devDependencies": {
@@ -53,7 +56,6 @@
     "eslint": "9.39.5",
     "eslint-config-next": "16.4.2",
     "prettier": "3.8.1",
-    "tsx": "4.21.0",
     "typescript": "5.9.3"
   },
   "overrides": {

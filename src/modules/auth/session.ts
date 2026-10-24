@@ -39,7 +39,7 @@ export async function authenticated() {
   const s = await session();
   const row = s.sid
     ? one(
-        "SELECT owner FROM sessions WHERE id=? AND expires>?",
+        "SELECT owner FROM sessions WHERE id=? AND expires>? AND NOT EXISTS(SELECT 1 FROM account_status a WHERE a.owner=sessions.owner AND a.disabled=1)",
         s.sid,
         Date.now(),
       )

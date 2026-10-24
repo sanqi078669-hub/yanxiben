@@ -754,6 +754,134 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
       cookie = login.headers.get("set-cookie")!.split(";")[0];
     },
   );
+  await t.test(
+    "HTTP 存量长密码可登录；超限新密码拒绝且 72 字节新密码可设置",
+    async () => {
+      const previousCookie = cookie;
+      try {
+        for (const next of ["a".repeat(72), "中".repeat(24), "😀".repeat(18)]) {
+          const owner = randomUUID(),
+            legacy = "z".repeat(72) + "legacy-suffix".repeat(20);
+          run(
+            "INSERT INTO users VALUES(?,?,?,?)",
+            owner,
+            owner,
+            bcrypt.hashSync(legacy, 4),
+            JSON.stringify(defaults),
+          );
+          const login = await call(
+            "auth/login",
+            { username: owner, password: legacy },
+            "POST",
+            { Cookie: "" },
+          );
+          assert.equal(login.status, 200);
+          cookie = login.headers.get("set-cookie")!.split(";")[0];
+          assert.equal(
+            (
+              await call("auth/reauth", {
+                password: legacy,
+                purpose: "RESTORE",
+              })
+            ).status,
+            200,
+          );
+          for (const rejected of [
+            next + "x",
+            "z".repeat(72) + "changed-suffix",
+          ]) {
+            const response = await call("auth/password", {
+              current: legacy,
+              password: rejected,
+            });
+            assert.equal(response.status, 400);
+            assert.match((await response.json()).error.message, /72 字节/);
+          }
+          assert.equal(
+            (await call("auth/password", { current: legacy, password: next }))
+              .status,
+            200,
+          );
+          assert.equal(
+            (
+              await call(
+                "auth/login",
+                { username: owner, password: next },
+                "POST",
+                { Cookie: "" },
+              )
+            ).status,
+            200,
+          );
+        }
+      } finally {
+        cookie = previousCookie;
+      }
+    },
+  );
+  await t.test("HTTP 在途改密拒绝管理员重置、停用和会话撤销", async () => {
+    const previousCookie = cookie;
+    try {
+      for (const action of ["reset", "disable", "revoke"]) {
+        const owner = randomUUID();
+        run(
+          "INSERT INTO users VALUES(?,?,?,?)",
+          owner,
+          owner,
+          bcrypt.hashSync(password, 12),
+          JSON.stringify(defaults),
+        );
+        const login = await call(
+          "auth/login",
+          { username: owner, password },
+          "POST",
+          { Cookie: "" },
+        );
+        assert.equal(login.status, 200);
+        cookie = login.headers.get("set-cookie")!.split(";")[0];
+        const pending = call("auth/password", {
+          current: password,
+          password: "pending-fixture-password",
+        });
+        let comparing = false;
+        for (let i = 0; i < 200; i++) {
+          if (
+            one(
+              "SELECT owner FROM reauth_limits WHERE owner=? AND lease_until>?",
+              owner,
+              Date.now(),
+            )
+          ) {
+            comparing = true;
+            break;
+          }
+          await new Promise((resolve) => setTimeout(resolve, 5));
+        }
+        assert(comparing, "未观察到密码比较租约");
+        if (action === "reset")
+          run(
+            "UPDATE users SET password=? WHERE id=?",
+            bcrypt.hashSync("admin-fixture-password", 4),
+            owner,
+          );
+        if (action === "disable")
+          run("INSERT INTO account_status VALUES(?,1)", owner);
+        if (action === "revoke")
+          run("DELETE FROM sessions WHERE owner=?", owner);
+        const expected = one(
+          "SELECT password FROM users WHERE id=?",
+          owner,
+        )!.password;
+        assert.equal((await pending).status, 401, action);
+        assert.equal(
+          one("SELECT password FROM users WHERE id=?", owner)!.password,
+          expected,
+        );
+      }
+    } finally {
+      cookie = previousCookie;
+    }
+  });
   await t.test("退出撤销服务器会话，旧 Cookie 不可重放", async () => {
     assert.equal((await call("auth/logout", {})).status, 200);
     assert.equal((await call("entries")).status, 401);

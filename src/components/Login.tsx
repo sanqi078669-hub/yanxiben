@@ -82,7 +82,7 @@ export default function Login({
           <ArrowRight size={17} />
         </button>
         <p className="login-hint">
-          首次使用：在项目的 data/local-login.txt 中查看初始账号与密码。
+          受邀使用：请向维护人领取账号。忘记密码时请联系维护人重置。
         </p>
       </form>
     </div>

@@ -9,6 +9,7 @@ import path from "node:path";
 import bcrypt from "bcryptjs";
 import { privateDirectory } from "../src/lib/private-files";
 import { BACKUP_ZIP_MAX_BYTES } from "../src/lib/capacity";
+import { newPasswordSchema } from "../src/lib/password-policy";
 const [command, file] = process.argv.slice(2);
 if (!file)
   throw new Error(
@@ -24,6 +25,7 @@ if (command === "restore") {
     process.env.RESTORE_PASSWORD.length < 12
   )
     throw new Error("请指定新的 DATA_DIR 和至少 12 位 RESTORE_PASSWORD");
+  newPasswordSchema.parse(process.env.RESTORE_PASSWORD);
   const directory = path.resolve(process.env.DATA_DIR);
   if (existsSync(directory) && readdirSync(directory).length > 0)
     throw new Error("恢复需要全新或空目录；未打开或迁移已有数据库");
