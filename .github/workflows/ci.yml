@@ -76,10 +76,11 @@ jobs:
       CANDIDATE_SHA: ${{ inputs.candidate_sha || github.sha }}
       RELEASE_WORKFLOW_SHA: ${{ github.workflow_sha }}
       RELEASE_WORKFLOW_REF: ${{ github.workflow_ref }}
-      RELEASE_EVIDENCE_DIR: ${{ runner.temp }}/release-acceptance
       # Browser upload verification is manual/non-blocking by policy.
       BROWSER_TEST_MODULE: ""
     steps:
+      - name: Set release evidence directory
+        run: echo "RELEASE_EVIDENCE_DIR=${RUNNER_TEMP}/release-acceptance" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.workflow_sha }}
