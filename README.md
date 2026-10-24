@@ -89,7 +89,7 @@ npm run start
 npm run backup -- backups/yanxiben-2026-10-21.zip
 ```
 
-备份包含 `manifest.json`（格式版本、时间、表计数、文件长度与 SHA-256）、`data.json`、附件目录。导出在同一数据库写事务窗口内读取快照；维护清理时必须停止应用，避免附件被并发删除。
+备份包含 `manifest.json`（格式版本、时间、表计数、文件长度与 SHA-256）、`data.json`、附件目录。导出在 WAL 只读事务内取得快照，释放事务后压缩；维护清理时必须停止应用，避免附件被并发删除。网页导出使用编译的 runtime/export-worker.mjs 独立进程，完成后流式下载 ZIP；仍为单次 POST 等待结果，没有异步 GET 任务接口。每账号同时 1 个、每主服务同时 2 个，120 秒超时；失败可用原幂等键重试。
 
 升级前快照同样包含私人数据，不应提交或公开。各项修复进度和验证记录见[代码审查修复计划](docs/CODE-REVIEW-REMEDIATION-PLAN.md)。
 

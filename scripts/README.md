@@ -2,6 +2,8 @@
 
 除 PowerShell 启动脚本会自行定位项目根目录外，以下命令均从项目根目录执行。
 
+`build-workers.mjs` 同时生成 runtime/restore-worker.mjs 和 runtime/export-worker.mjs；生产交付应保留整个 runtime/。网页导出/恢复均使用普通 Node，不依赖 tsx；命令行维护脚本仍需要开发依赖。
+
 追加维护：`node --import tsx scripts/rehearse-upgrade.ts --source-data data` 只在私有副本演练迁移、查询、导出恢复，原库不升级；`npm run maintenance:snapshots` 默认预览保留策略，`--keep 3 --days 30 --apply` 才执行清理，至少保留一份，先停止应用并核对离线备份。两个工具均不会把题目正文或凭据打印到终端；演练目录与 ZIP 含私人数据，不能公开。
 
 `qa-seed.ts` 仅接受项目 `test-results/` 内的子目录（不接受该目录本身、相似名称或指向外部的 junction），路径检查发生在导入数据库模块前。`qa-path.ts` 是共用守卫，不是独立运行命令。生成的登录信息保留在私有测试目录，不能提交。

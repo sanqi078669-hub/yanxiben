@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { createReadStream } from "node:fs";
+import { Readable } from "node:stream";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { one } from "../../../lib/db";
@@ -11,7 +13,7 @@ import {
   restoreWorkspaces,
   deleteRestore,
 } from "../../data-management/restore-workspace";
-import { exportArchive } from "../../data-management/exports";
+import { prepareExport } from "../../data-management/export-worker";
 import { idempotencyKey } from "../middleware";
 import { readRestoreUpload } from "../body";
 import type { ApiContext } from "../context";
@@ -66,13 +68,21 @@ export async function dataHandler(context: ApiContext) {
       "UNAUTHENTICATED",
       "请验证当前密码",
     );
-    const archive = exportArchive(owner, b.type, idempotencyKey(req));
-    return new NextResponse(Buffer.from(archive), {
-      headers: {
-        "Content-Type": "application/zip",
-        "Content-Disposition": `attachment; filename="yanxiben-${b.type.toLowerCase()}.zip"`,
-        "Cache-Control": "no-store",
-      },
+    const artifact = await prepareExport(owner, b.type, idempotencyKey(req), {
+      signal: req.signal,
     });
+    return new NextResponse(
+      Readable.toWeb(
+        createReadStream(artifact.filename),
+      ) as ReadableStream<Uint8Array>,
+      {
+        headers: {
+          "Content-Type": "application/zip",
+          "Content-Length": String(artifact.size),
+          "Content-Disposition": `attachment; filename="yanxiben-${b.type.toLowerCase()}.zip"`,
+          "Cache-Control": "no-store",
+        },
+      },
+    );
   }
 }

@@ -205,6 +205,24 @@ try {
   });
   cookie = login.response.headers.get("set-cookie").split(";")[0];
   assert.equal((await call("entries")).data.total, 1);
+  const exported = await fetch(base + "/api/v1/exports", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Requested-With": "yanxiben",
+      Cookie: cookie,
+      "Idempotency-Key": "production-export-fixture",
+    },
+    body: JSON.stringify({ type: "BACKUP", password }),
+    signal: AbortSignal.timeout(30000),
+  });
+  assert.equal(exported.status, 200);
+  assert.equal(
+    Buffer.from(await exported.arrayBuffer())
+      .subarray(0, 2)
+      .toString(),
+    "PK",
+  );
   const form = new FormData();
   form.set("password", password);
   form.set(

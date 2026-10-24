@@ -10,11 +10,12 @@ import { checkCachedArchiveCapacity } from "./capacity";
 import { privateDirectory } from "../../lib/private-files";
 
 export const EXPORT_TTL = 7 * 86400000;
-export function exportArchive(
+export function exportArtifact(
   owner: string,
   type: "BACKUP" | "MARKDOWN",
   key: string,
   now = Date.now(),
+  candidateId: string = randomUUID(),
 ) {
   assert(
     key.length >= 8 && key.length <= 200,
@@ -43,7 +44,11 @@ export function exportArchive(
     );
     const bytes = readFileSync(file(row.file_id));
     checkCachedArchiveCapacity(bytes);
-    return bytes;
+    return {
+      fileId: String(row.file_id),
+      filename: file(row.file_id),
+      size: bytes.length,
+    };
   };
   // Expired ZIPs and receipts are removed on the next export; credentials are never cached.
   transaction(() => {
@@ -59,14 +64,13 @@ export function exportArchive(
   // Each generator owns its snapshot transaction. Recheck under the write lock
   // so concurrent processes return the first committed artifact and timestamp.
   const archive = type === "BACKUP" ? backup(owner) : markdownExport(owner);
-  let written: string | undefined;
+  const id = z.string().uuid().parse(candidateId),
+    filename = file(id);
   try {
-    return transaction(() => {
+    writeFileSync(filename, archive, { flag: "wx", mode: 0o600 });
+    const picked = transaction(() => {
       const winner = lookup();
-      if (winner) return replay(winner);
-      const id = randomUUID();
-      writeFileSync(file(id), archive, { flag: "wx", mode: 0o600 });
-      written = file(id);
+      if (winner) return winner;
       run(
         "INSERT INTO export_receipts VALUES(?,?,?,?,?)",
         owner,
@@ -76,10 +80,23 @@ export function exportArchive(
         now + EXPORT_TTL,
       );
       if (type === "BACKUP") recordBackup(owner);
-      return Buffer.from(archive);
+      return { file_id: id, type };
     });
+    if (picked.file_id !== id) {
+      rmSync(filename, { force: true });
+      return replay(picked);
+    }
+    return { fileId: id, filename, size: archive.length };
   } catch (error) {
-    if (written) rmSync(written, { force: true });
+    rmSync(filename, { force: true });
     throw error;
   }
+}
+export function exportArchive(
+  owner: string,
+  type: "BACKUP" | "MARKDOWN",
+  key: string,
+  now = Date.now(),
+) {
+  return readFileSync(exportArtifact(owner, type, key, now).filename);
 }

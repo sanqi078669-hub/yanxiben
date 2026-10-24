@@ -66,6 +66,18 @@ export function transaction<T>(fn: () => T): T {
     throw e;
   }
 }
+/** WAL readers retain a consistent snapshot without reserving the writer lock. */
+export function readSnapshot<T>(fn: () => T): T {
+  db.exec("BEGIN");
+  try {
+    const result = fn();
+    db.exec("COMMIT");
+    return result;
+  } catch (error) {
+    db.exec("ROLLBACK");
+    throw error;
+  }
+}
 export function one(sql: string, ...args: (string | number | null)[]) {
   return db.prepare(sql).get(...args) as Record<string, any> | undefined;
 }

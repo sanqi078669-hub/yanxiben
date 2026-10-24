@@ -9,3 +9,13 @@ await build({
   target: "node24",
 });
 console.log("Production restore worker compiled.");
+await build({
+  entryPoints: ["scripts/export-isolated.ts"],
+  outfile: "runtime/export-worker.mjs",
+  bundle: true,
+  platform: "node",
+  format: "esm",
+  packages: "external",
+  target: "node24",
+});
+console.log("Production export worker compiled.");

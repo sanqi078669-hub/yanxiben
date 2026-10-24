@@ -8,7 +8,15 @@ import {
   statSync,
 } from "node:fs";
 import path from "node:path";
-import { all, one, run, transaction, db, dataDir } from "../../lib/db";
+import {
+  all,
+  one,
+  run,
+  transaction,
+  readSnapshot,
+  db,
+  dataDir,
+} from "../../lib/db";
 import { assert, unpack } from "../entries/service";
 import { fields } from "../../lib/model";
 import { z } from "zod";
@@ -86,7 +94,7 @@ function backupJson(bytes: Uint8Array, name: string) {
 export function backup(owner: string) {
   initKnowledgeTools();
   initAudit();
-  return transaction(() => {
+  const files = readSnapshot(() => {
     preflightBackup(owner);
     const data: Record<string, unknown> = {
       profile: {
@@ -126,11 +134,12 @@ export function backup(owner: string) {
         2,
       ),
     );
-    return checkedZip(files);
+    return files;
   });
+  return checkedZip(files);
 }
 export function markdownExport(owner: string) {
-  return transaction(() => {
+  const files = readSnapshot(() => {
     const files: Record<string, Uint8Array> = {};
     let index = "# 研习本 · 阅读导出\n\n";
     for (const row of all(
@@ -174,8 +183,9 @@ export function markdownExport(owner: string) {
       index += `- [${e.title.replace(/[\[\]\n]/g, "") || "未命名记录"}](${e.id}.md)\n`;
     }
     files["README.md"] = strToU8(index);
-    return checkedZip(files);
+    return files;
   });
+  return checkedZip(files);
 }
 export async function restore(
   bytes: Uint8Array,
