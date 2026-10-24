@@ -1,7 +1,11 @@
 import assert from "node:assert/strict";
 import { spawn, execFileSync } from "node:child_process";
 import { randomBytes, createHash } from "node:crypto";
-import { resolveCandidateCommit } from "./release-verification.mjs";
+import {
+  resolveCandidateCommit,
+  transferReleaseEvidence,
+} from "./release-verification.mjs";
+import { classifyFailure } from "./ci-release-evidence.mjs";
 import {
   mkdtempSync,
   mkdirSync,
@@ -37,6 +41,10 @@ env.INIT_PASSWORD = randomBytes(24).toString("hex");
 env.CANDIDATE_COMMIT = commit;
 const results = [];
 let lockfileSha256;
+let failure,
+  transfers = [];
+const evidenceDirectory =
+  process.env.RELEASE_EVIDENCE_DIR || path.join(source, "test-results");
 async function command(label, args) {
   console.log(`Checking: ${label}`);
   const started = Date.now();
@@ -44,6 +52,10 @@ async function command(label, args) {
     cwd: workspace,
     env,
     windowsHide: true,
+  });
+  let spawnError;
+  child.once("error", (error) => {
+    spawnError = error;
   });
   let output = "";
   for (const stream of [child.stdout, child.stderr])
@@ -55,8 +67,7 @@ async function command(label, args) {
     timedOut = true;
     child.kill();
   }, 240000);
-  const code = await new Promise((resolve, reject) => {
-    child.once("error", reject);
+  const code = await new Promise((resolve) => {
     child.once("close", resolve);
   }).finally(() => clearTimeout(timer));
   results.push({
@@ -65,6 +76,11 @@ async function command(label, args) {
     timedOut,
     durationMs: Date.now() - started,
     output,
+    spawnError: spawnError?.code || null,
+    failure_class:
+      code === 0
+        ? null
+        : classifyFailure(output + (spawnError?.code || ""), timedOut),
   });
   assert(code === 0 && !timedOut, `${label} 失败：${output}`);
 }
@@ -103,15 +119,22 @@ try {
     "run",
     "test:production",
   ]);
-  console.log(
-    "PASS: clean source install, init repair, quality, build, full tests and production restore.",
-  );
+  console.log("Functional checks completed; final evidence transfer follows.");
+} catch (error) {
+  error.failure_class =
+    results.find((result) => result.code !== 0)?.failure_class ||
+    classifyFailure(error.message);
+  failure = error;
+  throw error;
 } finally {
-  const report = path.join(
-    source,
-    "test-results",
-    "clean-install-acceptance.json",
-  );
+  let transferError;
+  try {
+    transfers = transferReleaseEvidence(workspace, evidenceDirectory, !failure);
+  } catch (error) {
+    transferError = error;
+    transfers = error.transfers || [];
+  }
+  const report = path.join(evidenceDirectory, "clean-install-acceptance.json");
   mkdirSync(path.dirname(report), { recursive: true });
   writeFileSync(
     report,
@@ -121,6 +144,12 @@ try {
         commit,
         lockfileSha256,
         node: process.version,
+        status: failure || transferError ? "failed" : "passed",
+        failure_class: transferError
+          ? "evidence"
+          : failure?.failure_class || null,
+        transfers,
+        evidenceError: transferError?.message || null,
         results,
       },
       null,
@@ -139,4 +168,9 @@ try {
     maxRetries: 3,
     retryDelay: 200,
   });
+  if (transferError) throw transferError;
+  if (!failure)
+    console.log(
+      "PASS: clean source install, init repair, quality, build, full tests, production restore and evidence transfer.",
+    );
 }

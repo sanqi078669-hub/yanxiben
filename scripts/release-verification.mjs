@@ -1,6 +1,50 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { randomBytes } from "node:crypto";
+import { createHash } from "node:crypto";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import path from "node:path";
+
+export function transferReleaseEvidence(workspace, destination, required) {
+  mkdirSync(destination, { recursive: true });
+  const transfers = [];
+  for (const [relative, name] of [
+    [
+      "test-results/production-restore-acceptance.json",
+      "production-restore-acceptance.json",
+    ],
+    ["coverage/coverage-summary.json", "coverage-summary.json"],
+  ]) {
+    const source = path.join(workspace, relative),
+      target = path.join(destination, name);
+    if (!existsSync(source) && !required) {
+      transfers.push({ source, target, status: "not-produced" });
+      continue;
+    }
+    try {
+      const bytes = readFileSync(source);
+      JSON.parse(bytes.toString("utf8"));
+      writeFileSync(target, bytes);
+      const sha256 = createHash("sha256").update(bytes).digest("hex");
+      assert.equal(
+        createHash("sha256").update(readFileSync(target)).digest("hex"),
+        sha256,
+      );
+      transfers.push({ source, target, sha256, status: "copied" });
+    } catch (cause) {
+      const error = new Error(`Evidence transfer failed: ${relative}`, {
+        cause,
+      });
+      error.failure_class = "evidence";
+      error.transfers = [
+        ...transfers,
+        { source, target, status: "failed", error: cause.code || cause.name },
+      ];
+      throw error;
+    }
+  }
+  return transfers;
+}
 
 /** Resolve an explicit commit before creating a workspace or running installation. */
 export function resolveCandidateCommit(source, args) {

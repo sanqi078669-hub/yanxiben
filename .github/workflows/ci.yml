@@ -4,6 +4,11 @@ on:
   push:
   pull_request:
   workflow_dispatch:
+    inputs:
+      candidate_sha:
+        description: "Candidate commit (full 40-character SHA; empty uses selected ref)"
+        required: false
+        type: string
 
 permissions:
   contents: read
@@ -55,4 +60,85 @@ jobs:
         with:
           name: coverage
           path: coverage/
+          if-no-files-found: error
+  release-acceptance:
+    # Manual only in this phase. Future PR support must use
+    # github.event.pull_request.head.sha, never the PR merge SHA.
+    if: github.event_name == 'workflow_dispatch'
+    needs: [quality, types, tests]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    concurrency:
+      group: release-acceptance-${{ github.ref }}
+      cancel-in-progress: false
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+      CANDIDATE_SHA: ${{ inputs.candidate_sha || github.sha }}
+      RELEASE_WORKFLOW_SHA: ${{ github.workflow_sha }}
+      RELEASE_WORKFLOW_REF: ${{ github.workflow_ref }}
+      RELEASE_EVIDENCE_DIR: ${{ runner.temp }}/release-acceptance
+      # Browser upload verification is manual/non-blocking by policy.
+      BROWSER_TEST_MODULE: ""
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.workflow_sha }}
+          path: workflow-source
+      - name: Initialize release evidence
+        run: node workflow-source/scripts/ci-release-evidence.mjs init
+      - name: Validate candidate SHA and commit object
+        id: candidate
+        run: node workflow-source/scripts/ci-release-evidence.mjs validate workflow-source
+      - uses: actions/checkout@v4
+        id: checkout-candidate
+        with:
+          ref: ${{ steps.candidate.outputs.candidate_sha }}
+          path: candidate
+      - uses: actions/setup-node@v4
+        id: runtime
+        with:
+          node-version: "24.19.0"
+          cache: npm
+          cache-dependency-path: candidate/package-lock.json
+      - name: Pin npm
+        id: npm
+        working-directory: candidate
+        run: node ../workflow-source/scripts/ci-release-evidence.mjs run npm-install npm install --global npm@11.17.0
+      - name: Record and verify candidate runtime
+        id: metadata
+        working-directory: candidate
+        run: node ../workflow-source/scripts/ci-release-evidence.mjs runtime
+      - name: Install bootstrap dependencies and warm offline cache
+        id: install
+        working-directory: candidate
+        run: node ../workflow-source/scripts/ci-release-evidence.mjs run bootstrap npm ci
+      - name: Preserve production dependency audit gate for selected candidate
+        id: audit
+        working-directory: candidate
+        run: node ../workflow-source/scripts/ci-release-evidence.mjs run audit npm audit --omit=dev --audit-level=high
+      - name: Preparation tests
+        id: preparation
+        working-directory: candidate
+        run: node ../workflow-source/scripts/ci-release-evidence.mjs run preparation node --test scripts/release-verification.test.mjs scripts/ci-release-evidence.test.mjs
+      - name: Browser upload verification skipped
+        if: always()
+        run: echo "::warning title=Browser upload verification skipped::未执行真实浏览器上传验收，请完成人工检查项。"
+      - name: Clean candidate acceptance (includes production verification)
+        id: clean
+        working-directory: candidate
+        # Executes npm run test:clean -- --commit "$CANDIDATE_SHA" exactly once.
+        # test:production is invoked only by the clean-install script.
+        run: node ../workflow-source/scripts/ci-release-evidence.mjs run clean npm run test:clean -- --commit "$CANDIDATE_SHA"
+      - name: Finalize release evidence
+        if: always()
+        env:
+          RELEASE_STEP_OUTCOMES: >-
+            {"validation":"${{ steps.candidate.outcome }}","checkout":"${{ steps.checkout-candidate.outcome }}","runtime":"${{ steps.runtime.outcome }}","npm":"${{ steps.npm.outcome }}","metadata":"${{ steps.metadata.outcome }}","install":"${{ steps.install.outcome }}","audit":"${{ steps.audit.outcome }}","preparation":"${{ steps.preparation.outcome }}","clean":"${{ steps.clean.outcome }}"}
+        run: node workflow-source/scripts/ci-release-evidence.mjs finalize
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: release-acceptance-${{ steps.candidate.outputs.candidate_sha || 'invalid-candidate' }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/release-acceptance/
+          retention-days: 30
           if-no-files-found: error
