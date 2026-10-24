@@ -1,14 +1,12 @@
-# 开发与贡献
+# 贡献指南
 
-## 环境与目录
+使用 Node.js `>=24.19.0 <25` 和 npm `11.x`，运行 `npm ci` 安装依赖。启动步骤见 [README](README.md)。
 
-使用 Node.js 24 和 npm，运行 `npm ci` 安装锁定依赖。本地使用需按 [README](README.md) 初始化账号。代码放在 `src/`，测试放在 `tests/`，工具放在 `scripts/`，说明文档放在 `docs/`。
+## 开发与检查
 
-本项目安装的 Next.js 版本有特定约定。修改框架相关代码前阅读 `AGENTS.md` 以及 `node_modules/next/dist/docs/` 中相应指南。
+代码放在 `src/`，测试放在 `tests/`，脚本放在 `scripts/`，文档放在 `docs/`。修改 Next.js 相关代码前，请阅读 [AGENTS.md](AGENTS.md) 和 `node_modules/next/dist/docs/` 中对应的指南。
 
-## 变更与验证
-
-一次提交聚焦一个可验证的改动。修复问题时描述复现条件、变更后的行为和验证结果；修改文件路径或命令时同步更新文档引用。
+提交前运行：
 
 ```sh
 npm run lint
@@ -19,31 +17,17 @@ npm run test:coverage
 npm run audit:production
 ```
 
-构建成功后再运行测试：HTTP 集成测试使用生产构建并占用本机 3127 端口。自动化测试使用独立临时数据库与模拟 AI 传输，不需要真实密钥。真实 AI 调用须单独显式启用，不纳入默认 CI。
+覆盖率测试需先构建应用。测试使用独立临时数据和模拟 AI，无需真实密钥；界面变更请补充页面检查。
 
-新功能先完成针对性验证，再进入下一项。UI 改动补充实际页面检查，测试结果如实注明尚未覆盖的设备和供应商。
+## 提交约定
 
-## 提交前检查
+- 每次提交聚焦一个改动，说明用途和验证结果；路径或命令变化时同步更新文档。
+- 提交源码、文档和依赖锁文件，排除本地数据、密钥、备份和生成产物；截图需检查隐私。
+- 自定义数据目录也应被忽略；`.gitignore` 不会取消已有文件的跟踪。
+- 项目尚未指定开源许可证。
 
-### Windows 仓库归属提示
+## Windows 仓库归属提示
 
-若个人终端的 `git status` 提示 dubious ownership，先核对当前账号和目录来源。此工作区最初由 CodexSandboxOffline 创建，因此不同 Windows 账号可能触发 Git 的保护。当前代理身份下可直接使用 Git，并不代表其他用户已配置好。
+遇到 `dubious ownership` 时，确认目录可信后，可对单次命令添加 `git -c safe.directory="项目绝对路径" status`。其他 Git 命令同理，不要设置 `safe.directory=*`。
 
-在确认此目录是自己的项目后，可对每条 Git 命令使用一次性、仅此目录的信任参数（不修改全局设置）：
-
-```powershell
-$repoPath = 'C:/Users/24505/Desktop/Mistake notebook'
-git -c "safe.directory=$repoPath" status
-git -c "safe.directory=$repoPath" log --oneline
-git -c "safe.directory=$repoPath" diff
-# add、commit 等写命令也使用同样的 -c 参数。
-```
-
-用户也可在自己的终端决定是否持久信任此目录；尚未代为修改用户级配置或 ACL。不要设置 `safe.directory=*`。归属错误与源码损坏不是一回事。
-
-- 提交源代码、文档和 `package-lock.json`，不提交依赖目录或构建产物。
-- 不提交数据库、附件、备份、登录文件、环境密钥、AI 私有配置或包含这些内容的截图。
-- 自定义 `DATA_DIR` 若放在项目内，须确保被忽略；`.gitignore` 不能保护已被跟踪的文件。
-- 仓库尚未指定开源许可证，不要擅自添加许可授权或虚构项目地址、维护者信息。
-
-GitHub 工作流将质量/审计、类型检查、构建/覆盖率测试分为独立任务。该工作流需上传到 GitHub 后才会运行，本地通过不代表云端已验证。覆盖范围、门槛和明确保留的开发依赖风险见 [质量门禁记录](docs/QUALITY-GATES.md)。
+CI 配置见 [.github/workflows/ci.yml](.github/workflows/ci.yml)，详细质量要求见 [质量门禁记录](docs/QUALITY-GATES.md)。
