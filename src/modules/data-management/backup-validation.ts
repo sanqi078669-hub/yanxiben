@@ -314,6 +314,25 @@ export async function validateBackupData(
       new Map(rows.map((r) => [r.id, r])),
     ]),
   );
+  const unique = (rows: any[], key: (row: any) => string, where: string) => {
+    const seen = new Set<string>();
+    for (const row of rows) {
+      const value = key(row);
+      if (seen.has(value)) invalid(where);
+      seen.add(value);
+    }
+  };
+  unique(parsed.reviews, (row) => row.entry_id, "reviews unique entry");
+  unique(
+    parsed.relations,
+    (row) => JSON.stringify([row.from_id, row.to_id, row.type]),
+    "relations unique tuple",
+  );
+  unique(
+    parsed.logs.filter((row) => row.mode === "SCHEDULED"),
+    (row) => JSON.stringify([row.review_id, row.local_date]),
+    "logs unique scheduled day",
+  );
   const has = (t: Table, key: string) => maps[t].has(key);
   const checkPayload = (p: z.infer<typeof entrySchema>, where: string) => {
     if (

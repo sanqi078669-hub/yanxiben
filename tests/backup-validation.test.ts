@@ -9,7 +9,7 @@ import sharp from "sharp";
 process.env.DATA_DIR = mkdtempSync(
   path.join(os.tmpdir(), "yanxi-backup-boundary-"),
 );
-const { one, dataDir } = await import("../src/lib/db");
+const { one, dataDir, db } = await import("../src/lib/db");
 const { restore } = await import("../src/modules/data-management/backup");
 const { defaults, entrySchema } = await import("../src/lib/model");
 const { backupRowSchemas } =
@@ -208,6 +208,37 @@ test("恢复拒绝摘要正确但结构非法的数据，数据库与附件目�
     ["HTML MIME", (d) => (d.attachments[0].mime = "text/html")],
     ["SVG MIME", (d) => (d.attachments[0].mime = "image/svg+xml")],
     ["重复主键", (d) => d.entries.push(d.entries[0])],
+    [
+      "同一记录重复复习项",
+      (d) => d.reviews.push({ ...d.reviews[0], id: randomUUID() }),
+    ],
+    [
+      "重复关联元组",
+      (d) => {
+        const other = randomUUID();
+        d.entries.push({ ...d.entries[0], id: other });
+        const relation = {
+          owner,
+          from_id: entryId,
+          to_id: other,
+          type: "SUPPORTS",
+        };
+        d.relations = [
+          { id: randomUUID(), ...relation },
+          { id: randomUUID(), ...relation },
+        ];
+      },
+    ],
+    [
+      "同日重复计划日志",
+      (d) => {
+        d.logs[0].mode = "SCHEDULED";
+        const value = JSON.parse(d.logs[0].payload);
+        value.mode = "SCHEDULED";
+        d.logs[0].payload = JSON.stringify(value);
+        d.logs.push({ ...d.logs[0], id: randomUUID() });
+      },
+    ],
     ["跨归属行", (d) => (d.entries[0].owner = randomUUID())],
     [
       "合并日志缺失内部结构",
@@ -254,6 +285,29 @@ test("文件写入失败会回滚数据库且不覆盖已有文件", async () =>
   });
   assert.equal(one("SELECT count(*) n FROM users")!.n, 0);
   unlinkSync(filename);
+});
+
+test("数据库约束作为最后防线时回滚并返回稳定错误", async () => {
+  db.exec(
+    "CREATE TRIGGER synthetic_constraint BEFORE INSERT ON users BEGIN SELECT RAISE(ABORT, 'private-schema-detail'); END",
+  );
+  try {
+    await assert.rejects(
+      () => restore(archive(fixture()), "restored", "hash"),
+      (error: any) => {
+        assert.equal(error.code, "INVALID_BACKUP");
+        assert.doesNotMatch(
+          error.message,
+          /private-schema-detail|constraint|users/,
+        );
+        return true;
+      },
+    );
+    assert.equal(one("SELECT count(*) n FROM users")!.n, 0);
+    assert.deepEqual(readdirSync(path.join(dataDir, "attachments")), []);
+  } finally {
+    db.exec("DROP TRIGGER synthetic_constraint");
+  }
 });
 
 test("合法备份恢复 JSON、复习与真实图片", async () => {

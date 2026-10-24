@@ -17,7 +17,7 @@ import {
   db,
   dataDir,
 } from "../../lib/db";
-import { assert, unpack } from "../entries/service";
+import { assert, unpack, AppError } from "../entries/service";
 import { fields } from "../../lib/model";
 import { z } from "zod";
 import { initKnowledgeTools } from "../entries/knowledge";
@@ -192,6 +192,29 @@ export async function restore(
   username: string,
   passwordHash: string,
 ) {
+  try {
+    return await restoreData(bytes, username, passwordHash);
+  } catch (error) {
+    const sqlite = error as { errcode?: number };
+    if (
+      error instanceof z.ZodError ||
+      (typeof sqlite.errcode === "number" && (sqlite.errcode & 255) === 19)
+    ) {
+      console.error("Restore validation/constraint failure:", error);
+      throw new AppError(
+        400,
+        "INVALID_BACKUP",
+        "备份数据校验未通过，未导入数据",
+      );
+    }
+    throw error;
+  }
+}
+async function restoreData(
+  bytes: Uint8Array,
+  username: string,
+  passwordHash: string,
+) {
   initKnowledgeTools();
   initAudit();
   assert(
@@ -207,26 +230,32 @@ export async function restore(
     "备份 ZIP 最大 200 MiB",
   );
   let total = 0;
-  const files = unzipSync(bytes, {
-    filter: (f) => {
-      assert(
-        !f.name.includes("..") &&
-          !f.name.includes("\\") &&
-          !f.name.startsWith("/"),
-        400,
-        "INVALID_BACKUP",
-        "不安全的归档路径",
-      );
-      total += f.originalSize;
-      assert(
-        total <= BACKUP_UNPACKED_MAX_BYTES,
-        400,
-        "INVALID_BACKUP",
-        "归档解压容量过大",
-      );
-      return true;
-    },
-  });
+  let files: Record<string, Uint8Array>;
+  try {
+    files = unzipSync(bytes, {
+      filter: (f) => {
+        assert(
+          !f.name.includes("..") &&
+            !f.name.includes("\\") &&
+            !f.name.startsWith("/"),
+          400,
+          "INVALID_BACKUP",
+          "不安全的归档路径",
+        );
+        total += f.originalSize;
+        assert(
+          total <= BACKUP_UNPACKED_MAX_BYTES,
+          400,
+          "INVALID_BACKUP",
+          "归档解压容量过大",
+        );
+        return true;
+      },
+    });
+  } catch (error) {
+    if (error instanceof AppError) throw error;
+    throw new AppError(400, "INVALID_BACKUP", "ZIP 结构无效，未导入数据");
+  }
   assert(
     files["manifest.json"] && files["data.json"],
     400,

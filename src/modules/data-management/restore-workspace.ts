@@ -222,6 +222,7 @@ export async function previewRestore(
           stdio: ["pipe", "pipe", "pipe"],
         });
         let out = "",
+          diagnostic = "",
           failure: AppError | null = null;
         const fail = (error: AppError) => {
           failure ??= error;
@@ -247,7 +248,9 @@ export async function previewRestore(
             fail(new AppError(503, "RESTORE_UNAVAILABLE", "恢复组件响应过大"));
           else out += b;
         });
-        child.stderr.on("data", () => {});
+        child.stderr.on("data", (chunk) => {
+          diagnostic = (diagnostic + chunk).slice(-8192);
+        });
         child.stdin.on("error", () => {});
         child.on("error", () => {
           failure ??= new AppError(
@@ -266,7 +269,29 @@ export async function previewRestore(
           try {
             const result = JSON.parse(out);
             if (result.error) {
-              reject(new AppError(400, "INVALID_BACKUP", result.error.message));
+              if (diagnostic)
+                console.error("Restore worker diagnostic:", diagnostic);
+              const code = result.error.code;
+              if (code === "INVALID_BACKUP")
+                reject(
+                  new AppError(
+                    400,
+                    code,
+                    "备份内容或附件校验未通过，未导入数据",
+                  ),
+                );
+              else if (code === "NOT_EMPTY")
+                reject(new AppError(400, code, "恢复目标必须为空"));
+              else if (code === "BACKUP_TOO_LARGE")
+                reject(new AppError(413, code, "备份容量超过恢复上限"));
+              else
+                reject(
+                  new AppError(
+                    503,
+                    "RESTORE_UNAVAILABLE",
+                    "恢复进程失败，请检查本地服务日志",
+                  ),
+                );
               return;
             }
             if (code !== 0 || !result.counts) throw new Error();

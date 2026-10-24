@@ -4,6 +4,7 @@ import { mkdtempSync, existsSync, readdirSync } from "node:fs";
 import path from "node:path";
 import os from "node:os";
 import { randomUUID } from "node:crypto";
+import { spawnSync } from "node:child_process";
 process.env.DATA_DIR = mkdtempSync(path.join(os.tmpdir(), "yanxi-restore-ui-"));
 const { run, one, dataDir } = await import("../src/lib/db");
 const { defaults, entrySchema } = await import("../src/lib/model");
@@ -45,7 +46,17 @@ test("恢复向导在隔离目录校验并保留当前数据库，损坏包拒�
     one("SELECT title FROM entries WHERE id=?", entry.id)?.title,
     "恢复验收",
   );
-  await assert.rejects(() => previewRestore(owner, new Uint8Array([1, 2, 3])));
+  await assert.rejects(
+    () => previewRestore(owner, new Uint8Array([1, 2, 3])),
+    (error: any) => {
+      assert.equal(error.code, "INVALID_BACKUP");
+      assert.doesNotMatch(
+        error.message,
+        /sqlite|ENOENT|restore-workspaces|invalid zip/i,
+      );
+      return true;
+    },
+  );
   await assert.rejects(() =>
     launchRestore(randomUUID(), { id: preview.id, confirm: true }),
   );
@@ -76,6 +87,31 @@ test("恢复向导在隔离目录校验并保留当前数据库，损坏包拒�
   assert.equal(cleanupRestoreWorkspaces(owner, Date.now() + 8 * 86400000), 1);
   assert.equal(restoreWorkspaces(owner).length, 0);
   assert.equal(existsSync(preview.folder), false);
+});
+
+test("编译恢复 worker 不向 stdout 暴露文件错误原文", () => {
+  const child = spawnSync(
+    process.execPath,
+    [path.resolve("runtime/restore-worker.mjs")],
+    {
+      env: {
+        ...process.env,
+        DATA_DIR: path.join(dataDir, "missing-file-worker"),
+      },
+      input: JSON.stringify({
+        file: path.join(dataDir, "private-missing.zip"),
+        username: "fixture",
+        passwordHash: "hash",
+      }),
+      encoding: "utf8",
+    },
+  );
+  assert.equal(child.status, 1);
+  assert.deepEqual(JSON.parse(child.stdout), {
+    error: { code: "RESTORE_FAILED" },
+  });
+  assert.doesNotMatch(child.stdout, /ENOENT|private-missing|sqlite|[A-Z]:\\/i);
+  assert.match(child.stderr, /ENOENT/);
 });
 
 test("进程控制仅接受隔离实例私有令牌，不接受未知或畸形令牌", () => {

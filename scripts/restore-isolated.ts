@@ -9,8 +9,21 @@ try {
   );
   process.stdout.write(JSON.stringify(result));
 } catch (error) {
+  console.error(
+    "Restore worker failed:",
+    error instanceof Error ? error.stack : "unknown",
+  );
+  const code = (error as { code?: string })?.code;
   process.stdout.write(
-    JSON.stringify({ error: { message: (error as Error).message } }),
+    JSON.stringify({
+      error: {
+        code: ["INVALID_BACKUP", "NOT_EMPTY", "BACKUP_TOO_LARGE"].includes(
+          code || "",
+        )
+          ? code
+          : "RESTORE_FAILED",
+      },
+    }),
   );
   process.exitCode = 1;
 }
