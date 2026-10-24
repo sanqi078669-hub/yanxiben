@@ -2,7 +2,7 @@
 
 日期：2026-10-21。版本：0.1.0。环境：Windows、Node.js 24.19、Next.js 16.4.2、SQLite、Chromium 内嵌浏览器。未部署公网。
 
-2026-10-24 说明：本文主体保留历史测试结果，不代表当前代码的最新验收。后续修复、测试数及限制见[代码审查修复计划](CODE-REVIEW-REMEDIATION-PLAN.md)，覆盖率及审计边界见[质量门禁](QUALITY-GATES.md)。
+2026-10-24 说明：本文主体保留历史测试结果，不代表当前代码的最新验收。最新本地 144/144、干净安装和浏览器回归见[审查修复最终本地验收](REMEDIATION-ACCEPTANCE.md)，逐项修复见[代码审查修复计划](CODE-REVIEW-REMEDIATION-PLAN.md)，覆盖率及审计边界见[质量门禁](QUALITY-GATES.md)。
 
 ## 自动化验证
 

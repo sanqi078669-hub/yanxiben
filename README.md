@@ -144,6 +144,8 @@ npm run audit:production
 npm run test:production
 ```
 
+从已提交源码验证完整新安装（使用 npm 离线缓存，不包含未提交修改）：`npm run test:clean`。分项证据见[审查修复计划](docs/CODE-REVIEW-REMEDIATION-PLAN.md)。
+
 测试使用系统临时目录的独立数据库；HTTP 集成测试启动 `127.0.0.1:3127` 的生产服务并在结束后关闭，因此运行测试前必须先构建。不会写入默认 `data/`。
 
 ## 实施范围

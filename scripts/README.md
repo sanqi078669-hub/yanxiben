@@ -29,3 +29,5 @@ AI 脚本使用 `npx tsx scripts/<脚本名>.ts --live` 显式启用真实调用
 备份、恢复、维护的完整前置条件见[项目说明](../README.md)，执行前不要省略数据隔离与备份步骤。脚本输出、临时凭据和报告产物放入已忽略的 `test-results/`，不要提交。
 
 `check-coverage.mjs` 由 `npm run test:coverage` 自动执行，检查整体及关键文件基线，报告位于 coverage/。`client-asset-probe.mjs` 可在隔离测试时设置 `PROBE_PORT`；`PROBE_FAIL_ATTEMPTS=1` 只注入一次复习提交 503，用于验证刷新重试，默认关闭。该代理不能替代正式服务，也不记录答案、Cookie 或原始幂等键。
+
+`npm run test:clean` 执行 `verify-clean-install.mjs`：从当前 Git HEAD 导出已提交源码（不包含未提交修改、运行数据或 .env），在系统临时目录离线 npm ci，再检查初始化/补密钥、lint/格式、首次构建前类型生成、构建、完整覆盖率和生产恢复。依赖离线缓存必须齐全；首次下载依赖可先在项目执行 npm ci。记录提交号及每条命令的退出状态到 test-results/clean-install-acceptance.json；关闭生产测试进程后按已验证的边界清理自身临时目录。远端 CI 仍需另行推送后执行。
