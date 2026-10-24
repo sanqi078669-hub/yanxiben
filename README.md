@@ -1,31 +1,29 @@
-# 研习本 · 本地试用版
+# 研习本
 
-根据[软件需求与设计说明书](docs/REQUIREMENTS.md)开发的私人考研学习应用。当前版本 0.1.0，先在本机使用，未部署公网。
+本地运行的考研学习记录与复习应用，支持材料收集、结构化整理、复习计划、本地备份与恢复。当前版本为 0.1.0，面向本机试用，尚未完成公网部署验收。
 
 ## 项目结构
 
 ```text
-.github/                 GitHub 检查流程、Issue 和 PR 模板
-docs/                    需求、架构决策、验收报告与改进计划
-scripts/                 初始化、启动、备份、维护和手动验证脚本
+.github/                 GitHub 检查流程、Issue 模板
+ docs/                   需求、架构决策、验收报告与改进计划
+scripts/                 初始化、启动、备份、维护和验证脚本
 src/
   app/                   Next.js 页面入口、API 路由和样式
-  components/            页面与 AI 交互组件
+  components/            页面与交互组件
   lib/                   数据库和公共模型
   modules/               认证、记录、复习、备份和 AI 业务逻辑
-tests/                   自动化单元与 HTTP 集成测试
+tests/                   自动化测试与 fixtures
+package.json             项目脚本与依赖声明
+package-lock.json        npm 锁定依赖
 README.md                项目说明和使用入口
-CONTRIBUTING.md           开发与提交约定
-SECURITY.md               安全问题报告与敏感文件说明
-AGENTS.md                编码代理的项目约定
+CONTRIBUTING.md          开发与提交约定
+SECURITY.md              安全问题报告
 ```
 
-`data/`、`test-results/`、`backups/` 为本地私有数据或产物；`node_modules/`、`.next/` 为依赖与构建缓存，均不提交到 Git。框架与包管理配置保留在根目录。
+`data/`、`test-results/`、`backups/`、`.private-secrets/` 为本地数据、密钥或测试产物；`node_modules/`、`.next/`、`coverage/` 和 `runtime/` 为依赖或生成文件，均不应进入公开仓库。截图位于 `docs/screenshots/`，公开前需人工检查其中是否含个人材料、账号或凭据。项目尚未指定开源许可证。
 
-详细资料见[文档索引](docs/README.md)，开发流程见[贡献说明](CONTRIBUTING.md)。项目尚未指定开源许可证；整理目录不代表授予开源使用许可。
-
-若个人 Windows 终端出现 Git dubious ownership，按[仓库归属说明](CONTRIBUTING.md#windows-仓库归属提示)给每条命令加此项目的 `-c safe.directory=...`；尚未代为更改用户全局配置或 ACL。
-
+详细资料见[文档索引](docs/README.md)，开发流程见[贡献说明](CONTRIBUTING.md)。
 ## 启动
 
 要求 Node.js >=24.19.0 且 <25、npm 11.x；已在 Node.js 24.19 / npm 11.17 验证。首次安装和初始化：
