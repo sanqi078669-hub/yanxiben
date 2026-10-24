@@ -14,6 +14,7 @@ import { z } from "zod";
 import { dataDir, one, run, all } from "../../lib/db";
 import { assert, AppError } from "../entries/service";
 import type { DiskUpload } from "../http/body";
+import { BACKUP_ZIP_MAX_BYTES } from "../../lib/capacity";
 
 const state = globalThis as typeof globalThis & {
   yanxiRestoreChildren?: Map<string, ChildProcess>;
@@ -191,7 +192,7 @@ export async function previewRestore(
 ) {
   const size = bytes instanceof Uint8Array ? bytes.length : bytes.size;
   assert(
-    size > 0 && size <= 200 * 1024 * 1024,
+    size > 0 && size <= BACKUP_ZIP_MAX_BYTES,
     413,
     "TOO_LARGE",
     "备份大小应为 1 字节至 200 MB",

@@ -1,6 +1,12 @@
 import { zipSync, unzipSync, strToU8, strFromU8 } from "fflate";
 import { createHash, randomBytes } from "node:crypto";
-import { readFileSync, writeFileSync, unlinkSync, existsSync } from "node:fs";
+import {
+  readFileSync,
+  writeFileSync,
+  unlinkSync,
+  existsSync,
+  statSync,
+} from "node:fs";
 import path from "node:path";
 import { all, one, run, transaction, db, dataDir } from "../../lib/db";
 import { assert, unpack } from "../entries/service";
@@ -11,6 +17,11 @@ import { initAudit } from "../ai/audit";
 import { validateBackupData } from "./backup-validation";
 import { BACKUP_FORMAT_VERSION, upgradeBackup } from "./backup-upgrade";
 import { DATABASE_VERSION } from "../../lib/migrations";
+import {
+  BACKUP_ZIP_MAX_BYTES,
+  BACKUP_UNPACKED_MAX_BYTES,
+} from "../../lib/capacity";
+import { checkAttachmentCapacity, checkBackupCapacity } from "./capacity";
 const tables = [
   "entries",
   "attachments",
@@ -27,6 +38,44 @@ const tables = [
   "entry_hint_usage",
 ] as const;
 const digest = (b: Uint8Array) => createHash("sha256").update(b).digest("hex");
+function checkedZip(files: Record<string, Uint8Array>) {
+  const unpacked = Object.values(files).reduce(
+    (sum, value) => sum + value.byteLength,
+    0,
+  );
+  checkBackupCapacity(unpacked);
+  const zipped = zipSync(files);
+  checkBackupCapacity(unpacked, zipped.byteLength);
+  return zipped;
+}
+function preflightBackup(owner: string) {
+  let estimated = 0;
+  for (const table of tables) {
+    const columns = db
+      .prepare(`PRAGMA table_info(${table})`)
+      .all()
+      .map((row) => String(row.name));
+    const expression = columns
+      .map((column) => `'${column}',"${column}"`)
+      .join(",");
+    const size = one(
+      `SELECT coalesce(sum(length(CAST(json_object(${expression}) AS BLOB))+1),0) n FROM ${table} WHERE owner=?`,
+      owner,
+    )!;
+    estimated += Number(size.n);
+    checkBackupCapacity(estimated);
+  }
+  for (const attachment of db
+    .prepare("SELECT id FROM attachments WHERE owner=?")
+    .iterate(owner)) {
+    const size = statSync(
+      path.join(dataDir, "attachments", String(attachment.id)),
+    ).size;
+    checkAttachmentCapacity(size);
+    estimated += size;
+    checkBackupCapacity(estimated);
+  }
+}
 function backupJson(bytes: Uint8Array, name: string) {
   try {
     return JSON.parse(strFromU8(bytes));
@@ -38,6 +87,7 @@ export function backup(owner: string) {
   initKnowledgeTools();
   initAudit();
   return transaction(() => {
+    preflightBackup(owner);
     const data: Record<string, unknown> = {
       profile: {
         id: owner,
@@ -76,7 +126,7 @@ export function backup(owner: string) {
         2,
       ),
     );
-    return zipSync(files);
+    return checkedZip(files);
   });
 }
 export function markdownExport(owner: string) {
@@ -114,6 +164,9 @@ export function markdownExport(owner: string) {
               ? "jpg"
               : "webp";
         const name = `attachments/${a.id}.${ext}`;
+        checkAttachmentCapacity(
+          statSync(path.join(dataDir, "attachments", a.id)).size,
+        );
         files[name] = readFileSync(path.join(dataDir, "attachments", a.id));
         md += `![${a.role === "PROMPT" ? "题面" : "答案"}](${name})\n\n`;
       }
@@ -121,7 +174,7 @@ export function markdownExport(owner: string) {
       index += `- [${e.title.replace(/[\[\]\n]/g, "") || "未命名记录"}](${e.id}.md)\n`;
     }
     files["README.md"] = strToU8(index);
-    return zipSync(files);
+    return checkedZip(files);
   });
 }
 export async function restore(
@@ -137,7 +190,12 @@ export async function restore(
     "NOT_EMPTY",
     "恢复仅允许在空白 DATA_DIR 中执行",
   );
-  assert(bytes.length <= 200 * 1024 * 1024);
+  assert(
+    bytes.length <= BACKUP_ZIP_MAX_BYTES,
+    413,
+    "BACKUP_TOO_LARGE",
+    "备份 ZIP 最大 200 MiB",
+  );
   let total = 0;
   const files = unzipSync(bytes, {
     filter: (f) => {
@@ -151,7 +209,7 @@ export async function restore(
       );
       total += f.originalSize;
       assert(
-        total <= 500 * 1024 * 1024,
+        total <= BACKUP_UNPACKED_MAX_BYTES,
         400,
         "INVALID_BACKUP",
         "归档解压容量过大",

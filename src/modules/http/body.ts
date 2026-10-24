@@ -7,11 +7,12 @@ import { randomUUID } from "node:crypto";
 import busboy from "busboy";
 import { dataDir } from "../../lib/db";
 import { AppError, assert } from "../entries/service";
+import { BACKUP_ZIP_MAX_BYTES, ATTACHMENT_MAX_BYTES } from "../../lib/capacity";
 
 export const JSON_BODY_LIMIT = 1024 * 1024;
-export const IMAGE_BODY_LIMIT = 12 * 1024 * 1024;
-export const RESTORE_FILE_LIMIT = 200 * 1024 * 1024;
-export const RESTORE_BODY_LIMIT = 201 * 1024 * 1024;
+export const IMAGE_BODY_LIMIT = ATTACHMENT_MAX_BYTES + 2 * 1024 * 1024;
+export const RESTORE_FILE_LIMIT = BACKUP_ZIP_MAX_BYTES;
+export const RESTORE_BODY_LIMIT = RESTORE_FILE_LIMIT + 1024 * 1024;
 const tooLarge = () =>
   new AppError(413, "FILE_TOO_LARGE", "请求内容超过允许大小");
 const cancelled = () => new AppError(499, "UPLOAD_CANCELLED", "上传已取消");

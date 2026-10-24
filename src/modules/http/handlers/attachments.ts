@@ -8,6 +8,8 @@ import { one, run, dataDir } from "../../../lib/db";
 import { AppError, assert } from "../../entries/service";
 import { readImageForm } from "../body";
 import type { ApiContext } from "../context";
+import { ATTACHMENT_MAX_BYTES } from "../../../lib/capacity";
+import { checkAttachmentCapacity } from "../../data-management/capacity";
 export async function attachmentsHandler(context: ApiContext) {
   const { req, p, parts, method, owner, ok } = context;
   if (p === "attachments" && method === "POST") {
@@ -15,7 +17,7 @@ export async function attachmentsHandler(context: ApiContext) {
     const f = form.get("file");
     assert(f instanceof File, 400, "VALIDATION_ERROR", "请选择图片");
     assert(
-      f.size > 0 && f.size <= 10 * 1024 * 1024,
+      f.size > 0 && f.size <= ATTACHMENT_MAX_BYTES,
       413,
       "FILE_TOO_LARGE",
       "图片最大 10 MB",
@@ -40,6 +42,7 @@ export async function attachmentsHandler(context: ApiContext) {
     const cleaned = await sharp(bytes, { limitInputPixels: 40000000 })
       .rotate()
       .toBuffer();
+    checkAttachmentCapacity(cleaned.length);
     const id = randomUUID(),
       mime = "image/" + (meta.format === "jpeg" ? "jpeg" : meta.format);
     writeFileSync(path.join(dataDir, "attachments", id), cleaned, {

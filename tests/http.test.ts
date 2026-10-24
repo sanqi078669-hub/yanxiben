@@ -9,6 +9,7 @@ import os from "node:os";
 import bcrypt from "bcryptjs";
 import sharp from "sharp";
 import { request as httpRequest } from "node:http";
+import { expandingPng } from "./image-fixtures";
 process.env.DATA_DIR = mkdtempSync(path.join(os.tmpdir(), "yanxi-http-"));
 const { run, one, dataDir } = await import("../src/lib/db");
 const { defaults } = await import("../src/lib/model");
@@ -309,6 +310,18 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
         body: f,
       });
     assert.equal((await upload(fake)).status, 415);
+    const expanding = await expandingPng();
+    assert(expanding.length < 10 * 1024 * 1024);
+    const enlarged = new FormData();
+    enlarged.append(
+      "file",
+      new Blob([new Uint8Array(expanding)], { type: "image/png" }),
+      "palette.png",
+    );
+    const rejected = await upload(enlarged);
+    assert.equal(rejected.status, 413);
+    assert.equal((await rejected.json()).error.code, "ATTACHMENT_TOO_LARGE");
+    assert.equal(one("SELECT count(*) n FROM attachments")!.n, 0);
     const f = new FormData();
     f.append(
       "file",

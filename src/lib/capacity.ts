@@ -1,0 +1,3 @@
+export const ATTACHMENT_MAX_BYTES = 10 * 1024 * 1024;
+export const BACKUP_ZIP_MAX_BYTES = 200 * 1024 * 1024;
+export const BACKUP_UNPACKED_MAX_BYTES = 500 * 1024 * 1024;

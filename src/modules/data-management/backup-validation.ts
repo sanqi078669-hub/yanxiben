@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { entrySchema, settingsSchema, fields, errors } from "../../lib/model";
 import { AppError } from "../entries/service";
 import { costSchema } from "../ai/pricing";
+import { ATTACHMENT_MAX_BYTES } from "../../lib/capacity";
 
 const id = z.string().uuid();
 const integer = z.number().int().nonnegative();
@@ -185,11 +186,7 @@ export const backupRowSchemas = {
       owner: id,
       name: z.string().max(1000),
       mime: z.enum(["image/jpeg", "image/png", "image/webp"]),
-      size: z
-        .number()
-        .int()
-        .positive()
-        .max(10 * 1024 * 1024),
+      size: z.number().int().positive().max(ATTACHMENT_MAX_BYTES),
       sha256: z.string().regex(/^[a-f0-9]{64}$/),
       created_at: time,
     })

@@ -6,6 +6,7 @@ import { all, one, run, transaction, dataDir } from "../../lib/db";
 import { assert } from "../entries/service";
 import { backup, markdownExport } from "./backup";
 import { recordBackup } from "./restore-workspace";
+import { checkCachedArchiveCapacity } from "./capacity";
 
 export const EXPORT_TTL = 7 * 86400000;
 export function exportArchive(
@@ -39,7 +40,9 @@ export function exportArchive(
       "IDEMPOTENCY_CONFLICT",
       "同一导出键不能用于不同类型",
     );
-    return readFileSync(file(row.file_id));
+    const bytes = readFileSync(file(row.file_id));
+    checkCachedArchiveCapacity(bytes);
+    return bytes;
   };
   // Expired ZIPs and receipts are removed on the next export; credentials are never cached.
   transaction(() => {
