@@ -16,8 +16,10 @@ import { Badge, Empty, ErrorBox } from "./ui";
 import { useLoad } from "./useLoad";
 export default function KnowledgePage({
   notify,
+  timezone,
 }: {
   notify: (s: string) => void;
+  timezone: string;
 }) {
   const { data: nodes, error, reload } = useLoad<any[]>("knowledge-nodes");
   const [name, setName] = useState(""),
@@ -76,7 +78,7 @@ export default function KnowledgePage({
       </div>
       <ErrorBox text={error || err} />
       <AiDiagnosis />
-      <LearningStatistics />
+      <LearningStatistics key={timezone} timezone={timezone} />
       <KnowledgeTools nodes={nodes || []} onChange={reload} />
       <div className="detail-grid">
         <section className="panel">

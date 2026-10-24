@@ -7,7 +7,7 @@ runtime/
 out/
 coverage/
 data/
-data-*/
+/data-*/
 test-results/
 backups/
 .private-secrets/

@@ -113,6 +113,16 @@ export const migrations: Migration[] = [
     `),
   },
 ];
+migrations.push({
+  version: 8,
+  name: "export-receipts-v8",
+  up: (db) =>
+    db.exec(`CREATE TABLE export_receipts(
+    owner TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    key_hash TEXT NOT NULL,type TEXT NOT NULL,file_id TEXT NOT NULL,
+    expires INTEGER NOT NULL,PRIMARY KEY(owner,key_hash));
+    CREATE INDEX export_expiry ON export_receipts(expires);`),
+});
 const current = migrations.at(-1)!.version;
 export const DATABASE_VERSION = current;
 const failure = (message: string): never => {

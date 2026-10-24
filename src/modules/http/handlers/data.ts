@@ -5,14 +5,14 @@ import { one } from "../../../lib/db";
 import { assert } from "../../entries/service";
 import {
   backupStatus,
-  recordBackup,
   previewRestore,
   launchRestore,
   stopRestore,
   restoreWorkspaces,
   deleteRestore,
 } from "../../data-management/restore-workspace";
-import { backup, markdownExport } from "../../data-management/backup";
+import { exportArchive } from "../../data-management/exports";
+import { idempotencyKey } from "../middleware";
 import { readRestoreUpload } from "../body";
 import type { ApiContext } from "../context";
 export async function dataHandler(context: ApiContext) {
@@ -66,8 +66,7 @@ export async function dataHandler(context: ApiContext) {
       "UNAUTHENTICATED",
       "请验证当前密码",
     );
-    const archive = b.type === "BACKUP" ? backup(owner) : markdownExport(owner);
-    if (b.type === "BACKUP") recordBackup(owner);
+    const archive = exportArchive(owner, b.type, idempotencyKey(req));
     return new NextResponse(Buffer.from(archive), {
       headers: {
         "Content-Type": "application/zip",

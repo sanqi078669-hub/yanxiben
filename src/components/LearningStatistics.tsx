@@ -2,15 +2,14 @@
 import { request } from "../lib/request";
 import { useEffect, useState } from "react";
 import { subjects, errors } from "../lib/model";
+import { statisticsDates } from "../lib/statistics-dates";
 import type { learningStatistics } from "../modules/review/statistics";
 type Statistics = ReturnType<typeof learningStatistics>;
 const fraction = (n: number, d: number) =>
   d ? `${n}/${d}（${Math.round((n / d) * 100)}%）` : "暂无样本";
-export function LearningStatistics() {
-  const [from, setFrom] = useState(() =>
-      new Date(Date.now() - 30 * 86400000).toISOString().slice(0, 10),
-    ),
-    [to, setTo] = useState(() => new Date().toISOString().slice(0, 10));
+export function LearningStatistics({ timezone }: { timezone: string }) {
+  const [from, setFrom] = useState(() => statisticsDates(timezone).from),
+    [to, setTo] = useState(() => statisticsDates(timezone).to);
   const [subject, setSubject] = useState(""),
     [mode, setMode] = useState("");
   const [data, setData] = useState<Statistics | null>(null),

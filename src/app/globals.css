@@ -1899,7 +1899,7 @@ footer span {
   align-items: center;
   gap: 14px;
   padding: 14px 0;
-  border-bottom: 1px solid var(--border);
+  border-bottom: 1px solid var(--line);
 }
 .ai-profile span {
   flex: 1;

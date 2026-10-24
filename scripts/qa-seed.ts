@@ -2,11 +2,8 @@ import { randomUUID, randomBytes } from "node:crypto";
 import { writeFileSync } from "node:fs";
 import path from "node:path";
 import bcrypt from "bcryptjs";
-if (
-  !process.env.DATA_DIR ||
-  !path.resolve(process.env.DATA_DIR).includes("test-results")
-)
-  throw new Error("只能写入 test-results 中的隔离测试目录");
+import { assertQaPath } from "./qa-path";
+assertQaPath(process.env.DATA_DIR);
 const { run, one, dataDir } = await import("../src/lib/db");
 const { defaults, entrySchema } = await import("../src/lib/model");
 const { createEntry, addReview } =

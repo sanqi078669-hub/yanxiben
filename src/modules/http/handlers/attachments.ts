@@ -75,20 +75,29 @@ export async function attachmentsHandler(context: ApiContext) {
       "UNSUPPORTED_ATTACHMENT",
       "附件格式不受支持",
     );
-    return new NextResponse(
-      readFileSync(path.join(dataDir, "attachments", id)),
-      {
-        headers: {
-          "Content-Type": a.mime,
-          "Cache-Control": "private, no-store",
-          "X-Content-Type-Options": "nosniff",
-          "Content-Security-Policy": "default-src 'none'; sandbox",
-          "Content-Disposition":
-            req.nextUrl.searchParams.get("download") === "1"
-              ? `attachment; filename="${id}"`
-              : `inline; filename="${id}"`,
-        },
-      },
-    );
+    const bytes = readFileSync(path.join(dataDir, "attachments", id));
+    const etag = '"' + createHash("sha256").update(bytes).digest("hex") + '"';
+    const headers = {
+      "Content-Type": a.mime,
+      "Cache-Control": "private, no-cache",
+      ETag: etag,
+      "X-Content-Type-Options": "nosniff",
+      "Content-Security-Policy": "default-src 'none'; sandbox",
+      "Content-Disposition":
+        req.nextUrl.searchParams.get("download") === "1"
+          ? `attachment; filename="${id}"`
+          : `inline; filename="${id}"`,
+    };
+    const matches = req.headers
+      .get("if-none-match")
+      ?.split(",")
+      .some((value) => {
+        const candidate = value.trim().replace(/^W\//, "");
+        return candidate === etag || candidate === "*";
+      });
+    return new NextResponse(matches ? null : bytes, {
+      status: matches ? 304 : 200,
+      headers,
+    });
   }
 }

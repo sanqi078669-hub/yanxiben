@@ -335,6 +335,40 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
     attachmentId = (await r.json()).data.id;
     const content = await call("attachments/" + attachmentId + "/content");
     assert.equal(content.status, 200);
+    const etag = content.headers.get("etag")!;
+    assert.match(etag, /^"[a-f0-9]{64}"$/);
+    assert.equal(content.headers.get("cache-control"), "private, no-cache");
+    const unchanged = await call(
+      "attachments/" + attachmentId + "/content",
+      undefined,
+      "GET",
+      { "If-None-Match": etag },
+    );
+    assert.equal(unchanged.status, 304);
+    assert.equal((await unchanged.arrayBuffer()).byteLength, 0);
+    const originalBytes = readFileSync(
+      path.join(dataDir, "attachments", attachmentId),
+    );
+    writeFileSync(
+      path.join(dataDir, "attachments", attachmentId),
+      await sharp({
+        create: { width: 2, height: 2, channels: 3, background: "red" },
+      })
+        .png()
+        .toBuffer(),
+    );
+    const changed = await call(
+      "attachments/" + attachmentId + "/content",
+      undefined,
+      "GET",
+      { "If-None-Match": etag },
+    );
+    assert.equal(changed.status, 200);
+    assert.notEqual(changed.headers.get("etag"), etag);
+    writeFileSync(
+      path.join(dataDir, "attachments", attachmentId),
+      originalBytes,
+    );
     assert.equal(content.headers.get("content-type"), "image/png");
     assert.equal(content.headers.get("x-content-type-options"), "nosniff");
     assert.match(
@@ -351,7 +385,14 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
     );
     run("UPDATE attachments SET mime='text/html' WHERE id=?", attachmentId);
     assert.equal(
-      (await call("attachments/" + attachmentId + "/content")).status,
+      (
+        await call(
+          "attachments/" + attachmentId + "/content",
+          undefined,
+          "GET",
+          { "If-None-Match": etag },
+        )
+      ).status,
       415,
     );
     run("UPDATE attachments SET mime='image/png' WHERE id=?", attachmentId);
@@ -361,7 +402,7 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
           "attachments/" + attachmentId + "/content",
           undefined,
           "GET",
-          { Cookie: otherCookie },
+          { Cookie: otherCookie, "If-None-Match": etag },
         )
       ).status,
       404,
@@ -372,7 +413,7 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
           "attachments/" + attachmentId + "/content",
           undefined,
           "GET",
-          { Cookie: "" },
+          { Cookie: "", "If-None-Match": etag },
         )
       ).status,
       401,
@@ -563,10 +604,38 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
       401,
     );
     for (const type of ["BACKUP", "MARKDOWN"]) {
-      const r = await call("exports", { type, password });
+      assert.equal((await call("exports", { type, password })).status, 400);
+      const key = randomUUID();
+      const r = await call("exports", { type, password }, "POST", {
+        "Idempotency-Key": key,
+      });
       assert.equal(r.status, 200);
       const bytes = new Uint8Array(await r.arrayBuffer());
       assert.equal(String.fromCharCode(bytes[0], bytes[1]), "PK");
+      const retry = await call("exports", { type, password }, "POST", {
+        "Idempotency-Key": key,
+      });
+      assert.equal(retry.status, 200);
+      assert.deepEqual(new Uint8Array(await retry.arrayBuffer()), bytes);
+      assert.equal(
+        (
+          await call("exports", { type, password: "wrong" }, "POST", {
+            "Idempotency-Key": key,
+          })
+        ).status,
+        401,
+      );
+      assert.equal(
+        (
+          await call(
+            "exports",
+            { type: type === "BACKUP" ? "MARKDOWN" : "BACKUP", password },
+            "POST",
+            { "Idempotency-Key": key },
+          )
+        ).status,
+        409,
+      );
     }
   });
   await t.test("删除与恢复保持历史并暂停复习", async () => {

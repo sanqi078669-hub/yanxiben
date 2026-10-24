@@ -32,7 +32,7 @@ const schema = z.object({
   pending: z.object({ body: attemptBody, key: z.string().uuid() }).nullable(),
 });
 const legacySchema = schema.extend({
-  formatVersion: z.undefined(),
+  formatVersion: z.undefined().optional(),
   answer: z.string().max(legacyLimit),
   pending: z
     .object({

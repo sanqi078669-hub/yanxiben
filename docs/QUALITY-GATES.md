@@ -51,10 +51,10 @@ c8 使用 all=true，包含整个 src 下 .ts/.tsx，exclude=[]；未加载文�
 
 ## 依赖审计及残余风险
 
-生产审计 `npm audit --omit=dev --audit-level=high`：**0 个漏洞**。
+2026-10-23 生产审计 `npm audit --omit=dev --audit-level=high`：**0 个漏洞**。2026-10-24 重跑发现 Zod 新公告，已将 4.3.6 升至 4.6.7（修复版自 4.6.6 起），见 [Zod 资源耗尽公告](https://github.com/advisories/GHSA-mrhx-c7xc-m3w5)。升级后的最新完整/生产审计返回均为 0，原始结果保存在忽略的 test-results/audit-all.json、audit-production.json。审计结果是查询时点快照，不证明不存在其他漏洞。
 
 完整审计最初为 5 high + 1 low。已将 esbuild 升至 0.28.2，并让 tsx 使用同一版本；构建、测试和生产恢复验证兼容。该修复对应 [Windows 开发服务文件读取公告](https://github.com/advisories/GHSA-g7r4-m6w7-qqqr)，项目没有调用 esbuild serve API。
 
-当前完整审计仍有 **5 个 high 包条目，均为开发依赖同一条 braces 漏洞链**：eslint-config-next → @next/eslint-plugin-next → fast-glob → micromatch → braces。不是 5 个独立应用漏洞。[上游公告](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm) 当前未提供修复版，恶意深层 glob 可导致开发工具栈耗尽。该链不在生产依赖中，应用请求不调用这些 lint 工具；开发环境仍应避免处理不可信 glob/仓库，后续跟进上游补丁。
+2026-10-23 完整审计曾有 **5 个 high 包条目，均为开发依赖同一条 braces 漏洞链**：eslint-config-next → @next/eslint-plugin-next → fast-glob → micromatch → braces。不是 5 个独立应用漏洞。[上游公告](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm) 当时未提供修复版。2026-10-24 npm 审计未再返回这条记录，但安装树中的 braces 仍为 3.0.3，不能据此宣称已通过升级修复；继续保留这项开发工具风险说明。该链不在生产依赖中，应用请求不调用 lint 工具；开发环境仍应避免处理不可信 glob/仓库。
 
 没有执行 npm audit fix --force 建议的 Next 配置降级到 14.x，也未隐藏完整审计结果。CI 按计划门禁生产依赖高危项；不宣称完整开发依赖审计为零。审计证据保存在忽略的 test-results/audit-production.json、audit-all.json。

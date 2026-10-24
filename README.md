@@ -26,7 +26,7 @@ AGENTS.md                编码代理的项目约定
 
 ## 启动
 
-要求 Node.js 24.19 或兼容的 Node.js 24 版本。首次安装和初始化：
+要求 Node.js >=24.19.0 且 <25、npm 11.x；已在 Node.js 24.19 / npm 11.17 验证。首次安装和初始化：
 
 ```powershell
 npm ci
@@ -36,7 +36,7 @@ npm run dev
 
 Windows 用户也可在项目目录运行 `./scripts/start-local.ps1`。打开 <http://127.0.0.1:3000>。
 
-初始化时生成私人账号，默认用户名 `student`，随机密码写入 `data/local-login.txt`，不会打印在终端。登录后可在“设置与数据”修改密码。已经初始化的账号不会被重复初始化覆盖。初始凭据文件不会随改密自动更新；确认记住新密码后可自行删除该文件。
+初始化时生成私人账号，默认用户名 `student`，随机密码写入 `data/local-login.txt`，不会打印在终端。登录后可在“设置与数据”修改密码。已经初始化的账号不会被覆盖；缺少 session-secret 时再次运行 init 会补建密钥，并使旧会话失效。初始凭据文件不会随改密自动更新；确认记住新密码后可自行删除该文件。
 
 为其他空白环境初始化，可先设置 `INIT_USERNAME`、`INIT_PASSWORD`（至少 12 位）和 `DATA_DIR`。默认不开放公开注册。
 
@@ -66,12 +66,19 @@ npm run start
 - `data/session-secret`：iron-session 加密密钥，不能公开。
 - 所有上述运行数据和凭据均被 `.gitignore` 排除。
 - 会话由 iron-session 封装，并由数据库会话记录控制撤销。密码由 bcryptjs 哈希保存。
-- 写请求校验 Origin 与自定义同源请求头。接口限制图片为 JPEG、PNG、WebP，并通过 sharp 解码重编码、去除元数据。
-- 关闭浏览器前应等待“已保存”；保存失败或版本冲突时本次输入只保留在当前页面。
+- 写请求强制 `X-Requested-With: yanxiben`；存在 Origin 时还要求同源，缺少 Origin 不单独拒绝。浏览器跨站请求无法绕过自定义头预检，服务端不开放跨站 CORS。接口限制图片为 JPEG、PNG、WebP，并通过 sharp 解码重编码、去除元数据。
+- 附件使用 `private, no-cache` + ETag，每次重新鉴权后才允许 304；不允许共享缓存或免鉴权的短期缓存。
+- 关闭浏览器前应等待“已保存”；编辑草稿和待确认复习保存在当前浏览器，错误时可重试。草稿不是服务端备份。
+
+可选配置见 [.env.example](.env.example)。Next 加载 `.env.local`，初始化/备份等 tsx 脚本使用 PowerShell 环境变量；不默认加载 dotenv。`next-env.d.ts` 是本版本 Next 生成文件，保持忽略，`npm run typecheck` 会先运行 `next typegen`。
 
 ## 备份与阅读导出
 
 设置页输入当前密码可下载完整备份 ZIP 或 Markdown 阅读 ZIP。两个导出都仅包含当前用户数据，不含密码哈希、会话与认证密钥。
+
+`POST /api/v1/exports` 强制 8–200 字符 `Idempotency-Key`：同用户、同键、同类型在首次生成后 7 天内返回逐字节相同的 ZIP；不同类型返回 409，每次重试都重新验证当前密码。设置页失败后重试保留原键，下载成功后再次导出使用新键。缓存 ZIP 位于私有 `DATA_DIR/export-cache/`，到期后下次导出清理；7 天后同键可生成新快照。不保存密码或完整请求体；导出回执/缓存不进入学习备份。接口仍为同步下载，没有独立 GET 导出任务接口（见 ADR）。
+
+当前备份格式为 v3，数据库迁移版本独立记录（当前 v8）。读取支持 v1/v2/v3；只转换明确支持的历史表/列默认值，随后完整校验，未知缺列和未来格式明确拒绝。数据库启动前按有序迁移升级，已有库升级前在 `DATA_DIR/migration-backups/` 留一致性快照；任意手改结构不在兼容承诺内。
 
 命令行备份（单账号实例，拒绝覆盖已有文件）：
 
@@ -81,7 +88,7 @@ npm run backup -- backups/yanxiben-2026-10-21.zip
 
 备份包含 `manifest.json`（格式版本、时间、表计数、文件长度与 SHA-256）、`data.json`、附件目录。导出在同一数据库写事务窗口内读取快照；维护清理时必须停止应用，避免附件被并发删除。
 
-代码审查修复后，新备份格式为 v3（包含本轮提示使用记录），并单独记录数据库版本。恢复支持 v1/v2/v3；旧版只补齐已知扩展表及明确的旧字段默认值，损坏或未知结构会拒绝，不能保证任意手改备份兼容。启动时统一执行数据库迁移；已有库升级前的 SQLite 快照位于 `data/migration-backups/`（自定义 DATA_DIR 时位于对应目录），其中包含私人数据，不应提交或公开。修复进度见[代码审查修复计划](docs/CODE-REVIEW-REMEDIATION-PLAN.md)。
+升级前快照同样包含私人数据，不应提交或公开。各项修复进度和验证记录见[代码审查修复计划](docs/CODE-REVIEW-REMEDIATION-PLAN.md)。
 
 阅读导出包含每条记录的 Markdown、README 索引和相对路径图片，可离线阅读。它不是结构化恢复来源。
 
@@ -129,8 +136,12 @@ npm run maintenance -- purge <记录UUID> --confirm
 
 ```powershell
 npm run typecheck
+npm run lint
+npm run format:check
 npm run build
-npm test
+npm run test:coverage
+npm run audit:production
+npm run test:production
 ```
 
 测试使用系统临时目录的独立数据库；HTTP 集成测试启动 `127.0.0.1:3127` 的生产服务并在结束后关闭，因此运行测试前必须先构建。不会写入默认 `data/`。
@@ -156,7 +167,7 @@ DeepSeek 示例：基础地址 `https://api.deepseek.com`，模型 `deepseek-fla
 
 每次调用都有发送范围和确认选项。AI 结果只作为建议；确认后才写入记录或另存变式。截图最多 3 张且仅发送题面图，文本助手不发送附件。相似题支持最多 8 条基础候选或最多 40 条同科目记录的语言模型语义比较，发送前展示摘录；基础检索可独立使用，不保证窗口外召回。
 
-密钥加密保存在 `data/ai-private/`，不回传浏览器、不写入日志、不包含在学习 ZIP 备份中；恢复学习备份后需要重新配置。不要把该私有目录提交代码库或分享。单次请求超时 45 秒，单账号同一时间一个 AI 请求，每分钟最多 10 次；不自动重试产生额外费用。
+模型密钥的密文保存在 `DATA_DIR/ai-private/`，主密钥默认独立放在 `.private-secrets/`，也可用 DATA_DIR 外的 `AI_KEY_FILE`；不回传浏览器、不写入日志、不包含在学习 ZIP 备份中。首次读取旧配置会校验并迁移旧主密钥，缺失或冲突明确报错。恢复学习备份后需重新配置模型。输出上限可选 4,000/8,000/16,000，分别使用 45/90/180 秒期限；单账号同一时间一个请求、每分钟最多 10 次，不自动重试。每日次数/费用阈值及未知价格行为见 [AI 配置边界](docs/AI-CONFIGURATION-BOUNDARIES.md)，生产/开发依赖审计限制见 [质量门禁](docs/QUALITY-GATES.md)。
 
 自动化测试使用模拟传输，不产生 API 费用。`scripts/ai-*-smoke.ts --live` 为明确启用的真实调用脚本，只发送合成样例，但会使用当前本地账号的服务配置并可能产生 API 费用。功能验证记录见 [AI 验收报告](docs/AI-ACCEPTANCE.md)。
 

@@ -29,8 +29,11 @@ export default function SettingsPage({
     [password, setPassword] = useState(""),
     [newPassword, setNewPassword] = useState(""),
     [exportPassword, setExportPassword] = useState(""),
+    [exportKeys, setExportKeys] = useState<Record<string, string>>({}),
     [busy, setBusy] = useState(false);
   async function download(type: string) {
+    const key = exportKeys[type] || crypto.randomUUID();
+    setExportKeys((keys) => ({ ...keys, [type]: key }));
     setBusy(true);
     setError("");
     try {
@@ -39,7 +42,7 @@ export default function SettingsPage({
         headers: {
           "Content-Type": "application/json",
           "X-Requested-With": "yanxiben",
-          "Idempotency-Key": crypto.randomUUID(),
+          "Idempotency-Key": key,
         },
         body: JSON.stringify({ type, password: exportPassword }),
       });
@@ -48,6 +51,11 @@ export default function SettingsPage({
       a.href = url;
       a.download = `yanxiben-${type.toLowerCase()}-${new Date().toISOString().slice(0, 10)}.zip`;
       a.click();
+      setExportKeys((keys) => {
+        const next = { ...keys };
+        delete next[type];
+        return next;
+      });
       setTimeout(() => URL.revokeObjectURL(url), 1000);
       notify("导出已生成并开始下载");
       if (type === "BACKUP")

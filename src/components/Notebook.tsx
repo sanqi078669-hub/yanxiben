@@ -232,7 +232,7 @@ export default function Notebook() {
               notify={notify}
             />
           ) : pathname.startsWith("/knowledge") ? (
-            <KnowledgePage notify={notify} />
+            <KnowledgePage notify={notify} timezone={profile.timezone} />
           ) : pathname === "/settings" ? (
             <SettingsPage
               profile={profile}
