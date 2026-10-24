@@ -24,6 +24,8 @@ AGENTS.md                编码代理的项目约定
 
 详细资料见[文档索引](docs/README.md)，开发流程见[贡献说明](CONTRIBUTING.md)。项目尚未指定开源许可证；整理目录不代表授予开源使用许可。
 
+若个人 Windows 终端出现 Git dubious ownership，按[仓库归属说明](CONTRIBUTING.md#windows-仓库归属提示)给每条命令加此项目的 `-c safe.directory=...`；尚未代为更改用户全局配置或 ACL。
+
 ## 启动
 
 要求 Node.js >=24.19.0 且 <25、npm 11.x；已在 Node.js 24.19 / npm 11.17 验证。首次安装和初始化：
@@ -124,6 +126,10 @@ Remove-Item Env:RESTORE_USERNAME
 npm run maintenance -- cleanup
 ```
 
+迁移快照单独管理，不随附件清理删除。`npm run maintenance:snapshots` 默认只预览，保留最近 3 份及未满 30 天的快照；至少保留 1 份。需要调整时先停止应用、核对预览并保存离线备份，再手动运行 `npm run maintenance:snapshots -- --keep 3 --days 30 --apply`。该命令不加载数据库，不会为了预览触发主库迁移。快照含私人数据，应与数据目录同样私有；Windows 权限继承父目录 ACL，Git 忽略不代替访问控制。
+
+升级前可执行 `node --import tsx scripts/rehearse-upgrade.ts --source-data data`：对只读源库取得一致性副本，在私有 test-results 内升级、核对旧表摘要、查询和逐账号导出恢复；仅输出数量和状态。原库保持不变，副本及 ZIP 含私人数据，应妥善保管。真正升级主库仍由正常启动执行。
+
 永久清理仅支持已在回收站中的指定记录；命令带明确确认参数，不提供自动到期销毁：
 
 ```powershell
@@ -147,6 +153,8 @@ npm run test:production
 从已提交源码验证完整新安装（使用 npm 离线缓存，不包含未提交修改）：`npm run test:clean`。分项证据见[审查修复计划](docs/CODE-REVIEW-REMEDIATION-PLAN.md)。
 
 测试使用系统临时目录的独立数据库；HTTP 集成测试启动 `127.0.0.1:3127` 的生产服务并在结束后关闭，因此运行测试前必须先构建。不会写入默认 `data/`。
+
+直接运行 `npm test` 会先构建，干净目录可直接验收；`test:coverage` 仍供已有构建或 CI 分步运行。涉及 AI 配置的自动化测试使用独立临时 AI_KEY_FILE，结束后清理，不使用真实主密钥。已有 `.private-secrets/` 仍必须私有；复制整个项目时应单独排除它，不可仅凭文件年龄删除可能仍被 key-reference 引用的旧密钥。
 
 ## 实施范围
 

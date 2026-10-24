@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { DatabaseSync } from "node:sqlite";
 import { coreSchema } from "../src/lib/schema";
-import { mkdtempSync, readdirSync } from "node:fs";
+import { mkdtempSync, readdirSync, readFileSync } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { spawnSync } from "node:child_process";
@@ -11,6 +11,56 @@ import {
   migrateDatabase,
   migrations,
 } from "../src/lib/migrations";
+
+test("v3 中间态升级至当前版本，原记录不变且只触发一次升级快照", () => {
+  const fixture = JSON.parse(
+    readFileSync("tests/fixtures/backup-v1.json", "utf8"),
+  );
+  const db = new DatabaseSync(":memory:");
+  try {
+    migrateDatabase(db, { steps: migrations.slice(0, 3) });
+    db.prepare("INSERT INTO users VALUES(?,?,?,?)").run(
+      fixture.profile.id,
+      "v3-fixture",
+      "hash",
+      JSON.stringify(fixture.profile.settings),
+    );
+    for (const row of fixture.entries) {
+      const keys = Object.keys(row);
+      db.prepare(
+        `INSERT INTO entries(${keys.join(",")}) VALUES(${keys.map(() => "?").join(",")})`,
+      ).run(...(Object.values(row) as (string | number | null)[]));
+    }
+    const before = db.prepare("SELECT * FROM entries ORDER BY id").all();
+    let snapshots = 0;
+    const beforeUpgrade = () => {
+      snapshots++;
+      assert.equal(db.prepare("PRAGMA user_version").get()!.user_version, 3);
+    };
+    migrateDatabase(db, { beforeUpgrade });
+    migrateDatabase(db, { beforeUpgrade });
+    assert.equal(snapshots, 1);
+    assert.equal(
+      db.prepare("PRAGMA user_version").get()!.user_version,
+      DATABASE_VERSION,
+    );
+    assert.deepEqual(
+      db.prepare("SELECT * FROM entries ORDER BY id").all(),
+      before,
+    );
+    assert.equal(
+      db.prepare("SELECT count(*) n FROM entry_search").get()!.n,
+      before.length,
+    );
+    assert(
+      db
+        .prepare("SELECT document FROM entry_search WHERE entry_id=?")
+        .get(fixture.entries[0].id),
+    );
+  } finally {
+    db.close();
+  }
+});
 
 test("新库统一初始化全部表；重复启动保持迁移记录不变", () => {
   const db = new DatabaseSync(":memory:");

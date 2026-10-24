@@ -1,3 +1,4 @@
+import "./ai-test-key";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { mkdtempSync, writeFileSync, unlinkSync, readFileSync } from "node:fs";

@@ -102,6 +102,11 @@ test("客户端与服务端共享 50k 契约，确定失败可编辑，未知结
   assert.ok(submissionWasRejected({ status: 409, code: "VERSION_CONFLICT" }));
   for (const status of [0, 200, 401, 403, 500, 502, 503])
     assert.equal(submissionWasRejected({ status }), false);
+  // A different body already owns this key: keep the original pending request.
+  assert.equal(
+    submissionWasRejected({ status: 409, code: "IDEMPOTENCY_CONFLICT" }),
+    false,
+  );
 });
 
 test("旧版超长答案与失败 pending 不丢失，反复刷新仍能完整恢复并缩短", () => {

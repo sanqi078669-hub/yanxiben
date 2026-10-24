@@ -25,6 +25,22 @@ npm run audit:production
 
 ## 提交前检查
 
+### Windows 仓库归属提示
+
+若个人终端的 `git status` 提示 dubious ownership，先核对当前账号和目录来源。此工作区最初由 CodexSandboxOffline 创建，因此不同 Windows 账号可能触发 Git 的保护。当前代理身份下可直接使用 Git，并不代表其他用户已配置好。
+
+在确认此目录是自己的项目后，可对每条 Git 命令使用一次性、仅此目录的信任参数（不修改全局设置）：
+
+```powershell
+$repoPath = 'C:/Users/24505/Desktop/Mistake notebook'
+git -c "safe.directory=$repoPath" status
+git -c "safe.directory=$repoPath" log --oneline
+git -c "safe.directory=$repoPath" diff
+# add、commit 等写命令也使用同样的 -c 参数。
+```
+
+用户也可在自己的终端决定是否持久信任此目录；尚未代为修改用户级配置或 ACL。不要设置 `safe.directory=*`。归属错误与源码损坏不是一回事。
+
 - 提交源代码、文档和 `package-lock.json`，不提交依赖目录或构建产物。
 - 不提交数据库、附件、备份、登录文件、环境密钥、AI 私有配置或包含这些内容的截图。
 - 自定义 `DATA_DIR` 若放在项目内，须确保被忽略；`.gitignore` 不能保护已被跟踪的文件。

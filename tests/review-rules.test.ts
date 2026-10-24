@@ -1,3 +1,4 @@
+import "./ai-test-key";
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { mkdtempSync } from "node:fs";
@@ -109,6 +110,32 @@ test("未加入计划时的提示保留到第一次复习，完成后不误伤�
   assert.ok(
     attempt(owner, review.id, { ...body, expectedVersion: 2 }, "later-round"),
   );
+});
+
+test("版本 0 提示跨暂停恢复保留到首次提交，旧非零版本不命中新版", () => {
+  for (const early of [true, false]) {
+    const { owner, entry } = setup();
+    if (early) recordEntryHint(owner, entry.id, 0);
+    const review = addReview(owner, entry.id);
+    if (!early) recordEntryHint(owner, entry.id, 1);
+    run("UPDATE reviews SET stage='PAUSED',version=2 WHERE id=?", review.id);
+    run("UPDATE reviews SET stage='NEW',version=3 WHERE id=?", review.id);
+    assert.equal(serverHintUsed(owner, entry.id, 3), early);
+    const submission = { ...body, expectedVersion: 3 };
+    if (early)
+      assert.throws(
+        () => attempt(owner, review.id, submission, "early-pause"),
+        /提示/,
+      );
+    attempt(
+      owner,
+      review.id,
+      { ...submission, rating: early ? "GOOD" : "EASY" },
+      "pause-resume",
+    );
+    assert.equal(serverHintUsed(owner, entry.id, 3), false);
+    assert(attempt(owner, review.id, submission, "after-success").attemptId);
+  }
 });
 
 test("AI 提示绑定本人记录，成功才记使用；失败及跨归属不会写入", async () => {

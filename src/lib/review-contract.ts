@@ -28,7 +28,6 @@ export function submissionWasRejected(error: unknown) {
         "ALREADY_REVIEWED_TODAY",
         "PAUSED",
         "NOT_DUE",
-        "IDEMPOTENCY_CONFLICT",
       ].includes(code || ""))
   );
 }
