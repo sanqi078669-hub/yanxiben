@@ -20,6 +20,7 @@ import {
   readableFeedback,
 } from "./contracts";
 import { complete } from "./provider";
+import { withImageProcessing } from "../images/processing";
 
 const running = new Set<string>();
 const recent = new Map<string, number[]>();
@@ -140,30 +141,31 @@ export async function extract(
     })
     .strict()
     .parse(raw);
-  const images: string[] = [];
-  for (const id of [...new Set(input.attachmentIds)]) {
-    const attachment = one(
-      "SELECT * FROM attachments WHERE id=? AND owner=?",
-      id,
-      owner,
-    );
-    assert(attachment, 404, "RESOURCE_NOT_FOUND", "图片不存在或无权访问");
-    const bytes = await sharp(
-      readFileSync(path.join(dataDir, "attachments", id)),
-      { limitInputPixels: 40000000 },
-    )
-      .resize({
-        width: 1600,
-        height: 1600,
-        fit: "inside",
-        withoutEnlargement: true,
-      })
-      .png()
-      .toBuffer();
-    images.push("data:image/png;base64," + bytes.toString("base64"));
-  }
-  return limited(owner, () =>
-    complete(
+  return limited(owner, async () => {
+    const images: string[] = [];
+    for (const id of [...new Set(input.attachmentIds)]) {
+      const attachment = one(
+        "SELECT * FROM attachments WHERE id=? AND owner=?",
+        id,
+        owner,
+      );
+      assert(attachment, 404, "RESOURCE_NOT_FOUND", "图片不存在或无权访问");
+      const bytes = await withImageProcessing(() =>
+        sharp(readFileSync(path.join(dataDir, "attachments", id)), {
+          limitInputPixels: 40000000,
+        })
+          .resize({
+            width: 1600,
+            height: 1600,
+            fit: "inside",
+            withoutEnlargement: true,
+          })
+          .png()
+          .toBuffer(),
+      );
+      images.push("data:image/png;base64," + bytes.toString("base64"));
+    }
+    return complete(
       "识别图片中的题目，不解答。逐字保留题干、公式（使用 $ LaTeX $）和选项。多道题请提示分开上传。输出 {type:MATH|CS|VOCABULARY|SENTENCE,subject:高等数学|数据结构|计算机组成原理|操作系统|计算机网络|英语,title:string,body:string,options:string[],warnings:string[]}。无法辨认的字符写[无法辨认]并在 warnings 说明，不得猜测。",
       {},
       extractionSchema,
@@ -171,6 +173,6 @@ export async function extract(
       transport,
       owner,
       input.target,
-    ),
-  );
+    );
+  });
 }

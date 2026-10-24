@@ -1,4 +1,5 @@
 import sharp from "sharp";
+import { withImageProcessing } from "../../images/processing";
 import { z } from "zod";
 import { assert } from "../../entries/service";
 import { publicConfig, saveConfig } from "../../ai/config";
@@ -42,28 +43,30 @@ export async function aiHandler(context: ApiContext) {
       .strict()
       .parse(await json());
     if (body.vision) {
-      const png = await sharp({
-        create: {
-          width: 48,
-          height: 48,
-          channels: 3,
-          background: { r: 0, g: 0, b: 255 },
-        },
-      })
-        .png()
-        .toBuffer();
       return ok(
         await audited(owner, "图片能力测试", () =>
-          limited(owner, () =>
-            complete(
+          limited(owner, async () => {
+            const png = await withImageProcessing(() =>
+              sharp({
+                create: {
+                  width: 48,
+                  height: 48,
+                  channels: 3,
+                  background: { r: 0, g: 0, b: 255 },
+                },
+              })
+                .png()
+                .toBuffer(),
+            );
+            return complete(
               '判断图片主色，只返回 {"color":"蓝色"}，若不是蓝色请返回实际颜色。',
               "固定测试色块，不含个人材料",
               z.object({ color: z.literal("蓝色") }),
               ["data:image/png;base64," + png.toString("base64")],
               fetch,
               owner,
-            ),
-          ),
+            );
+          }),
         ),
       );
     }

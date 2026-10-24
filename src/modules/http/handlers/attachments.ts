@@ -10,56 +10,61 @@ import { readImageForm } from "../body";
 import type { ApiContext } from "../context";
 import { ATTACHMENT_MAX_BYTES } from "../../../lib/capacity";
 import { checkAttachmentCapacity } from "../../data-management/capacity";
+import { withImageProcessing, withUpload } from "../../images/processing";
 export async function attachmentsHandler(context: ApiContext) {
   const { req, p, parts, method, owner, ok } = context;
   if (p === "attachments" && method === "POST") {
-    const form = await readImageForm(req);
-    const f = form.get("file");
-    assert(f instanceof File, 400, "VALIDATION_ERROR", "请选择图片");
-    assert(
-      f.size > 0 && f.size <= ATTACHMENT_MAX_BYTES,
-      413,
-      "FILE_TOO_LARGE",
-      "图片最大 10 MB",
-    );
-    const bytes = Buffer.from(await f.arrayBuffer());
-    let meta;
-    try {
-      meta = await sharp(bytes, { limitInputPixels: 40000000 }).metadata();
-    } catch {
-      throw new AppError(
-        415,
-        "UNSUPPORTED_MEDIA",
-        "无法读取图片，仅支持 PNG、JPEG、WebP",
+    return withUpload(owner, async () => {
+      const form = await readImageForm(req);
+      const f = form.get("file");
+      assert(f instanceof File, 400, "VALIDATION_ERROR", "请选择图片");
+      assert(
+        f.size > 0 && f.size <= ATTACHMENT_MAX_BYTES,
+        413,
+        "FILE_TOO_LARGE",
+        "图片最大 10 MB",
       );
-    }
-    assert(
-      ["jpeg", "png", "webp"].includes(meta.format || ""),
-      415,
-      "UNSUPPORTED_MEDIA",
-      "仅支持 PNG、JPEG、WebP",
-    );
-    const cleaned = await sharp(bytes, { limitInputPixels: 40000000 })
-      .rotate()
-      .toBuffer();
-    checkAttachmentCapacity(cleaned.length);
-    const id = randomUUID(),
-      mime = "image/" + (meta.format === "jpeg" ? "jpeg" : meta.format);
-    writeFileSync(path.join(dataDir, "attachments", id), cleaned, {
-      flag: "wx",
-      mode: 0o600,
+      return withImageProcessing(async () => {
+        const bytes = Buffer.from(await f.arrayBuffer());
+        let meta;
+        try {
+          meta = await sharp(bytes, { limitInputPixels: 40000000 }).metadata();
+        } catch {
+          throw new AppError(
+            415,
+            "UNSUPPORTED_MEDIA",
+            "无法读取图片，仅支持 PNG、JPEG、WebP",
+          );
+        }
+        assert(
+          ["jpeg", "png", "webp"].includes(meta.format || ""),
+          415,
+          "UNSUPPORTED_MEDIA",
+          "仅支持 PNG、JPEG、WebP",
+        );
+        const cleaned = await sharp(bytes, { limitInputPixels: 40000000 })
+          .rotate()
+          .toBuffer();
+        checkAttachmentCapacity(cleaned.length);
+        const id = randomUUID(),
+          mime = "image/" + (meta.format === "jpeg" ? "jpeg" : meta.format);
+        writeFileSync(path.join(dataDir, "attachments", id), cleaned, {
+          flag: "wx",
+          mode: 0o600,
+        });
+        run(
+          "INSERT INTO attachments VALUES(?,?,?,?,?,?,?)",
+          id,
+          owner,
+          f.name.slice(0, 200),
+          mime,
+          cleaned.length,
+          createHash("sha256").update(cleaned).digest("hex"),
+          new Date().toISOString(),
+        );
+        return ok({ id, name: f.name, mime, status: "READY" });
+      });
     });
-    run(
-      "INSERT INTO attachments VALUES(?,?,?,?,?,?,?)",
-      id,
-      owner,
-      f.name.slice(0, 200),
-      mime,
-      cleaned.length,
-      createHash("sha256").update(cleaned).digest("hex"),
-      new Date().toISOString(),
-    );
-    return ok({ id, name: f.name, mime, status: "READY" });
   }
   if (
     parts[0] === "attachments" &&
