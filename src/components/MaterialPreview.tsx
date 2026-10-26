@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element -- Private attachments require the browser's session cookie, which the public image optimizer does not forward. */
 import { fields, names } from "../lib/model";
+import { DictionaryLabel } from "./DictionaryContext";
 import { parseOptions } from "./OptionsEditor";
 
 const labels: Record<string, string> = {
@@ -147,15 +148,37 @@ function display(key: string, value: unknown): React.ReactNode {
 }
 export function MaterialPreview({
   material,
+  resolveLabels = false,
 }: {
   material: Record<string, unknown>;
+  resolveLabels?: boolean;
 }) {
   return (
     <dl className="material-preview">
       {Object.entries(material).map(([key, value]) => (
         <div key={key}>
           <dt>{labels[key] || key}</dt>
-          <dd>{display(key, value)}</dd>
+          <dd>
+            {resolveLabels &&
+            key === "subject" &&
+            typeof value === "string" &&
+            value ? (
+              <DictionaryLabel kind="SUBJECT" value={value} markArchived />
+            ) : resolveLabels &&
+              key === "errors" &&
+              Array.isArray(value) &&
+              value.length ? (
+              <ul>
+                {value.map((item: string) => (
+                  <li key={item}>
+                    <DictionaryLabel kind="ERROR" value={item} markArchived />
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              display(key, value)
+            )}
+          </dd>
         </div>
       ))}
     </dl>

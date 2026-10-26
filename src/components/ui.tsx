@@ -1,4 +1,5 @@
 "use client";
+import { DictionaryLabel } from "./DictionaryContext";
 import Link from "next/link";
 import { BookOpen, ArrowUpRight } from "lucide-react";
 import { rememberLibraryPosition } from "./libraryPosition";
@@ -64,7 +65,7 @@ export function Row({
       >
         <h3>{e.title || e.body.slice(0, 45) || "图片记录"}</h3>
         <p>
-          {e.subject}
+          <DictionaryLabel kind="SUBJECT" value={e.subject} />
           <span>·</span>
           {e.source || names[e.type]}
           <span>·</span>

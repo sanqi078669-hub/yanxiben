@@ -116,4 +116,13 @@ test("草稿按账号记录隔离，拒绝过期、未来及损坏内容，保�
   );
   assert.equal(readDraft(JSON.stringify(value), owner, "new", now - 1), null);
   assert.equal(readDraft("bad", owner, "new", now), null);
+  assert.equal(
+    readDraft(
+      JSON.stringify({ ...value, entry: { ...value.entry, subject: "" } }),
+      owner,
+      "new",
+      now,
+    )?.entry.body,
+    "未保存题目",
+  );
 });

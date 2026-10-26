@@ -1,4 +1,5 @@
 "use client";
+import { DictionaryLabel } from "./DictionaryContext";
 import Link from "next/link";
 
 import {
@@ -225,7 +226,8 @@ export default function LibraryPage({
                 <div className="entry-main">
                   <h3>{e.title || "未命名记录"}</h3>
                   <p>
-                    {e.subject} · 删除于 {e.deleted_at?.slice(0, 10)}
+                    <DictionaryLabel kind="SUBJECT" value={e.subject} /> ·
+                    删除于 {e.deleted_at?.slice(0, 10)}
                   </p>
                 </div>
                 <button

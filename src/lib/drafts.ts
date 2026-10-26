@@ -7,7 +7,10 @@ export const draftSchema = z.object({
   record: z.string(),
   updated: z.number(),
   version: z.number().int().min(0),
-  entry: entrySchema.extend({ tags: z.array(z.string().max(50)).max(30) }),
+  entry: entrySchema.extend({
+    subject: entrySchema.shape.subject.or(z.literal("")),
+    tags: z.array(z.string().max(50)).max(30),
+  }),
 });
 export type Draft = z.infer<typeof draftSchema>;
 export function readDraft(

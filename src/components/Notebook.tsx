@@ -47,6 +47,7 @@ import {
 import { clearBrowserDrafts } from "../lib/drafts";
 
 import { defaults } from "../lib/model";
+import { DictionaryProvider } from "./DictionaryContext";
 export default function Notebook() {
   const queryParams = useSearchParams();
   const pathname = usePathname(),
@@ -211,48 +212,51 @@ export default function Notebook() {
             </Link>
           </div>
         </header>
-        <main key={pathname} id="main-content" tabIndex={-1}>
-          {pathname === "/" ||
-          pathname === "/today" ||
-          pathname === "/login" ? (
-            <Today profile={profile} />
-          ) : pathname === "/inbox" ||
-            pathname === "/library" ||
-            pathname === "/trash" ? (
-            <LibraryPage mode={pathname.slice(1)} notify={notify} />
-          ) : pathname === "/entries/new" ? (
-            <Editor />
-          ) : pathname.startsWith("/entries/") && pathname.endsWith("/edit") ? (
-            <Editor id={pathname.split("/")[2]} />
-          ) : pathname.startsWith("/entries/") ? (
-            <Detail id={pathname.split("/")[2]} notify={notify} />
-          ) : pathname === "/review" ? (
-            <ReviewPage
-              key={queryParams.get("practice") || "scheduled"}
-              notify={notify}
-            />
-          ) : pathname.startsWith("/knowledge") ? (
-            <KnowledgePage notify={notify} timezone={profile.timezone} />
-          ) : pathname === "/settings" ? (
-            <>
-              <nav className="mobile-secondary-nav" aria-label="更多学习入口">
-                <Link className="button outline" href="/knowledge">
-                  知识地图
-                </Link>
-                <Link className="button outline" href="/trash">
-                  回收站
-                </Link>
-              </nav>
-              <SettingsPage
-                profile={profile}
-                onSave={setProfile}
+        <DictionaryProvider>
+          <main key={pathname} id="main-content" tabIndex={-1}>
+            {pathname === "/" ||
+            pathname === "/today" ||
+            pathname === "/login" ? (
+              <Today profile={profile} />
+            ) : pathname === "/inbox" ||
+              pathname === "/library" ||
+              pathname === "/trash" ? (
+              <LibraryPage mode={pathname.slice(1)} notify={notify} />
+            ) : pathname === "/entries/new" ? (
+              <Editor />
+            ) : pathname.startsWith("/entries/") &&
+              pathname.endsWith("/edit") ? (
+              <Editor id={pathname.split("/")[2]} />
+            ) : pathname.startsWith("/entries/") ? (
+              <Detail id={pathname.split("/")[2]} notify={notify} />
+            ) : pathname === "/review" ? (
+              <ReviewPage
+                key={queryParams.get("practice") || "scheduled"}
                 notify={notify}
               />
-            </>
-          ) : (
-            <Empty title="没有找到这个页面" />
-          )}
-        </main>
+            ) : pathname.startsWith("/knowledge") ? (
+              <KnowledgePage notify={notify} timezone={profile.timezone} />
+            ) : pathname === "/settings" ? (
+              <>
+                <nav className="mobile-secondary-nav" aria-label="更多学习入口">
+                  <Link className="button outline" href="/knowledge">
+                    知识地图
+                  </Link>
+                  <Link className="button outline" href="/trash">
+                    回收站
+                  </Link>
+                </nav>
+                <SettingsPage
+                  profile={profile}
+                  onSave={setProfile}
+                  notify={notify}
+                />
+              </>
+            ) : (
+              <Empty title="没有找到这个页面" />
+            )}
+          </main>
+        </DictionaryProvider>
         <footer>
           研习本 <span>·</span> 让错误成为下一次的答案。
         </footer>

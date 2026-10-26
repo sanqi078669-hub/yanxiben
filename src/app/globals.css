@@ -1991,6 +1991,70 @@ footer span {
   overflow: auto;
   font-size: 12px;
 }
+/* Dictionary controls keep their targets usable in both editor and settings. */
+.dictionary-manager {
+  margin-bottom: 24px;
+}
+.dictionary-groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+.dictionary-group {
+  min-width: 0;
+}
+.dictionary-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.dictionary-name {
+  flex: 1 1 140px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.dictionary-actions,
+.dictionary-inline,
+.dictionary-rename {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.dictionary-actions button,
+.dictionary-create button,
+.dictionary-rename button {
+  min-height: 32px;
+  min-width: 32px;
+}
+.dictionary-create {
+  margin: 12px 0;
+}
+.dictionary-inline input,
+.dictionary-rename label {
+  flex: 1 1 160px;
+  min-width: 0;
+}
+.dictionary-rename {
+  width: 100%;
+}
+.dictionary-archived {
+  margin-top: 16px;
+}
+.dictionary-archived summary {
+  min-height: 32px;
+  padding: 6px 0;
+  cursor: pointer;
+}
+@media (max-width: 900px) {
+  .dictionary-groups {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 /* Structured learning inputs and readable outgoing material. */
 .options-editor {
   border: 1px solid var(--line, #ddd);
@@ -2025,7 +2089,6 @@ footer span {
   font: inherit;
 }
 .editor-fields[data-capture-step="0"] .capture-analysis,
-.editor-fields[data-capture-step="0"] .editor-side,
 .editor-fields[data-capture-step="1"] .capture-material,
 .editor-fields[data-capture-step="2"] {
   display: none;

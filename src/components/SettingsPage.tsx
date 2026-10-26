@@ -1,4 +1,5 @@
 "use client";
+import DictionaryManager from "./DictionaryManager";
 import { AiPrices } from "./AiPrices";
 import { AiBudget } from "./AiBudget";
 import { RestoreWizard } from "./RestoreWizard";
@@ -116,6 +117,7 @@ export default function SettingsPage({
           MiB；学习 ZIP 200 MiB；解压 500 MiB。
         </p>
       )}
+      <DictionaryManager />
       <AiSettings />
       <AiPrices />
       <AiBudget />

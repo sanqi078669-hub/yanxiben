@@ -1,4 +1,5 @@
 "use client";
+import { DictionaryLabel } from "./DictionaryContext";
 import "katex/dist/katex.min.css";
 import { useEffect, useState, useRef, useCallback } from "react";
 import Link from "next/link";
@@ -621,7 +622,7 @@ export default function ReviewPage({
                               )
                             }
                           />
-                          {cause}
+                          <DictionaryLabel kind="ERROR" value={cause} />
                         </label>
                       ))}
                     </>

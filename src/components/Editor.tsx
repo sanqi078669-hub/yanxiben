@@ -30,8 +30,6 @@ import { useEntryDraft } from "./useEntryDraft";
 import {
   names,
   types,
-  subjects,
-  errors,
   fields,
   type Entry,
   type EntryInput,
@@ -41,11 +39,13 @@ import { MD } from "./Markdown";
 import { TypeIcon, Badge, ErrorBox } from "./ui";
 import { useLoad } from "./useLoad";
 import type { EntryList } from "../lib/api-types";
+import { useDictionary } from "./DictionaryContext";
+import { DictionaryCreate } from "./DictionaryCreate";
 type Any = Record<string, any>;
 const blank = (type: EntryInput["type"]): EntryInput => ({
   type,
   title: "",
-  subject: type === "MATH" ? "高等数学" : type === "CS" ? "数据结构" : "英语",
+  subject: "",
   body: "",
   source: "",
   summary: "",
@@ -58,6 +58,13 @@ const blank = (type: EntryInput["type"]): EntryInput => ({
   attachments: [],
 });
 export default function Editor({ id }: { id?: string }) {
+  const {
+    items,
+    label,
+    loading: dictionaryLoading,
+    error: dictionaryError,
+    reload: reloadDictionary,
+  } = useDictionary();
   const [captureStep, setCaptureStep] = useState(0);
   const [restoredDraft, setRestoredDraft] = useState(false);
   const router = useRouter(),
@@ -141,6 +148,10 @@ export default function Editor({ id }: { id?: string }) {
         pendingDrafts.length
       )
         return false;
+      if (!latest.current.subject.trim()) {
+        setError("请先选择或新建科目，再保存记录。");
+        return false;
+      }
       saving.current = true;
       setBusy(true);
       setError("");
@@ -317,7 +328,11 @@ export default function Editor({ id }: { id?: string }) {
           <button
             className="button"
             disabled={
-              busy || uploading || !!conflict || draft.pending.length > 0
+              busy ||
+              uploading ||
+              !!conflict ||
+              draft.pending.length > 0 ||
+              !e.subject.trim()
             }
             onClick={() =>
               !id && captureStep !== 2 ? setCaptureStep(2) : save(true)
@@ -332,6 +347,20 @@ export default function Editor({ id }: { id?: string }) {
           </button>
         </div>
       </div>
+      {!e.subject.trim() && (
+        <p className="tip" role="status">
+          请先选择或新建科目，再保存记录。
+          {!id && captureStep === 2 && (
+            <button
+              type="button"
+              className="button outline small"
+              onClick={() => setCaptureStep(1)}
+            >
+              返回选择科目
+            </button>
+          )}
+        </p>
+      )}
       <ErrorBox text={error} id="editor-error" />
       {draft.message && (
         <p role="status">{draft.message} 主动退出登录会清除本浏览器草稿。</p>
@@ -353,9 +382,9 @@ export default function Editor({ id }: { id?: string }) {
           <details>
             <summary>比较草稿与当前内容</summary>
             <h3>未提交草稿</h3>
-            <MaterialPreview material={item.entry} />
+            <MaterialPreview material={item.entry} resolveLabels />
             <h3>当前内容</h3>
-            <MaterialPreview material={e} />
+            <MaterialPreview material={e} resolveLabels />
           </details>
           <button
             className="button"
@@ -382,11 +411,11 @@ export default function Editor({ id }: { id?: string }) {
           <div className="comparison">
             <div>
               <h4>我的输入</h4>
-              <MaterialPreview material={e} />
+              <MaterialPreview material={e} resolveLabels />
             </div>
             <div>
               <h4>服务器内容</h4>
-              <MaterialPreview material={conflict} />
+              <MaterialPreview material={conflict} resolveLabels />
             </div>
           </div>
           <button
@@ -417,8 +446,14 @@ export default function Editor({ id }: { id?: string }) {
         </section>
       )}
       {!id && (
-        <section className="panel form-panel capture-steps" aria-label="录入步骤">
-          <nav className="ai-actions capture-step-nav" aria-label="选择录入步骤">
+        <section
+          className="panel form-panel capture-steps"
+          aria-label="录入步骤"
+        >
+          <nav
+            className="ai-actions capture-step-nav"
+            aria-label="选择录入步骤"
+          >
             {["1 · 录入材料", "2 · 整理分析（可跳过）", "3 · 核对保存"].map(
               (name, i) => (
                 <button
@@ -449,7 +484,7 @@ export default function Editor({ id }: { id?: string }) {
               下一步
             </button>
           )}
-          {captureStep === 2 && <MaterialPreview material={e} />}
+          {captureStep === 2 && <MaterialPreview material={e} resolveLabels />}
         </section>
       )}
       <fieldset
@@ -486,7 +521,7 @@ export default function Editor({ id }: { id?: string }) {
                       !confirm("切换模板将清空当前未保存内容，继续吗？")
                     )
                       return;
-                    setE(blank(t));
+                    setE({ ...blank(t), subject: e.subject });
                   }}
                 >
                   <TypeIcon type={t} />
@@ -763,16 +798,57 @@ export default function Editor({ id }: { id?: string }) {
                   change({ subject: v.target.value, knowledgeIds: [] })
                 }
               >
-                {(e.type === "MATH"
-                  ? ["高等数学"]
-                  : e.type === "CS"
-                    ? subjects.slice(1, 5)
-                    : ["英语"]
-                ).map((s) => (
-                  <option key={s}>{s}</option>
-                ))}
+                <option value="">
+                  {dictionaryLoading
+                    ? "正在读取科目…"
+                    : items.subjects.some((item) => !item.archived)
+                      ? "请选择科目"
+                      : "先新建科目"}
+                </option>
+                {e.subject &&
+                  !items.subjects.some(
+                    (item) => item.value === e.subject && !item.archived,
+                  ) && (
+                    <option value={e.subject}>
+                      {label("SUBJECT", e.subject)}
+                      {items.subjects.some((item) => item.value === e.subject)
+                        ? "（已归档）"
+                        : "（不在字典中）"}
+                    </option>
+                  )}
+                {items.subjects
+                  .filter((item) => !item.archived)
+                  .map((item) => (
+                    <option key={item.value} value={item.value}>
+                      {item.label}
+                    </option>
+                  ))}
               </select>
             </label>
+            <ErrorBox text={dictionaryError} />
+            {dictionaryError && (
+              <button
+                type="button"
+                className="button outline small"
+                onClick={() => void reloadDictionary().catch(() => {})}
+              >
+                重试读取分类
+              </button>
+            )}
+            {!dictionaryLoading &&
+              !items.subjects.some((item) => !item.archived) && (
+                <p className="muted">先新建科目，再为记录归类。</p>
+              )}
+            <DictionaryCreate
+              kind="SUBJECT"
+              expanded={
+                !dictionaryLoading &&
+                !items.subjects.some((item) => !item.archived)
+              }
+              onCreated={(item) =>
+                change({ subject: item.value, knowledgeIds: [] })
+              }
+            />
             <label>
               整理状态
               <select
@@ -819,7 +895,14 @@ export default function Editor({ id }: { id?: string }) {
             </div>
             <label>错因（可多选）</label>
             <div className="chip-list">
-              {errors.map((v) => (
+              {[
+                ...new Set([
+                  ...items.errors
+                    .filter((item) => !item.archived)
+                    .map((item) => item.value),
+                  ...e.errors,
+                ]),
+              ].map((v) => (
                 <button
                   key={v}
                   className={e.errors.includes(v) ? "chosen" : ""}
@@ -832,10 +915,23 @@ export default function Editor({ id }: { id?: string }) {
                     })
                   }
                 >
-                  {v}
+                  {label("ERROR", v)}
+                  {items.errors.some(
+                    (item) => item.value === v && item.archived,
+                  )
+                    ? "（已归档）"
+                    : !items.errors.some((item) => item.value === v)
+                      ? "（不在字典中）"
+                      : ""}
                 </button>
               ))}
             </div>
+            <DictionaryCreate
+              kind="ERROR"
+              onCreated={(item) =>
+                change({ errors: [...new Set([...e.errors, item.value])] })
+              }
+            />
             <label>
               标签
               <input

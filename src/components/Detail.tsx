@@ -20,6 +20,7 @@ import {
 } from "./EntryContent";
 import { TypeIcon, Badge, Empty, ErrorBox } from "./ui";
 import { useLoad } from "./useLoad";
+import { DictionaryLabel } from "./DictionaryContext";
 type Any = Record<string, any>;
 export default function Detail({
   id,
@@ -70,8 +71,9 @@ export default function Detail({
             <h1>{e.title || e.body.slice(0, 45) || "图片记录"}</h1>
           </div>
           <p>
-            {e.subject} · {e.status === "INBOX" ? "待整理" : "已整理"} · 第{" "}
-            {e.version} 版 · {e.source || "未注明来源"}
+            <DictionaryLabel kind="SUBJECT" value={e.subject} markArchived /> ·{" "}
+            {e.status === "INBOX" ? "待整理" : "已整理"} · 第 {e.version} 版 ·{" "}
+            {e.source || "未注明来源"}
           </p>
         </div>
         <Link className="button" href={"/entries/" + id + "/edit"}>
@@ -320,7 +322,9 @@ export default function Detail({
               <Badge key={t}>#{t}</Badge>
             ))}
             {e.errors.map((t: string) => (
-              <Badge key={t}>{t}</Badge>
+              <Badge key={t}>
+                <DictionaryLabel kind="ERROR" value={t} markArchived />
+              </Badge>
             ))}
           </div>
           <button
