@@ -142,7 +142,7 @@ function archive(data: Record<string, any>, bytes: Uint8Array = image) {
     ...files,
     "manifest.json": strToU8(
       JSON.stringify({
-        schemaVersion: 1,
+        schemaVersion: 4,
         counts: Object.fromEntries(
           Object.keys(backupRowSchemas).map((t) => [t, data[t].length]),
         ),

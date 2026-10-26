@@ -5,6 +5,7 @@ import { entrySchema, settingsSchema, fields, errors } from "../../lib/model";
 import { AppError } from "../entries/service";
 import { costSchema } from "../ai/pricing";
 import { ATTACHMENT_MAX_BYTES } from "../../lib/capacity";
+import { normalize } from "../dictionaries/normalize";
 
 const id = z.string().uuid();
 const integer = z.number().int().nonnegative();
@@ -176,6 +177,29 @@ const result = z
   })
   .strict();
 export const backupRowSchemas = {
+  dictionary_items: z
+    .object({
+      owner: id,
+      kind: z.enum(["TYPE", "SUBJECT", "ERROR"]),
+      value: z.string().min(1).max(200),
+      label: z.string().min(1).max(200),
+      normalized_name: z.string().min(1).max(200),
+      template: z.enum(["GENERIC", "MATH", "CS", "VOCABULARY", "SENTENCE"]),
+      sort_order: z.number().int(),
+      archived: z.union([z.literal(0), z.literal(1)]),
+      version,
+      created_at: z.string(),
+      updated_at: z.string(),
+    })
+    .strict()
+    .refine(
+      (row) => row.normalized_name === normalize(row.label),
+      "字典名称规范化不匹配",
+    )
+    .refine(
+      (row) => row.template === "GENERIC" || row.kind === "TYPE",
+      "只有类型可使用专用模板",
+    ),
   entry_hint_usage: z
     .object({ owner: id, entry_id: id, review_version: integer, used_at: time })
     .strict(),
@@ -297,11 +321,13 @@ export async function validateBackupData(
         );
       const v = row.data as any;
       const key =
-        table === "entry_hint_usage"
-          ? JSON.stringify([v.entry_id, v.review_version])
-          : table === "idempotency"
-            ? JSON.stringify([v.scope, v.key])
-            : v.id;
+        table === "dictionary_items"
+          ? JSON.stringify([v.kind, v.value])
+          : table === "entry_hint_usage"
+            ? JSON.stringify([v.entry_id, v.review_version])
+            : table === "idempotency"
+              ? JSON.stringify([v.scope, v.key])
+              : v.id;
       if (v.owner !== owner || seen.has(key))
         invalid(`${table}[${index}] owner/id`);
       seen.add(key);
@@ -323,6 +349,11 @@ export async function validateBackupData(
     }
   };
   unique(parsed.reviews, (row) => row.entry_id, "reviews unique entry");
+  unique(
+    parsed.dictionary_items.filter((row) => row.archived === 0),
+    (row) => JSON.stringify([row.kind, row.normalized_name]),
+    "dictionary_items active name",
+  );
   unique(
     parsed.relations,
     (row) => JSON.stringify([row.from_id, row.to_id, row.type]),

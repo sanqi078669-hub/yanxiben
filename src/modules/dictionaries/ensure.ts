@@ -1,4 +1,4 @@
-import { run } from "../../lib/db";
+import { all, run } from "../../lib/db";
 import { normalize } from "./normalize";
 import type { DictionaryKind } from "./service";
 
@@ -56,4 +56,56 @@ export function ensureEntry(
   ensure(owner, "SUBJECT", entry.subject, active);
   for (const error of new Set(entry.errors))
     ensure(owner, "ERROR", error, active);
+}
+
+/** Restore-time catch-up. Caller owns the transaction; imported rows win.
+ * Active references precede history so normalization collisions keep an active
+ * reference first, then the binary-smallest key, matching the v13 policy. */
+export function ensureReferenced(owner: string) {
+  const references = all(
+    `WITH
+    entry_sources(payload,active) AS (
+      SELECT payload,deleted_at IS NULL FROM entries WHERE owner=?
+      UNION ALL SELECT snapshot,0 FROM revisions WHERE owner=?
+      UNION ALL SELECT json_extract(r.value,'$.payload'),0
+        FROM knowledge_merges m,json_each(m.payload,'$.before.records') r WHERE m.owner=?
+      UNION ALL SELECT json_extract(r.value,'$.payload'),0
+        FROM knowledge_merges m,json_each(m.payload,'$.after.records') r WHERE m.owner=?
+    ),
+    knowledge_sources(node) AS (
+      SELECT json_extract(payload,'$.before.source') FROM knowledge_merges WHERE owner=?
+      UNION ALL SELECT json_extract(payload,'$.before.target') FROM knowledge_merges WHERE owner=?
+      UNION ALL SELECT n.value FROM knowledge_merges m,json_each(m.payload,'$.before.children') n WHERE m.owner=?
+      UNION ALL SELECT n.value FROM knowledge_merges m,json_each(m.payload,'$.after.nodes') n WHERE m.owner=?
+    ),
+    refs(kind,value,active) AS (
+      SELECT 'TYPE',json_extract(payload,'$.type'),active FROM entry_sources WHERE json_type(payload,'$.type')='text'
+      UNION ALL SELECT 'SUBJECT',json_extract(payload,'$.subject'),active FROM entry_sources WHERE json_type(payload,'$.subject')='text'
+      UNION ALL SELECT 'ERROR',j.value,e.active FROM entry_sources e,json_each(e.payload,'$.errors') j WHERE j.type='text'
+      UNION ALL SELECT 'SUBJECT',subject,archived=0 FROM knowledge WHERE owner=?
+      UNION ALL SELECT 'SUBJECT',json_extract(node,'$.subject'),0 FROM knowledge_sources WHERE json_type(node,'$.subject')='text'
+      UNION ALL SELECT 'ERROR',j.value,0 FROM logs l,json_each(l.payload,'$.errorCauses') j WHERE l.owner=? AND j.type='text'
+      UNION ALL SELECT 'ERROR',j.value,0 FROM logs l,json_each(l.payload,'$.errorSnapshot') j WHERE l.owner=? AND j.type='text'
+    )
+    SELECT kind,value,max(active) active FROM refs GROUP BY kind,value
+    ORDER BY kind,active DESC,value COLLATE BINARY`,
+    owner,
+    owner,
+    owner,
+    owner,
+    owner,
+    owner,
+    owner,
+    owner,
+    owner,
+    owner,
+    owner,
+  );
+  for (const reference of references)
+    ensure(
+      owner,
+      reference.kind as DictionaryKind,
+      reference.value,
+      !!reference.active,
+    );
 }

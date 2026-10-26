@@ -22,7 +22,11 @@ test("备份升级只补齐 v1 已知默认值，v2 不猜测修补", () => {
   assert.equal(data.ai_audit[0].feedback, "");
   const newer = { knowledge: [{}] };
   upgradeBackup(newer, { schemaVersion: 2, counts: {} });
-  assert.deepEqual(newer, { knowledge: [{}], entry_hint_usage: [] });
+  assert.deepEqual(newer, {
+    knowledge: [{}],
+    entry_hint_usage: [],
+    dictionary_items: [],
+  });
   assert.throws(
     () => upgradeBackup({}, { schemaVersion: 999, counts: {} }),
     /不支持/,

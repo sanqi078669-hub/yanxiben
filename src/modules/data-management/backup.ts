@@ -23,6 +23,7 @@ import { z } from "zod";
 import { initKnowledgeTools } from "../entries/knowledge";
 import { initAudit } from "../ai/audit";
 import { validateBackupData } from "./backup-validation";
+import { ensureReferenced } from "../dictionaries/ensure";
 import { BACKUP_FORMAT_VERSION, upgradeBackup } from "./backup-upgrade";
 import { DATABASE_VERSION } from "../../lib/migrations";
 import {
@@ -31,6 +32,7 @@ import {
 } from "../../lib/capacity";
 import { checkAttachmentCapacity, checkBackupCapacity } from "./capacity";
 const tables = [
+  "dictionary_items",
   "entries",
   "attachments",
   "knowledge",
@@ -267,7 +269,8 @@ async function restoreData(
       schemaVersion: z.union([
         z.literal(1),
         z.literal(2),
-        z.literal(BACKUP_FORMAT_VERSION),
+        z.literal(3),
+        z.literal(4),
       ]),
       counts: z.record(z.string(), z.number().int().nonnegative()),
       files: z.array(
@@ -376,6 +379,7 @@ async function restoreData(
           ).run(...keys.map((c) => row[c]));
         }
       }
+      ensureReferenced(owner);
       assert(!db.prepare("PRAGMA foreign_key_check").all().length);
       for (const a of data.attachments) {
         const filename = path.join(dataDir, "attachments", a.id);

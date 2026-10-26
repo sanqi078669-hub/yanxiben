@@ -1,13 +1,13 @@
 import { AppError } from "../entries/service";
 
-export const BACKUP_FORMAT_VERSION = 3;
+export const BACKUP_FORMAT_VERSION = 4;
 
 /** Versioned, explicit defaults only; unknown columns are rejected by row schemas. */
 export function upgradeBackup(
   data: Record<string, any>,
   manifest: { schemaVersion: number; counts: Record<string, number> },
 ) {
-  if (![1, 2, BACKUP_FORMAT_VERSION].includes(manifest.schemaVersion))
+  if (![1, 2, 3, 4].includes(manifest.schemaVersion))
     throw new AppError(400, "INVALID_BACKUP", "备份来自不支持的版本");
   if (manifest.schemaVersion === 1) {
     for (const table of [
@@ -33,6 +33,14 @@ export function upgradeBackup(
   ) {
     data.entry_hint_usage = [];
     manifest.counts.entry_hint_usage = 0;
+  }
+  if (
+    manifest.schemaVersion < 4 &&
+    data.dictionary_items === undefined &&
+    manifest.counts.dictionary_items === undefined
+  ) {
+    data.dictionary_items = [];
+    manifest.counts.dictionary_items = 0;
   }
   return data;
 }
