@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { errors } from "./model";
 
 export const REVIEW_ANSWER_MAX_LENGTH = 50000;
 export const reviewAttemptSchema = z
@@ -9,10 +8,7 @@ export const reviewAttemptSchema = z
     rating: z.enum(["AGAIN", "HARD", "GOOD", "EASY"]),
     hintUsed: z.boolean(),
     answerMd: z.string().max(REVIEW_ANSWER_MAX_LENGTH),
-    errorCauses: z
-      .array(z.enum(errors as [string, ...string[]]))
-      .max(6)
-      .optional(),
+    errorCauses: z.array(z.string().trim().min(1).max(50)).max(30).optional(),
   })
   .strict();
 

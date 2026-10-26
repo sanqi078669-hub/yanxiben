@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { errors } from "./model";
 import {
   REVIEW_ANSWER_MAX_LENGTH,
   reviewAttemptSchema,
@@ -25,8 +24,8 @@ const schema = z.object({
   rating: z.enum(["AGAIN", "HARD", "GOOD", "EASY"]),
   key: z.string().uuid(),
   errorCauses: z
-    .array(z.enum(errors as [string, ...string[]]))
-    .max(6)
+    .array(z.string().trim().min(1).max(50))
+    .max(30)
     .nullable()
     .optional(),
   pending: z.object({ body: attemptBody, key: z.string().uuid() }).nullable(),

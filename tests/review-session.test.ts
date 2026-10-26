@@ -145,3 +145,68 @@ test("旧版超长答案与失败 pending 不丢失，反复刷新仍能完整�
     "缩短后的答案",
   );
 });
+
+test("复习请求和中断会话接受自定义错因，30 项和每项 50 字符边界一致", () => {
+  const errorCauses = Array.from({ length: 30 }, (_, i) =>
+    `${i}`.padEnd(50, "因"),
+  );
+  const body = {
+    expectedVersion: 3,
+    mode: "SCHEDULED",
+    rating: "GOOD",
+    hintUsed: false,
+    answerMd: "答案",
+    errorCauses,
+  };
+  assert.ok(reviewAttemptSchema.safeParse(body).success);
+  assert.deepEqual(
+    reviewAttemptSchema.parse({ ...body, errorCauses: ["  自定义错因  "] })
+      .errorCauses,
+    ["自定义错因"],
+  );
+  const value = { ...session, errorCauses, pending: { key: id, body } };
+  const restored = readReviewSession(
+    JSON.stringify(value),
+    id,
+    "scheduled",
+    now,
+  )!;
+  assert.deepEqual(restored.errorCauses, errorCauses);
+  assert.deepEqual(restored.pending?.body.errorCauses, errorCauses);
+  for (const invalid of [
+    [" "],
+    ["因".repeat(51)],
+    [...errorCauses, "第31项"],
+  ]) {
+    assert.equal(
+      reviewAttemptSchema.safeParse({ ...body, errorCauses: invalid }).success,
+      false,
+    );
+    assert.equal(
+      readReviewSession(
+        JSON.stringify({ ...value, errorCauses: invalid }),
+        id,
+        "scheduled",
+        now,
+      ),
+      null,
+    );
+    assert.equal(
+      readReviewSession(
+        JSON.stringify({
+          ...value,
+          pending: { key: id, body: { ...body, errorCauses: invalid } },
+        }),
+        id,
+        "scheduled",
+        now,
+      ),
+      null,
+    );
+  }
+  assert.deepEqual(
+    reviewAttemptSchema.parse({ ...body, errorCauses: ["概念", "条件"] })
+      .errorCauses,
+    ["概念", "条件"],
+  );
+});

@@ -141,15 +141,6 @@ function validate(owner: string, input: unknown, previous?: Entry) {
     ...(e.type === "CS" ? ["subtype", "options_json"] : []),
   ];
   assert(Object.keys(e.details).every((k) => allowed.includes(k)));
-  assert(
-    e.type === "MATH"
-      ? e.subject === "高等数学"
-      : e.type === "CS"
-        ? ["数据结构", "计算机组成原理", "操作系统", "计算机网络"].includes(
-            e.subject,
-          )
-        : e.subject === "英语",
-  );
   if (e.type === "CS" && e.details.subtype)
     assert(["QUESTION", "CONCEPT"].includes(e.details.subtype));
   if (e.details.options_json) {

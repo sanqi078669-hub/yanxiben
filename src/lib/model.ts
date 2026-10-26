@@ -62,7 +62,7 @@ export const entrySchema = z
   .object({
     type: z.enum(types),
     title: z.string().trim().max(200),
-    subject: z.enum(subjects as [string, ...string[]]),
+    subject: z.string().trim().min(1).max(100),
     body: str,
     source: z.string().max(2000).default(""),
     summary: str.default(""),
@@ -71,7 +71,7 @@ export const entrySchema = z
     contexts: z.array(contextSchema).max(100).default([]),
     knowledgeIds: z.array(z.string().uuid()).max(100).default([]),
     tags: z.array(z.string().trim().min(1).max(50)).max(30).default([]),
-    errors: z.array(z.enum(errors as [string, ...string[]])).default([]),
+    errors: z.array(z.string().trim().min(1).max(50)).max(30).default([]),
     attachments: z
       .array(
         z

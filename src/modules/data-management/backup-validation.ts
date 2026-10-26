@@ -1,7 +1,7 @@
 import { z } from "zod";
 import sharp from "sharp";
 import { createHash } from "node:crypto";
-import { entrySchema, settingsSchema, fields, errors } from "../../lib/model";
+import { entrySchema, settingsSchema, fields } from "../../lib/model";
 import { AppError } from "../entries/service";
 import { costSchema } from "../ai/pricing";
 import { ATTACHMENT_MAX_BYTES } from "../../lib/capacity";
@@ -35,14 +35,7 @@ const entry = entrySchema.superRefine((v, ctx) => {
     ...fields[v.type].map(([key]) => key),
     ...(v.type === "CS" ? ["subtype", "options_json"] : []),
   ];
-  const validSubject =
-    v.type === "MATH"
-      ? v.subject === "高等数学"
-      : v.type === "CS"
-        ? !["英语", "高等数学"].includes(v.subject)
-        : v.subject === "英语";
   if (
-    !validSubject ||
     Object.keys(v.details).some((key) => !allowed.includes(key)) ||
     (v.type !== "VOCABULARY" && v.contexts.length)
   )
@@ -117,7 +110,7 @@ const review = z
   );
 const rating = z.enum(["AGAIN", "HARD", "GOOD", "EASY"]);
 const mode = z.enum(["SCHEDULED", "PRACTICE"]);
-const causes = z.array(z.enum(errors as [string, ...string[]])).max(6);
+const causes = z.array(z.string().trim().min(1).max(50)).max(30);
 const logPayload = z
   .object({
     expectedVersion: version,

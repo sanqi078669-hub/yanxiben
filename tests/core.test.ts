@@ -64,11 +64,77 @@ test("空题面以及只有无效附件不得保存", () => {
     }),
   );
 });
-test("未知字段和不兼容科目被拒绝", () => {
+test("未知字段、未知类型和模板外 details 被拒绝", () => {
   assert.throws(() => createEntry(owner, { ...input(), admin: true }));
-  assert.throws(() => createEntry(owner, { ...input(), subject: "英语" }));
+  assert.throws(() => createEntry(owner, { ...input(), type: "CUSTOM" }));
   assert.throws(() =>
     createEntry(owner, { ...input(), details: { bogus: "x" } }),
+  );
+});
+
+test("科目不再受模板限制，自定义科目和错因 trim 后可创建、更新并回读", () => {
+  const compatible = createEntry(owner, { ...input(), subject: "英语" });
+  assert.equal(getEntry(owner, compatible.id).subject, "英语");
+  const entry = createEntry(owner, {
+    ...input(),
+    subject: "  线性代数  ",
+    errors: ["  漏看假设  "],
+  });
+  assert.equal(getEntry(owner, entry.id).subject, "线性代数");
+  assert.deepEqual(getEntry(owner, entry.id).errors, ["漏看假设"]);
+  const updated = updateEntry(owner, entry.id, {
+    expectedVersion: 1,
+    subject: "概率论",
+    errors: ["条件遗漏"],
+  });
+  assert.equal(updated.version, 2);
+  assert.equal(getEntry(owner, entry.id).subject, "概率论");
+  assert.deepEqual(getEntry(owner, entry.id).errors, ["条件遗漏"]);
+});
+
+test("科目 1–100、错因每项 1–50 且最多 30；旧固定值仍可读写", () => {
+  for (const subject of ["", " \t\n ", "科".repeat(101)])
+    assert.throws(() => createEntry(owner, { ...input(), subject }));
+  for (const errors of [
+    [" "],
+    ["因".repeat(51)],
+    Array.from({ length: 31 }, (_, i) => `错因${i}`),
+  ])
+    assert.throws(() => createEntry(owner, { ...input(), errors }));
+  const boundary = createEntry(owner, {
+    ...input(),
+    subject: "科".repeat(100),
+    errors: Array.from({ length: 30 }, (_, i) => `${i}`.padEnd(50, "因")),
+  });
+  assert.equal(getEntry(owner, boundary.id).subject.length, 100);
+  assert.equal(getEntry(owner, boundary.id).errors.length, 30);
+  const legacy = createEntry(owner, {
+    ...input(),
+    errors: ["概念", "条件", "方法", "计算", "审题", "表达"],
+  });
+  assert.equal(getEntry(owner, legacy.id).subject, "高等数学");
+  assert.deepEqual(getEntry(owner, legacy.id).errors, legacy.errors);
+});
+
+test("放开科目后仍拒绝同账号但科目不匹配的知识点", () => {
+  const knowledgeId = randomUUID();
+  run(
+    "INSERT INTO knowledge VALUES(?,?,?,?,?,?,0)",
+    knowledgeId,
+    owner,
+    "高等数学",
+    null,
+    "科目匹配测试",
+    "",
+  );
+  assert.throws(
+    () =>
+      createEntry(owner, {
+        ...input(),
+        subject: "英语",
+        knowledgeIds: [knowledgeId],
+      }),
+    /知识点与科目不匹配/,
   );
 });
 test("旧版本不会覆盖新内容，手动保存保留历史", () => {

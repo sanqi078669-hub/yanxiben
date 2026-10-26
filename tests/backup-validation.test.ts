@@ -30,7 +30,8 @@ const hash = (b: Uint8Array) => createHash("sha256").update(b).digest("hex");
 const payload = entrySchema.parse({
   type: "MATH",
   title: "合法测试",
-  subject: "高等数学",
+  subject: "自定义科目",
+  errors: ["自定义错因"],
   body: "极限",
   attachments: [{ id: attachmentId, role: "PROMPT" }],
 });
@@ -97,6 +98,8 @@ function fixture(): Record<string, any> {
         rating: "GOOD",
         hintUsed: false,
         answerMd: "answer",
+        errorCauses: ["本次自定义错因"],
+        errorSnapshot: ["历史自定义错因"],
         before: r,
         after: r,
         algorithmVersion: "calendar-v1",
@@ -187,10 +190,8 @@ test("恢复拒绝摘要正确但结构非法的数据，数据库与附件目�
       (d) => {
         const p = JSON.parse(d.entries[0].payload);
         p.type = "CS";
-        p.subject = "数据结构";
         p.details.options_json = "{}";
         d.entries[0].type = "CS";
-        d.entries[0].subject = "数据结构";
         d.entries[0].payload = JSON.stringify(p);
       },
     ],
@@ -277,6 +278,68 @@ test("恢复拒绝摘要正确但结构非法的数据，数据库与附件目�
   });
 });
 
+test("备份科目与错因字符串校验保留长度和数量限制", () => {
+  const row = fixture().entries[0];
+  for (const subject of ["", " \n ", "科".repeat(101)]) {
+    const p = { ...JSON.parse(row.payload), subject };
+    assert.equal(
+      backupRowSchemas.entries.safeParse({
+        ...row,
+        subject,
+        payload: JSON.stringify(p),
+      }).success,
+      false,
+    );
+  }
+  const p = {
+    ...JSON.parse(row.payload),
+    subject: "科".repeat(100),
+    errors: Array.from({ length: 30 }, (_, i) => `${i}`.padEnd(50, "因")),
+  };
+  assert.ok(
+    backupRowSchemas.entries.safeParse({
+      ...row,
+      subject: p.subject,
+      payload: JSON.stringify(p),
+    }).success,
+  );
+  const log = fixture().logs[0];
+  for (const errors of [
+    [" "],
+    ["因".repeat(51)],
+    Array.from({ length: 31 }, (_, i) => `错因${i}`),
+  ]) {
+    assert.equal(
+      backupRowSchemas.entries.safeParse({
+        ...row,
+        payload: JSON.stringify({ ...JSON.parse(row.payload), errors }),
+      }).success,
+      false,
+    );
+    for (const key of ["errorCauses", "errorSnapshot"])
+      assert.equal(
+        backupRowSchemas.logs.safeParse({
+          ...log,
+          payload: JSON.stringify({
+            ...JSON.parse(log.payload),
+            [key]: errors,
+          }),
+        }).success,
+        false,
+      );
+  }
+  assert.ok(
+    backupRowSchemas.logs.safeParse({
+      ...log,
+      payload: JSON.stringify({
+        ...JSON.parse(log.payload),
+        errorCauses: p.errors,
+        errorSnapshot: p.errors,
+      }),
+    }).success,
+  );
+});
+
 test("文件写入失败会回滚数据库且不覆盖已有文件", async () => {
   const filename = path.join(dataDir, "attachments", attachmentId);
   writeFileSync(filename, "existing");
@@ -316,6 +379,14 @@ test("合法备份恢复 JSON、复习与真实图片", async () => {
   assert.equal(one("SELECT count(*) n FROM users")!.n, 1);
   assert.equal(one("SELECT count(*) n FROM logs")!.n, 1);
   assert.equal(one("SELECT mime FROM attachments")!.mime, "image/png");
+  assert.equal(one("SELECT subject FROM entries")!.subject, "自定义科目");
+  assert.deepEqual(
+    JSON.parse(one("SELECT payload FROM entries")!.payload).errors,
+    ["自定义错因"],
+  );
+  const restoredLog = JSON.parse(one("SELECT payload FROM logs")!.payload);
+  assert.deepEqual(restoredLog.errorCauses, ["本次自定义错因"]);
+  assert.deepEqual(restoredLog.errorSnapshot, ["历史自定义错因"]);
   assert.equal(
     one("SELECT review_version FROM entry_hint_usage")!.review_version,
     1,
