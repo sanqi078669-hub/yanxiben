@@ -1,6 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
-import { all, one, run } from "../../../lib/db";
+import { all, one, run, transaction } from "../../../lib/db";
+import { ensure } from "../../dictionaries/ensure";
 import { assert } from "../../entries/service";
 import { subjects } from "../../../lib/model";
 import {
@@ -58,26 +59,29 @@ export async function knowledgeHandler(context: ApiContext) {
         })
         .strict()
         .parse(await json());
-      if (b.parentId)
-        assert(
-          one(
-            "SELECT id FROM knowledge WHERE id=? AND owner=? AND subject=? AND archived=0",
-            b.parentId,
-            owner,
-            b.subject,
-          ),
+      return transaction(() => {
+        if (b.parentId)
+          assert(
+            one(
+              "SELECT id FROM knowledge WHERE id=? AND owner=? AND subject=? AND archived=0",
+              b.parentId,
+              owner,
+              b.subject,
+            ),
+          );
+        const id = randomUUID();
+        ensure(owner, "SUBJECT", b.subject);
+        run(
+          "INSERT INTO knowledge VALUES(?,?,?,?,?,?,0)",
+          id,
+          owner,
+          b.subject,
+          b.parentId,
+          b.name,
+          b.description,
         );
-      const id = randomUUID();
-      run(
-        "INSERT INTO knowledge VALUES(?,?,?,?,?,?,0)",
-        id,
-        owner,
-        b.subject,
-        b.parentId,
-        b.name,
-        b.description,
-      );
-      return ok(one("SELECT * FROM knowledge WHERE id=?", id));
+        return ok(one("SELECT * FROM knowledge WHERE id=?", id));
+      });
     }
   }
   if (parts[0] === "knowledge-nodes" && parts[1] && method === "PATCH") {
@@ -85,18 +89,21 @@ export async function knowledgeHandler(context: ApiContext) {
       .object({ archived: z.boolean() })
       .strict()
       .parse(await json());
-    assert(
-      one("SELECT id FROM knowledge WHERE id=? AND owner=?", parts[1], owner),
-      404,
-      "RESOURCE_NOT_FOUND",
-      "知识点不存在",
-    );
-    run(
-      "UPDATE knowledge SET archived=? WHERE id=? AND owner=?",
-      b.archived ? 1 : 0,
-      parts[1],
-      owner,
-    );
-    return ok(true);
+    return transaction(() => {
+      const node = one(
+        "SELECT subject FROM knowledge WHERE id=? AND owner=?",
+        parts[1],
+        owner,
+      );
+      assert(node, 404, "RESOURCE_NOT_FOUND", "知识点不存在");
+      ensure(owner, "SUBJECT", node.subject, !b.archived);
+      run(
+        "UPDATE knowledge SET archived=? WHERE id=? AND owner=?",
+        b.archived ? 1 : 0,
+        parts[1],
+        owner,
+      );
+      return ok(true);
+    });
   }
 }

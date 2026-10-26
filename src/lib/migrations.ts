@@ -1,6 +1,9 @@
 import { DatabaseSync } from "node:sqlite";
 import { coreSchema, extensionSchema } from "./schema";
 import { installSearchFunctions } from "./search";
+import { normalize } from "../modules/dictionaries/normalize";
+import { dictionaryMigrationSql } from "../modules/dictionaries/migration";
+import { dictionaryMigrationV13Sql } from "../modules/dictionaries/migration-v13";
 
 export type Migration = {
   version: number;
@@ -174,6 +177,16 @@ migrations.push({
     db.exec(`UPDATE users SET role = 'admin' WHERE username = 'student';`);
   },
 });
+migrations.push({
+  version: 12,
+  name: "owner-dictionaries-v12",
+  up: (db) => db.exec(dictionaryMigrationSql),
+});
+migrations.push({
+  version: 13,
+  name: "dictionary-labels-and-missing-v13",
+  up: (db) => db.exec(dictionaryMigrationV13Sql),
+});
 const current = migrations.at(-1)!.version;
 export const DATABASE_VERSION = current;
 const failure = (message: string): never => {
@@ -247,6 +260,9 @@ export function migrateDatabase(
   options: { steps?: Migration[]; beforeUpgrade?: () => void } = {},
 ) {
   installSearchFunctions(db);
+  db.function("dictionary_normalize", { deterministic: true }, (value) =>
+    normalize(String(value ?? "")),
+  );
   const steps = options.steps || migrations;
   if (steps.some((step, i) => step.version !== i + 1))
     failure("迁移步骤必须连续且从 1 开始");

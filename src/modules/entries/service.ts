@@ -11,6 +11,7 @@ import { localDate, schedule } from "../review/schedule";
 import { z } from "zod";
 import type { EntryList, EntryListItem } from "../../lib/api-types";
 import { reviewAttemptSchema } from "../../lib/review-contract";
+import { ensureEntry } from "../dictionaries/ensure";
 export class AppError extends Error {
   constructor(
     public status: number,
@@ -223,24 +224,27 @@ function snapshot(e: Entry, reason: string) {
   );
 }
 export function createEntry(owner: string, input: unknown) {
-  const e = validate(owner, input);
-  const id = randomUUID(),
-    now = new Date().toISOString();
-  run(
-    "INSERT INTO entries VALUES(?,?,?,?,?,?,?,?,?,?,?,NULL)",
-    id,
-    owner,
-    e.type,
-    e.title,
-    e.subject,
-    e.status,
-    e.body,
-    JSON.stringify(e),
-    1,
-    now,
-    now,
-  );
-  return getEntry(owner, id);
+  return transaction(() => {
+    const e = validate(owner, input);
+    ensureEntry(owner, e);
+    const id = randomUUID(),
+      now = new Date().toISOString();
+    run(
+      "INSERT INTO entries VALUES(?,?,?,?,?,?,?,?,?,?,?,NULL)",
+      id,
+      owner,
+      e.type,
+      e.title,
+      e.subject,
+      e.status,
+      e.body,
+      JSON.stringify(e),
+      1,
+      now,
+      now,
+    );
+    return getEntry(owner, id);
+  });
 }
 export function updateEntry(
   owner: string,
@@ -287,6 +291,7 @@ export function updateEntry(
       },
       current,
     );
+    ensureEntry(owner, e);
     const last = one(
       "SELECT created_at FROM revisions WHERE entry_id=? ORDER BY created_at DESC LIMIT 1",
       id,

@@ -1,6 +1,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import { z } from "zod";
 import { all, one, run, transaction } from "../../lib/db";
+import { ensure, ensureEntry } from "../dictionaries/ensure";
 import { assert, unpack } from "./service";
 import { enforceAccountQuota } from "../data-management/quota";
 const rowBytes = (row: Record<string, unknown>) =>
@@ -267,6 +268,10 @@ export function mergeKnowledge(owner: string, raw: unknown) {
         (a) => a.node_id === b.sourceId || a.node_id === b.targetId,
       ),
     };
+    for (const node of after.nodes)
+      ensure(owner, "SUBJECT", node!.subject, !node!.archived);
+    for (const row of after.records)
+      ensureEntry(owner, JSON.parse(row!.payload), !row!.deleted_at);
     run(
       "INSERT INTO knowledge_merges VALUES(?,?,?,0)",
       id,
@@ -318,6 +323,7 @@ export function undoKnowledgeMerge(owner: string, id: string) {
       "别名已改变，不能自动撤销",
     );
     for (const row of before.records) {
+      ensureEntry(owner, JSON.parse(row.payload), !row.deleted_at);
       const current = one("SELECT * FROM entries WHERE id=?", row.id)!;
       run(
         "INSERT INTO revisions VALUES(?,?,?,?,?,?,?)",
@@ -337,7 +343,8 @@ export function undoKnowledgeMerge(owner: string, id: string) {
         owner,
       );
     }
-    for (const node of [before.source, ...before.children])
+    for (const node of [before.source, ...before.children]) {
+      ensure(owner, "SUBJECT", node.subject, !node.archived);
       run(
         "UPDATE knowledge SET parent_id=?,archived=? WHERE id=? AND owner=?",
         node.parent_id,
@@ -345,6 +352,7 @@ export function undoKnowledgeMerge(owner: string, id: string) {
         node.id,
         owner,
       );
+    }
     run("DELETE FROM knowledge_aliases WHERE id=? AND owner=?", aliasId, owner);
     for (const alias of before.aliases)
       run(
