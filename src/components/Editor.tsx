@@ -417,8 +417,8 @@ export default function Editor({ id }: { id?: string }) {
         </section>
       )}
       {!id && (
-        <section className="panel form-panel" aria-label="录入步骤">
-          <nav className="ai-actions" aria-label="选择录入步骤">
+        <section className="panel form-panel capture-steps" aria-label="录入步骤">
+          <nav className="ai-actions capture-step-nav" aria-label="选择录入步骤">
             {["1 · 录入材料", "2 · 整理分析（可跳过）", "3 · 核对保存"].map(
               (name, i) => (
                 <button

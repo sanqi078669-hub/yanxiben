@@ -59,7 +59,7 @@ export default function Detail({
     );
   return (
     <>
-      <div className="page-heading">
+      <div className="page-heading detail-page-heading">
         <div>
           <Link className="back-link" href={returnTo}>
             <ChevronLeft size={16} />

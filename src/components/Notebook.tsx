@@ -234,11 +234,21 @@ export default function Notebook() {
           ) : pathname.startsWith("/knowledge") ? (
             <KnowledgePage notify={notify} timezone={profile.timezone} />
           ) : pathname === "/settings" ? (
-            <SettingsPage
-              profile={profile}
-              onSave={setProfile}
-              notify={notify}
-            />
+            <>
+              <nav className="mobile-secondary-nav" aria-label="更多学习入口">
+                <Link className="button outline" href="/knowledge">
+                  知识地图
+                </Link>
+                <Link className="button outline" href="/trash">
+                  回收站
+                </Link>
+              </nav>
+              <SettingsPage
+                profile={profile}
+                onSave={setProfile}
+                notify={notify}
+              />
+            </>
           ) : (
             <Empty title="没有找到这个页面" />
           )}

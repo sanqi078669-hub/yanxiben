@@ -83,6 +83,21 @@ export const entrySchema = z
   })
   .strict();
 export type EntryInput = z.infer<typeof entrySchema>;
+export function hasAnalysisContent(
+  entry: Pick<
+    EntryInput,
+    "type" | "details" | "contexts" | "summary" | "attachments"
+  >,
+) {
+  return (
+    (fields[entry.type] || []).some(([key]) => entry.details[key]?.trim()) ||
+    entry.contexts.some((context) =>
+      Object.values(context).some((value) => value.trim()),
+    ) ||
+    !!entry.summary.trim() ||
+    entry.attachments.some((attachment) => attachment.role === "ANSWER")
+  );
+}
 export type Entry = EntryInput & {
   id: string;
   owner: string;

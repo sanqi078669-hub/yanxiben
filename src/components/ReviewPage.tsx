@@ -18,7 +18,7 @@ import {
   REVIEW_ANSWER_MAX_LENGTH,
   submissionWasRejected,
 } from "../lib/review-contract";
-import { names, errors } from "../lib/model";
+import { names, errors, hasAnalysisContent } from "../lib/model";
 import { api } from "../lib/request";
 import { MD } from "./Markdown";
 import {
@@ -99,6 +99,7 @@ export default function ReviewPage({
     }
   }, [practice]);
   const current = isPractice ? practiceItem : queue?.items[index];
+  const canShowAnalysis = !!current && hasAnalysisContent(current.entry);
   useEffect(() => {
     if (previousQuestion.current && current?.id !== previousQuestion.current)
       questionHeading.current?.focus();
@@ -500,8 +501,12 @@ export default function ReviewPage({
                 </button>
                 <button
                   className="text-button"
-                  disabled={busy || !!pendingView}
+                  disabled={busy || !!pendingView || !canShowAnalysis}
+                  aria-describedby={
+                    !canShowAnalysis ? "analysis-hint-unavailable" : undefined
+                  }
                   onClick={async () => {
+                    if (!canShowAnalysis) return;
                     setBusy(true);
                     try {
                       await api(`review-items/${current.id}/hint`, {
@@ -521,16 +526,35 @@ export default function ReviewPage({
                 >
                   需要提示，先看看思路
                 </button>
+                {!canShowAnalysis && (
+                  <p id="analysis-hint-unavailable">
+                    这条记录还没有分析内容，无法查看提示
+                  </p>
+                )}
                 {!isPractice && (
-                  <button
-                    className="text-button"
-                    onClick={() => {
-                      reset();
-                      setIndex((index + 1) % queue.items.length);
-                    }}
-                  >
-                    暂时跳过
-                  </button>
+                  <>
+                    <button
+                      className="text-button"
+                      disabled={queue.items.length <= 1}
+                      aria-describedby={
+                        queue.items.length <= 1
+                          ? "review-skip-unavailable"
+                          : undefined
+                      }
+                      onClick={() => {
+                        if (queue.items.length <= 1) return;
+                        reset();
+                        setIndex((index + 1) % queue.items.length);
+                      }}
+                    >
+                      暂时跳过
+                    </button>
+                    {queue.items.length <= 1 && (
+                      <p id="review-skip-unavailable">
+                        已经是最后一条，无法跳过
+                      </p>
+                    )}
+                  </>
                 )}
               </div>
             ) : (
@@ -603,6 +627,11 @@ export default function ReviewPage({
                     </>
                   )}
                 </fieldset>
+                {hint && (
+                  <p id="hint-rating-limit">
+                    本次使用了提示，最高可选掌握
+                  </p>
+                )}
                 <div className="ratings">
                   {[
                     ["AGAIN", "不会", "需要重新理解"],
@@ -614,6 +643,9 @@ export default function ReviewPage({
                       key={v}
                       className={rating === v ? "selected" : ""}
                       aria-pressed={rating === v}
+                      aria-describedby={
+                        hint && v === "EASY" ? "hint-rating-limit" : undefined
+                      }
                       disabled={busy || !!pendingView || (hint && v === "EASY")}
                       onClick={() => setRating(v)}
                     >

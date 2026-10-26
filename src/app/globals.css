@@ -212,6 +212,14 @@ small {
   padding: 34px 21px 0;
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  overflow-y: auto;
+}
+.sidebar > * {
+  flex-shrink: 0;
+}
+.mobile-secondary-nav {
+  display: none;
 }
 .brand {
   display: flex;
@@ -687,8 +695,9 @@ footer span {
   font-weight: 500;
 }
 .entry-main p {
-  font-size: 9px;
-  color: #a0a895;
+  font-size: 12px;
+  line-height: 1.25;
+  color: var(--muted);
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
@@ -696,7 +705,7 @@ footer span {
 }
 .entry-main p span {
   padding: 0 8px;
-  color: #bac2b1;
+  color: inherit;
 }
 .subject-panel > a {
   display: flex;
@@ -1612,6 +1621,20 @@ footer span {
   .page-heading > .button {
     display: none;
   }
+  .page-heading.detail-page-heading {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .page-heading.detail-page-heading > .button {
+    display: inline-flex;
+    align-self: flex-start;
+  }
+  .mobile-secondary-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 23px;
+  }
   .eyebrow {
     font-size: 8px;
     letter-spacing: 1px;
@@ -1654,16 +1677,14 @@ footer span {
     font-size: 24px;
   }
   .banner-art {
-    right: -15px;
-    top: 50px;
-    transform: rotate(10deg) scale(0.85);
+    display: none;
   }
   .review-banner p {
-    max-width: 185px;
+    max-width: 100%;
     font-size: 10px;
   }
   .review-banner > div:first-child {
-    max-width: 70%;
+    max-width: 100%;
   }
   .panel {
     padding: 19px;
@@ -1698,7 +1719,46 @@ footer span {
     font-size: 11px;
   }
   .entry-main p {
-    font-size: 8px;
+    font-size: 12px;
+  }
+  .capture-steps.form-panel {
+    padding: 12px;
+  }
+  .capture-steps:has(> .text-button) {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px;
+  }
+  .capture-steps .capture-step-nav {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+    margin: 0;
+    grid-column: 1 / -1;
+  }
+  .capture-step-nav > .button {
+    padding: 6px;
+    font-size: 11px;
+    white-space: normal;
+    justify-content: center;
+  }
+  .capture-steps > p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+  .editor-fields[data-capture-step="0"] .type-picker {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    margin: 15px 0;
+  }
+  .editor-fields[data-capture-step="0"] .type-picker button {
+    min-width: 0;
+    flex-direction: column;
+    gap: 2px;
+    padding: 4px 2px;
   }
   .entry-row > .badge {
     font-size: 9px;

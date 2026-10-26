@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { hasAnalysisContent } from "../../../lib/model";
 import { all, one, run, transaction } from "../../../lib/db";
 import {
   assert,
@@ -48,6 +49,12 @@ export async function reviewsHandler(context: ApiContext) {
         parts[1],
       );
       assert(r, 404, "RESOURCE_NOT_FOUND", "复习项不存在");
+      assert(
+        hasAnalysisContent(getEntry(owner, r.entry_id)),
+        400,
+        "ANALYSIS_UNAVAILABLE",
+        "这条记录还没有分析内容，无法查看提示",
+      );
       return ok(recordEntryHint(owner, r.entry_id, b.expectedVersion));
     }
     if (parts[2] === "attempts" && method === "POST")
