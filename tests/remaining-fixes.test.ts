@@ -29,11 +29,12 @@ test("统计默认日期按用户时区，上海凌晨跨月仍包含当天", ()
     entry = randomUUID(),
     review = randomUUID();
   run(
-    "INSERT INTO users VALUES(?,?,?,?)",
+    "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
     owner,
     owner,
     "hash",
     JSON.stringify(defaults),
+    "user",
   );
   createEntry(
     owner,
@@ -94,11 +95,12 @@ test("导出同键固定快照、隔离用户、到期清理且不更新备份�
   const owners = [randomUUID(), randomUUID()];
   for (const owner of owners)
     run(
-      "INSERT INTO users VALUES(?,?,?,?)",
+      "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
       owner,
       owner,
       "hash",
       JSON.stringify(defaults),
+      "user",
     );
   const owner = owners[0];
   const entry = createEntry(

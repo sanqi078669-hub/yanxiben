@@ -2,6 +2,7 @@ import { test, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import {
   mkdtempSync,
+  mkdirSync,
   readdirSync,
   rmSync,
   writeFileSync,
@@ -13,22 +14,30 @@ import { randomUUID } from "node:crypto";
 process.env.DATA_DIR = mkdtempSync(
   path.join(os.tmpdir(), "yanxi-export-cache-"),
 );
-const { run, one, all, dataDir } = await import("../src/lib/db");
+const { run, one, all, dataDir, db } = await import("../src/lib/db");
+db.exec("DROP TRIGGER IF EXISTS enforce_user_capacity");
 const { defaults } = await import("../src/lib/model");
 const { exportArtifact } =
   await import("../src/modules/data-management/exports");
-const { reserveExport, exportFile, startExportCacheCleanup, EXPORT_TTL } =
-  await import("../src/modules/data-management/export-cache");
+const {
+  reserveExport,
+  exportFile,
+  startExportCacheCleanup,
+  EXPORT_TTL,
+  cleanupExportCache,
+  exportCachePolicy,
+} = await import("../src/modules/data-management/export-cache");
 const { prepareExport } =
   await import("../src/modules/data-management/export-worker");
 function account() {
   const owner = randomUUID();
   run(
-    "INSERT INTO users VALUES(?,?,?,?)",
+    "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
     owner,
     owner,
     "synthetic-hash",
     JSON.stringify(defaults),
+    "user",
   );
   return owner;
 }
@@ -48,6 +57,46 @@ beforeEach(() => {
     EXPORT_CACHE_MIN_FREE_BYTES: "1",
     EXPORT_CACHE_CLEANUP_MS: "20",
   });
+});
+test("默认预算容纳七账号各两份满额导出，文件预算同步", () => {
+  for (const key of ["ACCOUNT_BYTES", "INSTANCE_BYTES", "INSTANCE_FILES"])
+    delete process.env["EXPORT_CACHE_" + key];
+  const policy = exportCachePolicy();
+  assert(policy.accountBytes >= 2 * 80 * 1024 ** 2 + 1024 ** 2);
+  assert(policy.instanceBytes >= 7 * policy.accountBytes);
+  assert(policy.instanceFiles >= 7 * policy.accountFiles);
+});
+test("有效回执缺失 ZIP 时重放重建；清理失败保留可重试回执", () => {
+  const owner = account(),
+    key = randomUUID();
+  const first = exportArtifact(owner, "MARKDOWN", key);
+  rmSync(first.filename);
+  const retry = exportArtifact(owner, "MARKDOWN", key);
+  assert.notEqual(retry.fileId, first.fileId);
+  assert(existsSync(retry.filename));
+  run("UPDATE export_receipts SET expires=0 WHERE owner=?", owner);
+  const blocked = randomUUID();
+  mkdirSync(exportFile(blocked));
+  run(
+    "INSERT INTO export_receipts VALUES(?,?,?,?,?)",
+    owner,
+    randomUUID(),
+    "MARKDOWN",
+    blocked,
+    0,
+  );
+  try {
+    cleanupExportCache();
+    assert.equal(existsSync(retry.filename), false);
+    assert.equal(
+      one("SELECT file_id FROM export_receipts WHERE file_id=?", retry.fileId),
+      undefined,
+    );
+    assert(one("SELECT file_id FROM export_receipts WHERE file_id=?", blocked));
+  } finally {
+    rmSync(exportFile(blocked), { recursive: true });
+    cleanupExportCache();
+  }
 });
 test("账号及实例字节预算分别拒绝新任务，旧键绕过预算和频率，其他业务可写", () => {
   for (const dimension of ["ACCOUNT", "INSTANCE"]) {

@@ -4,6 +4,7 @@ node_modules/
 # Next.js build output and cache
 .next/
 out/
+dist/
 
 # Project-generated runtime and test artifacts
 /runtime/

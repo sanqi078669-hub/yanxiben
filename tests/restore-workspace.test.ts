@@ -19,15 +19,67 @@ const {
   cleanupRestoreWorkspaces,
   restoreWorkspaces,
   restoreControl,
+  stopRestore,
 } = await import("../src/modules/data-management/restore-workspace");
+test(
+  "恢复空间数量受限，隔离服务不继承生产来源和代理配置",
+  { timeout: 60000 },
+  async (t) => {
+    const owner = randomUUID();
+    const bcrypt = await import("bcryptjs");
+    const password = randomUUID();
+    run(
+      "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
+      owner,
+      owner,
+      bcrypt.hashSync(password, 4),
+      JSON.stringify(defaults),
+      "user",
+    );
+    const bytes = backup(owner),
+      first = await previewRestore(owner, bytes),
+      second = await previewRestore(owner, bytes);
+    await assert.rejects(() => previewRestore(owner, bytes), {
+      code: "RESTORE_WORKSPACE_LIMIT",
+    });
+    const previous = { ...process.env };
+    Object.assign(process.env, {
+      YANXI_DEPLOYMENT: "invited",
+      PUBLIC_ORIGIN: "https://study.example.org",
+      PROXY_SECRET: "p".repeat(48),
+      SECURE_COOKIES: "1",
+    });
+    t.after(async () => {
+      for (const key of Object.keys(process.env))
+        if (!(key in previous)) delete process.env[key];
+      Object.assign(process.env, previous);
+      await stopRestore(owner, { id: first.id });
+      deleteRestore(owner, { id: first.id });
+      deleteRestore(owner, { id: second.id });
+    });
+    const { url } = await launchRestore(owner, { id: first.id, confirm: true });
+    const login = await fetch(url + "/api/v1/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Requested-With": "yanxiben",
+        Origin: url,
+      },
+      body: JSON.stringify({ username: owner, password }),
+    });
+    assert.equal(login.status, 200);
+    assert(!login.headers.get("set-cookie")!.includes("Secure"));
+  },
+);
 test("恢复向导在隔离目录校验并保留当前数据库，损坏包拒绝", async () => {
   const owner = randomUUID();
   run(
-    "INSERT INTO users VALUES(?,?,?,?)",
+    "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
     owner,
     owner,
     "hash",
     JSON.stringify(defaults),
+    "user",
   );
   const entry = createEntry(
     owner,

@@ -20,13 +20,38 @@ export function clientIp(headers: Headers) {
   return ip;
 }
 
-/** Count attempts before bcrypt; bounded database keys, shared with account limits. */
+const loginState = globalThis as typeof globalThis & {
+  yanxiLoginActive?: number;
+};
+export function loginFailureKey(headers: Headers, username: string) {
+  return (
+    "pair:" +
+    createHash("sha256")
+      .update(JSON.stringify([clientIp(headers), username.toLowerCase()]))
+      .digest("hex")
+  );
+}
+/** Reserve only after reading JSON, so a stalled body cannot occupy a bcrypt slot. */
+export function acquireLoginSlot() {
+  assert(
+    (loginState.yanxiLoginActive || 0) < 8,
+    429,
+    "RATE_LIMITED",
+    "登录繁忙，请稍后重试",
+  );
+  loginState.yanxiLoginActive = (loginState.yanxiLoginActive || 0) + 1;
+  let released = false;
+  return () => {
+    if (!released) loginState.yanxiLoginActive!--;
+    released = true;
+  };
+}
+/** Count requests before reading JSON; malformed requests consume the IP budget. */
 export function limitLogin(headers: Headers, now = Date.now()) {
   const ip = clientIp(headers);
   transaction(() => {
     run("DELETE FROM login_limits WHERE reset_at<?", now);
     for (const [key, maximum] of [
-      ["@global", 120],
       ["@ip:" + createHash("sha256").update(ip).digest("hex"), 30],
     ] as const) {
       const row = one("SELECT count FROM login_limits WHERE key=?", key);

@@ -66,11 +66,12 @@ const { audited, auditList } = await import("../src/modules/ai/audit");
 const { budgetStatus } = await import("../src/modules/ai/budget");
 const { savePrice } = await import("../src/modules/ai/pricing");
 run(
-  "INSERT INTO users VALUES(?,?,?,?)",
+  "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
   owner,
   "qa-ai",
   bcrypt.hashSync("local-qa-ai-only-2026", 4),
   JSON.stringify(defaults),
+  "user",
 );
 writeFileSync(
   path.join(folder, "session-secret"),

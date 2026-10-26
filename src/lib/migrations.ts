@@ -139,6 +139,41 @@ migrations.push({
       `CREATE TABLE account_status(owner TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,disabled INTEGER NOT NULL DEFAULT 0);`,
     ),
 });
+migrations.push({
+  version: 11,
+  name: "user-role-and-capacity",
+  up: (db) => {
+    const row = db.prepare("SELECT COUNT(*) AS c FROM users").get() as { c: number };
+    if (row.c > 7) {
+      throw new Error(
+        `users 表已有 ${row.c} 个账号，超过 7 人上限，请先处理再跑迁移 11`,
+      );
+    }
+    db.exec(`ALTER TABLE users ADD COLUMN role TEXT NOT NULL DEFAULT 'user';`);
+    db.exec(`
+      CREATE TRIGGER users_role_valid_insert
+      BEFORE INSERT ON users
+      FOR EACH ROW
+      WHEN NEW.role NOT IN ('user', 'admin')
+      BEGIN SELECT RAISE(ABORT, 'INVALID_ROLE'); END;
+    `);
+    db.exec(`
+      CREATE TRIGGER users_role_valid_update
+      BEFORE UPDATE OF role ON users
+      FOR EACH ROW
+      WHEN NEW.role NOT IN ('user', 'admin')
+      BEGIN SELECT RAISE(ABORT, 'INVALID_ROLE'); END;
+    `);
+    db.exec(`
+      CREATE TRIGGER enforce_user_capacity
+      BEFORE INSERT ON users
+      FOR EACH ROW
+      WHEN (SELECT COUNT(*) FROM users) >= 7
+      BEGIN SELECT RAISE(ABORT, 'REGISTRATION_LIMIT_REACHED'); END;
+    `);
+    db.exec(`UPDATE users SET role = 'admin' WHERE username = 'student';`);
+  },
+});
 const current = migrations.at(-1)!.version;
 export const DATABASE_VERSION = current;
 const failure = (message: string): never => {

@@ -11,14 +11,15 @@ import sharp from "sharp";
 import { unzipSync, strFromU8 } from "fflate";
 process.env.DATA_DIR = mkdtempSync(path.join(os.tmpdir(), "yanxi-launch-"));
 const { one, run, db, dataDir } = await import("../src/lib/db");
+db.exec("DROP TRIGGER IF EXISTS enforce_user_capacity");
 const { maintainAccount } = await import("../src/modules/auth/admin");
-const { clientIp, limitLogin } =
+const { clientIp, limitLogin, acquireLoginSlot, loginFailureKey } =
   await import("../src/modules/auth/login-boundary");
 const password = randomBytes(18).toString("hex");
 
 test("账号凭据独占保存、重置/停用/启用均撤销会话", () => {
-  const first = maintainAccount("create", "operator", password);
-  const second = maintainAccount("create", "second", password);
+  const first = maintainAccount("create", "operator", password, "user");
+  const second = maintainAccount("create", "second", password, "user");
   assert.notEqual(first.credential, second.credential);
   const bytes = readFileSync(first.credential!);
   assert(!existsSync(path.join(dataDir, "local-login.txt")));
@@ -38,7 +39,7 @@ test("账号凭据独占保存、重置/停用/启用均撤销会话", () => {
   }
   assert.deepEqual(readFileSync(first.credential!), bytes);
 });
-test("可信代理秘密、IP 与全局登录边界；伪造 XFF 无效", () => {
+test("可信代理秘密、IP 与登录并发边界；伪造 XFF 无效", () => {
   process.env.PROXY_SECRET = randomBytes(32).toString("hex");
   assert.throws(() => clientIp(new Headers({ "x-forwarded-for": "1.2.3.4" })));
   const h = new Headers({
@@ -46,6 +47,7 @@ test("可信代理秘密、IP 与全局登录边界；伪造 XFF 无效", () => 
     "x-yanxi-client-ip": "192.0.2.1",
   });
   assert.equal(clientIp(h), "192.0.2.1");
+  const originalPair = loginFailureKey(h, "student");
   for (let i = 0; i < 30; i++) limitLogin(h);
   h.set("x-forwarded-for", "192.0.2.99");
   assert.throws(() => limitLogin(h), /登录尝试/);
@@ -54,7 +56,13 @@ test("可信代理秘密、IP 与全局登录边界；伪造 XFF 无效", () => 
     for (let j = 0; j < 30; j++) limitLogin(h);
   }
   h.set("x-yanxi-client-ip", "192.0.2.5");
-  assert.throws(() => limitLogin(h), /登录尝试/);
+  assert.notEqual(loginFailureKey(h, "student"), originalPair);
+  assert.equal(loginFailureKey(h, "student"), loginFailureKey(h, "STUDENT"));
+  limitLogin(h);
+  const releases = Array.from({ length: 8 }, () => acquireLoginSlot());
+  assert.throws(() => acquireLoginSlot(), /登录繁忙/);
+  releases.forEach((release) => release());
+  acquireLoginSlot()();
   delete process.env.PROXY_SECRET;
   run("DELETE FROM login_limits");
 });
@@ -66,7 +74,7 @@ test("7 账号 HTTP 核心操作、重启持久化及完整实例快照恢复", 
     path.join(dataDir, "session-secret"),
     randomBytes(48).toString("hex"),
   );
-  for (let i = 0; i < 7; i++) maintainAccount("create", `user${i}`, password);
+  for (let i = 0; i < 7; i++) maintainAccount("create", `user${i}`, password, "user");
   const secret = randomBytes(32).toString("hex");
   let server: ReturnType<typeof spawn>;
   const start = async () => {
@@ -388,6 +396,10 @@ test("7 账号 HTTP 核心操作、重启持久化及完整实例快照恢复", 
   const nonce = /'nonce-([^']+)'/.exec(policy)![1];
   assert.notEqual(policy, html2.headers.get("content-security-policy"));
   assert((await html.text()).includes(`nonce="${nonce}"`));
+  for (const pathname of ["/apix", "/apiary", "/_next/staticx"]) {
+    const page = await fetch(base + pathname);
+    assert(page.headers.get("content-security-policy"), pathname);
+  }
   maintainAccount("disable", "user0");
   assert.equal(
     (await call(0, "settings", undefined, accounts[0].cookie)).status,
@@ -492,5 +504,5 @@ test("7 账号 HTTP 核心操作、重启持久化及完整实例快照恢复", 
       snapshot: JSON.parse(result.stdout),
     }),
   );
-  assert.equal(db.prepare("PRAGMA user_version").get()!.user_version, 10);
+  assert.equal(db.prepare("PRAGMA user_version").get()!.user_version, 11);
 });

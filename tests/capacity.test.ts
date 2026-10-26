@@ -55,11 +55,12 @@ test("旧超限附件在读取和压缩前拒绝，不生成不可恢复备份",
   const owner = randomUUID(),
     id = randomUUID();
   run(
-    "INSERT INTO users VALUES(?,?,?,?)",
+    "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
     owner,
     owner,
     "hash",
     JSON.stringify(defaults),
+    "user",
   );
   const filename = path.join(dataDir, "attachments", id);
   writeFileSync(filename, "");
@@ -80,11 +81,12 @@ test("旧超限附件在读取和压缩前拒绝，不生成不可恢复备份",
 test("一条记录包含 20 张合法图片时完整导出可恢复", async () => {
   const owner = randomUUID();
   run(
-    "INSERT INTO users VALUES(?,?,?,?)",
+    "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
     owner,
     owner,
     "hash",
     JSON.stringify(defaults),
+    "user",
   );
   const bytes = await sharp({
     create: { width: 4, height: 4, channels: 3, background: "green" },

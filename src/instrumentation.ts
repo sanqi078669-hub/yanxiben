@@ -1,5 +1,8 @@
 export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
+    const { validateDeploymentConfig } =
+      await import("./lib/deployment-config");
+    validateDeploymentConfig();
     const { pathToFileURL } = await import("node:url");
     const { resolve } = await import("node:path");
     // Runtime modules, like the existing export worker, are built separately.

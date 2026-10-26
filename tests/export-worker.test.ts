@@ -16,11 +16,12 @@ const { prepareExport } =
 function account() {
   const owner = randomUUID();
   run(
-    "INSERT INTO users VALUES(?,?,?,?)",
+    "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
     owner,
     owner,
     "hash",
     JSON.stringify(defaults),
+    "user",
   );
   createEntry(
     owner,

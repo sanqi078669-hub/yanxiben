@@ -11,16 +11,18 @@ import sharp from "sharp";
 import { request as httpRequest } from "node:http";
 import { expandingPng } from "./image-fixtures";
 process.env.DATA_DIR = mkdtempSync(path.join(os.tmpdir(), "yanxi-http-"));
-const { run, one, dataDir } = await import("../src/lib/db");
+const { run, one, dataDir, db } = await import("../src/lib/db");
+db.exec("DROP TRIGGER IF EXISTS enforce_user_capacity");
 const { defaults } = await import("../src/lib/model");
 const password = randomBytes(18).toString("hex");
 for (const username of ["alpha", "beta"])
   run(
-    "INSERT INTO users VALUES(?,?,?,?)",
+    "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
     randomUUID(),
     username,
     bcrypt.hashSync(password, 4),
     JSON.stringify(defaults),
+    "user",
   );
 writeFileSync(
   path.join(dataDir, "session-secret"),
@@ -90,6 +92,26 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
     assert.equal((await call("entries")).status, 401),
   );
   await t.test("同源登录成功、异源和缺少 CSRF 标识被拒绝", async () => {
+    run("DELETE FROM login_limits");
+    for (let i = 0; i < 10; i++)
+      assert.equal(
+        (await call("auth/login", { username: "alpha", password: "wrong" }))
+          .status,
+        401,
+      );
+    assert.equal(
+      one("SELECT count FROM login_limits WHERE key LIKE 'pair:%'")!.count,
+      10,
+    );
+    assert.equal(
+      (await call("auth/login", { username: "alpha", password })).status,
+      200,
+    );
+    assert.equal(
+      one("SELECT count(*) n FROM login_limits WHERE key LIKE 'pair:%'")!.n,
+      0,
+    );
+    run("DELETE FROM login_limits");
     assert.equal(
       (
         await call("auth/login", { username: "alpha", password }, "POST", {
@@ -763,11 +785,12 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
           const owner = randomUUID(),
             legacy = "z".repeat(72) + "legacy-suffix".repeat(20);
           run(
-            "INSERT INTO users VALUES(?,?,?,?)",
+            "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
             owner,
             owner,
             bcrypt.hashSync(legacy, 4),
             JSON.stringify(defaults),
+            "user",
           );
           const login = await call(
             "auth/login",
@@ -825,11 +848,12 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
       for (const action of ["reset", "disable", "revoke"]) {
         const owner = randomUUID();
         run(
-          "INSERT INTO users VALUES(?,?,?,?)",
+          "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
           owner,
           owner,
           bcrypt.hashSync(password, 12),
           JSON.stringify(defaults),
+          "user",
         );
         const login = await call(
           "auth/login",

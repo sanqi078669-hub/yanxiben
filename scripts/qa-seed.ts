@@ -13,11 +13,12 @@ if (one("SELECT id FROM users LIMIT 1"))
 const owner = randomUUID(),
   password = randomBytes(16).toString("hex");
 run(
-  "INSERT INTO users VALUES(?,?,?,?)",
+  "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
   owner,
   "qa",
   bcrypt.hashSync(password, 4),
   JSON.stringify(defaults),
+  "user",
 );
 writeFileSync(
   path.join(dataDir, "session-secret"),

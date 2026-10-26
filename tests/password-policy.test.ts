@@ -21,7 +21,7 @@ test("网页与 CLI 的 ASCII、中文、emoji 新密码统一使用 UTF-8 72/73
     assert.equal(passwordBytes(prefix + "x"), 73);
     assert.equal(newPasswordSchema.safeParse(prefix + "x").success, false);
     const username = randomUUID();
-    const result = maintainAccount("create", username, prefix);
+    const result = maintainAccount("create", username, prefix, "user");
     unlinkSync(result.credential!);
     const before = one(
       "SELECT password FROM users WHERE username=?",
@@ -36,7 +36,7 @@ test("网页与 CLI 的 ASCII、中文、emoji 新密码统一使用 UTF-8 72/73
       before,
     );
     assert.throws(
-      () => maintainAccount("create", randomUUID(), prefix + "x"),
+      () => maintainAccount("create", randomUUID(), prefix + "x", "user"),
       /72 字节/,
     );
   }
@@ -49,11 +49,12 @@ test("存量长密码仍可验证，仅改超限后缀被拒绝，随后可改�
   // bcryptjs truncates beyond byte 72 rather than rejecting the input.
   assert(bcrypt.compareSync("a".repeat(72) + "different-suffix", credential));
   run(
-    "INSERT INTO users VALUES(?,?,?,?)",
+    "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
     owner,
     owner,
     credential,
     JSON.stringify(defaults),
+    "user",
   );
   run("INSERT INTO sessions VALUES(?,?,?)", sid, owner, Date.now() + 60000);
   assert(await verifyCurrentPassword(owner, old, { sid }));

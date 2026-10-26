@@ -333,6 +333,7 @@ async function restoreData(
   await validateBackupData(data, files);
   const owner = data.profile.id as string;
   const written: string[] = [];
+  let promotedAdmin: string | null = null;
   try {
     transaction(() => {
       assert(
@@ -343,12 +344,25 @@ async function restoreData(
       );
       db.exec("PRAGMA defer_foreign_keys=ON");
       run(
-        "INSERT INTO users VALUES(?,?,?,?)",
+        "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
         owner,
         username,
         passwordHash,
         JSON.stringify(data.profile.settings),
+        "user",
       );
+      const adminCount = db
+        .prepare("SELECT COUNT(*) AS c FROM users WHERE role = 'admin'")
+        .get() as { c: number };
+      if (adminCount.c === 0) {
+        const first = db
+          .prepare("SELECT id, username FROM users ORDER BY username LIMIT 1")
+          .get() as { id: string; username: string } | undefined;
+        if (first) {
+          db.prepare("UPDATE users SET role = 'admin' WHERE id = ?").run(first.id);
+          promotedAdmin = first.username;
+        }
+      }
       for (const t of tables) {
         // Use accepted row keys, validated above; no SQL identifiers originate in the archive.
         const allowed = db
@@ -384,5 +398,5 @@ async function restoreData(
     for (const filename of written.reverse()) unlinkSync(filename);
     throw error;
   }
-  return { owner, counts: m.counts };
+  return { owner, counts: m.counts, promotedAdmin };
 }

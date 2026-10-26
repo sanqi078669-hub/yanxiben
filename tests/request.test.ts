@@ -1,6 +1,14 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { api, request, readEnvelope, RequestError } from "../src/lib/request";
+import {
+  api,
+  request,
+  readEnvelope,
+  RequestError,
+  requestResponse,
+  readDownload,
+  requestTimeoutMs,
+} from "../src/lib/request";
 
 test("共享请求保留 HTTP 状态、业务错误码与 requestId", async () => {
   await assert.rejects(
@@ -148,4 +156,55 @@ test("共享请求覆盖等待响应与读取正文的超时，并保留主动�
   await assert.rejects(() => request("settings", { timeoutMs: 5 }), {
     code: "REQUEST_TIMEOUT",
   });
+});
+test("导出正文超时映射中文契约", async (t) => {
+  const keepAlive = setInterval(() => {}, 1000);
+  t.after(() => clearInterval(keepAlive));
+  t.mock.method(
+    globalThis,
+    "fetch",
+    async (_url: unknown, init: RequestInit) =>
+      new Response(
+        new ReadableStream({
+          start(controller) {
+            init.signal!.addEventListener(
+              "abort",
+              () => controller.error(init.signal!.reason),
+              { once: true },
+            );
+          },
+        }),
+      ),
+  );
+  await assert.rejects(
+    async () =>
+      readDownload(await requestResponse("exports", { timeoutMs: 5 })),
+    { code: "REQUEST_TIMEOUT" },
+  );
+});
+test("导出分块读取提供字节进度且允许生成加慢网下载", async () => {
+  assert(requestTimeoutMs("exports") >= 120000 + (80 * 1024 ** 2 * 8) / 1000);
+  assert(requestTimeoutMs("data/restore-launch") >= 45000);
+  const progress: number[] = [];
+  const blob = await readDownload(
+    new Response(
+      new ReadableStream({
+        start(controller) {
+          controller.enqueue(new Uint8Array([1, 2]));
+          controller.enqueue(new Uint8Array([3]));
+          controller.close();
+        },
+      }),
+      { headers: { "Content-Length": "3" } },
+    ),
+    (bytes, total) => {
+      assert.equal(total, 3);
+      progress.push(bytes);
+    },
+  );
+  assert.deepEqual(progress, [2, 3]);
+  assert.deepEqual(
+    new Uint8Array(await blob.arrayBuffer()),
+    new Uint8Array([1, 2, 3]),
+  );
 });

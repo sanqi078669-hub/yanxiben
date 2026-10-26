@@ -16,5 +16,5 @@ if (one("SELECT id FROM users WHERE username=?", username)) {
   console.log("账号已存在，未修改密码。");
   process.exit(0);
 }
-const result = maintainAccount("create", username, process.env.INIT_PASSWORD);
+const result = maintainAccount("create", username, process.env.INIT_PASSWORD, "admin");
 console.log("账号创建完成；私有交付文件：" + result.credential);

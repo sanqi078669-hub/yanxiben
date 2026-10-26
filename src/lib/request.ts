@@ -38,8 +38,37 @@ export function requestTimeoutMs(path: string) {
     : path === "data/restore-preview" || path === "attachments"
       ? 180000
       : path === "exports"
-        ? 150000
-        : 30000;
+        ? 900000
+        : path === "data/restore-launch"
+          ? 90000
+          : 30000;
+}
+export async function readDownload(
+  response: Response,
+  onProgress?: (bytes: number, total: number) => void,
+) {
+  const reader = response.body?.getReader();
+  if (!reader) return new Blob();
+  const chunks: Uint8Array<ArrayBuffer>[] = [];
+  let received = 0;
+  const total = Number(response.headers.get("Content-Length")) || 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      chunks.push(value);
+      received += value.byteLength;
+      onProgress?.(received, total);
+    }
+    return new Blob(chunks, {
+      type: response.headers.get("Content-Type") || "application/zip",
+    });
+  } catch (error) {
+    checkCancellation(response);
+    throw error;
+  } finally {
+    reader.releaseLock();
+  }
 }
 export async function readEnvelope<T = any>(response: Response): Promise<T> {
   let body: any;

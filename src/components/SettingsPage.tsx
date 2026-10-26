@@ -11,7 +11,7 @@ import { AiSettings } from "./AiTools";
 import { AiHistory } from "./AiHistory";
 
 import { defaults } from "../lib/model";
-import { requestResponse } from "../lib/request";
+import { requestResponse, readDownload } from "../lib/request";
 import { api } from "../lib/request";
 import { ErrorBox } from "./ui";
 import {
@@ -51,11 +51,13 @@ export default function SettingsPage({
     [newPassword, setNewPassword] = useState(""),
     [exportPassword, setExportPassword] = useState(""),
     [exportKeys, setExportKeys] = useState<Record<string, string>>({}),
-    [busy, setBusy] = useState(false);
+    [busy, setBusy] = useState(false),
+    [downloadProgress, setDownloadProgress] = useState("");
   async function download(type: string) {
     const key = exportKeys[type] || crypto.randomUUID();
     setExportKeys((keys) => ({ ...keys, [type]: key }));
     setBusy(true);
+    setDownloadProgress("正在生成导出…");
     setError("");
     try {
       const r = await requestResponse("exports", {
@@ -67,7 +69,14 @@ export default function SettingsPage({
         },
         body: JSON.stringify({ type, password: exportPassword }),
       });
-      const url = URL.createObjectURL(await r.blob());
+      const blob = await readDownload(r, (bytes, total) =>
+        setDownloadProgress(
+          total
+            ? `下载中 ${Math.floor((bytes / total) * 100)}%`
+            : `已接收 ${(bytes / 1048576).toFixed(1)} MiB`,
+        ),
+      );
+      const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
       a.download = `yanxiben-${type.toLowerCase()}-${new Date().toISOString().slice(0, 10)}.zip`;
@@ -85,6 +94,7 @@ export default function SettingsPage({
       setError((e as Error).message);
     } finally {
       setBusy(false);
+      setDownloadProgress("");
     }
   }
   return (
@@ -97,6 +107,7 @@ export default function SettingsPage({
         </div>
       </div>
       <ErrorBox text={error} />
+      {downloadProgress && <p role="status">{downloadProgress}</p>}
       {capacity && (
         <p className="tip">
           当前账号数据约 {(capacity.bytes / 1048576).toFixed(1)}{" "}

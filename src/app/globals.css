@@ -177,6 +177,12 @@ small {
   border-radius: 5px;
   font-size: 11px;
 }
+.badge.admin-status-ok {
+  color: var(--green);
+}
+.badge.admin-status-danger {
+  color: #a35e4e;
+}
 .inline {
   display: flex;
   align-items: center;

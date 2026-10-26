@@ -19,11 +19,12 @@ test("HTTP 小缓存预算拒绝新任务、保留旧键，启动清理无需导
   const owners = Array.from({ length: 4 }, () => randomUUID());
   for (const owner of owners)
     run(
-      "INSERT INTO users VALUES(?,?,?,?)",
+      "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
       owner,
       owner,
       bcrypt.hashSync(password, 4),
       JSON.stringify(defaults),
+      "user",
     );
   writeFileSync(
     path.join(dataDir, "session-secret"),
@@ -82,9 +83,16 @@ test("HTTP 小缓存预算拒绝新任务、保留旧键，启动清理无需导
   server.stderr.on("data", (value) => (output += value));
   t.after(() => server.kill());
   let ready = false;
-  for (let i = 0; i < 60; i++) {
+  const startupDeadline = Date.now() + 30000;
+  while (Date.now() < startupDeadline && server.exitCode === null) {
     try {
-      if ((await fetch(base + "/api/v1/settings")).status === 401) {
+      if (
+        (
+          await fetch(base + "/api/v1/settings", {
+            signal: AbortSignal.timeout(1000),
+          })
+        ).status === 401
+      ) {
         ready = true;
         break;
       }

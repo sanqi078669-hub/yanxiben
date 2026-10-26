@@ -84,6 +84,10 @@ export default function Login({
         <p className="login-hint">
           受邀使用：请向维护人领取账号。忘记密码时请联系维护人重置。
         </p>
+        <p className="login-hint">
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+          还没有账号？<a href="/register">创建账号</a>
+        </p>
       </form>
     </div>
   );

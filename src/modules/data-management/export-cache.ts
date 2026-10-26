@@ -30,10 +30,10 @@ function setting(name: string, fallback: number) {
 }
 export function exportCachePolicy() {
   return {
-    accountBytes: setting("EXPORT_CACHE_ACCOUNT_BYTES", 64 * 1024 * 1024),
-    instanceBytes: setting("EXPORT_CACHE_INSTANCE_BYTES", 192 * 1024 * 1024),
+    accountBytes: setting("EXPORT_CACHE_ACCOUNT_BYTES", 256 * 1024 * 1024),
+    instanceBytes: setting("EXPORT_CACHE_INSTANCE_BYTES", 1792 * 1024 * 1024),
     accountFiles: setting("EXPORT_CACHE_ACCOUNT_FILES", 12),
-    instanceFiles: setting("EXPORT_CACHE_INSTANCE_FILES", 60),
+    instanceFiles: setting("EXPORT_CACHE_INSTANCE_FILES", 84),
     rateCount: setting("EXPORT_CACHE_RATE_COUNT", 3),
     rateWindowMs: setting("EXPORT_CACHE_RATE_WINDOW_MS", 300000),
     minFreeBytes: setting(
@@ -77,20 +77,46 @@ export function cachedExport(
     "IDEMPOTENCY_CONFLICT",
     "同一导出键不能用于不同类型",
   );
-  const filename = exportFile(row.file_id),
+  const filename = exportFile(row.file_id);
+  let bytes: Buffer;
+  try {
     bytes = readFileSync(/* turbopackIgnore: true */ filename);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+    run(
+      "DELETE FROM export_receipts WHERE owner=? AND key_hash=? AND file_id=?",
+      owner,
+      row.key_hash,
+      row.file_id,
+    );
+    return;
+  }
   checkCachedArchiveCapacity(bytes);
   return { fileId: String(row.file_id), filename, size: bytes.length };
 }
 export function cleanupExportCache(now = Date.now()) {
   privateDirectory(directory);
-  transaction(() => {
-    for (const row of all(
-      "SELECT file_id FROM export_receipts WHERE expires<=?",
-      now,
-    ))
-      rmSync(exportFile(row.file_id), { force: true });
-    run("DELETE FROM export_receipts WHERE expires<=?", now);
+  // Commit each removal separately: a later filesystem failure cannot restore
+  // receipts for files already deleted. Failed files remain counted and retryable.
+  let failed = false;
+  for (const row of all(
+    "SELECT file_id FROM export_receipts WHERE expires<=?",
+    now,
+  )) {
+    try {
+      transaction(() => {
+        rmSync(exportFile(row.file_id), { force: true });
+        run(
+          "DELETE FROM export_receipts WHERE file_id=? AND expires<=?",
+          row.file_id,
+          now,
+        );
+      });
+    } catch {
+      failed = true;
+    }
+  }
+  {
     const retained = new Set(
       all("SELECT file_id FROM export_receipts").map(
         (row) => row.file_id + ".zip",
@@ -106,8 +132,16 @@ export function cleanupExportCache(now = Date.now()) {
           EXPORT_TTL <=
           now
       )
-        rmSync(path.join(directory, name), { force: true });
-  });
+        try {
+          rmSync(path.join(directory, name), { force: true });
+        } catch {
+          failed = true;
+        }
+  }
+  if (failed)
+    console.error(
+      "Some export cache files could not be removed; retrying next interval",
+    );
   const window = exportCachePolicy().rateWindowMs;
   for (const [owner, attempts] of state.attempts) {
     const recent = attempts.filter((time) => time > now - window);

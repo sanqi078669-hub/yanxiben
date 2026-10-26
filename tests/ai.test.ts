@@ -20,18 +20,20 @@ const owner = randomUUID(),
   other = randomUUID(),
   profileId = randomUUID();
 run(
-  "INSERT INTO users VALUES(?,?,?,?)",
+  "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
   owner,
   "ai-qa",
   "hash",
   JSON.stringify(defaults),
+  "user",
 );
 run(
-  "INSERT INTO users VALUES(?,?,?,?)",
+  "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
   other,
   "ai-other",
   "hash",
   JSON.stringify(defaults),
+  "user",
 );
 const profile = {
   id: profileId,

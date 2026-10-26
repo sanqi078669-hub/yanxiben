@@ -16,11 +16,12 @@ const owner = randomUUID(),
   other = randomUUID();
 for (const id of [owner, other])
   run(
-    "INSERT INTO users VALUES(?,?,?,?)",
+    "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
     id,
     id,
     "hash",
     JSON.stringify(defaults),
+    "user",
   );
 const profile = {
   id: randomUUID(),

@@ -7,6 +7,8 @@ import { readJson } from "./body";
 import { guardRequest, jsonOk, errorResponse } from "./middleware";
 import { resourceHandlers } from "./router";
 import { loginHandler } from "./handlers/login";
+import { registerHandler } from "./handlers/register";
+import { adminHandler } from "./handlers/admin";
 import { enforceQuota, accountUsage } from "../data-management/quota";
 export async function handleRequest(
   req: NextRequest,
@@ -37,6 +39,8 @@ export async function handleRequest(
       );
     if (p === "auth/login" && method === "POST")
       return await loginHandler(context);
+    if (p === "auth/register" && method === "POST")
+      return await registerHandler(context);
     const { owner, session: s } = await authenticated();
     if (p === "data/capacity" && method === "GET")
       return context.ok({
@@ -45,13 +49,14 @@ export async function handleRequest(
       });
     if (
       !["GET", "HEAD"].includes(method) &&
-      !["auth", "exports", "data"].includes(parts[0])
+      !["auth", "exports", "data", "admin"].includes(parts[0])
     )
       enforceQuota(owner);
     if (parts[0] === "ai" && process.env.AI_ENABLED === "0" && method !== "GET")
       throw new AppError(403, "AI_DISABLED", "本实例尚未启用 AI，请联系维护人");
-    const handler = Object.hasOwn(resourceHandlers, parts[0])
-      ? resourceHandlers[parts[0]]
+    const handlers: typeof resourceHandlers = { ...resourceHandlers, admin: adminHandler };
+    const handler = Object.hasOwn(handlers, parts[0])
+      ? handlers[parts[0]]
       : undefined;
     const response = handler && (await handler({ ...context, owner, s }));
     if (response) return response;

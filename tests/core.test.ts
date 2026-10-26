@@ -27,18 +27,20 @@ const awaitAuditModule = await import("../src/modules/ai/audit");
 const owner = randomUUID(),
   other = randomUUID();
 run(
-  "INSERT INTO users VALUES(?,?,?,?)",
+  "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
   owner,
   "one",
   "hash",
   JSON.stringify(defaults),
+  "user",
 );
 run(
-  "INSERT INTO users VALUES(?,?,?,?)",
+  "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
   other,
   "two",
   "hash",
   JSON.stringify(defaults),
+  "user",
 );
 const input = (type = "MATH", body = "求 $\\lim_{x\\to 0} \\sin(x)/x$") =>
   entrySchema.parse({

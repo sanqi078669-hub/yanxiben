@@ -23,11 +23,12 @@ test("真实浏览器：上传停滞、中断、取消及离开页面不丢未�
   const owner = randomUUID(),
     password = "synthetic-browser-password";
   run(
-    "INSERT INTO users VALUES(?,?,?,?)",
+    "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
     owner,
     owner,
     bcrypt.hashSync(password, 4),
     JSON.stringify(defaults),
+    "user",
   );
   writeFileSync(
     path.join(dataDir, "session-secret"),

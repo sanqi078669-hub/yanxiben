@@ -37,11 +37,12 @@ function account() {
   const owner = randomUUID(),
     id = randomUUID();
   run(
-    "INSERT INTO users VALUES(?,?,?,?)",
+    "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
     owner,
     owner,
     "fixture",
     JSON.stringify(defaults),
+    "user",
   );
   const profile = {
     id,

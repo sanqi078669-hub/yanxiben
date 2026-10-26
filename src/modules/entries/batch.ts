@@ -63,6 +63,11 @@ export function batchPause(owner: string, raw: unknown) {
       .parse(raw),
     changes: unknown[] = [],
     results: Result[] = [];
+  const id = randomUUID();
+  transaction(() => {
+    run("INSERT INTO batch_edits VALUES(?,?,?)", id, owner, "[]");
+    enforceAccountQuota(owner);
+  });
   for (const item of b.items) {
     try {
       transaction(() => {
@@ -98,26 +103,27 @@ export function batchPause(owner: string, raw: unknown) {
           review.id,
           owner,
         );
-        changes.push({
+        const change = {
           kind: "pause",
           id: item.id,
           reviewId: review.id,
           version: review.version + 1,
           stage: review.stage,
-        });
+        };
+        run(
+          "UPDATE batch_edits SET payload=? WHERE id=? AND owner=?",
+          JSON.stringify([...changes, change]),
+          id,
+          owner,
+        );
+        enforceAccountQuota(owner);
+        changes.push(change);
         results.push({ id: item.id, ok: true, message: "已暂停计划" });
       });
     } catch (e) {
       results.push({ id: item.id, ok: false, message: (e as Error).message });
     }
   }
-  const id = randomUUID();
-  run(
-    "INSERT INTO batch_edits VALUES(?,?,?)",
-    id,
-    owner,
-    JSON.stringify(changes),
-  );
   return { id, results };
 }
 export function batchTags(owner: string, raw: unknown) {

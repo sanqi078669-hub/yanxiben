@@ -1,5 +1,13 @@
 import { spawn, type ChildProcess } from "node:child_process";
-import { writeFileSync, readFileSync, existsSync, rmSync } from "node:fs";
+import {
+  writeFileSync,
+  readFileSync,
+  existsSync,
+  rmSync,
+  readdirSync,
+  lstatSync,
+  statfsSync,
+} from "node:fs";
 import { createServer } from "node:net";
 import { createRequire } from "node:module";
 import path from "node:path";
@@ -8,7 +16,10 @@ import { z } from "zod";
 import { dataDir, one, run, all } from "../../lib/db";
 import { assert, AppError } from "../entries/service";
 import type { DiskUpload } from "../http/body";
-import { BACKUP_ZIP_MAX_BYTES } from "../../lib/capacity";
+import {
+  BACKUP_ZIP_MAX_BYTES,
+  BACKUP_UNPACKED_MAX_BYTES,
+} from "../../lib/capacity";
 import { privateDirectory } from "../../lib/private-files";
 
 const state = globalThis as typeof globalThis & {
@@ -17,6 +28,7 @@ const state = globalThis as typeof globalThis & {
 };
 const children = (state.yanxiRestoreChildren ??= new Map());
 const launching = (state.yanxiRestoreLaunching ??= new Map());
+const previews = new Map<string, string>();
 const root = path.resolve(dataDir, "restore-workspaces");
 const requestSchema = z.object({ id: z.string().uuid() }).strict();
 function folderFor(id: string) {
@@ -39,7 +51,12 @@ function removeFiles(folder: string) {
     "INVALID_WORKSPACE",
     "拒绝清理未知目录",
   );
-  rmSync(target, { recursive: true, force: true });
+  rmSync(target, {
+    recursive: true,
+    force: true,
+    maxRetries: 5,
+    retryDelay: 200,
+  });
 }
 function workspace(owner: string, id: string) {
   const row = one(
@@ -203,12 +220,46 @@ export async function previewRestore(
   const user = one("SELECT username,password FROM users WHERE id=?", owner);
   assert(user, 404, "NOT_FOUND", "账号不存在");
   cleanupRestoreWorkspaces(owner);
+  // Include in-flight workspaces before awaiting the worker. This server runs one
+  // application process, and failed previews remove their directories.
+  privateDirectory(root);
+  const rows = all("SELECT owner FROM restore_workspaces");
+  assert(
+    rows.filter((row) => row.owner === owner).length +
+      [...previews.values()].filter((value) => value === owner).length <
+      2 && rows.length + previews.size < 7,
+    507,
+    "RESTORE_WORKSPACE_LIMIT",
+    "恢复空间数量已达上限，请先删除不再使用的空间",
+  );
+  const folderBytes = (folder: string): number =>
+    readdirSync(folder, { withFileTypes: true }).reduce((sum, entry) => {
+      const filename = path.join(folder, entry.name),
+        stat = lstatSync(filename);
+      assert(
+        !stat.isSymbolicLink(),
+        503,
+        "INVALID_WORKSPACE",
+        "恢复目录包含未知链接",
+      );
+      return sum + (stat.isDirectory() ? folderBytes(filename) : stat.size);
+    }, 0);
+  const disk = statfsSync(root),
+    reserve = BACKUP_ZIP_MAX_BYTES + BACKUP_UNPACKED_MAX_BYTES;
+  assert(
+    folderBytes(root) + (previews.size + 1) * reserve <= 7 * reserve &&
+      disk.bavail * disk.bsize >= (previews.size + 1) * reserve + 1024 ** 3,
+    507,
+    "RESTORE_DISK_LIMIT",
+    "恢复空间磁盘预算不足，请先清理旧空间",
+  );
   const id = randomUUID(),
     folder = folderFor(id),
     archive = path.join(folder, "source.zip"),
     target = path.join(folder, "data");
   privateDirectory(path.dirname(folder));
   privateDirectory(folder);
+  previews.set(id, owner);
   try {
     if (bytes instanceof Uint8Array)
       writeFileSync(archive, bytes, { mode: 0o600, flag: "wx" });
@@ -327,6 +378,8 @@ export async function previewRestore(
   } catch (error) {
     removeFiles(folder);
     throw error;
+  } finally {
+    previews.delete(id);
   }
 }
 async function freePort() {
@@ -384,8 +437,14 @@ async function startRestore(owner: string, row: Record<string, any>) {
       DATA_DIR: row.folder,
       SESSION_COOKIE_NAME: `yanxi_restore_${id.replaceAll("-", "")}`,
       RESTORE_CONTROL_TOKEN: token,
+      YANXI_DEPLOYMENT: "local",
+      PUBLIC_ORIGIN: url,
+      SECURE_COOKIES: "0",
+      RESTORE_MODE: "admin",
+      AI_ENABLED: "0",
     };
     delete env.SESSION_SECRET;
+    delete env.PROXY_SECRET;
     // Next output is discarded; keep bounded startup diagnostics, not an unbounded log.
     const child = spawn(
       process.execPath,

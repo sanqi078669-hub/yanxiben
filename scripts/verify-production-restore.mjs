@@ -260,7 +260,9 @@ try {
   workspaceId = preview.data.id;
   assert.equal(preview.data.counts.entries, 1);
   assert.deepEqual(readdirSync(path.join(target, "upload-tmp")), []);
-  occupiedPort = createServer();
+  // This fixture only occupies a port; never retain a probe connection that
+  // would make server.close() wait forever during cleanup.
+  occupiedPort = createServer((socket) => socket.destroy());
   await new Promise((resolve) => {
     occupiedPort.once("error", () => resolve());
     occupiedPort.listen(3200, "127.0.0.1", resolve);

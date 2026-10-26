@@ -1,7 +1,7 @@
 import { randomBytes } from "node:crypto";
 import { NextResponse, type NextRequest } from "next/server";
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const nonce = randomBytes(24).toString("base64");
   const dev = process.env.NODE_ENV === "development";
   // KaTeX and React use style attributes; scripts remain nonce protected.
@@ -11,9 +11,11 @@ export function proxy(request: NextRequest) {
   headers.set("Content-Security-Policy", policy);
   const response = NextResponse.next({ request: { headers } });
   response.headers.set("Content-Security-Policy", policy);
-  response.headers.set("Cache-Control", "no-store");
+  response.headers.set("Cache-Control", "private, no-store");
   return response;
 }
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: [
+    "/((?!api(?:/|$)|_next/static(?:/|$)|_next/image(?:/|$)|favicon\\.ico$).*)",
+  ],
 };

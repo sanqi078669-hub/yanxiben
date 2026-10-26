@@ -15,11 +15,12 @@ const { markdownExport } =
 const { afterSubmission } = await import("../src/modules/review/queue");
 const owner = randomUUID();
 run(
-  "INSERT INTO users VALUES(?,?,?,?)",
+  "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
   owner,
   "qa",
   "hash",
   JSON.stringify(defaults),
+  "user",
 );
 const input = (type = "MATH") =>
   entrySchema.parse({

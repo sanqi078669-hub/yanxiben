@@ -11,6 +11,7 @@ export function maintainAccount(
   command: string,
   username: string,
   supplied?: string,
+  role: "user" | "admin" = "user",
 ) {
   if (!/^[a-zA-Z0-9_.-]{1,100}$/.test(username))
     throw new Error("用户名仅允许字母、数字、点、下划线和连字符");
@@ -38,11 +39,12 @@ export function maintainAccount(
     transaction(() => {
       if (command === "create")
         run(
-          "INSERT INTO users VALUES(?,?,?,?)",
+          "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
           owner,
           username,
           bcrypt.hashSync(password, 12),
           JSON.stringify(defaults),
+          role,
         );
       if (command === "reset")
         run(

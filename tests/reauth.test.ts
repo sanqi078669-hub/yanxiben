@@ -6,7 +6,8 @@ import path from "node:path";
 import { randomUUID } from "node:crypto";
 import bcrypt from "bcryptjs";
 process.env.DATA_DIR = mkdtempSync(path.join(os.tmpdir(), "yanxi-reauth-"));
-const { run, one } = await import("../src/lib/db");
+const { run, one, db } = await import("../src/lib/db");
+db.exec("DROP TRIGGER IF EXISTS enforce_user_capacity");
 const { defaults } = await import("../src/lib/model");
 const {
   verifyCurrentPassword,
@@ -17,11 +18,12 @@ const {
 function account() {
   const owner = randomUUID();
   run(
-    "INSERT INTO users VALUES(?,?,?,?)",
+    "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
     owner,
     owner,
     bcrypt.hashSync("synthetic-password", 4),
     JSON.stringify(defaults),
+    "user",
   );
   return owner;
 }

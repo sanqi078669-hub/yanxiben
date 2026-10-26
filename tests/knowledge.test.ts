@@ -22,11 +22,12 @@ function setup() {
     target = randomUUID(),
     child = randomUUID();
   run(
-    "INSERT INTO users VALUES(?,?,?,?)",
+    "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
     owner,
     owner,
     "hash",
     JSON.stringify(defaults),
+    "user",
   );
   for (const [id, name, parent] of [
     [source, "导数", null],

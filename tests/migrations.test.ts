@@ -19,7 +19,7 @@ test("v3 中间态升级至当前版本，原记录不变且只触发一次升�
   const db = new DatabaseSync(":memory:");
   try {
     migrateDatabase(db, { steps: migrations.slice(0, 3) });
-    db.prepare("INSERT INTO users VALUES(?,?,?,?)").run(
+    db.prepare("INSERT INTO users (id, username, password, settings) VALUES(?,?,?,?)").run(
       fixture.profile.id,
       "v3-fixture",
       "hash",
@@ -116,7 +116,7 @@ test("识别无迁移表的 v1 库，保留数据并补齐已知旧字段", () =
       "CREATE TABLE ai_audit(id TEXT PRIMARY KEY,owner TEXT NOT NULL,action TEXT NOT NULL,model TEXT NOT NULL,host TEXT NOT NULL,created_at TEXT NOT NULL,duration INTEGER NOT NULL,status TEXT NOT NULL,tokens INTEGER,result TEXT)",
     );
     db.exec(
-      "INSERT INTO users VALUES('owner','user','hash','{}'); INSERT INTO knowledge VALUES('node','owner','高等数学',NULL,'极限',''); INSERT INTO restore_workspaces VALUES('work','owner','folder','{}','date',NULL)",
+      "INSERT INTO users (id, username, password, settings) VALUES('owner','user','hash','{}'); INSERT INTO knowledge VALUES('node','owner','高等数学',NULL,'极限',''); INSERT INTO restore_workspaces VALUES('work','owner','folder','{}','date',NULL)",
     );
     let backedUp = false;
     migrateDatabase(db, {
@@ -237,7 +237,7 @@ test("实际文件启动升级前生成可读取的数据库快照", () => {
   const old = new DatabaseSync(path.join(folder, "yanxiben.sqlite"));
   old.exec(
     coreSchema +
-      "PRAGMA user_version=1; INSERT INTO users VALUES('owner','user','hash','{}')",
+      "PRAGMA user_version=1; INSERT INTO users (id, username, password, settings) VALUES('owner','user','hash','{}')",
   );
   old.close();
   const result = spawnSync(

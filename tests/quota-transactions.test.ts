@@ -22,11 +22,12 @@ function setup(count = 3, large = false) {
     source = randomUUID(),
     target = randomUUID();
   run(
-    "INSERT INTO users VALUES(?,?,?,?)",
+    "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
     owner,
     owner,
     "synthetic",
     JSON.stringify(defaults),
+    "user",
   );
   for (const node of [source, target])
     run(

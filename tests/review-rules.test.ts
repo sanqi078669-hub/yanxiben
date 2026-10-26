@@ -19,11 +19,12 @@ const { activeStage } = await import("../src/modules/review/schedule");
 function setup() {
   const owner = randomUUID();
   run(
-    "INSERT INTO users VALUES(?,?,?,?)",
+    "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
     owner,
     owner,
     "hash",
     JSON.stringify(defaults),
+    "user",
   );
   const input = entrySchema.parse({
     type: "MATH",

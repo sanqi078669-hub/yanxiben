@@ -39,11 +39,12 @@ const owner = randomUUID(),
 const start = performance.now();
 transaction(() => {
   run(
-    "INSERT INTO users VALUES(?,?,?,?)",
+    "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
     owner,
     "benchmark",
     "hash",
     JSON.stringify(defaults),
+    "user",
   );
   for (let i = 0; i < records; i++) {
     const id = randomUUID(),

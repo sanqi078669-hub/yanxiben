@@ -15,11 +15,12 @@ const { createEntry, addReview, trashEntry, attempt } =
 test("本次错因独立于题目标签，提交重试幂等且拒绝未知分类", () => {
   const owner = randomUUID();
   run(
-    "INSERT INTO users VALUES(?,?,?,?)",
+    "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
     owner,
     owner,
     "hash",
     JSON.stringify(defaults),
+    "user",
   );
   const entry = createEntry(
     owner,
@@ -119,11 +120,12 @@ test("错因快照按月聚合，旧日志保持未知，重复提交不增加�
 test("统计筛选隔离账号和删除记录，不发送答案原文", () => {
   for (const owner of ["a", "b"]) {
     run(
-      "INSERT INTO users VALUES(?,?,?,?)",
+      "INSERT INTO users (id, username, password, settings, role) VALUES(?,?,?,?,?)",
       owner,
       owner,
       "hash",
       JSON.stringify(defaults),
+      "user",
     );
     for (const deleted of [false, true]) {
       const entry = createEntry(

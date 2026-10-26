@@ -9,6 +9,7 @@ import {
   readFileSync,
   writeFileSync,
   lstatSync,
+  createReadStream,
 } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
@@ -19,19 +20,22 @@ if (!source || !target || !["snapshot", "verify"].includes(command))
     "DATA_DIR 必填；用法 instance snapshot 新目录 --offline 或 instance verify 快照目录",
   );
 const destination = path.resolve(target);
-function digest(folder: string): Record<string, string> {
+async function fileDigest(file: string) {
+  const hash = createHash("sha256");
+  for await (const chunk of createReadStream(file)) hash.update(chunk);
+  return hash.digest("hex");
+}
+async function digest(folder: string): Promise<Record<string, string>> {
   const result: Record<string, string> = {};
-  function walk(relative: string) {
+  async function walk(relative: string) {
     const file = path.join(folder, relative),
       stat = lstatSync(file);
     if (stat.isSymbolicLink()) throw new Error("拒绝符号链接");
     if (stat.isDirectory())
       for (const name of readdirSync(file).sort())
-        walk(path.join(relative, name));
+        await walk(path.join(relative, name));
     else if (stat.isFile())
-      result[relative.replaceAll("\\", "/")] = createHash("sha256")
-        .update(readFileSync(file))
-        .digest("hex");
+      result[relative.replaceAll("\\", "/")] = await fileDigest(file);
     else throw new Error("拒绝特殊文件");
   }
   for (const name of [
@@ -40,7 +44,7 @@ function digest(folder: string): Record<string, string> {
     "ai-private",
     "session-secret",
   ])
-    if (existsSync(path.join(folder, name))) walk(name);
+    if (existsSync(path.join(folder, name))) await walk(name);
   return result;
 }
 if (command === "snapshot") {
@@ -52,7 +56,7 @@ if (command === "snapshot") {
     throw new Error("请先停止应用和所有写入 CLI，再显式传入 --offline");
   if (existsSync(destination) || destination.startsWith(source + path.sep))
     throw new Error("目标必须为 DATA_DIR 外的全新目录");
-  digest(source); // Reject linked input before copying.
+  await digest(source); // Reject linked input before copying.
   mkdirSync(destination, { mode: 0o700 });
   const db = new DatabaseSync(path.join(source, "yanxiben.sqlite"), {
     readOnly: true,
@@ -76,7 +80,7 @@ if (command === "snapshot") {
     JSON.stringify({
       version: 1,
       created: new Date().toISOString(),
-      files: digest(destination),
+      files: await digest(destination),
     }),
     { mode: 0o600, flag: "wx" },
   );
@@ -84,7 +88,9 @@ if (command === "snapshot") {
 const manifest = JSON.parse(
   readFileSync(path.join(destination, "instance-manifest.json"), "utf8"),
 );
-if (JSON.stringify(manifest.files) !== JSON.stringify(digest(destination)))
+if (
+  JSON.stringify(manifest.files) !== JSON.stringify(await digest(destination))
+)
   throw new Error("快照文件摘要不匹配");
 const db = new DatabaseSync(path.join(destination, "yanxiben.sqlite"), {
   readOnly: true,
@@ -110,10 +116,11 @@ try {
     ]),
   );
   for (const row of db.prepare("SELECT id,sha256 FROM attachments").all()) {
-    const bytes = readFileSync(
-      path.join(destination, "attachments", String(row.id)),
-    );
-    if (createHash("sha256").update(bytes).digest("hex") !== row.sha256)
+    if (
+      (await fileDigest(
+        path.join(destination, "attachments", String(row.id)),
+      )) !== row.sha256
+    )
       throw new Error("附件摘要不匹配");
   }
   console.log(JSON.stringify({ status: "verified", counts }));
