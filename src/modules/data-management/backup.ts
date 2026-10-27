@@ -143,13 +143,30 @@ export function backup(owner: string) {
 export function markdownExport(owner: string) {
   const files = readSnapshot(() => {
     const files: Record<string, Uint8Array> = {};
+    const dictionaryLabels = new Map(
+      all(
+        "SELECT kind,value,label FROM dictionary_items WHERE owner=?",
+        owner,
+      ).map((row) => [
+        JSON.stringify([row.kind, row.value]),
+        row.label as string,
+      ]),
+    );
+    const label = (kind: "SUBJECT" | "ERROR", value: string) =>
+      dictionaryLabels.get(JSON.stringify([kind, value]))?.trim() || value;
+    const knowledgeNames = new Map(
+      all("SELECT id,name FROM knowledge WHERE owner=?", owner).map((row) => [
+        row.id,
+        row.name as string,
+      ]),
+    );
     let index = "# 研习本 · 阅读导出\n\n";
     for (const row of all(
       "SELECT * FROM entries WHERE owner=? AND deleted_at IS NULL",
       owner,
     )) {
       const e = unpack(row);
-      let md = `# ${e.title || "未命名记录"}\n\n${e.subject} · ${e.status}\n\n## 原材料\n\n${e.body}\n\n来源：${e.source}\n\n`;
+      let md = `# ${e.title || "未命名记录"}\n\n${label("SUBJECT", e.subject)} · ${e.status}\n\n## 原材料\n\n${e.body}\n\n来源：${e.source}\n\n`;
       if (e.type === "CS") {
         md += `题型：${e.details.subtype === "CONCEPT" ? "概念疑问" : "题目"}\n\n`;
         if (e.details.options_json)
@@ -162,6 +179,7 @@ export function markdownExport(owner: string) {
       for (const c of e.contexts)
         md += `## 语境\n\n${c.sentence_text}\n\n${c.meaning_md}\n\n${c.collocation}\n\n来源：${c.source}\n\n`;
       md += `## 总结\n\n${e.summary}\n\n标签：${e.tags.join("、")}\n\n`;
+      md += `错因：${e.errors.map((value) => label("ERROR", value)).join("、") || "无"}\n\n知识点：${e.knowledgeIds.map((value) => knowledgeNames.get(value) || value).join("、") || "无"}\n\n`;
       for (const a of e.attachments) {
         const f = one(
           "SELECT * FROM attachments WHERE id=? AND owner=?",

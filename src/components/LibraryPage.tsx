@@ -1,5 +1,6 @@
 "use client";
 import { DictionaryLabel } from "./DictionaryContext";
+import { DictionaryOptions } from "./DictionaryOptions";
 import Link from "next/link";
 
 import {
@@ -15,7 +16,7 @@ import { BatchTags } from "./BatchTags";
 import type { EntryList, KnowledgeNode } from "../lib/api-types";
 import { useLibraryPosition } from "./libraryPosition";
 
-import { names, types, subjects, errors } from "../lib/model";
+import { names, types } from "../lib/model";
 import { api } from "../lib/request";
 import { TypeIcon, Empty, Row, ErrorBox } from "./ui";
 import { useLoad } from "./useLoad";
@@ -119,7 +120,7 @@ export default function LibraryPage({
             onChange={(e) => setQ(e.target.value)}
           />
         </div>
-        <div className="filters">
+        <div className="filters dictionary-filters">
           <select
             aria-label="记录类型"
             value={type}
@@ -138,9 +139,7 @@ export default function LibraryPage({
             onChange={(e) => setSubject(e.target.value)}
           >
             <option value="">所有科目</option>
-            {subjects.map((s) => (
-              <option key={s}>{s}</option>
-            ))}
+            <DictionaryOptions kind="SUBJECT" value={subject} />
           </select>
           {mode !== "inbox" && (
             <select
@@ -174,9 +173,7 @@ export default function LibraryPage({
             onChange={(e) => setErrorFilter(e.target.value)}
           >
             <option value="">所有错因</option>
-            {errors.map((e) => (
-              <option key={e}>{e}</option>
-            ))}
+            <DictionaryOptions kind="ERROR" value={errorFilter} />
           </select>
           <input
             className="tag-filter"

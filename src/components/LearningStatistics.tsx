@@ -1,19 +1,36 @@
 "use client";
 import { request } from "../lib/request";
 import { useEffect, useState } from "react";
-import { subjects, errors } from "../lib/model";
+import { useDictionary } from "./DictionaryContext";
+import { DictionaryOptions } from "./DictionaryOptions";
 import { statisticsDates } from "../lib/statistics-dates";
 import type { learningStatistics } from "../modules/review/statistics";
 type Statistics = ReturnType<typeof learningStatistics>;
 const fraction = (n: number, d: number) =>
   d ? `${n}/${d}（${Math.round((n / d) * 100)}%）` : "暂无样本";
 export function LearningStatistics({ timezone }: { timezone: string }) {
+  const { items, label } = useDictionary();
   const [from, setFrom] = useState(() => statisticsDates(timezone).from),
     [to, setTo] = useState(() => statisticsDates(timezone).to);
   const [subject, setSubject] = useState(""),
     [mode, setMode] = useState("");
   const [data, setData] = useState<Statistics | null>(null),
     [error, setError] = useState("");
+  const dictionaryErrors = [...items.errors].sort(
+    (a, b) => a.sortOrder - b.sortOrder || a.value.localeCompare(b.value),
+  );
+  const errorColumns = [
+    ...dictionaryErrors.map((item) => item.value),
+    ...Array.from(
+      new Set(
+        Object.values(data?.errorMonthly ?? {}).flatMap((month) =>
+          Object.keys(month.counts),
+        ),
+      ),
+    )
+      .filter((value) => !dictionaryErrors.some((item) => item.value === value))
+      .sort(),
+  ];
   useEffect(() => {
     const controller = new AbortController();
     setData(null);
@@ -29,7 +46,7 @@ export function LearningStatistics({ timezone }: { timezone: string }) {
     return () => controller.abort();
   }, [from, to, subject, mode]);
   return (
-    <section className="panel form-panel">
+    <section className="panel form-panel statistics-panel">
       <h2>复习效果 · 以自评为依据</h2>
       <div className="filters">
         <label>
@@ -52,9 +69,7 @@ export function LearningStatistics({ timezone }: { timezone: string }) {
           统计科目
           <select value={subject} onChange={(e) => setSubject(e.target.value)}>
             <option value="">全部科目</option>
-            {subjects.map((s) => (
-              <option key={s}>{s}</option>
-            ))}
+            <DictionaryOptions kind="SUBJECT" value={subject} />
           </select>
         </label>
         <label>
@@ -84,7 +99,12 @@ export function LearningStatistics({ timezone }: { timezone: string }) {
               连续两次困难比例：{fraction(data.repeated, data.repeatBase)}
             </li>
           </ul>
-          <div className="table-scroll">
+          <div
+            className="table-scroll"
+            tabIndex={0}
+            role="region"
+            aria-label="按月回顾表，可横向滚动"
+          >
             <table>
               <caption>按月回顾（次数）</caption>
               <thead>
@@ -109,7 +129,12 @@ export function LearningStatistics({ timezone }: { timezone: string }) {
               </tbody>
             </table>
           </div>
-          <div className="table-scroll">
+          <div
+            className="table-scroll"
+            tabIndex={0}
+            role="region"
+            aria-label="错因统计表，可横向滚动"
+          >
             <table>
               <caption>本次作答错因自评 · 按月变化</caption>
               <thead>
@@ -117,8 +142,15 @@ export function LearningStatistics({ timezone }: { timezone: string }) {
                   <th>月份</th>
                   <th>已填写错因</th>
                   <th>未填写 / 旧历史</th>
-                  {errors.map((e) => (
-                    <th key={e}>{e}</th>
+                  {errorColumns.map((e) => (
+                    <th key={e}>
+                      {label("ERROR", e)}
+                      {items.errors.some(
+                        (item) => item.value === e && item.archived,
+                      )
+                        ? "（已归档）"
+                        : ""}
+                    </th>
                   ))}
                 </tr>
               </thead>
@@ -128,11 +160,18 @@ export function LearningStatistics({ timezone }: { timezone: string }) {
                     <th scope="row">{month}</th>
                     <td>{v.known}</td>
                     <td>{v.unknown}</td>
-                    {errors.map((e) => (
-                      <td key={e}>{fraction(v.counts[e], v.known)}</td>
+                    {errorColumns.map((e) => (
+                      <td key={e}>
+                        {v.known ? fraction(v.counts[e] ?? 0, v.known) : "—"}
+                      </td>
                     ))}
                   </tr>
                 ))}
+                {!Object.keys(data.errorMonthly).length && (
+                  <tr>
+                    <td colSpan={3 + errorColumns.length}>暂无数据</td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>

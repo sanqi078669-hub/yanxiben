@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { db } from "../../lib/db";
-import { subjects, errors } from "../../lib/model";
 const day = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}$/)
@@ -14,7 +13,7 @@ export const statisticsQuery = z
   .object({
     from: day,
     to: day,
-    subject: z.enum(["", ...subjects] as [string, ...string[]]).default(""),
+    subject: z.string().trim().max(100).default(""),
     mode: z.enum(["", "PRACTICE", "SCHEDULED"]).default(""),
   })
   .refine((v) => v.from <= v.to, "起始日期不能晚于结束日期");
@@ -68,12 +67,12 @@ export function summarize(rows: Iterable<StatisticRow>) {
     const em = (errorMonthly[month] ||= {
       known: 0,
       unknown: 0,
-      counts: Object.fromEntries(errors.map((e) => [e, 0])),
+      counts: Object.create(null) as Record<string, number>,
     });
     if (row.errorCauses) {
       em.known++;
       for (const e of new Set(row.errorCauses))
-        if (errors.includes(e)) em.counts[e]++;
+        if (e.trim()) em.counts[e] = (em.counts[e] ?? 0) + 1;
     } else em.unknown++;
     m.total++;
     if (good) m.independent++;
@@ -130,7 +129,7 @@ export function learningStatistics(owner: string, raw: unknown) {
           r.causes === null
             ? undefined
             : (JSON.parse(r.causes as string) as unknown[]).filter(
-                (e): e is string => typeof e === "string" && errors.includes(e),
+                (e): e is string => typeof e === "string" && !!e.trim(),
               ),
       };
   }

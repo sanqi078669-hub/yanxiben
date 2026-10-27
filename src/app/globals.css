@@ -2099,6 +2099,21 @@ footer span {
 .table-scroll {
   overflow-x: auto;
 }
+.statistics-panel .table-scroll {
+  max-width: 100%;
+  min-width: 0;
+}
+.statistics-panel {
+  min-width: 0;
+}
+.statistics-panel th {
+  white-space: nowrap;
+}
+.statistics-panel .filters > *,
+.dictionary-filters select {
+  min-width: 0;
+  max-width: 100%;
+}
 .table-scroll table {
   width: 100%;
   border-collapse: collapse;
