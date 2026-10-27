@@ -28,7 +28,6 @@ import { MaterialPreview } from "./MaterialPreview";
 import { useEntryDraft } from "./useEntryDraft";
 
 import {
-  legacyTemplate,
   templateFields,
   type Entry,
   type EntryInput,
@@ -88,7 +87,6 @@ export default function Editor({ id }: { id?: string }) {
     [uploading, setUploading] = useState(false),
     [busy, setBusy] = useState(false);
   const template = templateOf(e.type);
-  const customType = !legacyTemplate(e.type);
   const typeAvailable =
     !!e.type && (!!id || activeTypes.some((item) => item.value === e.type));
   const [savedValue, setSavedValue] = useState(() => JSON.stringify(e));
@@ -699,11 +697,7 @@ export default function Editor({ id }: { id?: string }) {
                 </div>
               ))}
             </div>
-            {customType ? (
-              <p className="muted">自定义类型暂不支持 AI</p>
-            ) : (
-              <AiExtract entry={e} existing={!!id} onApply={change} />
-            )}
+            <AiExtract entry={e} existing={!!id} onApply={change} />
             <label>
               来源
               <input
@@ -714,22 +708,18 @@ export default function Editor({ id }: { id?: string }) {
             </label>
           </section>
           <div className="capture-analysis">
-            {customType ? (
-              <p className="panel form-panel muted">自定义类型暂不支持 AI</p>
-            ) : (
-              <AiStudy
-                key={e.type}
-                entry={e}
-                actions={
-                  e.type === "VOCABULARY"
-                    ? ["organize", "english"]
-                    : e.type === "SENTENCE"
-                      ? ["organize", "analyze", "english"]
-                      : ["organize", "analyze"]
-                }
-                onApply={change}
-              />
-            )}
+            <AiStudy
+              key={e.type}
+              entry={e}
+              actions={
+                template === "VOCABULARY"
+                  ? ["organize", "english"]
+                  : template === "SENTENCE"
+                    ? ["organize", "analyze", "english"]
+                    : ["organize", "analyze"]
+              }
+              onApply={change}
+            />
           </div>
           <section className="panel form-panel capture-analysis">
             <div className="section-title">

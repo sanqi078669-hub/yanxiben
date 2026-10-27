@@ -12,6 +12,7 @@ import {
   type StudyAction,
 } from "../modules/ai/contracts";
 import { entrySchema, type EntryInput } from "../lib/model";
+import { DictionaryLabel, useDictionary } from "./DictionaryContext";
 
 export function AiStudy({
   entry,
@@ -30,6 +31,8 @@ export function AiStudy({
   hintUsed?: boolean;
   onRating?: (rating: string) => void;
 }) {
+  const { templateOf } = useDictionary();
+  const template = templateOf(entry.type);
   const [status, setStatus] = useState<any>(null),
     [action, setAction] = useState<StudyAction>(actions[0]),
     [consent, setConsent] = useState(false),
@@ -100,7 +103,7 @@ export function AiStudy({
           </label>
           <details>
             <summary>查看本次发送的文字（不发送图片）</summary>
-            <MaterialPreview material={material} />
+            <MaterialPreview material={material} resolveLabels />
           </details>
           {action === "hint" && (
             <label>
@@ -201,7 +204,7 @@ export function AiStudy({
           {previous && (
             <details>
               <summary>对比上一次生成结果</summary>
-              <MaterialPreview material={previous} />
+              <MaterialPreview material={previous} resolveLabels />
             </details>
           )}
           {action === "organize" ? (
@@ -218,7 +221,17 @@ export function AiStudy({
                 <p key={i}>依据：{s}</p>
               ))}
               {action === "analyze" && (
-                <p>错因建议：{result.errorTags?.join("、") || "未归类"}</p>
+                <p>
+                  错因建议：
+                  {result.errorTags?.length
+                    ? result.errorTags.map((value: string, index: number) => (
+                        <span key={value}>
+                          {index ? "、" : ""}
+                          <DictionaryLabel kind="ERROR" value={value} />
+                        </span>
+                      ))
+                    : "未归类"}
+                </p>
               )}
             </>
           )}
@@ -371,16 +384,18 @@ export function AiStudy({
                     setBusy(true);
                     setError("");
                     try {
-                      const draft = variantDraft(entry, result);
+                      const draft = variantDraft(entry, result, template);
                       if (variantAnswer.trim()) {
                         const field =
-                          entry.type === "MATH"
-                            ? "original_work_md"
-                            : entry.type === "CS"
-                              ? "my_answer_md"
-                              : entry.type === "SENTENCE"
-                                ? "initial_translation_md"
-                                : "takeaway_md";
+                          template === "GENERIC"
+                            ? "analysis_md"
+                            : template === "MATH"
+                              ? "original_work_md"
+                              : template === "CS"
+                                ? "my_answer_md"
+                                : template === "SENTENCE"
+                                  ? "initial_translation_md"
+                                  : "takeaway_md";
                         draft.details[field] = [
                           draft.details[field],
                           variantAnswer,

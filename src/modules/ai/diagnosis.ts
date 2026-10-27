@@ -4,6 +4,7 @@ import { all } from "../../lib/db";
 import { assert } from "../entries/service";
 import { complete } from "./provider";
 import { limited } from "./service";
+import { aiDictionary } from "./dictionaries";
 
 export function diagnosisPreview(owner: string) {
   const rows = all(
@@ -48,7 +49,7 @@ export function diagnosisPreview(owner: string) {
     if (r.mode === "PRACTICE") v.practice++;
     groups.set(r.id, v);
   }
-  const material = {
+  const material = aiDictionary(owner).material({
     scope:
       "仅最近200次练习，按不会/困难次数排序取最多20条记录；不代表完整学习能力评价",
     sampleSize: rows.length,
@@ -66,7 +67,7 @@ export function diagnosisPreview(owner: string) {
     entries: [...groups.values()]
       .sort((a, b) => b.again + b.hard - (a.again + a.hard))
       .slice(0, 20),
-  };
+  });
   return {
     material,
     digest: createHash("sha256").update(JSON.stringify(material)).digest("hex"),

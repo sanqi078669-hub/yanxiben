@@ -182,7 +182,7 @@ export function MaterialPreview({
               value ? (
               <DictionaryLabel kind="SUBJECT" value={value} markArchived />
             ) : resolveLabels &&
-              key === "errors" &&
+              (key === "errors" || key === "errorTags") &&
               Array.isArray(value) &&
               value.length ? (
               <ul>

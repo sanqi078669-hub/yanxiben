@@ -6,6 +6,7 @@ import { complete } from "./provider";
 import { limited } from "./service";
 import type { Entry } from "../../lib/model";
 import { searchTokens as tokens } from "../../lib/search";
+import { aiDictionary } from "./dictionaries";
 
 const excerpt = (e: Entry) => ({
   id: e.id,
@@ -70,7 +71,7 @@ export function relatedPreview(
           ).values(),
         ].slice(0, 40)
       : basicCandidates;
-  const material = {
+  const material = aiDictionary(owner).material({
     entry: excerpt(entry),
     candidates,
     basicIds: basicCandidates.map((e) => e.id),
@@ -80,7 +81,7 @@ export function relatedPreview(
       mode === "semantic"
         ? "同科目基础候选加最近更新记录，最多40条；通过当前语言模型比较语义，不使用外部嵌入服务。超出窗口的记录未参与本次比较。"
         : "同科目记录中按文字、标签与知识点匹配的最多8条候选",
-  };
+  });
   return {
     material,
     digest: createHash("sha256").update(JSON.stringify(material)).digest("hex"),

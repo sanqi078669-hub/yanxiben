@@ -16,6 +16,7 @@ const { extractionPatch } = await import("../src/modules/ai/contracts");
 const { run, dataDir } = await import("../src/lib/db");
 const { defaults } = await import("../src/lib/model");
 const { createEntry } = await import("../src/modules/entries/service");
+const { ensure } = await import("../src/modules/dictionaries/ensure");
 const owner = randomUUID(),
   other = randomUUID(),
   profileId = randomUUID();
@@ -53,7 +54,7 @@ const success = (value: unknown) => async () =>
     }),
   );
 const result = {
-  type: "CS" as const,
+  type: "408 专业课",
   subject: "数据结构",
   title: "队列",
   body: "先进先出的结构？",
@@ -68,6 +69,9 @@ const draft = entrySchema.parse({
   body: "求导 x^2",
   details: { original_work_md: "我认为导数是 x。" },
 });
+ensure(owner, "TYPE", "CS");
+ensure(owner, "SUBJECT", "数据结构");
+ensure(owner, "ERROR", "方法");
 test("配置加密且读取不返回密钥，账号隔离", () => {
   saveConfig(owner, { action: "save", profile });
   assert(!JSON.stringify(publicConfig(owner)).includes(profile.key));
@@ -118,7 +122,7 @@ test("辅助整理仅返回建议，预览材料不含身份、附件或来源�
     ),
   );
 });
-test("错因分析需要原作答，并严格限制错因分类", async () => {
+test("错因分析需要原作答，未知错因丢弃并提示", async () => {
   await assert.rejects(() =>
     study(
       owner,
@@ -140,13 +144,13 @@ test("错因分析需要原作答，并严格限制错因分类", async () => {
     ),
     output,
   );
-  await assert.rejects(() =>
-    study(
-      owner,
-      { action: "analyze", entry: draft, consent: true },
-      success({ ...output, errorTags: ["不聪明"] }),
-    ),
+  const unknown = await study(
+    owner,
+    { action: "analyze", entry: draft, consent: true },
+    success({ ...output, errorTags: ["不聪明"] }),
   );
+  assert.deepEqual(unknown.errorTags, []);
+  assert.deepEqual(unknown.warnings, ["AI 返回了未识别的错因：不聪明"]);
 });
 test("分级提示不发送答案、总结或原解法，限制三级", async () => {
   const saved = createEntry(owner, draft);
@@ -408,7 +412,7 @@ test("图片识别检查归属及明确同意，输出完整选项", async () =>
       return success(result)();
     },
   );
-  assert.deepEqual(value, result);
+  assert.deepEqual(value, { ...result, type: "CS" });
   assert.equal(
     extractionPatch(value).details.options_json,
     '["A. 栈","B. 队列"]',

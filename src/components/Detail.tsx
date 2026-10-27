@@ -8,7 +8,7 @@ import { Plus, Trash2, ChevronLeft, FileText, Target, X } from "lucide-react";
 import { AiStudy } from "./AiStudy";
 import { AiRelated } from "./AiRelated";
 
-import { legacyTemplate, type Entry } from "../lib/model";
+import { type Entry } from "../lib/model";
 import { api } from "../lib/request";
 import { MD } from "./Markdown";
 import {
@@ -85,18 +85,8 @@ export default function Detail({
       <ErrorBox text={actionError} />
       <details className="panel form-panel">
         <summary>AI 辅助：查找相似题、提示与变式</summary>
-        {legacyTemplate(e.type) ? (
-          <>
-            <AiRelated key={id} entryId={id} onLinked={reload} />
-            <AiStudy
-              key={id + "study"}
-              entry={e}
-              actions={["hint", "variant"]}
-            />
-          </>
-        ) : (
-          <p>自定义类型暂不支持 AI</p>
-        )}
+        <AiRelated key={id} entryId={id} onLinked={reload} />
+        <AiStudy key={id + "study"} entry={e} actions={["hint", "variant"]} />
       </details>
       <div className="detail-grid">
         <div>

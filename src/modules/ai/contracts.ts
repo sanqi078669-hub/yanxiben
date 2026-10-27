@@ -1,36 +1,27 @@
 import { z } from "zod";
 import {
-  types,
-  subjects,
-  errors,
   entrySchema,
+  legacyTemplate,
+  type Template,
   type EntryInput,
 } from "../../lib/model";
 
 export const extractionSchema = z
   .object({
-    type: z.enum(types),
-    subject: z.enum(subjects as [string, ...string[]]),
+    type: z.string().trim().min(1).max(100),
+    subject: z.string().trim().min(1).max(100),
     title: z.string().max(200),
     body: z.string().min(1).max(30000),
     options: z.array(z.string().max(2000)).max(20),
     warnings: z.array(z.string().max(500)).max(10),
   })
-  .strict()
-  .refine(
-    (v) =>
-      v.type === "MATH"
-        ? v.subject === "高等数学"
-        : v.type === "CS"
-          ? !["高等数学", "英语"].includes(v.subject)
-          : v.subject === "英语",
-    "科目与模板不兼容",
-  );
+  .strict();
 export type Extraction = z.infer<typeof extractionSchema>;
 
 export function extractionPatch(
   result: Extraction,
   existingType?: string,
+  template: Template = legacyTemplate(result.type) ?? "GENERIC",
 ): Pick<EntryInput, "type" | "subject" | "title" | "body" | "details"> {
   if (existingType && existingType !== result.type)
     throw new Error("识别模板与已保存记录不一致，请新建对应模板记录");
@@ -40,7 +31,7 @@ export function extractionPatch(
     title: result.title,
     body: result.body,
     details:
-      result.type === "CS"
+      template === "CS"
         ? { subtype: "QUESTION", options_json: JSON.stringify(result.options) }
         : {},
   };
@@ -76,7 +67,7 @@ export const analysisSchema = z
   .object({
     feedback: z.string().min(1).max(10000),
     evidence: z.array(z.string().max(2000)).max(10),
-    errorTags: z.array(z.enum(errors as [string, ...string[]])).max(6),
+    errorTags: z.array(z.string().trim().min(1).max(50)).max(30),
     warnings: z.array(z.string().max(500)).max(10),
   })
   .strict();
@@ -133,7 +124,7 @@ export const studySchemas: Record<StudyAction, z.ZodType> = {
   english: englishSchema,
   variant: variantSchema,
 };
-export const studyPrompts: Record<StudyAction, string> = {
+export const studyPrompts = {
   variant:
     "围绕输入的核心知识点生成一道同类型、条件完备且不同于原题的变式题。自行求解校验，避免含糊或无解的题目；如信息不足说明不确定性。输出 {question:string,solution:string,knowledgePoints:string[],warnings:string[]}。question不得含答案，solution提供完整解答。",
   english:
@@ -143,14 +134,18 @@ export const studyPrompts: Record<StudyAction, string> = {
   hint: "依据 hintLevel 给出一级提示：1只点出相关概念，2提供解题方向，3提供下一步操作。任何级别都不直接给出最终答案或完整解答。只输出 {hint:string,warnings:string[]}。",
   organize:
     "为输入整理标题、总结与分类建议。不要编造原解法或作答经历；题目不足时明确说明。输出 {title:string,summary:string,tags:string[],knowledgePoints:string[],warnings:string[]}。知识点只作为建议，不声称已添加到知识地图。",
-  analyze:
-    "对比用户原解法和参考内容，指出首个错误步骤、原因与修正方向。证据必须引用输入的具体步骤；参考内容也可能错误，要独立检查。若原解法正确请明确说明，不强行归错。输出 {feedback:string,evidence:string[],errorTags:(概念|条件|方法|计算|审题|表达)[],warnings:string[]}。",
+  analyze: (labels: string[]) =>
+    "对比用户原解法和参考内容，指出首个错误步骤、原因与修正方向。证据必须引用输入的具体步骤；参考内容也可能错误，要独立检查。若原解法正确请明确说明，不强行归错。输出 {feedback:string,evidence:string[],errorTags:string[],warnings:string[]}。" +
+    (labels.length
+      ? `errorTags 只能从下列错因名称中选择，不得新造：${JSON.stringify(labels)}。`
+      : "用户尚未配置错因，errorTags 必须返回空数组。"),
 };
 export function originalWork(e: EntryInput) {
   return (
     e.details.original_work_md ||
     e.details.my_answer_md ||
     e.details.initial_translation_md ||
+    e.details.analysis_md ||
     ""
   );
 }
@@ -169,6 +164,7 @@ export function studyMaterial(e: EntryInput, action: StudyAction = "organize") {
     body: e.body,
     summary: e.summary,
     details: e.details,
+    errors: e.errors,
     contexts: e.contexts.map(({ sentence_text, meaning_md, collocation }) => ({
       sentence_text,
       meaning_md,
@@ -192,15 +188,18 @@ export const studyRequest = z
 export function variantDraft(
   entry: EntryInput,
   result: z.infer<typeof variantSchema>,
+  template: Template = legacyTemplate(entry.type) ?? "GENERIC",
 ): EntryInput {
   const solutionKey =
-    entry.type === "MATH"
-      ? "solution_md"
-      : entry.type === "CS"
-        ? "reference_answer_md"
-        : entry.type === "SENTENCE"
-          ? "reference_translation_md"
-          : "takeaway_md";
+    template === "GENERIC"
+      ? "analysis_md"
+      : template === "MATH"
+        ? "solution_md"
+        : template === "CS"
+          ? "reference_answer_md"
+          : template === "SENTENCE"
+            ? "reference_translation_md"
+            : "takeaway_md";
   return entrySchema.parse({
     type: entry.type,
     subject: entry.subject,
@@ -211,7 +210,7 @@ export function variantDraft(
     status: "INBOX",
     details: {
       [solutionKey]: result.solution,
-      ...(entry.type === "CS" ? { subtype: "QUESTION" } : {}),
+      ...(template === "CS" ? { subtype: "QUESTION" } : {}),
     },
     tags: ["AI变式"],
   });

@@ -21,6 +21,7 @@ import {
 } from "./contracts";
 import { complete } from "./provider";
 import { withImageProcessing } from "../images/processing";
+import { aiDictionary } from "./dictionaries";
 
 const running = new Set<string>();
 const recent = new Map<string, number[]>();
@@ -56,6 +57,7 @@ export async function study(
 ) {
   const input = studyRequest.parse(raw),
     material = studyMaterial(input.entry, input.action);
+  const dictionary = aiDictionary(owner);
   let hintVersion: number | undefined;
   if (input.action === "hint") {
     assert(input.entryId, 400, "AI_ENTRY_REQUIRED", "提示需要绑定已保存的记录");
@@ -70,7 +72,9 @@ export async function study(
   }
   if (input.action === "english")
     assert(
-      ["VOCABULARY", "SENTENCE"].includes(input.entry.type),
+      ["VOCABULARY", "SENTENCE"].includes(
+        dictionary.templateOf(input.entry.type),
+      ),
       400,
       "AI_TEMPLATE_MISMATCH",
       "英语解析仅支持生词和长难句模板",
@@ -103,14 +107,18 @@ export async function study(
   );
   const result: any = await limited(owner, () =>
     complete(
-      studyPrompts[input.action],
-      {
+      input.action === "analyze"
+        ? studyPrompts.analyze(
+            dictionary.active("ERROR").map((item) => item.label),
+          )
+        : studyPrompts[input.action],
+      dictionary.material({
         ...material,
         ...(input.action === "hint" ? { hintLevel: input.hintLevel } : {}),
         ...(input.action === "feedback"
           ? { answer: input.answer, hintUsed: input.hintUsed }
           : {}),
-      },
+      }),
       studySchemas[input.action],
       [],
       transport,
@@ -120,6 +128,15 @@ export async function study(
   );
   if (hintVersion !== undefined)
     recordEntryHint(owner, input.entryId!, hintVersion);
+  if (input.action === "analyze") {
+    const tags: string[] = [];
+    for (const name of result.errorTags) {
+      const value = dictionary.valueOf("ERROR", name);
+      if (value) tags.push(value);
+      else result.warnings.push(`AI 返回了未识别的错因：${name}`);
+    }
+    result.errorTags = [...new Set(tags)];
+  }
   if (input.action === "feedback") {
     result.rating = safeRating(result.rating, input.hintUsed);
     result.feedback = readableFeedback(result.feedback);
@@ -141,6 +158,19 @@ export async function extract(
     })
     .strict()
     .parse(raw);
+  const dictionary = aiDictionary(owner);
+  assert(
+    dictionary.active("TYPE").length,
+    400,
+    "AI_DICTIONARY_REQUIRED",
+    "请先创建类型",
+  );
+  assert(
+    dictionary.active("SUBJECT").length,
+    400,
+    "AI_DICTIONARY_REQUIRED",
+    "请先创建科目",
+  );
   return limited(owner, async () => {
     const images: string[] = [];
     for (const id of [...new Set(input.attachmentIds)]) {
@@ -165,8 +195,9 @@ export async function extract(
       );
       images.push("data:image/png;base64," + bytes.toString("base64"));
     }
-    return complete(
-      "识别图片中的题目，不解答。逐字保留题干、公式（使用 $ LaTeX $）和选项。多道题请提示分开上传。输出 {type:MATH|CS|VOCABULARY|SENTENCE,subject:高等数学|数据结构|计算机组成原理|操作系统|计算机网络|英语,title:string,body:string,options:string[],warnings:string[]}。无法辨认的字符写[无法辨认]并在 warnings 说明，不得猜测。",
+    const result = await complete(
+      "识别图片中的题目，不解答。逐字保留题干、公式（使用 $ LaTeX $）和选项。多道题请提示分开上传。输出 {type:string,subject:string,title:string,body:string,options:string[],warnings:string[]}。无法辨认的字符写[无法辨认]并在 warnings 说明，不得猜测。" +
+        `类型只能从下列名称中选一个，不得新造：${JSON.stringify(dictionary.active("TYPE").map((item) => item.label))}。科目只能从下列名称中选一个，不得新造：${JSON.stringify(dictionary.active("SUBJECT").map((item) => item.label))}。`,
       {},
       extractionSchema,
       images,
@@ -174,5 +205,10 @@ export async function extract(
       owner,
       input.target,
     );
+    const type = dictionary.valueOf("TYPE", result.type);
+    const subject = dictionary.valueOf("SUBJECT", result.subject);
+    assert(type, 422, "AI_UNKNOWN_TYPE", "AI 返回了未识别的类型");
+    assert(subject, 422, "AI_UNKNOWN_SUBJECT", "AI 返回了未识别的科目");
+    return { ...result, type, subject };
   });
 }

@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { providerPresets } from "../modules/ai/presets";
 import { extractionPatch, type Extraction } from "../modules/ai/contracts";
-import { names, type EntryInput } from "../lib/model";
+import { type EntryInput } from "../lib/model";
+import { DictionaryLabel, useDictionary } from "./DictionaryContext";
 
 import { api } from "../lib/request";
 export function aiApi(path: string, body?: unknown) {
@@ -345,6 +346,7 @@ export function AiExtract({
   existing: boolean;
   onApply: (patch: Partial<EntryInput>) => void;
 }) {
+  const { templateOf } = useDictionary();
   const [status, setStatus] = useState<any>(null),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false),
@@ -435,8 +437,9 @@ export function AiExtract({
       {result && (
         <div className="ai-result">
           <p>
-            <b>识别建议 · 请核对</b> · {names[result.type] ?? result.type} ·{" "}
-            {result.subject}
+            <b>识别建议 · 请核对</b> ·{" "}
+            <DictionaryLabel kind="TYPE" value={result.type} /> ·{" "}
+            <DictionaryLabel kind="SUBJECT" value={result.subject} />
           </p>
           <h3>{result.title}</h3>
           <pre>{result.body}</pre>
@@ -459,6 +462,7 @@ export function AiExtract({
                 const patch = extractionPatch(
                   result,
                   existing ? entry.type : undefined,
+                  templateOf(result.type),
                 );
                 if (
                   !existing &&
