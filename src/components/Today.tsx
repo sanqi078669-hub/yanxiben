@@ -12,12 +12,75 @@ import {
   Layers,
 } from "lucide-react";
 
-import { names, types, defaults, type Entry } from "../lib/model";
+import { defaults, type Entry, type Template } from "../lib/model";
+import { useDictionary } from "./DictionaryContext";
 import { TypeIcon, Empty, Row, ErrorBox } from "./ui";
 import { useLoad } from "./useLoad";
-type Any = Record<string, any>;
+const subtitles: Record<Template, string> = {
+  GENERIC: "留下原文，梳理思考",
+  MATH: "从错因到方法",
+  CS: "从疑问到原理",
+  VOCABULARY: "在语境中记忆",
+  SENTENCE: "拆开句子，读懂逻辑",
+};
+function TypeEmpty() {
+  return (
+    <div className="type-empty">
+      <p>先创建类型，让每份思考有个归处。</p>
+      <Link href="/settings#dictionary-manager">前往设置页「分类管理」</Link>
+    </div>
+  );
+}
+export function TypeCollection() {
+  const { items, loading, templateOf } = useDictionary();
+  const active = items.types.filter((item) => !item.archived);
+  if (!active.length)
+    return loading ? <p role="status">正在读取类型…</p> : <TypeEmpty />;
+  return (
+    <div className="collect-grid">
+      {active.map((item) => (
+        <Link
+          href={"/entries/new?type=" + encodeURIComponent(item.value)}
+          key={item.value}
+        >
+          <TypeIcon type={item.value} />
+          <span>
+            {item.label}
+            <small>{subtitles[templateOf(item.value)]}</small>
+          </span>
+          <ArrowUpRight size={15} />
+        </Link>
+      ))}
+    </div>
+  );
+}
+export function TypeFootprints({
+  byType = [],
+}: {
+  byType?: { type: string; n: number }[];
+}) {
+  const { items, loading } = useDictionary();
+  const active = items.types.filter((item) => !item.archived);
+  if (!active.length)
+    return loading ? <p role="status">正在读取类型…</p> : <TypeEmpty />;
+  return (
+    <>
+      {active.map((item) => (
+        <Link
+          href={"/library?type=" + encodeURIComponent(item.value)}
+          key={item.value}
+        >
+          <TypeIcon type={item.value} />
+          <span>{item.label}</span>
+          <b>{byType.find((row) => row.type === item.value)?.n ?? 0}</b>
+        </Link>
+      ))}
+    </>
+  );
+}
 export default function Today({ profile }: { profile: typeof defaults }) {
   const { data: d, error } = useLoad("dashboard");
+  const { error: dictionaryError } = useDictionary();
   const date = new Intl.DateTimeFormat("zh-CN", {
     timeZone: profile.timezone,
     month: "long",
@@ -41,7 +104,7 @@ export default function Today({ profile }: { profile: typeof defaults }) {
           快速收集
         </Link>
       </div>
-      <ErrorBox text={error} />
+      <ErrorBox text={error || dictionaryError} />
       <div className="stats">
         <Link href="/review" className="stat">
           <span>
@@ -125,26 +188,7 @@ export default function Today({ profile }: { profile: typeof defaults }) {
             <Plus size={17} />
           </div>
           <p className="muted">先记下来，分析可以慢慢来。</p>
-          <div className="collect-grid">
-            {types.map((t) => (
-              <Link href={"/entries/new?type=" + t} key={t}>
-                <TypeIcon type={t} />
-                <span>
-                  {names[t]}
-                  <small>
-                    {t === "MATH"
-                      ? "从错因到方法"
-                      : t === "CS"
-                        ? "从疑问到原理"
-                        : t === "VOCABULARY"
-                          ? "在语境中记忆"
-                          : "拆开句子，读懂逻辑"}
-                  </small>
-                </span>
-                <ArrowUpRight size={15} />
-              </Link>
-            ))}
-          </div>
+          <TypeCollection />
         </section>
       </div>
       <div className="dashboard-bottom">
@@ -169,13 +213,7 @@ export default function Today({ profile }: { profile: typeof defaults }) {
             <h2>我的学习足迹</h2>
             <Layers size={17} />
           </div>
-          {types.map((t) => (
-            <Link href={"/library?type=" + t} key={t}>
-              <TypeIcon type={t} />
-              <span>{names[t]}</span>
-              <b>{d?.byType.find((r: Any) => r.type === t)?.n || 0}</b>
-            </Link>
-          ))}
+          <TypeFootprints byType={d?.byType} />
           <div className="quiet-note">
             不必一次学会所有。
             <br />

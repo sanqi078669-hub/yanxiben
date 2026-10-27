@@ -158,7 +158,7 @@ export function markdownExport(owner: string) {
         owner,
       ).map((row) => [row.value, row.template]),
     );
-    const label = (kind: "SUBJECT" | "ERROR", value: string) =>
+    const label = (kind: "TYPE" | "SUBJECT" | "ERROR", value: string) =>
       dictionaryLabels.get(JSON.stringify([kind, value]))?.trim() || value;
     const knowledgeNames = new Map(
       all("SELECT id,name FROM knowledge WHERE owner=?", owner).map((row) => [
@@ -174,7 +174,7 @@ export function markdownExport(owner: string) {
       const e = unpack(row);
       const template =
         typeTemplates.get(e.type) ?? legacyTemplate(e.type) ?? "GENERIC";
-      let md = `# ${e.title || "未命名记录"}\n\n${label("SUBJECT", e.subject)} · ${e.status}\n\n## 原材料\n\n${e.body}\n\n来源：${e.source}\n\n`;
+      let md = `# ${e.title || "未命名记录"}\n\n类型：${label("TYPE", e.type)}\n\n${label("SUBJECT", e.subject)} · ${e.status}\n\n## 原材料\n\n${e.body}\n\n来源：${e.source}\n\n`;
       if (template === "CS") {
         md += `题型：${e.details.subtype === "CONCEPT" ? "概念疑问" : "题目"}\n\n`;
         if (e.details.options_json)

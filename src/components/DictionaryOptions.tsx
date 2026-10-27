@@ -6,7 +6,7 @@ export function DictionaryOptions({
   kind,
   value,
 }: {
-  kind: "SUBJECT" | "ERROR";
+  kind: "TYPE" | "SUBJECT" | "ERROR";
   value: string;
 }) {
   const { items, label } = useDictionary();

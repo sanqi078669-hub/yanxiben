@@ -33,6 +33,7 @@ after(() => {
 
 test("Markdown 导出解析 UUID 科目、归档错因和知识点名称，不改原记录或备份 JSON", () => {
   const subject = dictionary.create(owner, "SUBJECT", "线性代数");
+  const type = dictionary.create(owner, "TYPE", "研习随笔");
   const error = dictionary.create(owner, "ERROR", "漏看约束");
   const knowledgeId = randomUUID();
   run(
@@ -43,7 +44,7 @@ test("Markdown 导出解析 UUID 科目、归档错因和知识点名称，不�
     "矩阵的秩",
   );
   const entry = createEntry(owner, {
-    type: "MATH",
+    type: type.value,
     subject: subject.value,
     title: "矩阵练习",
     body: "求矩阵的秩",
@@ -51,6 +52,7 @@ test("Markdown 导出解析 UUID 科目、归档错因和知识点名称，不�
     knowledgeIds: [knowledgeId],
   });
   dictionary.archive(owner, "ERROR", error.value, error.version);
+  dictionary.archive(owner, "TYPE", type.value, type.version);
   run(
     "INSERT INTO dictionary_items SELECT ?,kind,value,'另一个账号','另一个账号',template,sort_order,archived,version,created_at,updated_at FROM dictionary_items WHERE owner=? AND kind='SUBJECT'",
     other,
@@ -64,9 +66,16 @@ test("Markdown 导出解析 UUID 科目、归档错因和知识点名称，不�
     unzipSync(markdownExport(owner))[entry.id + ".md"],
   );
   assert.match(markdown, /线性代数/);
+  assert.match(markdown, /^# 矩阵练习\n\n类型：研习随笔\n\n/);
   assert.match(markdown, /错因：漏看约束/);
   assert.match(markdown, /知识点：矩阵的秩/);
-  for (const value of [subject.value, error.value, knowledgeId, "另一个账号"])
+  for (const value of [
+    type.value,
+    subject.value,
+    error.value,
+    knowledgeId,
+    "另一个账号",
+  ])
     assert.ok(!markdown.includes(value), value);
   assert.equal(
     one("SELECT payload FROM entries WHERE id=?", entry.id)!.payload,
@@ -74,13 +83,15 @@ test("Markdown 导出解析 UUID 科目、归档错因和知识点名称，不�
   );
   const data = JSON.parse(strFromU8(unzipSync(backup(owner))["data.json"]));
   assert.equal(data.entries[0].subject, subject.value);
+  assert.equal(data.entries[0].type, type.value);
   assert.equal(data.entries[0].payload, originalPayload);
 });
 
 test("Markdown 无字典项时回退原值，空错因和知识点输出无", () => {
   const value = randomUUID();
+  const type = dictionary.create(owner, "TYPE", "历史类型");
   const entry = createEntry(owner, {
-    type: "MATH",
+    type: type.value,
     subject: value,
     title: "历史缺项",
     body: "x",
@@ -90,10 +101,16 @@ test("Markdown 无字典项时回退原值，空错因和知识点输出无", ()
     owner,
     value,
   );
+  run(
+    "DELETE FROM dictionary_items WHERE owner=? AND kind='TYPE' AND value=?",
+    owner,
+    type.value,
+  );
   const markdown = strFromU8(
     unzipSync(markdownExport(owner))[entry.id + ".md"],
   );
   assert.ok(markdown.includes(value));
+  assert.ok(markdown.includes("类型：" + type.value));
   assert.match(markdown, /错因：无/);
   assert.match(markdown, /知识点：无/);
 });

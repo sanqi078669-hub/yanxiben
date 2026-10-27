@@ -623,12 +623,14 @@ footer span {
 }
 .collect-grid > a {
   display: flex;
+  min-width: 0;
   align-items: center;
   gap: 9px;
 }
 .collect-grid > a > span:nth-child(2) {
   font-size: 11px;
-  white-space: nowrap;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .collect-grid small {
   display: block;
@@ -718,6 +720,10 @@ footer span {
   width: 29px;
   height: 30px;
   font-size: 18px;
+}
+.subject-panel > a > span:nth-child(2) {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .subject-panel > a b {
   margin-left: auto;
@@ -2190,6 +2196,9 @@ footer span {
   }
 }
 @media (max-width: 600px) {
+  .dictionary-filters select[aria-label="记录类型"] {
+    flex-basis: 100%;
+  }
   .page-heading:has(> .ai-actions) {
     flex-direction: column;
     align-items: stretch;

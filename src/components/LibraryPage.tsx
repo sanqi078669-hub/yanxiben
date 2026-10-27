@@ -1,5 +1,5 @@
 "use client";
-import { DictionaryLabel } from "./DictionaryContext";
+import { DictionaryLabel, useDictionary } from "./DictionaryContext";
 import { DictionaryOptions } from "./DictionaryOptions";
 import Link from "next/link";
 
@@ -16,7 +16,6 @@ import { BatchTags } from "./BatchTags";
 import type { EntryList, KnowledgeNode } from "../lib/api-types";
 import { useLibraryPosition } from "./libraryPosition";
 
-import { names, types } from "../lib/model";
 import { api } from "../lib/request";
 import { TypeIcon, Empty, Row, ErrorBox } from "./ui";
 import { useLoad } from "./useLoad";
@@ -27,6 +26,7 @@ export default function LibraryPage({
   mode: string;
   notify: (s: string, tone?: "success" | "error") => void;
 }) {
+  const { items, loading: dictionaryLoading } = useDictionary();
   const {
     q,
     setQ,
@@ -105,6 +105,12 @@ export default function LibraryPage({
         </Link>
       </div>
       <div className="filter-panel">
+        {!dictionaryLoading && !items.types.some((item) => !item.archived) && (
+          <p>
+            暂无可用类型，可先创建类型或恢复归档类型。
+            <Link href="/settings#dictionary-manager">前往分类管理</Link>
+          </p>
+        )}
         <p aria-live="polite">
           {hasFilters ? "已启用筛选条件" : "显示默认范围"}{" "}
           <button className="text-button" onClick={clearFilters}>
@@ -127,11 +133,7 @@ export default function LibraryPage({
             onChange={(e) => setType(e.target.value)}
           >
             <option value="">所有类型</option>
-            {types.map((t) => (
-              <option key={t} value={t}>
-                {names[t]}
-              </option>
-            ))}
+            <DictionaryOptions kind="TYPE" value={type} />
           </select>
           <select
             aria-label="科目"

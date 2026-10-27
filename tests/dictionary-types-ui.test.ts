@@ -11,6 +11,8 @@ import { Analysis } from "../src/components/EntryContent";
 import { MaterialPreview } from "../src/components/MaterialPreview";
 import { TypeCreate } from "../src/components/TypeCreate";
 import DictionaryManager from "../src/components/DictionaryManager";
+import { TypeCollection, TypeFootprints } from "../src/components/Today";
+import { DictionaryOptions } from "../src/components/DictionaryOptions";
 import { entrySchema, type Entry } from "../src/lib/model";
 import { readDraft } from "../src/lib/drafts";
 import type { DictionaryItem } from "../src/modules/dictionaries/service";
@@ -145,4 +147,55 @@ test("没有类型的未完成草稿可恢复，服务端 entrySchema 仍拒绝�
       "new",
     ),
   );
+});
+
+test("Today 自定义类型收集卡使用 value 链接、模板副标题，足迹按 value 计数且缺省 0", () => {
+  const rows = [
+    typeItem("uuid-a", "GENERIC"),
+    typeItem("uuid-b", "VOCABULARY"),
+    typeItem("old", "MATH", true),
+  ];
+  const cards = render(createElement(TypeCollection), rows);
+  assert.match(cards, /href="\/entries\/new\?type=uuid-a"/);
+  assert.match(cards, /名称-uuid-a/);
+  assert.match(cards, /留下原文，梳理思考/);
+  assert.match(cards, /在语境中记忆/);
+  assert.doesNotMatch(cards, /名称-old/);
+  const counts = render(
+    createElement(TypeFootprints, {
+      byType: [
+        { type: "uuid-a", n: 3 },
+        { type: "old", n: 8 },
+        { type: "missing", n: 10 },
+      ],
+    }),
+    rows,
+  );
+  assert.match(counts, /href="\/library\?type=uuid-a"/);
+  assert.match(counts, /<span>名称-uuid-a<\/span><b>3<\/b>/);
+  assert.match(counts, /<span>名称-uuid-b<\/span><b>0<\/b>/);
+  assert.doesNotMatch(counts, /名称-old/);
+});
+
+test("无活跃类型时 Today 两处均引导分类管理；筛选保留归档、缺失当前值和标签", () => {
+  const archived = typeItem("old", "MATH", true);
+  for (const rows of [[], [archived]]) {
+    for (const component of [TypeCollection, TypeFootprints]) {
+      const html = render(createElement(component), rows);
+      assert.match(html, /先创建类型/);
+      assert.match(html, /href="\/settings#dictionary-manager"/);
+      assert.doesNotMatch(html, /href="\/entries\/new\?type=/);
+    }
+  }
+  const active = typeItem("active", "GENERIC");
+  const options = render(
+    createElement(DictionaryOptions, { kind: "TYPE", value: "missing" }),
+    [archived, active],
+  );
+  assert.match(options, /<option value="old">名称-old（已归档）<\/option>/);
+  assert.match(
+    options,
+    /<option value="missing">missing（不在字典中）<\/option>/,
+  );
+  assert.ok(options.indexOf('value="active"') < options.indexOf('value="old"'));
 });
