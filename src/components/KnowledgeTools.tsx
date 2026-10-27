@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 type Node = { id: string; name: string; subject: string; archived: number };
 import { api } from "../lib/request";
+import { useDictionary } from "./DictionaryContext";
 function request(path: string, body?: unknown) {
   return api("knowledge-tools/" + path, body);
 }
@@ -12,6 +13,7 @@ export function KnowledgeTools({
   nodes: Node[];
   onChange: () => void;
 }) {
+  const { label } = useDictionary();
   const [merges, setMerges] = useState<
     { id: string; source: string; target: string; affected: number }[]
   >([]);
@@ -48,7 +50,7 @@ export function KnowledgeTools({
     }
   }
   return (
-    <details className="panel form-panel">
+    <details className="panel form-panel knowledge-tools">
       <summary>知识点别名与同义合并</summary>
       <p>
         合并会迁移记录关联和直接子节点，原知识点保留并归档。不会因为名称相似自动合并。
@@ -69,7 +71,7 @@ export function KnowledgeTools({
             .filter((n) => !n.archived)
             .map((n) => (
               <option key={n.id} value={n.id}>
-                {n.subject} · {n.name}
+                {label("SUBJECT", n.subject)} · {n.name}
               </option>
             ))}
         </select>
@@ -116,7 +118,7 @@ export function KnowledgeTools({
             .filter((n) => !n.archived && n.id !== target)
             .map((n) => (
               <option key={n.id} value={n.id}>
-                {n.subject} · {n.name}
+                {label("SUBJECT", n.subject)} · {n.name}
               </option>
             ))}
         </select>

@@ -1307,6 +1307,8 @@ footer span {
 }
 .knowledge-node a {
   flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
   font-size: 13px;
 }
 .knowledge-node small {
@@ -1314,6 +1316,15 @@ footer span {
   font-size: 10px;
   color: #a1ae95;
   font-weight: 400;
+}
+.knowledge-map > *,
+.knowledge-tools {
+  min-width: 0;
+}
+.knowledge-map select,
+.knowledge-tools select {
+  min-width: 0;
+  max-width: 100%;
 }
 .settings-grid {
   display: grid;

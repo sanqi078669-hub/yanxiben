@@ -58,6 +58,17 @@ function fixture(): Record<string, any> {
     Object.keys(backupRowSchemas).map((t) => [t, []]),
   );
   data.profile = { id: owner, settings: defaults };
+  data.knowledge = [
+    {
+      id: randomUUID(),
+      owner,
+      subject: "自定义知识点科目",
+      parent_id: null,
+      name: "自定义知识点",
+      description: "",
+      archived: 0,
+    },
+  ];
   data.entries = [
     {
       ...meta,
@@ -380,6 +391,18 @@ test("合法备份恢复 JSON、复习与真实图片", async () => {
   assert.equal(one("SELECT count(*) n FROM logs")!.n, 1);
   assert.equal(one("SELECT mime FROM attachments")!.mime, "image/png");
   assert.equal(one("SELECT subject FROM entries")!.subject, "自定义科目");
+  assert.equal(
+    one("SELECT subject FROM knowledge")!.subject,
+    "自定义知识点科目",
+  );
+  assert.equal(
+    one(
+      "SELECT label FROM dictionary_items WHERE owner=? AND kind='SUBJECT' AND value=?",
+      owner,
+      "自定义知识点科目",
+    )!.label,
+    "自定义知识点科目",
+  );
   assert.deepEqual(
     JSON.parse(one("SELECT payload FROM entries")!.payload).errors,
     ["自定义错因"],

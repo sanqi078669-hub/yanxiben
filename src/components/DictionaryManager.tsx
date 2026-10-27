@@ -194,6 +194,7 @@ export default function DictionaryManager() {
   const { loading, error, reload } = useDictionary();
   return (
     <section
+      id="dictionary-manager"
       className="panel form-panel dictionary-manager"
       aria-label="分类管理"
     >

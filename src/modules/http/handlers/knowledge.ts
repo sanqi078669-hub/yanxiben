@@ -3,7 +3,6 @@ import { z } from "zod";
 import { all, one, run, transaction } from "../../../lib/db";
 import { ensure } from "../../dictionaries/ensure";
 import { assert } from "../../entries/service";
-import { subjects } from "../../../lib/model";
 import {
   knowledgeAliases,
   knowledgeMerges,
@@ -53,7 +52,7 @@ export async function knowledgeHandler(context: ApiContext) {
       const b = z
         .object({
           name: z.string().trim().min(1).max(100),
-          subject: z.enum(subjects as [string, ...string[]]),
+          subject: z.string().trim().min(1).max(100),
           parentId: z.string().uuid().nullable(),
           description: z.string().max(10000),
         })
@@ -86,20 +85,29 @@ export async function knowledgeHandler(context: ApiContext) {
   }
   if (parts[0] === "knowledge-nodes" && parts[1] && method === "PATCH") {
     const b = z
-      .object({ archived: z.boolean() })
+      .object({
+        name: z.string().trim().min(1).max(100).optional(),
+        description: z.string().max(10000).optional(),
+        archived: z.boolean().optional(),
+      })
       .strict()
+      .refine((v) => Object.keys(v).length > 0, "请提供要修改的字段")
       .parse(await json());
     return transaction(() => {
       const node = one(
-        "SELECT subject FROM knowledge WHERE id=? AND owner=?",
+        "SELECT subject,name,description,archived FROM knowledge WHERE id=? AND owner=?",
         parts[1],
         owner,
       );
       assert(node, 404, "RESOURCE_NOT_FOUND", "知识点不存在");
-      ensure(owner, "SUBJECT", node.subject, !b.archived);
+      const archived =
+        b.archived === undefined ? node.archived : Number(b.archived);
+      ensure(owner, "SUBJECT", node.subject, !archived);
       run(
-        "UPDATE knowledge SET archived=? WHERE id=? AND owner=?",
-        b.archived ? 1 : 0,
+        "UPDATE knowledge SET name=?,description=?,archived=? WHERE id=? AND owner=?",
+        b.name ?? node.name,
+        b.description ?? node.description,
+        archived,
         parts[1],
         owner,
       );
