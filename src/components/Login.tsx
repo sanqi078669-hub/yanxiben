@@ -6,6 +6,7 @@ import { BookOpen, ArrowRight } from "lucide-react";
 import { defaults } from "../lib/model";
 import { api } from "../lib/request";
 import { ErrorBox } from "./ui";
+import PasswordInput from "./PasswordInput";
 export default function Login({
   onLogin,
 }: {
@@ -67,8 +68,8 @@ export default function Login({
         </label>
         <label>
           密码
-          <input
-            type="password"
+          <PasswordInput
+            aria-label="密码"
             autoComplete="current-password"
             aria-describedby={error ? "login-error" : undefined}
             value={password}

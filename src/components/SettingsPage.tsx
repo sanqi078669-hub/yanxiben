@@ -15,6 +15,7 @@ import { defaults } from "../lib/model";
 import { requestResponse, readDownload } from "../lib/request";
 import { api } from "../lib/request";
 import { ErrorBox } from "./ui";
+import PasswordInput from "./PasswordInput";
 import {
   newPasswordSchema,
   newPasswordHint,
@@ -50,6 +51,8 @@ export default function SettingsPage({
     [error, setError] = useState(""),
     [password, setPassword] = useState(""),
     [newPassword, setNewPassword] = useState(""),
+    [confirmPassword, setConfirmPassword] = useState(""),
+    [confirmPasswordError, setConfirmPasswordError] = useState(""),
     [exportPassword, setExportPassword] = useState(""),
     [exportKeys, setExportKeys] = useState<Record<string, string>>({}),
     [busy, setBusy] = useState(false),
@@ -209,8 +212,8 @@ export default function SettingsPage({
             </p>
             <label>
               验证当前密码
-              <input
-                type="password"
+              <PasswordInput
+                aria-label="验证当前密码"
                 value={exportPassword}
                 onChange={(e) => setExportPassword(e.target.value)}
                 autoComplete="current-password"
@@ -243,6 +246,11 @@ export default function SettingsPage({
             className="panel form-panel"
             onSubmit={async (e) => {
               e.preventDefault();
+              if (newPassword !== confirmPassword) {
+                setConfirmPasswordError("两次输入的新密码不一致");
+                return;
+              }
+              setConfirmPasswordError("");
               try {
                 newPasswordSchema.parse(newPassword);
                 await api("auth/password", {
@@ -251,6 +259,8 @@ export default function SettingsPage({
                 });
                 setPassword("");
                 setNewPassword("");
+                setConfirmPassword("");
+                setConfirmPasswordError("");
                 setError("");
                 notify("密码已修改，其他会话已退出");
               } catch (e) {
@@ -261,8 +271,8 @@ export default function SettingsPage({
             <h2>账号与安全</h2>
             <label>
               当前密码
-              <input
-                type="password"
+              <PasswordInput
+                aria-label="当前密码"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
@@ -271,8 +281,8 @@ export default function SettingsPage({
             </label>
             <label>
               新密码（至少 12 位）
-              <input
-                type="password"
+              <PasswordInput
+                aria-label="新密码（至少 12 位）"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 autoComplete="new-password"
@@ -283,6 +293,21 @@ export default function SettingsPage({
             <p className="tip">
               {newPasswordHint}。当前 {passwordBytes(newPassword)} 字节。
             </p>
+            <label>
+              确认新密码
+              <PasswordInput
+                aria-label="确认新密码"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                autoComplete="new-password"
+                aria-invalid={!!confirmPasswordError}
+                aria-describedby={
+                  confirmPasswordError ? "confirm-password-error" : undefined
+                }
+                required
+              />
+            </label>
+            <ErrorBox text={confirmPasswordError} id="confirm-password-error" />
             <button className="button outline">修改密码</button>
           </form>
         </div>

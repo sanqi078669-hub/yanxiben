@@ -5,6 +5,7 @@ import { BookOpen, ArrowRight } from "lucide-react";
 import { defaults } from "../lib/model";
 import { api } from "../lib/request";
 import { ErrorBox } from "./ui";
+import PasswordInput from "./PasswordInput";
 
 export default function Register({
   onRegister,
@@ -79,8 +80,8 @@ export default function Register({
         </label>
         <label>
           密码
-          <input
-            type="password"
+          <PasswordInput
+            aria-label="密码"
             autoComplete="new-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -90,8 +91,8 @@ export default function Register({
         </label>
         <label>
           确认密码
-          <input
-            type="password"
+          <PasswordInput
+            aria-label="确认密码"
             autoComplete="new-password"
             value={confirm}
             onChange={(e) => setConfirm(e.target.value)}

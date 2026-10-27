@@ -75,6 +75,39 @@ label select {
   margin-top: 7px;
   font-weight: 400;
 }
+.password-field {
+  position: relative;
+  display: block;
+  min-width: 0;
+}
+label .password-field {
+  margin-top: 7px;
+}
+.password-field input {
+  display: block;
+  margin-top: 0;
+  padding-right: 44px;
+}
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 4px;
+  transform: translateY(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--muted);
+}
+.password-toggle:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 1px;
+}
 h1,
 h2,
 h3,

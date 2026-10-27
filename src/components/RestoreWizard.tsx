@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import { api, request } from "../lib/request";
+import PasswordInput from "./PasswordInput";
 type Preview = {
   id: string;
   counts: Record<string, number>;
@@ -92,9 +93,9 @@ export function RestoreWizard() {
           </label>
           <label>
             验证当前密码
-            <input
+            <PasswordInput
+              aria-label="验证当前密码"
               autoComplete="current-password"
-              type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
