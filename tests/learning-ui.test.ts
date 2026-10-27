@@ -9,7 +9,26 @@ import {
   HistoryRow,
   OptionsView,
   RevisionContent,
+  Analysis,
 } from "../src/components/EntryContent";
+import { entrySchema, type Entry } from "../src/lib/model";
+import { TypeIcon } from "../src/components/ui";
+
+test("自定义类型分析与图标使用通用兜底，不因未知类型白屏", () => {
+  for (const type of ["custom-type", "constructor", "__proto__"]) {
+    const e = entrySchema.parse({
+      type,
+      title: "自定义",
+      subject: "科目",
+      body: "原文",
+      details: { analysis_md: "通用分析文本" },
+    }) as Entry;
+    const html = renderToStaticMarkup(createElement(Analysis, { e }));
+    assert.match(html, /分析与理解/);
+    assert.match(html, /通用分析文本/);
+    assert.match(renderToStaticMarkup(createElement(TypeIcon, { type })), /◇/);
+  }
+});
 
 test("损坏历史、选项及快照仅显示本条错误，不在渲染时抛异常", () => {
   for (const raw of ["{", "{}", "[]", "null"]) {

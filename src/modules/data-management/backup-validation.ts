@@ -1,7 +1,13 @@
 import { z } from "zod";
 import sharp from "sharp";
 import { createHash } from "node:crypto";
-import { entrySchema, settingsSchema, fields } from "../../lib/model";
+import {
+  entrySchema,
+  settingsSchema,
+  templateFields,
+  legacyTemplate,
+  type Template,
+} from "../../lib/model";
 import { AppError } from "../entries/service";
 import { costSchema } from "../ai/pricing";
 import { ATTACHMENT_MAX_BYTES } from "../../lib/capacity";
@@ -30,26 +36,6 @@ const json = <T extends z.ZodType>(schema: T) =>
     ctx.addIssue({ code: "custom", message: "JSON 内容结构无效" });
     return z.NEVER;
   });
-const entry = entrySchema.superRefine((v, ctx) => {
-  const allowed = [
-    ...fields[v.type].map(([key]) => key),
-    ...(v.type === "CS" ? ["subtype", "options_json"] : []),
-  ];
-  if (
-    Object.keys(v.details).some((key) => !allowed.includes(key)) ||
-    (v.type !== "VOCABULARY" && v.contexts.length)
-  )
-    ctx.addIssue({ code: "custom", message: "记录模板不匹配" });
-  if (v.details.subtype && !["QUESTION", "CONCEPT"].includes(v.details.subtype))
-    ctx.addIssue({ code: "custom", message: "题型无效" });
-  if (
-    v.details.options_json &&
-    !json(z.array(z.string().max(2000)).max(20)).safeParse(
-      v.details.options_json,
-    ).success
-  )
-    ctx.addIssue({ code: "custom", message: "选项无效" });
-});
 const entryMeta = {
   id,
   owner: id,
@@ -66,25 +52,10 @@ const entryRow = z
     subject: entrySchema.shape.subject,
     status: entrySchema.shape.status,
     body: text,
-    payload: json(entry),
+    payload: json(entrySchema),
   })
   .strict();
-const snapshot = entrySchema
-  .extend(entryMeta)
-  .strict()
-  .superRefine((v, ctx) => {
-    const {
-      id: _id,
-      owner: _owner,
-      version: _version,
-      created_at: _created,
-      updated_at: _updated,
-      deleted_at: _deleted,
-      ...payload
-    } = v;
-    if (!entry.safeParse(payload).success)
-      ctx.addIssue({ code: "custom", message: "快照模板无效" });
-  });
+const snapshot = entrySchema.extend(entryMeta).strict();
 const review = z
   .object({
     id,
@@ -358,7 +329,29 @@ export async function validateBackupData(
     "logs unique scheduled day",
   );
   const has = (t: Table, key: string) => maps[t].has(key);
+  const typeTemplates = new Map<string, Template>(
+    parsed.dictionary_items
+      .filter((row) => row.kind === "TYPE")
+      .map((row) => [row.value, row.template]),
+  );
   const checkPayload = (p: z.infer<typeof entrySchema>, where: string) => {
+    const template =
+      typeTemplates.get(p.type) ?? legacyTemplate(p.type) ?? "GENERIC";
+    const allowed = [
+      ...templateFields[template].map(([key]) => key),
+      ...(template === "CS" ? ["subtype", "options_json"] : []),
+    ];
+    if (
+      Object.keys(p.details).some((key) => !allowed.includes(key)) ||
+      (template !== "VOCABULARY" && p.contexts.length) ||
+      (p.details.subtype &&
+        !["QUESTION", "CONCEPT"].includes(p.details.subtype)) ||
+      (p.details.options_json &&
+        !json(z.array(z.string().max(2000)).max(20)).safeParse(
+          p.details.options_json,
+        ).success)
+    )
+      invalid(`${where} template`);
     if (
       p.attachments.some((a) => !has("attachments", a.id)) ||
       p.knowledgeIds.some(

@@ -9,7 +9,9 @@ const typeLabels: Record<string, string> = {
   SENTENCE: "英语长难句",
 };
 export function defaultLabel(kind: DictionaryKind, value: string) {
-  return kind === "TYPE" ? (typeLabels[value] ?? value) : value;
+  return kind === "TYPE" && Object.hasOwn(typeLabels, value)
+    ? typeLabels[value]
+    : value;
 }
 
 /** Caller owns the business transaction. Existing rows are never modified. */

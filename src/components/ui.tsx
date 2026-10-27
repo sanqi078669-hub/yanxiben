@@ -6,9 +6,11 @@ import { rememberLibraryPosition } from "./libraryPosition";
 import { names } from "../lib/model";
 import type { EntryListItem } from "../lib/api-types";
 const icons = { MATH: "∑", CS: "⌘", VOCABULARY: "Aa", SENTENCE: "“ ”" };
-export function TypeIcon({ type }: { type: keyof typeof names }) {
+export function TypeIcon({ type }: { type: string }) {
   return (
-    <span className={"type-icon " + type.toLowerCase()}>{icons[type]}</span>
+    <span className={"type-icon " + type.toLowerCase()}>
+      {Object.hasOwn(icons, type) ? icons[type as keyof typeof icons] : "◇"}
+    </span>
   );
 }
 export function Badge({ children }: { children: React.ReactNode }) {
@@ -67,7 +69,7 @@ export function Row({
         <p>
           <DictionaryLabel kind="SUBJECT" value={e.subject} />
           <span>·</span>
-          {e.source || names[e.type]}
+          {e.source || (names[e.type] ?? e.type)}
           <span>·</span>
           {new Date(e.updated_at).toLocaleDateString("zh-CN")}
         </p>

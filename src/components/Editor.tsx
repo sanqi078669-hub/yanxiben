@@ -31,6 +31,7 @@ import {
   names,
   types,
   fields,
+  templateFields,
   type Entry,
   type EntryInput,
 } from "../lib/model";
@@ -685,7 +686,7 @@ export default function Editor({ id }: { id?: string }) {
                 />
               </>
             )}
-            {fields[e.type].map(([key, label]) => (
+            {(fields[e.type] ?? templateFields.GENERIC).map(([key, label]) => (
               <label key={key}>
                 {label}
                 {preview ? (

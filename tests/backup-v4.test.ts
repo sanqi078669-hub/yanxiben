@@ -146,6 +146,116 @@ function legacyFixture(version: 1 | 2 | 3) {
   return data;
 }
 
+test("v4 自定义 GENERIC 类型可恢复，缺失类型按 GENERIC 容错并补齐", () => {
+  for (const includeDictionary of [true, false]) {
+    const data = structuredClone(exportedData);
+    const type = randomUUID();
+    const row = data.entries[0];
+    row.type = type;
+    row.payload = JSON.stringify({
+      ...JSON.parse(row.payload),
+      type,
+      details: { analysis_md: "自定义分析" },
+    });
+    if (includeDictionary) {
+      const legacy = data.dictionary_items.find((r: any) => r.kind === "TYPE");
+      data.dictionary_items.push({
+        ...legacy,
+        value: type,
+        label: "通用类型",
+        normalized_name: "通用类型",
+        template: "GENERIC",
+      });
+    }
+    const restored = restoreIsolated(archive(data, 4));
+    assert.equal(restored.ok, true);
+    assert.equal(
+      restored.rows.find((r: any) => r.kind === "TYPE" && r.value === type)
+        .template,
+      "GENERIC",
+    );
+    for (const patch of [
+      { details: { solution_md: "错误字段" } },
+      { details: { subtype: "QUESTION" } },
+      {
+        contexts: [
+          {
+            sentence_text: "word",
+            meaning_md: "义",
+            source: "",
+            collocation: "",
+            sentence_entry_id: "",
+          },
+        ],
+      },
+    ]) {
+      const invalid = structuredClone(data);
+      invalid.entries[0].payload = JSON.stringify({
+        ...JSON.parse(row.payload),
+        ...patch,
+      });
+      assert.equal(restoreIsolated(archive(invalid, 4)).code, "INVALID_BACKUP");
+    }
+    const historical = structuredClone(data);
+    const payload = JSON.parse(row.payload);
+    historical.revisions.push({
+      id: randomUUID(),
+      owner,
+      entry_id: row.id,
+      version: row.version,
+      snapshot: JSON.stringify({
+        ...payload,
+        id: row.id,
+        owner,
+        version: row.version,
+        created_at: row.created_at,
+        updated_at: row.updated_at,
+        deleted_at: null,
+      }),
+      reason: "MANUAL",
+      created_at: row.created_at,
+    });
+    assert.equal(restoreIsolated(archive(historical, 4)).ok, true);
+    const snapshot = JSON.parse(historical.revisions[0].snapshot);
+    snapshot.details = { solution_md: "错误快照模板" };
+    historical.revisions[0].snapshot = JSON.stringify(snapshot);
+    assert.equal(
+      restoreIsolated(archive(historical, 4)).code,
+      "INVALID_BACKUP",
+    );
+  }
+});
+
+test("备份模板优先字典，v3 未知类型使用 GENERIC", () => {
+  const data = structuredClone(exportedData);
+  data.dictionary_items.find(
+    (r: any) => r.kind === "TYPE" && r.value === "MATH",
+  ).template = "GENERIC";
+  data.entries[0].payload = JSON.stringify({
+    ...JSON.parse(data.entries[0].payload),
+    details: { analysis_md: "字典模板优先" },
+  });
+  assert.equal(restoreIsolated(archive(data, 4)).ok, true);
+  const old = legacyFixture(3);
+  const type = "constructor";
+  for (const row of old.entries) {
+    row.type = type;
+    row.payload = JSON.stringify({
+      ...JSON.parse(row.payload),
+      type,
+      details: { analysis_md: "旧备份未知类型" },
+      contexts: [],
+    });
+  }
+  const restored = restoreIsolated(archive(old, 3));
+  assert.equal(restored.ok, true);
+  assert.equal(
+    restored.rows.find((r: any) => r.kind === "TYPE" && r.value === type)
+      .template,
+    "GENERIC",
+  );
+});
+
 test("v4 导出包含字典计数，改名/归档/排序及跨 kind 相同 value 无损往返", () => {
   assert.equal(exportedManifest.schemaVersion, 4);
   assert.equal(exportedManifest.counts.dictionary_items, originalRows.length);

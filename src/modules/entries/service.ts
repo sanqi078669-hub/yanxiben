@@ -2,7 +2,9 @@ import { randomUUID, createHash } from "node:crypto";
 import { all, one, run, transaction } from "../../lib/db";
 import {
   entrySchema,
-  fields,
+  templateFields,
+  legacyTemplate,
+  type Template,
   defaults,
   type Entry,
   type Review,
@@ -11,7 +13,7 @@ import { localDate, schedule } from "../review/schedule";
 import { z } from "zod";
 import type { EntryList, EntryListItem } from "../../lib/api-types";
 import { reviewAttemptSchema } from "../../lib/review-contract";
-import { ensureEntry } from "../dictionaries/ensure";
+import { ensure, ensureEntry } from "../dictionaries/ensure";
 export class AppError extends Error {
   constructor(
     public status: number,
@@ -130,18 +132,27 @@ export function dashboard(owner: string) {
 }
 function validate(owner: string, input: unknown, previous?: Entry) {
   const e = entrySchema.parse(input);
+  const typeItem = one(
+    "SELECT template FROM dictionary_items WHERE owner=? AND kind='TYPE' AND value=?",
+    owner,
+    e.type,
+  );
+  const template = (typeItem?.template ??
+    legacyTemplate(e.type)) as Template | null;
+  assert(template, 400, "VALIDATION_ERROR", "类型不存在");
+  if (!typeItem) ensure(owner, "TYPE", e.type);
   assert(
-    e.type === "VOCABULARY" || e.contexts.length === 0,
+    template === "VOCABULARY" || e.contexts.length === 0,
     400,
     "VALIDATION_ERROR",
     "只有生词记录可以添加语境",
   );
   const allowed = [
-    ...fields[e.type].map((f) => f[0]),
-    ...(e.type === "CS" ? ["subtype", "options_json"] : []),
+    ...templateFields[template].map((f) => f[0]),
+    ...(template === "CS" ? ["subtype", "options_json"] : []),
   ];
   assert(Object.keys(e.details).every((k) => allowed.includes(k)));
-  if (e.type === "CS" && e.details.subtype)
+  if (template === "CS" && e.details.subtype)
     assert(["QUESTION", "CONCEPT"].includes(e.details.subtype));
   if (e.details.options_json) {
     try {
@@ -168,7 +179,7 @@ function validate(owner: string, input: unknown, previous?: Entry) {
     "VALIDATION_ERROR",
     "请填写原文或上传题面图片",
   );
-  if (e.type === "SENTENCE" && e.status === "ORGANIZED")
+  if (template === "SENTENCE" && e.status === "ORGANIZED")
     assert(
       e.body.trim(),
       400,

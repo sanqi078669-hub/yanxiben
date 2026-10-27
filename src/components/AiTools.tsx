@@ -435,7 +435,8 @@ export function AiExtract({
       {result && (
         <div className="ai-result">
           <p>
-            <b>识别建议 · 请核对</b> · {names[result.type]} · {result.subject}
+            <b>识别建议 · 请核对</b> · {names[result.type] ?? result.type} ·{" "}
+            {result.subject}
           </p>
           <h3>{result.title}</h3>
           <pre>{result.body}</pre>

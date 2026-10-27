@@ -443,7 +443,7 @@ export default function ReviewPage({
             <div className="section-title">
               <div className="inline">
                 <TypeIcon type={current.entry.type} />
-                <span>{names[current.entry.type as keyof typeof names]}</span>
+                <span>{names[current.entry.type] ?? current.entry.type}</span>
               </div>
               <Badge>
                 {isPractice
@@ -629,9 +629,7 @@ export default function ReviewPage({
                   )}
                 </fieldset>
                 {hint && (
-                  <p id="hint-rating-limit">
-                    本次使用了提示，最高可选掌握
-                  </p>
+                  <p id="hint-rating-limit">本次使用了提示，最高可选掌握</p>
                 )}
                 <div className="ratings">
                   {[

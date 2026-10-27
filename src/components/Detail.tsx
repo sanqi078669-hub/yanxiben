@@ -92,7 +92,7 @@ export default function Detail({
           <section className="panel form-panel">
             <div className="section-title">
               <h2>原始材料</h2>
-              <Badge>{names[e.type as keyof typeof names]}</Badge>
+              <Badge>{names[e.type] ?? e.type}</Badge>
             </div>
             <MD>{e.body}</MD>
             {e.type === "CS" && e.details.options_json && (

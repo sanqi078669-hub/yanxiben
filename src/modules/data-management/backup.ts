@@ -18,7 +18,7 @@ import {
   dataDir,
 } from "../../lib/db";
 import { assert, unpack, AppError } from "../entries/service";
-import { fields } from "../../lib/model";
+import { templateFields, legacyTemplate, type Template } from "../../lib/model";
 import { z } from "zod";
 import { initKnowledgeTools } from "../entries/knowledge";
 import { initAudit } from "../ai/audit";
@@ -152,6 +152,12 @@ export function markdownExport(owner: string) {
         row.label as string,
       ]),
     );
+    const typeTemplates = new Map<string, Template>(
+      all(
+        "SELECT value,template FROM dictionary_items WHERE owner=? AND kind='TYPE'",
+        owner,
+      ).map((row) => [row.value, row.template]),
+    );
     const label = (kind: "SUBJECT" | "ERROR", value: string) =>
       dictionaryLabels.get(JSON.stringify([kind, value]))?.trim() || value;
     const knowledgeNames = new Map(
@@ -166,15 +172,17 @@ export function markdownExport(owner: string) {
       owner,
     )) {
       const e = unpack(row);
+      const template =
+        typeTemplates.get(e.type) ?? legacyTemplate(e.type) ?? "GENERIC";
       let md = `# ${e.title || "未命名记录"}\n\n${label("SUBJECT", e.subject)} · ${e.status}\n\n## 原材料\n\n${e.body}\n\n来源：${e.source}\n\n`;
-      if (e.type === "CS") {
+      if (template === "CS") {
         md += `题型：${e.details.subtype === "CONCEPT" ? "概念疑问" : "题目"}\n\n`;
         if (e.details.options_json)
           md += `## 选项\n\n${JSON.parse(e.details.options_json)
             .map((option: string) => `- ${option}`)
             .join("\n")}\n\n`;
       }
-      for (const [key, label] of fields[e.type])
+      for (const [key, label] of templateFields[template])
         if (e.details[key]) md += `## ${label}\n\n${e.details[key]}\n\n`;
       for (const c of e.contexts)
         md += `## 语境\n\n${c.sentence_text}\n\n${c.meaning_md}\n\n${c.collocation}\n\n来源：${c.source}\n\n`;

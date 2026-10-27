@@ -1,11 +1,14 @@
 import { z } from "zod";
 export const types = ["MATH", "CS", "VOCABULARY", "SENTENCE"] as const;
-export const names = {
-  MATH: "数学错题",
-  CS: "408 专业课",
-  VOCABULARY: "英语生词",
-  SENTENCE: "英语长难句",
-};
+export const names: Record<string, string> = Object.assign(
+  Object.create(null),
+  {
+    MATH: "数学错题",
+    CS: "408 专业课",
+    VOCABULARY: "英语生词",
+    SENTENCE: "英语长难句",
+  },
+);
 export const subjects = [
   "高等数学",
   "数据结构",
@@ -15,38 +18,63 @@ export const subjects = [
   "英语",
 ];
 export const errors = ["概念", "条件", "方法", "计算", "审题", "表达"];
-export const fields: Record<string, [string, string][]> = {
-  MATH: [
-    ["original_work_md", "我的原解法"],
-    ["error_step_md", "错误步骤"],
-    ["solution_md", "正确解法"],
-    ["applicability_md", "适用条件"],
-    ["decision_rule_md", "方法选择"],
-    ["takeaway_md", "可复用总结"],
-  ],
-  CS: [
-    ["my_answer_md", "我的答案 / 原理解"],
-    ["reference_answer_md", "参考答案"],
-    ["principle_md", "原理与推理"],
-    ["comparison_md", "易混概念"],
-    ["boundary_md", "边界与反例"],
-    ["self_explanation_md", "自己的解释"],
-  ],
-  VOCABULARY: [
-    ["lemma", "词条原形"],
-    ["surface_form", "原词形"],
-    ["part_of_speech", "词性"],
-    ["takeaway_md", "个人总结"],
-  ],
-  SENTENCE: [
-    ["context_md", "上下文"],
-    ["initial_translation_md", "初次理解"],
-    ["main_clause_md", "句子主干"],
-    ["clause_analysis_md", "从句与结构"],
-    ["reference_logic_md", "指代与逻辑"],
-    ["reference_translation_md", "参考译文"],
-    ["difficulty_md", "理解障碍"],
-  ],
+export const fields: Record<string, [string, string][]> = Object.assign(
+  Object.create(null),
+  {
+    MATH: [
+      ["original_work_md", "我的原解法"],
+      ["error_step_md", "错误步骤"],
+      ["solution_md", "正确解法"],
+      ["applicability_md", "适用条件"],
+      ["decision_rule_md", "方法选择"],
+      ["takeaway_md", "可复用总结"],
+    ],
+    CS: [
+      ["my_answer_md", "我的答案 / 原理解"],
+      ["reference_answer_md", "参考答案"],
+      ["principle_md", "原理与推理"],
+      ["comparison_md", "易混概念"],
+      ["boundary_md", "边界与反例"],
+      ["self_explanation_md", "自己的解释"],
+    ],
+    VOCABULARY: [
+      ["lemma", "词条原形"],
+      ["surface_form", "原词形"],
+      ["part_of_speech", "词性"],
+      ["takeaway_md", "个人总结"],
+    ],
+    SENTENCE: [
+      ["context_md", "上下文"],
+      ["initial_translation_md", "初次理解"],
+      ["main_clause_md", "句子主干"],
+      ["clause_analysis_md", "从句与结构"],
+      ["reference_logic_md", "指代与逻辑"],
+      ["reference_translation_md", "参考译文"],
+      ["difficulty_md", "理解障碍"],
+    ],
+  },
+);
+export const templates = [
+  "GENERIC",
+  "MATH",
+  "CS",
+  "VOCABULARY",
+  "SENTENCE",
+] as const;
+export type Template = (typeof templates)[number];
+export function legacyTemplate(
+  value: string,
+): Exclude<Template, "GENERIC"> | null {
+  return types.includes(value as (typeof types)[number])
+    ? (value as (typeof types)[number])
+    : null;
+}
+export const templateFields: Record<Template, [string, string][]> = {
+  GENERIC: [["analysis_md", "分析与理解"]],
+  MATH: fields.MATH,
+  CS: fields.CS,
+  VOCABULARY: fields.VOCABULARY,
+  SENTENCE: fields.SENTENCE,
 };
 const str = z.string().max(50000);
 export const contextSchema = z
@@ -60,7 +88,7 @@ export const contextSchema = z
   .strict();
 export const entrySchema = z
   .object({
-    type: z.enum(types),
+    type: z.string().trim().min(1).max(100),
     title: z.string().trim().max(200),
     subject: z.string().trim().min(1).max(100),
     body: str,
@@ -90,7 +118,9 @@ export function hasAnalysisContent(
   >,
 ) {
   return (
-    (fields[entry.type] || []).some(([key]) => entry.details[key]?.trim()) ||
+    (fields[entry.type] ?? templateFields.GENERIC).some(([key]) =>
+      entry.details[key]?.trim(),
+    ) ||
     entry.contexts.some((context) =>
       Object.values(context).some((value) => value.trim()),
     ) ||
