@@ -11,6 +11,7 @@ import sharp from "sharp";
 import { unzipSync, strFromU8 } from "fflate";
 process.env.DATA_DIR = mkdtempSync(path.join(os.tmpdir(), "yanxi-launch-"));
 const { one, run, db, dataDir } = await import("../src/lib/db");
+const { DATABASE_VERSION } = await import("../src/lib/migrations");
 db.exec("DROP TRIGGER IF EXISTS enforce_user_capacity");
 const { maintainAccount } = await import("../src/modules/auth/admin");
 const { clientIp, limitLogin, acquireLoginSlot, loginFailureKey } =
@@ -504,5 +505,8 @@ test("7 账号 HTTP 核心操作、重启持久化及完整实例快照恢复", 
       snapshot: JSON.parse(result.stdout),
     }),
   );
-  assert.equal(db.prepare("PRAGMA user_version").get()!.user_version, 11);
+  assert.equal(
+    db.prepare("PRAGMA user_version").get()!.user_version,
+    DATABASE_VERSION,
+  );
 });

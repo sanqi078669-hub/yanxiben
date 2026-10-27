@@ -64,6 +64,19 @@ function insert(table: string, row: Record<string, string | number | null>) {
 
 function learningData(owner: string) {
   const now = new Date().toISOString();
+  insert("dictionary_items", {
+    owner,
+    kind: "TYPE",
+    value: "MATH",
+    label: "数学错题",
+    normalized_name: "数学错题",
+    template: "MATH",
+    sort_order: 0,
+    archived: 0,
+    version: 1,
+    created_at: now,
+    updated_at: now,
+  });
   const entry = randomUUID(),
     otherEntry = randomUUID(),
     review = randomUUID(),

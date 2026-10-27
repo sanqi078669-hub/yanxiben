@@ -10,6 +10,8 @@ process.env.DATA_DIR = mkdtempSync(
 const { withImageProcessing, withUpload } =
   await import("../src/modules/images/processing");
 const { extract, limited } = await import("../src/modules/ai/service");
+const { ensure } = await import("../src/modules/dictionaries/ensure");
+const { run } = await import("../src/lib/db");
 
 test("图片处理最多两个任务，超额不开始，异常后释放容量", async () => {
   let releaseA!: () => void, releaseB!: () => void;
@@ -74,6 +76,15 @@ test("上传账号并发与每分钟次数限制在读取正文前生效", async
 });
 test("AI 忙时先拒绝提取，不查询不存在的图片或开始预处理", async () => {
   const owner = randomUUID();
+  run(
+    "INSERT INTO users(id, username, password, settings) VALUES(?,?,?,?)",
+    owner,
+    owner,
+    "fixture",
+    "{}",
+  );
+  ensure(owner, "TYPE", "MATH");
+  ensure(owner, "SUBJECT", "高等数学");
   let release!: () => void;
   const held = limited(
     owner,

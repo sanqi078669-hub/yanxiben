@@ -576,6 +576,7 @@ test("HTTP 接口集成：鉴权、上传、并发、备份、退出", async (t)
             subject: "高等数学",
             title: "提示验收",
             body: "求导",
+            details: { solution_md: "解" },
           })
         ).json()
       ).data;
