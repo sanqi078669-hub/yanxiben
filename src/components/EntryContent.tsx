@@ -1,7 +1,8 @@
 "use client";
 /* eslint-disable @next/next/no-img-element -- Private attachments require the browser's session cookie, which the public image optimizer does not forward. */
 import Link from "next/link";
-import { fields, templateFields, type Entry } from "../lib/model";
+import { templateFields, type Entry } from "../lib/model";
+import { useDictionary } from "./DictionaryContext";
 import {
   parseViewJson,
   historyViewSchema,
@@ -48,9 +49,10 @@ export function SentenceLink({ id }: { id: string }) {
   );
 }
 export function Analysis({ e }: { e: Entry }) {
+  const { templateOf } = useDictionary();
   return (
     <>
-      {(fields[e.type] ?? templateFields.GENERIC)
+      {templateFields[templateOf(e.type)]
         .filter(([k]) => e.details[k])
         .map(([k, l]) => (
           <section className="analysis-section" key={k}>

@@ -10,7 +10,7 @@ export function DictionaryCreate({
   onCreated,
   expanded = false,
 }: {
-  kind: "SUBJECT" | "ERROR";
+  kind: "TYPE" | "SUBJECT" | "ERROR";
   onCreated?: (item: DictionaryItem) => void;
   expanded?: boolean;
 }) {
@@ -20,7 +20,7 @@ export function DictionaryCreate({
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false);
   const id = useId();
-  const title = kind === "SUBJECT" ? "科目" : "错因";
+  const title = kind === "TYPE" ? "类型" : kind === "SUBJECT" ? "科目" : "错因";
   return (
     <div className="dictionary-create">
       {!open && !expanded ? (

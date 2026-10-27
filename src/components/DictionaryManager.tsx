@@ -5,12 +5,13 @@ import type { DictionaryItem } from "../modules/dictionaries/service";
 import { dictionaryGroup, useDictionary } from "./DictionaryContext";
 import { DictionaryCreate } from "./DictionaryCreate";
 import { ErrorBox } from "./ui";
+import { TypeCreate, templateNames } from "./TypeCreate";
 
-function DictionaryGroup({ kind }: { kind: "SUBJECT" | "ERROR" }) {
+function DictionaryGroup({ kind }: { kind: "TYPE" | "SUBJECT" | "ERROR" }) {
   const { items, reload, loading, error } = useDictionary();
   const [busy, setBusy] = useState(false),
     [message, setMessage] = useState("");
-  const title = kind === "SUBJECT" ? "科目" : "错因";
+  const title = kind === "TYPE" ? "类型" : kind === "SUBJECT" ? "科目" : "错因";
   const rows = items[dictionaryGroup[kind]];
   const active = rows.filter((item) => !item.archived),
     archived = rows.filter((item) => item.archived);
@@ -62,6 +63,7 @@ function DictionaryGroup({ kind }: { kind: "SUBJECT" | "ERROR" }) {
     <DictionaryRow
       key={item.value}
       item={item}
+      showTemplate={kind === "TYPE"}
       busy={busy || loading}
       onPatch={(patchValue) => patch(item, patchValue)}
       onMove={(offset) => move(index, offset)}
@@ -77,7 +79,7 @@ function DictionaryGroup({ kind }: { kind: "SUBJECT" | "ERROR" }) {
         <p className="muted">还没有可用{title}，可以新建或恢复归档项。</p>
       )}
       <div>{active.map(renderRow)}</div>
-      <DictionaryCreate kind={kind} />
+      {kind === "TYPE" ? <TypeCreate /> : <DictionaryCreate kind={kind} />}
       {archived.length > 0 && (
         <details className="dictionary-archived">
           <summary>
@@ -97,6 +99,7 @@ function DictionaryRow({
   onMove,
   first,
   last,
+  showTemplate,
 }: {
   item: DictionaryItem;
   busy: boolean;
@@ -104,6 +107,7 @@ function DictionaryRow({
   onMove: (offset: number) => Promise<void>;
   first: boolean;
   last: boolean;
+  showTemplate: boolean;
 }) {
   const [editing, setEditing] = useState(false),
     [name, setName] = useState(item.label);
@@ -111,6 +115,9 @@ function DictionaryRow({
     <div className="dictionary-row">
       <div className="dictionary-name">
         <strong>{item.label}</strong>
+        {showTemplate && (
+          <span className="muted">模板：{templateNames[item.template]}</span>
+        )}
         {item.archived && <span className="muted">（已归档）</span>}
       </div>
       <div className="dictionary-actions">
@@ -200,7 +207,7 @@ export default function DictionaryManager() {
     >
       <h2>分类管理</h2>
       <p className="muted">
-        管理科目与错因。改名会更新记录中的显示名称；归档后仍保留已有记录。
+        管理类型、科目与错因。改名会更新记录中的显示名称；归档后仍保留已有记录。
       </p>
       {loading && <p role="status">正在读取分类…</p>}
       {error && (
@@ -213,6 +220,7 @@ export default function DictionaryManager() {
         </button>
       )}
       <div className="dictionary-groups">
+        <DictionaryGroup kind="TYPE" />
         <DictionaryGroup kind="SUBJECT" />
         <DictionaryGroup kind="ERROR" />
       </div>

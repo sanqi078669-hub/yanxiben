@@ -28,12 +28,11 @@ import { MaterialPreview } from "./MaterialPreview";
 import { useEntryDraft } from "./useEntryDraft";
 
 import {
-  names,
-  types,
-  fields,
+  legacyTemplate,
   templateFields,
   type Entry,
   type EntryInput,
+  type Template,
 } from "../lib/model";
 import { api, uploadAttachment } from "../lib/request";
 import { MD } from "./Markdown";
@@ -42,6 +41,7 @@ import { useLoad } from "./useLoad";
 import type { EntryList } from "../lib/api-types";
 import { useDictionary } from "./DictionaryContext";
 import { DictionaryCreate } from "./DictionaryCreate";
+import { TypeCreate } from "./TypeCreate";
 type Any = Record<string, any>;
 const blank = (type: EntryInput["type"]): EntryInput => ({
   type,
@@ -62,6 +62,7 @@ export default function Editor({ id }: { id?: string }) {
   const {
     items,
     label,
+    templateOf,
     loading: dictionaryLoading,
     error: dictionaryError,
     reload: reloadDictionary,
@@ -70,9 +71,11 @@ export default function Editor({ id }: { id?: string }) {
   const [restoredDraft, setRestoredDraft] = useState(false);
   const router = useRouter(),
     params = useSearchParams();
-  const initial = types.includes(params.get("type") as any)
-    ? (params.get("type") as EntryInput["type"])
-    : "MATH";
+  const activeTypes = items.types.filter((item) => !item.archived);
+  const initial =
+    activeTypes.find((item) => item.value === params.get("type"))?.value ??
+    activeTypes[0]?.value ??
+    "";
   const [e, setE] = useState<EntryInput>(blank(initial)),
     [version, setVersion] = useState(0),
     [loaded, setLoaded] = useState(!id),
@@ -84,6 +87,10 @@ export default function Editor({ id }: { id?: string }) {
     [preview, setPreview] = useState(false),
     [uploading, setUploading] = useState(false),
     [busy, setBusy] = useState(false);
+  const template = templateOf(e.type);
+  const customType = !legacyTemplate(e.type);
+  const typeAvailable =
+    !!e.type && (!!id || activeTypes.some((item) => item.value === e.type));
   const [savedValue, setSavedValue] = useState(() => JSON.stringify(e));
   const uploadRequest = useRef<AbortController | null>(null);
   useEffect(() => {
@@ -101,6 +108,16 @@ export default function Editor({ id }: { id?: string }) {
   useLayoutEffect(() => {
     latest.current = e;
   }, [e]);
+  useEffect(() => {
+    if (!id && !dictionaryLoading && !e.type && initial) {
+      const next = { ...e, type: initial };
+      if (JSON.stringify(e) === saved.current) {
+        saved.current = JSON.stringify(next);
+        setSavedValue(saved.current);
+      }
+      setE(next);
+    }
+  }, [id, dictionaryLoading, e, initial]);
   const draft = useEntryDraft(
     e,
     id || "new",
@@ -151,6 +168,16 @@ export default function Editor({ id }: { id?: string }) {
         return false;
       if (!latest.current.subject.trim()) {
         setError("请先选择或新建科目，再保存记录。");
+        return false;
+      }
+      if (
+        !latest.current.type.trim() ||
+        (!id &&
+          !items.types.some(
+            (item) => item.value === latest.current.type && !item.archived,
+          ))
+      ) {
+        setError("请先选择或新建类型，再保存记录。");
         return false;
       }
       saving.current = true;
@@ -207,6 +234,7 @@ export default function Editor({ id }: { id?: string }) {
       clearDraft,
       loaded,
       loadError,
+      items.types,
     ],
   );
   useEffect(() => {
@@ -259,6 +287,22 @@ export default function Editor({ id }: { id?: string }) {
   }, []);
   const change = (patch: Partial<EntryInput>) =>
     setE((v) => ({ ...v, ...patch }));
+  const selectType = (
+    value: string,
+    targetTemplate: Template = templateOf(value),
+  ) => {
+    if (id || value === e.type) return;
+    if (
+      Object.keys(e.details).length &&
+      !confirm("切换类型将清空分析字段，继续吗？")
+    )
+      return;
+    change({
+      type: value,
+      details: {},
+      contexts: targetTemplate === "VOCABULARY" ? e.contexts : [],
+    });
+  };
   async function upload(file: File) {
     if (uploadRequest.current) return;
     const controller = new AbortController();
@@ -333,7 +377,8 @@ export default function Editor({ id }: { id?: string }) {
               uploading ||
               !!conflict ||
               draft.pending.length > 0 ||
-              !e.subject.trim()
+              !e.subject.trim() ||
+              !typeAvailable
             }
             onClick={() =>
               !id && captureStep !== 2 ? setCaptureStep(2) : save(true)
@@ -348,6 +393,11 @@ export default function Editor({ id }: { id?: string }) {
           </button>
         </div>
       </div>
+      {!typeAvailable && (
+        <p className="tip" role="status">
+          请先选择或新建类型，再保存记录。
+        </p>
+      )}
       {!e.subject.trim() && (
         <p className="tip" role="status">
           请先选择或新建科目，再保存记录。
@@ -510,26 +560,44 @@ export default function Editor({ id }: { id?: string }) {
               </button>
             </div>
             <div className="type-picker">
-              {types.map((t) => (
+              {activeTypes.map((item) => (
                 <button
-                  key={t}
+                  key={item.value}
                   disabled={!!id}
-                  className={e.type === t ? "selected" : ""}
+                  className={e.type === item.value ? "selected" : ""}
                   onClick={() => {
-                    if (
-                      e.type !== t &&
-                      (e.body || Object.keys(e.details).length) &&
-                      !confirm("切换模板将清空当前未保存内容，继续吗？")
-                    )
-                      return;
-                    setE({ ...blank(t), subject: e.subject });
+                    selectType(item.value);
                   }}
                 >
-                  <TypeIcon type={t} />
-                  {names[t]}
+                  <TypeIcon type={item.value} />
+                  {item.label}
                 </button>
               ))}
+              {e.type && !activeTypes.some((item) => item.value === e.type) && (
+                <button disabled>
+                  <TypeIcon type={e.type} />
+                  {label("TYPE", e.type)}（
+                  {items.types.some(
+                    (item) => item.value === e.type && item.archived,
+                  )
+                    ? "已归档"
+                    : "不在字典中"}
+                  ）
+                </button>
+              )}
             </div>
+            {!id && (
+              <>
+                {!activeTypes.length && !dictionaryLoading && (
+                  <p role="status">
+                    还没有可用类型，可以新建类型或从预设添加。
+                  </p>
+                )}
+                <TypeCreate
+                  onCreated={(item) => selectType(item.value, item.template)}
+                />
+              </>
+            )}
             <label>
               标题
               <input
@@ -539,9 +607,9 @@ export default function Editor({ id }: { id?: string }) {
               />
             </label>
             <label>
-              {e.type === "VOCABULARY"
+              {template === "VOCABULARY"
                 ? "词条 / 原句"
-                : e.type === "SENTENCE"
+                : template === "SENTENCE"
                   ? "英文原句"
                   : "题目 / 疑问"}
               {preview ? (
@@ -550,7 +618,7 @@ export default function Editor({ id }: { id?: string }) {
                 <textarea
                   className="body-editor"
                   placeholder={
-                    e.type === "MATH"
+                    template === "MATH"
                       ? "输入题目，支持 Markdown、$公式$ 和代码块…"
                       : "输入或粘贴原文…"
                   }
@@ -631,7 +699,11 @@ export default function Editor({ id }: { id?: string }) {
                 </div>
               ))}
             </div>
-            <AiExtract entry={e} existing={!!id} onApply={change} />
+            {customType ? (
+              <p className="muted">自定义类型暂不支持 AI</p>
+            ) : (
+              <AiExtract entry={e} existing={!!id} onApply={change} />
+            )}
             <label>
               来源
               <input
@@ -642,18 +714,22 @@ export default function Editor({ id }: { id?: string }) {
             </label>
           </section>
           <div className="capture-analysis">
-            <AiStudy
-              key={e.type}
-              entry={e}
-              actions={
-                e.type === "VOCABULARY"
-                  ? ["organize", "english"]
-                  : e.type === "SENTENCE"
-                    ? ["organize", "analyze", "english"]
-                    : ["organize", "analyze"]
-              }
-              onApply={change}
-            />
+            {customType ? (
+              <p className="panel form-panel muted">自定义类型暂不支持 AI</p>
+            ) : (
+              <AiStudy
+                key={e.type}
+                entry={e}
+                actions={
+                  e.type === "VOCABULARY"
+                    ? ["organize", "english"]
+                    : e.type === "SENTENCE"
+                      ? ["organize", "analyze", "english"]
+                      : ["organize", "analyze"]
+                }
+                onApply={change}
+              />
+            )}
           </div>
           <section className="panel form-panel capture-analysis">
             <div className="section-title">
@@ -662,7 +738,7 @@ export default function Editor({ id }: { id?: string }) {
               </h2>
               <Badge>允许稍后补充</Badge>
             </div>
-            {e.type === "CS" && (
+            {template === "CS" && (
               <>
                 <label>
                   类型
@@ -686,7 +762,7 @@ export default function Editor({ id }: { id?: string }) {
                 />
               </>
             )}
-            {(fields[e.type] ?? templateFields.GENERIC).map(([key, label]) => (
+            {templateFields[template].map(([key, label]) => (
               <label key={key}>
                 {label}
                 {preview ? (
@@ -705,7 +781,7 @@ export default function Editor({ id }: { id?: string }) {
                 )}
               </label>
             ))}
-            {e.type === "VOCABULARY" && (
+            {template === "VOCABULARY" && (
               <>
                 {existingWords?.items.some(
                   (x) =>

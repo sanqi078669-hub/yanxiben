@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import { api } from "../lib/request";
+import { legacyTemplate, names, type Template } from "../lib/model";
 import type {
   DictionaryItem,
   DictionaryKind,
@@ -26,9 +27,18 @@ export const dictionaryGroup = {
   ERROR: "errors",
 } as const;
 const fallbackLabel = (value: string) => (value.trim() ? value : "未命名");
-const DictionaryContext = createContext({
+export const dictionaryTemplate = (
+  items: DictionaryItem[],
+  value: string,
+): Template =>
+  items.find((item) => item.value === value)?.template ??
+  legacyTemplate(value) ??
+  "GENERIC";
+export const DictionaryContext = createContext({
   items: empty,
-  label: (_kind: DictionaryKind, value: string) => fallbackLabel(value),
+  label: (kind: DictionaryKind, value: string) =>
+    (kind === "TYPE" ? names[value] : undefined) ?? fallbackLabel(value),
+  templateOf: (value: string): Template => dictionaryTemplate([], value),
   reload: async () => empty,
   loading: false,
   error: "",
@@ -70,9 +80,13 @@ export function DictionaryProvider({ children }: { children: ReactNode }) {
         ?.label.trim() || fallbackLabel(value),
     [items],
   );
+  const templateOf = useCallback(
+    (value: string): Template => dictionaryTemplate(items.types, value),
+    [items.types],
+  );
   return (
     <DictionaryContext.Provider
-      value={{ items, label, reload, loading, error }}
+      value={{ items, label, templateOf, reload, loading, error }}
     >
       {children}
     </DictionaryContext.Provider>

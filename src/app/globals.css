@@ -884,11 +884,14 @@ footer span {
 }
 .type-picker {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   margin: 25px 0;
 }
 .type-picker button {
   flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
   border: 1px solid var(--line);
   background: #fafbf8;
   border-radius: 7px;
@@ -2013,6 +2016,15 @@ footer span {
 }
 .dictionary-group {
   min-width: 0;
+}
+.type-create {
+  margin: 12px 0;
+  min-width: 0;
+}
+.type-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 .dictionary-row {
   display: flex;

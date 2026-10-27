@@ -1,15 +1,22 @@
 "use client";
-import { DictionaryLabel } from "./DictionaryContext";
+import { DictionaryLabel, useDictionary } from "./DictionaryContext";
 import Link from "next/link";
 import { BookOpen, ArrowUpRight } from "lucide-react";
 import { rememberLibraryPosition } from "./libraryPosition";
-import { names } from "../lib/model";
 import type { EntryListItem } from "../lib/api-types";
-const icons = { MATH: "∑", CS: "⌘", VOCABULARY: "Aa", SENTENCE: "“ ”" };
+const icons = {
+  GENERIC: "◇",
+  MATH: "∑",
+  CS: "⌘",
+  VOCABULARY: "Aa",
+  SENTENCE: "“ ”",
+};
 export function TypeIcon({ type }: { type: string }) {
+  const { templateOf } = useDictionary();
+  const template = templateOf(type);
   return (
-    <span className={"type-icon " + type.toLowerCase()}>
-      {Object.hasOwn(icons, type) ? icons[type as keyof typeof icons] : "◇"}
+    <span className={"type-icon " + template.toLowerCase()}>
+      {icons[template]}
     </span>
   );
 }
@@ -69,7 +76,7 @@ export function Row({
         <p>
           <DictionaryLabel kind="SUBJECT" value={e.subject} />
           <span>·</span>
-          {e.source || (names[e.type] ?? e.type)}
+          {e.source || <DictionaryLabel kind="TYPE" value={e.type} />}
           <span>·</span>
           {new Date(e.updated_at).toLocaleDateString("zh-CN")}
         </p>

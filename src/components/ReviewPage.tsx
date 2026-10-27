@@ -1,5 +1,5 @@
 "use client";
-import { DictionaryLabel } from "./DictionaryContext";
+import { DictionaryLabel, useDictionary } from "./DictionaryContext";
 import "katex/dist/katex.min.css";
 import { useEffect, useState, useRef, useCallback } from "react";
 import Link from "next/link";
@@ -19,7 +19,7 @@ import {
   REVIEW_ANSWER_MAX_LENGTH,
   submissionWasRejected,
 } from "../lib/review-contract";
-import { names, errors, hasAnalysisContent } from "../lib/model";
+import { errors, hasAnalysisContent } from "../lib/model";
 import { api } from "../lib/request";
 import { MD } from "./Markdown";
 import {
@@ -37,6 +37,7 @@ export default function ReviewPage({
   notify: (s: string) => void;
 }) {
   const params = useSearchParams();
+  const { templateOf } = useDictionary();
   const practice = params.get("practice");
   const [focusMode, setFocusMode] = useState(false);
   const [errorCauses, setErrorCauses] = useState<string[] | null>(null);
@@ -100,7 +101,12 @@ export default function ReviewPage({
     }
   }, [practice]);
   const current = isPractice ? practiceItem : queue?.items[index];
-  const canShowAnalysis = !!current && hasAnalysisContent(current.entry);
+  const canShowAnalysis =
+    !!current &&
+    hasAnalysisContent({
+      ...current.entry,
+      type: templateOf(current.entry.type),
+    });
   useEffect(() => {
     if (previousQuestion.current && current?.id !== previousQuestion.current)
       questionHeading.current?.focus();
@@ -443,7 +449,9 @@ export default function ReviewPage({
             <div className="section-title">
               <div className="inline">
                 <TypeIcon type={current.entry.type} />
-                <span>{names[current.entry.type] ?? current.entry.type}</span>
+                <span>
+                  <DictionaryLabel kind="TYPE" value={current.entry.type} />
+                </span>
               </div>
               <Badge>
                 {isPractice
@@ -455,7 +463,7 @@ export default function ReviewPage({
               {current.entry.title || "想一想，再作答"}
             </h2>
             <MD>{current.entry.body}</MD>
-            {current.entry.type === "CS" &&
+            {templateOf(current.entry.type) === "CS" &&
               current.entry.details.options_json && (
                 <OptionsView raw={current.entry.details.options_json} />
               )}

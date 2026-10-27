@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element -- Private attachments require the browser's session cookie, which the public image optimizer does not forward. */
-import { fields, names } from "../lib/model";
-import { DictionaryLabel } from "./DictionaryContext";
+import { templateFields } from "../lib/model";
+import { DictionaryLabel, useDictionary } from "./DictionaryContext";
 import { parseOptions } from "./OptionsEditor";
 
 const labels: Record<string, string> = {
@@ -10,7 +10,7 @@ const labels: Record<string, string> = {
   mode: "比较方式",
   total: "同科目记录总数",
   difference: "差异",
-  ...Object.fromEntries(Object.values(fields).flat()),
+  ...Object.fromEntries(Object.values(templateFields).flat()),
   type: "材料类型",
   subject: "科目",
   title: "标题",
@@ -96,7 +96,7 @@ function display(key: string, value: unknown): React.ReactNode {
       "（无）"
     );
   if (key === "type" && typeof value === "string")
-    return names[value as keyof typeof names] || value;
+    return <DictionaryLabel kind="TYPE" value={value} markArchived />;
   if (key === "subtype")
     return value === "CONCEPT"
       ? "概念疑问"
@@ -149,20 +149,37 @@ function display(key: string, value: unknown): React.ReactNode {
 export function MaterialPreview({
   material,
   resolveLabels = false,
+  fieldLabels,
 }: {
   material: Record<string, unknown>;
   resolveLabels?: boolean;
+  fieldLabels?: Record<string, string>;
 }) {
+  const { templateOf } = useDictionary();
+  const detailLabels = Object.fromEntries(
+    templateFields[
+      templateOf(typeof material.type === "string" ? material.type : "")
+    ],
+  );
   return (
     <dl className="material-preview">
       {Object.entries(material).map(([key, value]) => (
         <div key={key}>
-          <dt>{labels[key] || key}</dt>
+          <dt>{fieldLabels?.[key] || labels[key] || key}</dt>
           <dd>
-            {resolveLabels &&
-            key === "subject" &&
-            typeof value === "string" &&
-            value ? (
+            {key === "details" &&
+            value &&
+            typeof value === "object" &&
+            !Array.isArray(value) ? (
+              <MaterialPreview
+                material={value as Record<string, unknown>}
+                fieldLabels={detailLabels}
+                resolveLabels={resolveLabels}
+              />
+            ) : resolveLabels &&
+              key === "subject" &&
+              typeof value === "string" &&
+              value ? (
               <DictionaryLabel kind="SUBJECT" value={value} markArchived />
             ) : resolveLabels &&
               key === "errors" &&

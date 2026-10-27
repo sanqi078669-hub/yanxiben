@@ -8,6 +8,7 @@ export const draftSchema = z.object({
   updated: z.number(),
   version: z.number().int().min(0),
   entry: entrySchema.extend({
+    type: entrySchema.shape.type.or(z.literal("")),
     subject: entrySchema.shape.subject.or(z.literal("")),
     tags: z.array(z.string().max(50)).max(30),
   }),

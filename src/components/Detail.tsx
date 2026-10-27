@@ -8,7 +8,7 @@ import { Plus, Trash2, ChevronLeft, FileText, Target, X } from "lucide-react";
 import { AiStudy } from "./AiStudy";
 import { AiRelated } from "./AiRelated";
 
-import { names, type Entry } from "../lib/model";
+import { legacyTemplate, type Entry } from "../lib/model";
 import { api } from "../lib/request";
 import { MD } from "./Markdown";
 import {
@@ -20,7 +20,7 @@ import {
 } from "./EntryContent";
 import { TypeIcon, Badge, Empty, ErrorBox } from "./ui";
 import { useLoad } from "./useLoad";
-import { DictionaryLabel } from "./DictionaryContext";
+import { DictionaryLabel, useDictionary } from "./DictionaryContext";
 type Any = Record<string, any>;
 export default function Detail({
   id,
@@ -30,6 +30,7 @@ export default function Detail({
   notify: (s: string) => void;
 }) {
   const router = useRouter();
+  const { templateOf } = useDictionary();
   const returnQuery = useSearchParams().get("returnTo") || "";
   const returnTo = /^\/(library|inbox)(\?|$)/.test(returnQuery)
     ? returnQuery
@@ -84,18 +85,30 @@ export default function Detail({
       <ErrorBox text={actionError} />
       <details className="panel form-panel">
         <summary>AI 辅助：查找相似题、提示与变式</summary>
-        <AiRelated key={id} entryId={id} onLinked={reload} />
-        <AiStudy key={id + "study"} entry={e} actions={["hint", "variant"]} />
+        {legacyTemplate(e.type) ? (
+          <>
+            <AiRelated key={id} entryId={id} onLinked={reload} />
+            <AiStudy
+              key={id + "study"}
+              entry={e}
+              actions={["hint", "variant"]}
+            />
+          </>
+        ) : (
+          <p>自定义类型暂不支持 AI</p>
+        )}
       </details>
       <div className="detail-grid">
         <div>
           <section className="panel form-panel">
             <div className="section-title">
               <h2>原始材料</h2>
-              <Badge>{names[e.type] ?? e.type}</Badge>
+              <Badge>
+                <DictionaryLabel kind="TYPE" value={e.type} markArchived />
+              </Badge>
             </div>
             <MD>{e.body}</MD>
-            {e.type === "CS" && e.details.options_json && (
+            {templateOf(e.type) === "CS" && e.details.options_json && (
               <OptionsView raw={e.details.options_json} />
             )}
             <AttachmentImages e={e} role="PROMPT" />
