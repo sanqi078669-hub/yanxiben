@@ -127,63 +127,81 @@ export default function LibraryPage({
           />
         </div>
         <div className="filters dictionary-filters">
-          <select
-            aria-label="记录类型"
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-          >
-            <option value="">所有类型</option>
-            <DictionaryOptions kind="TYPE" value={type} />
-          </select>
-          <select
-            aria-label="科目"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-          >
-            <option value="">所有科目</option>
-            <DictionaryOptions kind="SUBJECT" value={subject} />
-          </select>
-          {mode !== "inbox" && (
+          <label className="dictionary-filter dictionary-filter-type">
+            <span className="dictionary-filter-name">记录类型</span>
             <select
-              aria-label="整理状态"
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
+              aria-label="记录类型"
+              value={type}
+              onChange={(e) => setType(e.target.value)}
             >
-              <option value="">整理状态</option>
-              <option value="INBOX">待整理</option>
-              <option value="ORGANIZED">已整理</option>
+              <option value="">所有类型</option>
+              <DictionaryOptions kind="TYPE" value={type} />
             </select>
+          </label>
+          <label className="dictionary-filter">
+            <span className="dictionary-filter-name">科目</span>
+            <select
+              aria-label="科目"
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+            >
+              <option value="">所有科目</option>
+              <DictionaryOptions kind="SUBJECT" value={subject} />
+            </select>
+          </label>
+          {mode !== "inbox" && (
+            <label className="dictionary-filter">
+              <span className="dictionary-filter-name">整理状态</span>
+              <select
+                aria-label="整理状态"
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
+              >
+                <option value="">整理状态</option>
+                <option value="INBOX">待整理</option>
+                <option value="ORGANIZED">已整理</option>
+              </select>
+            </label>
           )}
-          <select
-            aria-label="知识点"
-            value={knowledge}
-            onChange={(e) => setKnowledge(e.target.value)}
-          >
-            <option value="">所有知识点</option>
-            {knowledge && nodes && !nodes.some((n) => n.id === knowledge) && (
-              <option value={knowledge}>原知识点已失效，请清除筛选</option>
-            )}
-            {nodes?.map((n) => (
-              <option key={n.id} value={n.id}>
-                {n.name}
-              </option>
-            ))}
-          </select>
-          <select
-            aria-label="错因"
-            value={errorFilter}
-            onChange={(e) => setErrorFilter(e.target.value)}
-          >
-            <option value="">所有错因</option>
-            <DictionaryOptions kind="ERROR" value={errorFilter} />
-          </select>
-          <input
-            className="tag-filter"
-            aria-label="标签筛选"
-            placeholder="标签"
-            value={tag}
-            onChange={(e) => setTag(e.target.value)}
-          />
+          <label className="dictionary-filter">
+            <span className="dictionary-filter-name">知识点</span>
+            <select
+              aria-label="知识点"
+              value={knowledge}
+              onChange={(e) => setKnowledge(e.target.value)}
+            >
+              <option value="">所有知识点</option>
+              {knowledge && nodes && !nodes.some((n) => n.id === knowledge) && (
+                <option value={knowledge}>原知识点已失效，请清除筛选</option>
+              )}
+              {nodes?.map((n) => (
+                <option key={n.id} value={n.id}>
+                  {n.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="dictionary-filter">
+            <span className="dictionary-filter-name">错因</span>
+            <select
+              aria-label="错因"
+              value={errorFilter}
+              onChange={(e) => setErrorFilter(e.target.value)}
+            >
+              <option value="">所有错因</option>
+              <DictionaryOptions kind="ERROR" value={errorFilter} />
+            </select>
+          </label>
+          <label className="dictionary-filter dictionary-filter-tag">
+            <span className="dictionary-filter-name">标签</span>
+            <input
+              className="tag-filter"
+              aria-label="标签筛选"
+              placeholder="标签"
+              value={tag}
+              onChange={(e) => setTag(e.target.value)}
+            />
+          </label>
           <button
             className="text-button"
             onClick={() => {

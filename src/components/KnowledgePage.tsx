@@ -95,9 +95,6 @@ export default function KnowledgePage({
         </div>
       </div>
       <ErrorBox text={error || err || dictionaryError} />
-      <AiDiagnosis />
-      <LearningStatistics key={timezone} timezone={timezone} />
-      <KnowledgeTools nodes={nodes || []} onChange={reload} />
       <div className="detail-grid knowledge-map">
         <section className="panel">
           <div className="section-title">
@@ -198,6 +195,12 @@ export default function KnowledgePage({
           </button>
         </form>
       </div>
+      <details className="panel form-panel knowledge-insights">
+        <summary>学习诊断与统计（默认折叠）</summary>
+        <AiDiagnosis />
+        <LearningStatistics key={timezone} timezone={timezone} />
+      </details>
+      <KnowledgeTools nodes={nodes || []} onChange={reload} />
     </>
   );
 }
