@@ -30,6 +30,12 @@
         "value": "yanxiben journal serif",
         "createdAt": "2026-10-29T04:57:45.587Z",
         "reason": "User confirmed self-hosted Noto Serif SC for the login-only journal pilot; Yanxiben Journal Serif is its scoped font-family alias. Global DESIGN.md and tokens stay unchanged."
+      },
+      {
+        "rule": "design-system-font",
+        "value": "yanxiben journal ui",
+        "createdAt": "2026-10-29T07:59:53.648Z",
+        "reason": "User confirmed reusing self-hosted Noto Serif SC for the scoped journal shell and Today page. Yanxiben Journal UI is the unique alias preventing typography changes on other content pages."
       }
     ]
   }

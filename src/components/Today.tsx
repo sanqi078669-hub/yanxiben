@@ -88,11 +88,15 @@ export default function Today({ profile }: { profile: typeof defaults }) {
     weekday: "long",
   }).format(new Date());
   return (
-    <>
+    <div className="journal-today">
       <div className="page-heading">
         <div>
           <div className="eyebrow">
-            {date} <span> / </span> A LITTLE PROGRESS, EVERY DAY
+            {date}
+            <span className="journal-date-note">
+              {" "}
+              / A LITTLE PROGRESS, EVERY DAY
+            </span>
           </div>
           <h1>
             今天，也向前一点。<span className="sun-mark">✳</span>
@@ -221,6 +225,6 @@ export default function Today({ profile }: { profile: typeof defaults }) {
           </div>
         </section>
       </div>
-    </>
+    </div>
   );
 }

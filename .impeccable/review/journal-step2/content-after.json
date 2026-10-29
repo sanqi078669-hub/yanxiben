@@ -1,0 +1,380 @@
+[
+  {
+    "page": "library",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "clientWidth": 1425,
+    "controls": [
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": "1px solid rgb(220, 227, 218)",
+        "borderRadius": "7px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "12px",
+        "height": 35.796875,
+        "padding": "7px 10px",
+        "text": "所有类型数学错题英语测试类型-3b-改（已归档）英语生词（已归档）",
+        "width": 184
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": "1px solid rgb(220, 227, 218)",
+        "borderRadius": "7px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "12px",
+        "height": 35.796875,
+        "padding": "7px 10px",
+        "text": "所有科目高等数学测试科目-2d-改（已归档）测试科目-临时-改名（已归档）",
+        "width": 206
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": "1px solid rgb(220, 227, 218)",
+        "borderRadius": "7px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "12px",
+        "height": 35.796875,
+        "padding": "7px 10px",
+        "text": "整理状态待整理已整理",
+        "width": 90
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": "1px solid rgb(220, 227, 218)",
+        "borderRadius": "7px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "12px",
+        "height": 35.796875,
+        "padding": "7px 10px",
+        "text": "所有知识点测试知识点-2f极限",
+        "width": 117
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": "1px solid rgb(220, 227, 218)",
+        "borderRadius": "7px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "12px",
+        "height": 35.796875,
+        "padding": "7px 10px",
+        "text": "所有错因概念条件测试错因-2d（已归档）",
+        "width": 168
+      }
+    ],
+    "scrollWidth": 1425
+  },
+  {
+    "page": "detail",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "clientWidth": 1425,
+    "controls": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": "",
+        "borderRadius": "0px",
+        "color": "rgb(40, 98, 76)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "13px",
+        "height": 44,
+        "padding": "10px 0px",
+        "text": "分析与理解",
+        "width": 65
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": "0px none rgb(39, 59, 55)",
+        "borderRadius": "0px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "13px",
+        "height": 44,
+        "padding": "10px 0px",
+        "text": "复习历史 · 1",
+        "width": 70.796875
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": "0px none rgb(39, 59, 55)",
+        "borderRadius": "0px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "13px",
+        "height": 44,
+        "padding": "10px 0px",
+        "text": "内容版本",
+        "width": 52
+      }
+    ],
+    "scrollWidth": 1425
+  },
+  {
+    "page": "settings",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "clientWidth": 1425,
+    "controls": [
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": "1px solid rgb(220, 227, 218)",
+        "borderRadius": "7px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "13px",
+        "height": 45.4375,
+        "padding": "11px 12px",
+        "text": "",
+        "width": 1044
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": "1px solid rgb(220, 227, 218)",
+        "borderRadius": "7px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "13px",
+        "height": 45.4375,
+        "padding": "11px 12px",
+        "text": "",
+        "width": 1044
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": "1px solid rgb(220, 227, 218)",
+        "borderRadius": "7px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "13px",
+        "height": 45.4375,
+        "padding": "11px 12px",
+        "text": "",
+        "width": 1044
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": "1px solid rgb(220, 227, 218)",
+        "borderRadius": "7px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "13px",
+        "height": 45.4375,
+        "padding": "11px 12px",
+        "text": "",
+        "width": 1044
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": "1px solid rgb(220, 227, 218)",
+        "borderRadius": "7px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "13px",
+        "height": 45.4375,
+        "padding": "11px 12px",
+        "text": "",
+        "width": 1044
+      }
+    ],
+    "scrollWidth": 1425
+  },
+  {
+    "page": "library",
+    "viewport": {
+      "width": 375,
+      "height": 812
+    },
+    "clientWidth": 360,
+    "controls": [
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": "1px solid rgb(220, 227, 218)",
+        "borderRadius": "7px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "12px",
+        "height": 44,
+        "padding": "7px 10px",
+        "text": "所有类型数学错题英语测试类型-3b-改（已归档）英语生词（已归档）",
+        "width": 292
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": "1px solid rgb(220, 227, 218)",
+        "borderRadius": "7px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "12px",
+        "height": 44,
+        "padding": "7px 10px",
+        "text": "所有科目高等数学测试科目-2d-改（已归档）测试科目-临时-改名（已归档）",
+        "width": 142
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": "1px solid rgb(220, 227, 218)",
+        "borderRadius": "7px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "12px",
+        "height": 44,
+        "padding": "7px 10px",
+        "text": "整理状态待整理已整理",
+        "width": 142
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": "1px solid rgb(220, 227, 218)",
+        "borderRadius": "7px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "12px",
+        "height": 44,
+        "padding": "7px 10px",
+        "text": "所有知识点测试知识点-2f极限",
+        "width": 142
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": "1px solid rgb(220, 227, 218)",
+        "borderRadius": "7px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "12px",
+        "height": 44,
+        "padding": "7px 10px",
+        "text": "所有错因概念条件测试错因-2d（已归档）",
+        "width": 142
+      }
+    ],
+    "scrollWidth": 360
+  },
+  {
+    "page": "detail",
+    "viewport": {
+      "width": 375,
+      "height": 812
+    },
+    "clientWidth": 360,
+    "controls": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": "",
+        "borderRadius": "0px",
+        "color": "rgb(40, 98, 76)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "13px",
+        "height": 44,
+        "padding": "10px 0px",
+        "text": "分析与理解",
+        "width": 65
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": "0px none rgb(39, 59, 55)",
+        "borderRadius": "0px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "13px",
+        "height": 44,
+        "padding": "10px 0px",
+        "text": "复习历史 · 1",
+        "width": 70.796875
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "border": "0px none rgb(39, 59, 55)",
+        "borderRadius": "0px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "13px",
+        "height": 44,
+        "padding": "10px 0px",
+        "text": "内容版本",
+        "width": 52
+      }
+    ],
+    "scrollWidth": 360
+  },
+  {
+    "page": "settings",
+    "viewport": {
+      "width": 375,
+      "height": 812
+    },
+    "clientWidth": 360,
+    "controls": [
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": "1px solid rgb(220, 227, 218)",
+        "borderRadius": "7px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "13px",
+        "height": 45.4375,
+        "padding": "11px 12px",
+        "text": "",
+        "width": 284
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": "1px solid rgb(220, 227, 218)",
+        "borderRadius": "7px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "13px",
+        "height": 45.4375,
+        "padding": "11px 12px",
+        "text": "",
+        "width": 284
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": "1px solid rgb(220, 227, 218)",
+        "borderRadius": "7px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "13px",
+        "height": 45.4375,
+        "padding": "11px 12px",
+        "text": "",
+        "width": 284
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": "1px solid rgb(220, 227, 218)",
+        "borderRadius": "7px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "13px",
+        "height": 45.4375,
+        "padding": "11px 12px",
+        "text": "",
+        "width": 284
+      },
+      {
+        "background": "rgb(255, 255, 255)",
+        "border": "1px solid rgb(220, 227, 218)",
+        "borderRadius": "7px",
+        "color": "rgb(39, 59, 55)",
+        "font": "Arial, \"Microsoft YaHei\", \"PingFang SC\", sans-serif",
+        "fontSize": "13px",
+        "height": 45.4375,
+        "padding": "11px 12px",
+        "text": "",
+        "width": 284
+      }
+    ],
+    "scrollWidth": 360
+  }
+]

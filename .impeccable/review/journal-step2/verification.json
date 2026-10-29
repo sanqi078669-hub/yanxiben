@@ -1,0 +1,105 @@
+{
+  "cssSelectorsScoped": true,
+  "noGlobalTokenOverride": true,
+  "notebookOnlyCssImportAndClass": true,
+  "routingAndMobileAriaCurrentUnchanged": true,
+  "excludedContentFilesUnchanged": true,
+  "typecheck": "passed",
+  "lint": "passed",
+  "contrast": {
+    "samples": 44,
+    "minRatio": 5.03
+  },
+  "smallTargets": [],
+  "viewports": [
+    {
+      "viewport": [
+        1440,
+        900
+      ],
+      "noHorizontalOverflow": true,
+      "ctaBottom": 566.703125,
+      "ctaVisible": true,
+      "fontLoaded": true,
+      "focus": {
+        "offset": "3px",
+        "outline": "rgb(40, 98, 76) solid 3px",
+        "text": "R1测试：复数方程求解高等数学·数学错题·2026/10/26"
+      },
+      "reviewEyebrow": "none",
+      "dateSize": "12px"
+    },
+    {
+      "viewport": [
+        375,
+        812
+      ],
+      "noHorizontalOverflow": true,
+      "ctaBottom": 679.234375,
+      "ctaVisible": true,
+      "fontLoaded": true,
+      "focus": {
+        "offset": "3px",
+        "outline": "rgb(40, 98, 76) solid 3px",
+        "text": "R1测试：复数方程求解高等数学·数学错题·2026/10/26"
+      },
+      "reviewEyebrow": "none",
+      "dateSize": "12px"
+    }
+  ],
+  "contentComparison": [
+    {
+      "page": "library",
+      "width": 1440,
+      "noHorizontalOverflow": true,
+      "contentStylesUnchanged": true,
+      "styleDifferences": [],
+      "widthNotes": {
+        "before": 1440,
+        "after": 1425,
+        "note": "Vertical scrollbar/content loading changes available width; styles compared separately."
+      }
+    },
+    {
+      "page": "detail",
+      "width": 1440,
+      "noHorizontalOverflow": true,
+      "contentStylesUnchanged": true,
+      "styleDifferences": [],
+      "widthNotes": null
+    },
+    {
+      "page": "settings",
+      "width": 1440,
+      "noHorizontalOverflow": true,
+      "contentStylesUnchanged": true,
+      "styleDifferences": [],
+      "widthNotes": null
+    },
+    {
+      "page": "library",
+      "width": 375,
+      "noHorizontalOverflow": true,
+      "contentStylesUnchanged": true,
+      "styleDifferences": [],
+      "widthNotes": null
+    },
+    {
+      "page": "detail",
+      "width": 375,
+      "noHorizontalOverflow": true,
+      "contentStylesUnchanged": true,
+      "styleDifferences": [],
+      "widthNotes": null
+    },
+    {
+      "page": "settings",
+      "width": 375,
+      "noHorizontalOverflow": true,
+      "contentStylesUnchanged": true,
+      "styleDifferences": [],
+      "widthNotes": null
+    }
+  ],
+  "finishReviewFix": "Removed redundant review banner eyebrow at all widths; date remains 12px. Screenshots recaptured."
+}

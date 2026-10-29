@@ -1,0 +1,399 @@
+[
+  {
+    "client": 1425,
+    "cta": {
+      "bottom": 566.703125,
+      "height": 44,
+      "top": 522.703125,
+      "width": 139
+    },
+    "current": [
+      {
+        "current": "page",
+        "href": "/today"
+      },
+      {
+        "current": null,
+        "href": "/library"
+      },
+      {
+        "current": null,
+        "href": "/entries/new"
+      },
+      {
+        "current": null,
+        "href": "/review"
+      },
+      {
+        "current": null,
+        "href": "/settings"
+      }
+    ],
+    "fontLoaded": true,
+    "grid": "643.188px 428.797px",
+    "heading": "32px",
+    "nav": {
+      "bottom": 0,
+      "height": 0,
+      "top": 0,
+      "width": 0
+    },
+    "scroll": 1425,
+    "statsColumns": "257px 257px 257px 257px",
+    "targets": [
+      {
+        "bottom": 109.890625,
+        "height": 75.890625,
+        "text": "研习本YOUR LEARNING NOTEBOOK",
+        "top": 34,
+        "width": 194
+      },
+      {
+        "bottom": 225.6875,
+        "height": 44,
+        "text": "今日学习",
+        "top": 181.6875,
+        "width": 194
+      },
+      {
+        "bottom": 276.6875,
+        "height": 44,
+        "text": "收集箱",
+        "top": 232.6875,
+        "width": 194
+      },
+      {
+        "bottom": 327.6875,
+        "height": 44,
+        "text": "资料库",
+        "top": 283.6875,
+        "width": 194
+      },
+      {
+        "bottom": 378.6875,
+        "height": 44,
+        "text": "复习计划",
+        "top": 334.6875,
+        "width": 194
+      },
+      {
+        "bottom": 429.6875,
+        "height": 44,
+        "text": "知识地图",
+        "top": 385.6875,
+        "width": 194
+      },
+      {
+        "bottom": 722.03125,
+        "height": 44,
+        "text": "回收站",
+        "top": 678.03125,
+        "width": 194
+      },
+      {
+        "bottom": 773.03125,
+        "height": 44,
+        "text": "设置与数据",
+        "top": 729.03125,
+        "width": 194
+      },
+      {
+        "bottom": 869.015625,
+        "height": 44,
+        "text": "退出登录",
+        "top": 825.015625,
+        "width": 44
+      },
+      {
+        "bottom": 59.5,
+        "height": 44,
+        "text": "收集一条",
+        "top": 15.5,
+        "width": 104
+      },
+      {
+        "bottom": 191.640625,
+        "height": 45.4375,
+        "text": "快速收集",
+        "top": 146.203125,
+        "width": 121
+      },
+      {
+        "bottom": 381.15625,
+        "height": 130.3125,
+        "text": "待复习 1条今天再想一遍，记得更牢",
+        "top": 250.84375,
+        "width": 257
+      },
+      {
+        "bottom": 381.15625,
+        "height": 130.3125,
+        "text": "待整理 2条给收集的灵感一个归处",
+        "top": 250.84375,
+        "width": 257
+      },
+      {
+        "bottom": 381.15625,
+        "height": 130.3125,
+        "text": "累计收集 2条每一条，都是成长的注脚",
+        "top": 250.84375,
+        "width": 257
+      },
+      {
+        "bottom": 381.15625,
+        "height": 130.3125,
+        "text": "今日已练习 0次认真完成的每次尝试都算数",
+        "top": 250.84375,
+        "width": 257
+      },
+      {
+        "bottom": 566.703125,
+        "height": 44,
+        "text": "开始今日复习",
+        "top": 522.703125,
+        "width": 139
+      },
+      {
+        "bottom": 577.75,
+        "height": 69.84375,
+        "text": "∑数学错题从错因到方法",
+        "top": 507.90625,
+        "width": 428.796875
+      },
+      {
+        "bottom": 647.59375,
+        "height": 69.84375,
+        "text": "◇英语留下原文，梳理思考",
+        "top": 577.75,
+        "width": 428.796875
+      },
+      {
+        "bottom": 749.15625,
+        "height": 44,
+        "text": "全部记录",
+        "top": 705.15625,
+        "width": 74
+      },
+      {
+        "bottom": 831.296875,
+        "height": 54.140625,
+        "text": "R1测试：复数方程求解高等数学·数学错题·2026/10/2",
+        "top": 777.15625,
+        "width": 546.1875
+      },
+      {
+        "bottom": 918.4375,
+        "height": 54.140625,
+        "text": "【示例】等价无穷小：先看运算结构高等数学·本地功能验证示例，",
+        "top": 864.296875,
+        "width": 546.1875
+      },
+      {
+        "bottom": 807.453125,
+        "height": 59.296875,
+        "text": "∑数学错题2",
+        "top": 748.15625,
+        "width": 428.796875
+      },
+      {
+        "bottom": 866.75,
+        "height": 59.296875,
+        "text": "◇英语0",
+        "top": 807.453125,
+        "width": 428.796875
+      }
+    ],
+    "viewport": [
+      1440,
+      900
+    ],
+    "focus": {
+      "offset": "3px",
+      "outline": "rgb(40, 98, 76) solid 3px",
+      "text": "R1测试：复数方程求解高等数学·数学错题·2026/10/26"
+    },
+    "dateSize": "12px",
+    "reviewEyebrow": "none"
+  },
+  {
+    "client": 360,
+    "cta": {
+      "bottom": 679.234375,
+      "height": 44,
+      "top": 635.234375,
+      "width": 139
+    },
+    "current": [
+      {
+        "current": "page",
+        "href": "/today"
+      },
+      {
+        "current": null,
+        "href": "/library"
+      },
+      {
+        "current": null,
+        "href": "/entries/new"
+      },
+      {
+        "current": null,
+        "href": "/review"
+      },
+      {
+        "current": null,
+        "href": "/settings"
+      }
+    ],
+    "fontLoaded": true,
+    "grid": "324px",
+    "heading": "26px",
+    "nav": {
+      "bottom": 812,
+      "height": 65,
+      "top": 747,
+      "width": 360
+    },
+    "scroll": 360,
+    "statsColumns": "162px 162px",
+    "targets": [
+      {
+        "bottom": 53,
+        "height": 44,
+        "text": "收集一条",
+        "top": 9,
+        "width": 104
+      },
+      {
+        "bottom": 352.796875,
+        "height": 143.75,
+        "text": "待复习 1条今天再想一遍，记得更牢",
+        "top": 209.046875,
+        "width": 162
+      },
+      {
+        "bottom": 352.796875,
+        "height": 143.75,
+        "text": "待整理 2条给收集的灵感一个归处",
+        "top": 209.046875,
+        "width": 162
+      },
+      {
+        "bottom": 497.546875,
+        "height": 144.75,
+        "text": "累计收集 2条每一条，都是成长的注脚",
+        "top": 352.796875,
+        "width": 162
+      },
+      {
+        "bottom": 497.546875,
+        "height": 144.75,
+        "text": "今日已练习 0次认真完成的每次尝试都算数",
+        "top": 352.796875,
+        "width": 162
+      },
+      {
+        "bottom": 679.234375,
+        "height": 44,
+        "text": "开始今日复习",
+        "top": 635.234375,
+        "width": 139
+      },
+      {
+        "bottom": 925.578125,
+        "height": 69.84375,
+        "text": "∑数学错题从错因到方法",
+        "top": 855.734375,
+        "width": 324
+      },
+      {
+        "bottom": 995.421875,
+        "height": 69.84375,
+        "text": "◇英语留下原文，梳理思考",
+        "top": 925.578125,
+        "width": 324
+      },
+      {
+        "bottom": 1076.421875,
+        "height": 44,
+        "text": "全部记录",
+        "top": 1032.421875,
+        "width": 74
+      },
+      {
+        "bottom": 1156.921875,
+        "height": 52.5,
+        "text": "R1测试：复数方程求解高等数学·数学错题·2026/10/2",
+        "top": 1104.421875,
+        "width": 257
+      },
+      {
+        "bottom": 1242.421875,
+        "height": 52.5,
+        "text": "【示例】等价无穷小：先看运算结构高等数学·本地功能验证示例，",
+        "top": 1189.921875,
+        "width": 257
+      },
+      {
+        "bottom": 1398.71875,
+        "height": 59.296875,
+        "text": "∑数学错题2",
+        "top": 1339.421875,
+        "width": 324
+      },
+      {
+        "bottom": 1458.015625,
+        "height": 59.296875,
+        "text": "◇英语0",
+        "top": 1398.71875,
+        "width": 324
+      },
+      {
+        "bottom": 812,
+        "height": 56,
+        "text": "今日",
+        "top": 756,
+        "width": 72
+      },
+      {
+        "bottom": 812,
+        "height": 56,
+        "text": "资料库",
+        "top": 756,
+        "width": 72
+      },
+      {
+        "bottom": 812,
+        "height": 56,
+        "text": "收集",
+        "top": 756,
+        "width": 72
+      },
+      {
+        "bottom": 812,
+        "height": 56,
+        "text": "复习",
+        "top": 756,
+        "width": 72
+      },
+      {
+        "bottom": 812,
+        "height": 56,
+        "text": "设置",
+        "top": 756,
+        "width": 72
+      }
+    ],
+    "viewport": [
+      375,
+      812
+    ],
+    "focus": {
+      "offset": "3px",
+      "outline": "rgb(40, 98, 76) solid 3px",
+      "text": "R1测试：复数方程求解高等数学·数学错题·2026/10/26"
+    },
+    "dateSize": "12px",
+    "reviewEyebrow": "none"
+  }
+]

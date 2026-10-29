@@ -22,6 +22,7 @@ const Today = dynamic(() => import("./Today"), {
   loading: () => <p role="status">正在打开页面…</p>,
 });
 import Login from "./Login";
+import "./journal.css";
 import { api } from "../lib/request";
 import { Empty, ErrorBox } from "./ui";
 import { RequestError } from "../lib/request";
@@ -130,7 +131,7 @@ export default function Notebook() {
     ["/settings", "设置", Settings],
   ] as const;
   return (
-    <div className="shell">
+    <div className="shell journal-shell">
       <a className="skip-link" href="#main-content">
         跳到主要内容
       </a>

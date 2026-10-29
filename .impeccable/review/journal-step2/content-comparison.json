@@ -1,0 +1,54 @@
+[
+  {
+    "page": "library",
+    "width": 1440,
+    "noHorizontalOverflow": true,
+    "contentStylesUnchanged": true,
+    "styleDifferences": [],
+    "widthNotes": {
+      "before": 1440,
+      "after": 1425,
+      "note": "Vertical scrollbar/content loading changes available width; styles compared separately."
+    }
+  },
+  {
+    "page": "detail",
+    "width": 1440,
+    "noHorizontalOverflow": true,
+    "contentStylesUnchanged": true,
+    "styleDifferences": [],
+    "widthNotes": null
+  },
+  {
+    "page": "settings",
+    "width": 1440,
+    "noHorizontalOverflow": true,
+    "contentStylesUnchanged": true,
+    "styleDifferences": [],
+    "widthNotes": null
+  },
+  {
+    "page": "library",
+    "width": 375,
+    "noHorizontalOverflow": true,
+    "contentStylesUnchanged": true,
+    "styleDifferences": [],
+    "widthNotes": null
+  },
+  {
+    "page": "detail",
+    "width": 375,
+    "noHorizontalOverflow": true,
+    "contentStylesUnchanged": true,
+    "styleDifferences": [],
+    "widthNotes": null
+  },
+  {
+    "page": "settings",
+    "width": 375,
+    "noHorizontalOverflow": true,
+    "contentStylesUnchanged": true,
+    "styleDifferences": [],
+    "widthNotes": null
+  }
+]
