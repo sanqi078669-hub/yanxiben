@@ -120,6 +120,15 @@ export default function Notebook() {
         : pathname === "/trash"
           ? "回收站"
           : "今日学习");
+  const mobileActivePath =
+    pathname === "/" ? "/today" : pathname === "/inbox" ? "/library" : pathname;
+  const mobileNav = [
+    ["/today", "今日", Sun],
+    ["/library", "资料库", Library],
+    ["/entries/new", "收集", Plus],
+    ["/review", "复习", RotateCcw],
+    ["/settings", "设置", Settings],
+  ] as const;
   return (
     <div className="shell">
       <a className="skip-link" href="#main-content">
@@ -275,26 +284,17 @@ export default function Notebook() {
         </div>
       )}
       <nav className="mobile-nav">
-        <Link href="/today">
-          <Sun />
-          今日
-        </Link>
-        <Link href="/library">
-          <Library />
-          资料库
-        </Link>
-        <Link href="/entries/new">
-          <Plus />
-          收集
-        </Link>
-        <Link href="/review">
-          <RotateCcw />
-          复习
-        </Link>
-        <Link href="/settings">
-          <Settings />
-          设置
-        </Link>
+        {mobileNav.map(([path, label, Icon]) => (
+          <Link
+            href={path}
+            key={path}
+            className={mobileActivePath === path ? "active" : undefined}
+            aria-current={mobileActivePath === path ? "page" : undefined}
+          >
+            <Icon />
+            {label}
+          </Link>
+        ))}
       </nav>
     </div>
   );

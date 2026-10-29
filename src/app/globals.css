@@ -1846,18 +1846,30 @@ footer span {
     justify-content: space-around;
     background: #fbfcf8f5;
     border-top: 1px solid var(--line);
-    height: 65px;
-    padding: 9px 0 6px;
+    height: calc(65px + env(safe-area-inset-bottom));
+    padding: 8px 0 0;
+    padding-bottom: env(safe-area-inset-bottom);
     z-index: 20;
     backdrop-filter: blur(12px);
   }
   .mobile-nav a {
-    font-size: 9px;
+    flex: 1;
+    min-width: 0;
+    min-height: 48px;
+    font-size: 11px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 3px;
-    color: #7d9370;
+    white-space: nowrap;
+    border-radius: 999px;
+    color: var(--muted);
+  }
+  .mobile-nav a.active {
+    color: var(--green);
+    background: var(--pale);
+    font-weight: 600;
   }
   .mobile-nav svg {
     width: 20px;
