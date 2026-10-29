@@ -1,0 +1,30 @@
+{
+  "buildPath": "code",
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "consolas",
+        "createdAt": "2026-10-29T04:00:19.173Z",
+        "reason": "Existing Markdown code font in globals.css predates this change; domain-appropriate code typography, not a new font or identity change."
+      },
+      {
+        "rule": "overused-font",
+        "value": "arial",
+        "createdAt": "2026-10-29T04:02:41.217Z",
+        "reason": "Agent triage: Arial is the incumbent body/fallback stack documented in DESIGN.md; user constrained this task to local detail typography and preserving the established font system."
+      },
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "src/app/globals.css"
+        ],
+        "createdAt": "2026-10-29T04:02:41.271Z",
+        "reason": "Agent triage: existing analysis-section h3 border-left is a heading marker, not a card edge; it predates this change and is recorded in DESIGN.md. Retained for the user-scoped typography-only refinement."
+      }
+    ]
+  }
+}
