@@ -24,6 +24,12 @@
         ],
         "createdAt": "2026-10-29T04:02:41.271Z",
         "reason": "Agent triage: existing analysis-section h3 border-left is a heading marker, not a card edge; it predates this change and is recorded in DESIGN.md. Retained for the user-scoped typography-only refinement."
+      },
+      {
+        "rule": "design-system-font",
+        "value": "yanxiben journal serif",
+        "createdAt": "2026-10-29T04:57:45.587Z",
+        "reason": "User confirmed self-hosted Noto Serif SC for the login-only journal pilot; Yanxiben Journal Serif is its scoped font-family alias. Global DESIGN.md and tokens stay unchanged."
       }
     ]
   }

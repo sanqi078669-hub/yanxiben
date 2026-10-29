@@ -1,0 +1,11 @@
+{
+  "family": "Noto Serif SC",
+  "weights": "500..600",
+  "glyphs": "研习本把每一次思考，变成向前的一步。打开你的",
+  "cssSource": "https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500..600&display=swap&text=%E7%A0%94%E4%B9%A0%E6%9C%AC%E6%8A%8A%E6%AF%8F%E4%B8%80%E6%AC%A1%E6%80%9D%E8%80%83%EF%BC%8C%E5%8F%98%E6%88%90%E5%90%91%E5%89%8D%E7%9A%84%E4%B8%80%E6%AD%A5%E3%80%82%E6%89%93%E5%BC%80%E4%BD%A0%E7%9A%84",
+  "binarySource": "https://fonts.gstatic.com/l/font?kit=H4chBXePl9DZ0Xe7gG9cyOj7oqOEV9PrlD2o41DzSOESeW9g-MgM2aNaEb53VQEE_lPhMrTA3oiYYzmW1-ff3yeSFfV_jU8SXwXCfhvl37_sAw&skey=37fe335b8fd815cc&v=v36",
+  "license": "SIL Open Font License 1.1",
+  "licenseSource": "https://raw.githubusercontent.com/google/fonts/main/ofl/notoserifsc/OFL.txt",
+  "bytes": 8516,
+  "note": "Downloaded once during implementation; runtime requests stay on the app origin. Regenerate this subset when changing serif heading copy."
+}

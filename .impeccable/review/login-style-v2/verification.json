@@ -1,0 +1,53 @@
+{
+  "unchangedSubmitHandler": true,
+  "fontSubsetCoversAllHeadings": true,
+  "contrast": [
+    {
+      "role": "primary on page",
+      "foreground": "#242622",
+      "background": "#F5F1E8",
+      "ratio": 13.55
+    },
+    {
+      "role": "secondary on page",
+      "foreground": "#66685E",
+      "background": "#F5F1E8",
+      "ratio": 5.03
+    },
+    {
+      "role": "input text",
+      "foreground": "#242622",
+      "background": "#FFFCF6",
+      "ratio": 14.91
+    },
+    {
+      "role": "button text",
+      "foreground": "#FFFCF6",
+      "background": "#28624C",
+      "ratio": 6.97
+    },
+    {
+      "role": "registration link",
+      "foreground": "#28624C",
+      "background": "#F5F1E8",
+      "ratio": 6.33
+    },
+    {
+      "role": "error text",
+      "foreground": "#924D3C",
+      "background": "#FFFCF6",
+      "ratio": 6.12
+    }
+  ],
+  "checks": {
+    "tsc": "passed",
+    "lint": "passed",
+    "diffCheck": "passed"
+  },
+  "browser": {
+    "passwordToggle": "passed",
+    "busyState": "observed disabled 正在登录…",
+    "error": "passed",
+    "success": "not completed: browser approval usage limit, then browser connection unavailable"
+  }
+}

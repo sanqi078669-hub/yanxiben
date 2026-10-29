@@ -1,0 +1,53 @@
+{
+  "buttonBottom": 594.53125,
+  "clientWidth": 360,
+  "fontLoaded": true,
+  "headingSize": "32px",
+  "scrollWidth": 360,
+  "targets": [
+    {
+      "background": "rgb(255, 252, 246)",
+      "color": "rgb(36, 38, 34)",
+      "fontSize": "16px",
+      "height": 48,
+      "label": "username",
+      "width": 312
+    },
+    {
+      "background": "rgb(255, 252, 246)",
+      "color": "rgb(36, 38, 34)",
+      "fontSize": "16px",
+      "height": 48,
+      "label": "密码",
+      "width": 312
+    },
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "color": "rgb(102, 104, 94)",
+      "fontSize": "16px",
+      "height": 44,
+      "label": "显示密码",
+      "width": 44
+    },
+    {
+      "background": "rgb(40, 98, 76)",
+      "color": "rgb(255, 252, 246)",
+      "fontSize": "16px",
+      "height": 48,
+      "label": "进入学习空间",
+      "width": 312
+    },
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "color": "rgb(40, 98, 76)",
+      "fontSize": "13px",
+      "height": 44,
+      "label": "创建账号",
+      "width": 52
+    }
+  ],
+  "viewport": [
+    375,
+    812
+  ]
+}

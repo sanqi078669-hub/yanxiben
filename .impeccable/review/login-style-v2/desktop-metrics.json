@@ -1,0 +1,25 @@
+{
+  "clientWidth": 1440,
+  "fontLoaded": true,
+  "heading": {
+    "lineHeight": "62.4px",
+    "size": "48px",
+    "weight": "500"
+  },
+  "image": {
+    "loaded": true,
+    "width": 480
+  },
+  "layout": {
+    "footer": 108,
+    "grid": "734.719px 577.266px",
+    "header": 108
+  },
+  "registration": "/register",
+  "scrollHeight": 900,
+  "scrollWidth": 1440,
+  "viewport": [
+    1440,
+    900
+  ]
+}
