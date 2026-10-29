@@ -1,0 +1,2626 @@
+[
+  {
+    "state": "library-records",
+    "client": 1425,
+    "fields": [
+      {
+        "bottom": 344.84375,
+        "height": 48,
+        "name": "搜索记录",
+        "radius": "4px",
+        "top": 296.84375,
+        "width": 1100
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "记录类型",
+        "radius": "4px",
+        "top": 360.84375,
+        "width": 160.65625
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "科目",
+        "radius": "4px",
+        "top": 360.84375,
+        "width": 160.671875
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "整理状态",
+        "radius": "4px",
+        "top": 360.84375,
+        "width": 160.65625
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "知识点",
+        "radius": "4px",
+        "top": 360.84375,
+        "width": 160.671875
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "错因",
+        "radius": "4px",
+        "top": 360.84375,
+        "width": 160.671875
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "标签筛选",
+        "radius": "4px",
+        "top": 360.84375,
+        "width": 160.671875
+      },
+      {
+        "bottom": 645.234375,
+        "height": 44,
+        "name": "批量操作添加标签暂停复习计划",
+        "radius": "4px",
+        "top": 601.234375,
+        "width": 1029
+      },
+      {
+        "bottom": 927.484375,
+        "height": 48.5,
+        "name": "要添加的标签",
+        "radius": "4px",
+        "top": 878.984375,
+        "width": 1029
+      }
+    ],
+    "fontLoaded": true,
+    "heading": "32px",
+    "markdown": null,
+    "scroll": 1425,
+    "tabs": [],
+    "targets": [
+      {
+        "bottom": 178.640625,
+        "height": 45.4375,
+        "name": "收集一条",
+        "top": 133.203125,
+        "width": 121
+      },
+      {
+        "bottom": 284.84375,
+        "height": 44,
+        "name": "清除筛选并回到第一页",
+        "top": 240.84375,
+        "width": 142
+      },
+      {
+        "bottom": 344.84375,
+        "height": 48,
+        "name": "搜索记录",
+        "top": 296.84375,
+        "width": 1100
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "记录类型",
+        "top": 360.84375,
+        "width": 160.65625
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "科目",
+        "top": 360.84375,
+        "width": 160.671875
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "整理状态",
+        "top": 360.84375,
+        "width": 160.65625
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "知识点",
+        "top": 360.84375,
+        "width": 160.671875
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "错因",
+        "top": 360.84375,
+        "width": 160.671875
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "标签筛选",
+        "top": 360.84375,
+        "width": 160.671875
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "清除筛选",
+        "top": 360.84375,
+        "width": 64
+      },
+      {
+        "bottom": 510.84375,
+        "height": 44,
+        "name": "批量整理：标签与复习计划（仅当前页，最多 20 条）",
+        "top": 466.84375,
+        "width": 1058
+      },
+      {
+        "bottom": 645.234375,
+        "height": 44,
+        "name": "添加标签暂停复习计划",
+        "top": 601.234375,
+        "width": 1029
+      },
+      {
+        "bottom": 707.234375,
+        "height": 44,
+        "name": "",
+        "top": 663.234375,
+        "width": 1029
+      },
+      {
+        "bottom": 769.234375,
+        "height": 44,
+        "name": "",
+        "top": 725.234375,
+        "width": 1029
+      },
+      {
+        "bottom": 831.234375,
+        "height": 44,
+        "name": "",
+        "top": 787.234375,
+        "width": 1029
+      },
+      {
+        "bottom": 927.484375,
+        "height": 48.5,
+        "name": "",
+        "top": 878.984375,
+        "width": 1029
+      },
+      {
+        "bottom": 980.921875,
+        "height": 45.4375,
+        "name": "预览影响范围",
+        "top": 935.484375,
+        "width": 120
+      },
+      {
+        "bottom": 674.4375,
+        "height": 53.59375,
+        "name": "R1测试：复数方程求解高等数学·数学错题·2026/10/26",
+        "top": 620.84375,
+        "width": 957
+      },
+      {
+        "bottom": 765.03125,
+        "height": 53.59375,
+        "name": "【示例】等价无穷小：先看运算结构高等数学·本地功能验证示例，可移入回收站·202",
+        "top": 711.4375,
+        "width": 957
+      },
+      {
+        "bottom": 848.03125,
+        "height": 44,
+        "name": "上一页",
+        "top": 804.03125,
+        "width": 44
+      },
+      {
+        "bottom": 848.03125,
+        "height": 44,
+        "name": "下一页",
+        "top": 804.03125,
+        "width": 44
+      }
+    ],
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  {
+    "state": "library-empty",
+    "client": 1440,
+    "fields": [
+      {
+        "bottom": 344.84375,
+        "height": 48,
+        "name": "搜索记录",
+        "radius": "4px",
+        "top": 296.84375,
+        "width": 1115
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "记录类型",
+        "radius": "4px",
+        "top": 360.84375,
+        "width": 163.15625
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "科目",
+        "radius": "4px",
+        "top": 360.84375,
+        "width": 163.171875
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "整理状态",
+        "radius": "4px",
+        "top": 360.84375,
+        "width": 163.15625
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "知识点",
+        "radius": "4px",
+        "top": 360.84375,
+        "width": 163.171875
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "错因",
+        "radius": "4px",
+        "top": 360.84375,
+        "width": 163.171875
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "标签筛选",
+        "radius": "4px",
+        "top": 360.84375,
+        "width": 163.171875
+      }
+    ],
+    "fontLoaded": true,
+    "heading": "32px",
+    "markdown": null,
+    "scroll": 1440,
+    "tabs": [],
+    "targets": [
+      {
+        "bottom": 178.640625,
+        "height": 45.4375,
+        "name": "收集一条",
+        "top": 133.203125,
+        "width": 121
+      },
+      {
+        "bottom": 284.84375,
+        "height": 44,
+        "name": "清除筛选并回到第一页",
+        "top": 240.84375,
+        "width": 142
+      },
+      {
+        "bottom": 344.84375,
+        "height": 48,
+        "name": "搜索记录",
+        "top": 296.84375,
+        "width": 1115
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "记录类型",
+        "top": 360.84375,
+        "width": 163.15625
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "科目",
+        "top": 360.84375,
+        "width": 163.171875
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "整理状态",
+        "top": 360.84375,
+        "width": 163.15625
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "知识点",
+        "top": 360.84375,
+        "width": 163.171875
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "错因",
+        "top": 360.84375,
+        "width": 163.171875
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "标签筛选",
+        "top": 360.84375,
+        "width": 163.171875
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "清除筛选",
+        "top": 360.84375,
+        "width": 64
+      },
+      {
+        "bottom": 699.28125,
+        "height": 44,
+        "name": "上一页",
+        "top": 655.28125,
+        "width": 44
+      },
+      {
+        "bottom": 699.28125,
+        "height": 44,
+        "name": "下一页",
+        "top": 655.28125,
+        "width": 44
+      }
+    ],
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  {
+    "state": "library-records",
+    "client": 360,
+    "fields": [
+      {
+        "bottom": 332.296875,
+        "height": 48,
+        "name": "搜索记录",
+        "radius": "4px",
+        "top": 284.296875,
+        "width": 324
+      },
+      {
+        "bottom": 422.09375,
+        "height": 48,
+        "name": "记录类型",
+        "radius": "4px",
+        "top": 374.09375,
+        "width": 324
+      },
+      {
+        "bottom": 507.890625,
+        "height": 48,
+        "name": "科目",
+        "radius": "4px",
+        "top": 459.890625,
+        "width": 156
+      },
+      {
+        "bottom": 507.890625,
+        "height": 48,
+        "name": "整理状态",
+        "radius": "4px",
+        "top": 459.890625,
+        "width": 156
+      },
+      {
+        "bottom": 593.6875,
+        "height": 48,
+        "name": "知识点",
+        "radius": "4px",
+        "top": 545.6875,
+        "width": 156
+      },
+      {
+        "bottom": 593.6875,
+        "height": 48,
+        "name": "错因",
+        "radius": "4px",
+        "top": 545.6875,
+        "width": 156
+      },
+      {
+        "bottom": 679.484375,
+        "height": 48,
+        "name": "标签筛选",
+        "radius": "4px",
+        "top": 631.484375,
+        "width": 324
+      },
+      {
+        "bottom": 1044.15625,
+        "height": 44,
+        "name": "批量操作添加标签暂停复习计划",
+        "radius": "4px",
+        "top": 1000.15625,
+        "width": 269
+      },
+      {
+        "bottom": 1326.40625,
+        "height": 48.5,
+        "name": "要添加的标签",
+        "radius": "4px",
+        "top": 1277.90625,
+        "width": 269
+      }
+    ],
+    "fontLoaded": true,
+    "heading": "26px",
+    "markdown": null,
+    "scroll": 360,
+    "tabs": [],
+    "targets": [
+      {
+        "bottom": 272.296875,
+        "height": 44,
+        "name": "清除筛选并回到第一页",
+        "top": 228.296875,
+        "width": 142
+      },
+      {
+        "bottom": 332.296875,
+        "height": 48,
+        "name": "搜索记录",
+        "top": 284.296875,
+        "width": 324
+      },
+      {
+        "bottom": 422.09375,
+        "height": 48,
+        "name": "记录类型",
+        "top": 374.09375,
+        "width": 324
+      },
+      {
+        "bottom": 507.890625,
+        "height": 48,
+        "name": "科目",
+        "top": 459.890625,
+        "width": 156
+      },
+      {
+        "bottom": 507.890625,
+        "height": 48,
+        "name": "整理状态",
+        "top": 459.890625,
+        "width": 156
+      },
+      {
+        "bottom": 593.6875,
+        "height": 48,
+        "name": "知识点",
+        "top": 545.6875,
+        "width": 156
+      },
+      {
+        "bottom": 593.6875,
+        "height": 48,
+        "name": "错因",
+        "top": 545.6875,
+        "width": 156
+      },
+      {
+        "bottom": 679.484375,
+        "height": 48,
+        "name": "标签筛选",
+        "top": 631.484375,
+        "width": 324
+      },
+      {
+        "bottom": 739.484375,
+        "height": 48,
+        "name": "清除筛选",
+        "top": 691.484375,
+        "width": 324
+      },
+      {
+        "bottom": 864.265625,
+        "height": 66.78125,
+        "name": "批量整理：标签与复习计划（仅当前页，最多 20 条）",
+        "top": 797.484375,
+        "width": 298
+      },
+      {
+        "bottom": 1044.15625,
+        "height": 44,
+        "name": "添加标签暂停复习计划",
+        "top": 1000.15625,
+        "width": 269
+      },
+      {
+        "bottom": 1106.15625,
+        "height": 44,
+        "name": "",
+        "top": 1062.15625,
+        "width": 269
+      },
+      {
+        "bottom": 1168.15625,
+        "height": 44,
+        "name": "",
+        "top": 1124.15625,
+        "width": 269
+      },
+      {
+        "bottom": 1230.15625,
+        "height": 44,
+        "name": "",
+        "top": 1186.15625,
+        "width": 269
+      },
+      {
+        "bottom": 1326.40625,
+        "height": 48.5,
+        "name": "",
+        "top": 1277.90625,
+        "width": 269
+      },
+      {
+        "bottom": 1379.84375,
+        "height": 45.4375,
+        "name": "预览影响范围",
+        "top": 1334.40625,
+        "width": 120
+      },
+      {
+        "bottom": 1023.359375,
+        "height": 52.09375,
+        "name": "R1测试：复数方程求解高等数学·数学错题·2026/10/26",
+        "top": 971.265625,
+        "width": 224
+      },
+      {
+        "bottom": 1112.453125,
+        "height": 52.09375,
+        "name": "【示例】等价无穷小：先看运算结构高等数学·本地功能验证示例，可移入回收站·202",
+        "top": 1060.359375,
+        "width": 224
+      },
+      {
+        "bottom": 1195.453125,
+        "height": 44,
+        "name": "上一页",
+        "top": 1151.453125,
+        "width": 44
+      },
+      {
+        "bottom": 1195.453125,
+        "height": 44,
+        "name": "下一页",
+        "top": 1151.453125,
+        "width": 44
+      }
+    ],
+    "viewport": [
+      375,
+      812
+    ]
+  },
+  {
+    "state": "library-empty",
+    "client": 360,
+    "fields": [
+      {
+        "bottom": -30.703125,
+        "height": 48,
+        "name": "搜索记录",
+        "radius": "4px",
+        "top": -78.703125,
+        "width": 324
+      },
+      {
+        "bottom": 59.09375,
+        "height": 48,
+        "name": "记录类型",
+        "radius": "4px",
+        "top": 11.09375,
+        "width": 324
+      },
+      {
+        "bottom": 144.890625,
+        "height": 48,
+        "name": "科目",
+        "radius": "4px",
+        "top": 96.890625,
+        "width": 156
+      },
+      {
+        "bottom": 144.890625,
+        "height": 48,
+        "name": "整理状态",
+        "radius": "4px",
+        "top": 96.890625,
+        "width": 156
+      },
+      {
+        "bottom": 230.6875,
+        "height": 48,
+        "name": "知识点",
+        "radius": "4px",
+        "top": 182.6875,
+        "width": 156
+      },
+      {
+        "bottom": 230.6875,
+        "height": 48,
+        "name": "错因",
+        "radius": "4px",
+        "top": 182.6875,
+        "width": 156
+      },
+      {
+        "bottom": 316.484375,
+        "height": 48,
+        "name": "标签筛选",
+        "radius": "4px",
+        "top": 268.484375,
+        "width": 324
+      }
+    ],
+    "fontLoaded": true,
+    "heading": "26px",
+    "markdown": null,
+    "scroll": 360,
+    "tabs": [],
+    "targets": [
+      {
+        "bottom": -90.703125,
+        "height": 44,
+        "name": "清除筛选并回到第一页",
+        "top": -134.703125,
+        "width": 142
+      },
+      {
+        "bottom": -30.703125,
+        "height": 48,
+        "name": "搜索记录",
+        "top": -78.703125,
+        "width": 324
+      },
+      {
+        "bottom": 59.09375,
+        "height": 48,
+        "name": "记录类型",
+        "top": 11.09375,
+        "width": 324
+      },
+      {
+        "bottom": 144.890625,
+        "height": 48,
+        "name": "科目",
+        "top": 96.890625,
+        "width": 156
+      },
+      {
+        "bottom": 144.890625,
+        "height": 48,
+        "name": "整理状态",
+        "top": 96.890625,
+        "width": 156
+      },
+      {
+        "bottom": 230.6875,
+        "height": 48,
+        "name": "知识点",
+        "top": 182.6875,
+        "width": 156
+      },
+      {
+        "bottom": 230.6875,
+        "height": 48,
+        "name": "错因",
+        "top": 182.6875,
+        "width": 156
+      },
+      {
+        "bottom": 316.484375,
+        "height": 48,
+        "name": "标签筛选",
+        "top": 268.484375,
+        "width": 324
+      },
+      {
+        "bottom": 376.484375,
+        "height": 48,
+        "name": "清除筛选",
+        "top": 328.484375,
+        "width": 324
+      },
+      {
+        "bottom": 666.921875,
+        "height": 44,
+        "name": "上一页",
+        "top": 622.921875,
+        "width": 44
+      },
+      {
+        "bottom": 666.921875,
+        "height": 44,
+        "name": "下一页",
+        "top": 622.921875,
+        "width": 44
+      }
+    ],
+    "viewport": [
+      375,
+      812
+    ]
+  },
+  {
+    "state": "detail-first",
+    "client": 1425,
+    "fields": [
+      {
+        "bottom": 836.046875,
+        "height": 44,
+        "name": "关联记录选择记录R1测试：复数方程求解",
+        "radius": "4px",
+        "top": 792.046875,
+        "width": 248
+      },
+      {
+        "bottom": 926.484375,
+        "height": 44,
+        "name": "关联类型相似支撑对比包含词汇",
+        "radius": "4px",
+        "top": 882.484375,
+        "width": 248
+      }
+    ],
+    "fontLoaded": true,
+    "heading": "32px",
+    "markdown": {
+      "lineHeight": "28.8px",
+      "size": "16px"
+    },
+    "plan": [
+      {
+        "tag": "H3",
+        "text": "安排下一次回看"
+      },
+      {
+        "tag": "P",
+        "text": "下次到期：2026-10-22已逾期 7 天"
+      },
+      {
+        "tag": "SPAN",
+        "text": "学习中"
+      },
+      {
+        "tag": "A",
+        "text": "主动练习"
+      },
+      {
+        "tag": "P",
+        "text": "主动练习只记录历史，不改变到期日期。"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "暂停复习计划"
+      }
+    ],
+    "scroll": 1425,
+    "tabs": [
+      {
+        "border": "2px solid rgb(40, 98, 76)",
+        "bottom": 598.1875,
+        "color": "rgb(40, 98, 76)",
+        "current": "true",
+        "height": 44,
+        "name": "分析与理解",
+        "top": 554.1875,
+        "width": 65
+      },
+      {
+        "border": "2px solid rgba(0, 0, 0, 0)",
+        "bottom": 598.1875,
+        "color": "rgb(36, 38, 34)",
+        "current": "false",
+        "height": 44,
+        "name": "复习历史 · 1",
+        "top": 554.1875,
+        "width": 70.796875
+      },
+      {
+        "border": "2px solid rgba(0, 0, 0, 0)",
+        "bottom": 598.1875,
+        "color": "rgb(36, 38, 34)",
+        "current": "false",
+        "height": 44,
+        "name": "内容版本",
+        "top": 554.1875,
+        "width": 52
+      }
+    ],
+    "targets": [
+      {
+        "bottom": 160,
+        "height": 44,
+        "name": "返回列表",
+        "top": 116,
+        "width": 68
+      },
+      {
+        "bottom": 201.015625,
+        "height": 45.4375,
+        "name": "继续整理",
+        "top": 155.578125,
+        "width": 120
+      },
+      {
+        "bottom": 321.59375,
+        "height": 44,
+        "name": "AI 辅助：查找相似题、提示与变式",
+        "top": 277.59375,
+        "width": 1100
+      },
+      {
+        "bottom": 598.1875,
+        "height": 44,
+        "name": "分析与理解",
+        "top": 554.1875,
+        "width": 65
+      },
+      {
+        "bottom": 598.1875,
+        "height": 44,
+        "name": "复习历史 · 1",
+        "top": 554.1875,
+        "width": 70.796875
+      },
+      {
+        "bottom": 598.1875,
+        "height": 44,
+        "name": "内容版本",
+        "top": 554.1875,
+        "width": 52
+      },
+      {
+        "bottom": 564.015625,
+        "height": 45.4375,
+        "name": "主动练习",
+        "top": 518.578125,
+        "width": 248
+      },
+      {
+        "bottom": 653.609375,
+        "height": 44,
+        "name": "暂停复习计划",
+        "top": 609.609375,
+        "width": 90
+      },
+      {
+        "bottom": 836.046875,
+        "height": 44,
+        "name": "选择记录R1测试：复数方程求解",
+        "top": 792.046875,
+        "width": 248
+      },
+      {
+        "bottom": 926.484375,
+        "height": 44,
+        "name": "相似支撑对比包含词汇",
+        "top": 882.484375,
+        "width": 248
+      },
+      {
+        "bottom": 993.921875,
+        "height": 45.4375,
+        "name": "添加关联",
+        "top": 948.484375,
+        "width": 248
+      },
+      {
+        "bottom": 1138.8125,
+        "height": 63.09375,
+        "name": "移入回收站",
+        "top": 1075.71875,
+        "width": 94
+      }
+    ],
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  {
+    "state": "detail-plan",
+    "client": 1425,
+    "fields": [
+      {
+        "bottom": 510.046875,
+        "height": 44,
+        "name": "关联记录选择记录R1测试：复数方程求解",
+        "radius": "4px",
+        "top": 466.046875,
+        "width": 248
+      },
+      {
+        "bottom": 600.484375,
+        "height": 44,
+        "name": "关联类型相似支撑对比包含词汇",
+        "radius": "4px",
+        "top": 556.484375,
+        "width": 248
+      }
+    ],
+    "fontLoaded": true,
+    "heading": "32px",
+    "markdown": {
+      "lineHeight": "28.8px",
+      "size": "16px"
+    },
+    "plan": [
+      {
+        "tag": "H3",
+        "text": "安排下一次回看"
+      },
+      {
+        "tag": "P",
+        "text": "下次到期：2026-10-22已逾期 7 天"
+      },
+      {
+        "tag": "SPAN",
+        "text": "学习中"
+      },
+      {
+        "tag": "A",
+        "text": "主动练习"
+      },
+      {
+        "tag": "P",
+        "text": "主动练习只记录历史，不改变到期日期。"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "暂停复习计划"
+      }
+    ],
+    "scroll": 1425,
+    "tabs": [
+      {
+        "border": "2px solid rgb(40, 98, 76)",
+        "bottom": 272.1875,
+        "color": "rgb(40, 98, 76)",
+        "current": "true",
+        "height": 44,
+        "name": "分析与理解",
+        "top": 228.1875,
+        "width": 65
+      },
+      {
+        "border": "2px solid rgba(0, 0, 0, 0)",
+        "bottom": 272.1875,
+        "color": "rgb(36, 38, 34)",
+        "current": "false",
+        "height": 44,
+        "name": "复习历史 · 1",
+        "top": 228.1875,
+        "width": 70.796875
+      },
+      {
+        "border": "2px solid rgba(0, 0, 0, 0)",
+        "bottom": 272.1875,
+        "color": "rgb(36, 38, 34)",
+        "current": "false",
+        "height": 44,
+        "name": "内容版本",
+        "top": 228.1875,
+        "width": 52
+      }
+    ],
+    "targets": [
+      {
+        "bottom": -166,
+        "height": 44,
+        "name": "返回列表",
+        "top": -210,
+        "width": 68
+      },
+      {
+        "bottom": -124.984375,
+        "height": 45.4375,
+        "name": "继续整理",
+        "top": -170.421875,
+        "width": 120
+      },
+      {
+        "bottom": -4.40625,
+        "height": 44,
+        "name": "AI 辅助：查找相似题、提示与变式",
+        "top": -48.40625,
+        "width": 1100
+      },
+      {
+        "bottom": 272.1875,
+        "height": 44,
+        "name": "分析与理解",
+        "top": 228.1875,
+        "width": 65
+      },
+      {
+        "bottom": 272.1875,
+        "height": 44,
+        "name": "复习历史 · 1",
+        "top": 228.1875,
+        "width": 70.796875
+      },
+      {
+        "bottom": 272.1875,
+        "height": 44,
+        "name": "内容版本",
+        "top": 228.1875,
+        "width": 52
+      },
+      {
+        "bottom": 238.015625,
+        "height": 45.4375,
+        "name": "主动练习",
+        "top": 192.578125,
+        "width": 248
+      },
+      {
+        "bottom": 327.609375,
+        "height": 44,
+        "name": "暂停复习计划",
+        "top": 283.609375,
+        "width": 90
+      },
+      {
+        "bottom": 510.046875,
+        "height": 44,
+        "name": "选择记录R1测试：复数方程求解",
+        "top": 466.046875,
+        "width": 248
+      },
+      {
+        "bottom": 600.484375,
+        "height": 44,
+        "name": "相似支撑对比包含词汇",
+        "top": 556.484375,
+        "width": 248
+      },
+      {
+        "bottom": 667.921875,
+        "height": 45.4375,
+        "name": "添加关联",
+        "top": 622.484375,
+        "width": 248
+      },
+      {
+        "bottom": 812.8125,
+        "height": 63.09375,
+        "name": "移入回收站",
+        "top": 749.71875,
+        "width": 94
+      }
+    ],
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  {
+    "state": "detail-ai-open",
+    "client": 1425,
+    "fields": [
+      {
+        "bottom": 498.765625,
+        "height": 44,
+        "name": "候选范围语义比较（最多 40 条）基础匹",
+        "radius": "4px",
+        "top": 454.765625,
+        "width": 1100
+      },
+      {
+        "bottom": 811.171875,
+        "height": 44,
+        "name": "需要什么帮助分步提示变式练习",
+        "radius": "4px",
+        "top": 767.171875,
+        "width": 1100
+      },
+      {
+        "bottom": 953.609375,
+        "height": 44,
+        "name": "提示深度1 · 相关概念2 · 解题方向",
+        "radius": "4px",
+        "top": 909.609375,
+        "width": 1100
+      },
+      {
+        "bottom": 1627.5,
+        "height": 44,
+        "name": "关联记录选择记录R1测试：复数方程求解",
+        "radius": "4px",
+        "top": 1583.5,
+        "width": 248
+      },
+      {
+        "bottom": 1717.9375,
+        "height": 44,
+        "name": "关联类型相似支撑对比包含词汇",
+        "radius": "4px",
+        "top": 1673.9375,
+        "width": 248
+      }
+    ],
+    "fontLoaded": true,
+    "heading": "32px",
+    "markdown": {
+      "lineHeight": "28.8px",
+      "size": "16px"
+    },
+    "plan": [
+      {
+        "tag": "H3",
+        "text": "安排下一次回看"
+      },
+      {
+        "tag": "P",
+        "text": "下次到期：2026-10-22已逾期 7 天"
+      },
+      {
+        "tag": "SPAN",
+        "text": "学习中"
+      },
+      {
+        "tag": "A",
+        "text": "主动练习"
+      },
+      {
+        "tag": "P",
+        "text": "主动练习只记录历史，不改变到期日期。"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "暂停复习计划"
+      }
+    ],
+    "scroll": 1425,
+    "tabs": [
+      {
+        "border": "2px solid rgb(40, 98, 76)",
+        "bottom": 1389.640625,
+        "color": "rgb(40, 98, 76)",
+        "current": "true",
+        "height": 44,
+        "name": "分析与理解",
+        "top": 1345.640625,
+        "width": 65
+      },
+      {
+        "border": "2px solid rgba(0, 0, 0, 0)",
+        "bottom": 1389.640625,
+        "color": "rgb(36, 38, 34)",
+        "current": "false",
+        "height": 44,
+        "name": "复习历史 · 1",
+        "top": 1345.640625,
+        "width": 70.796875
+      },
+      {
+        "border": "2px solid rgba(0, 0, 0, 0)",
+        "bottom": 1389.640625,
+        "color": "rgb(36, 38, 34)",
+        "current": "false",
+        "height": 44,
+        "name": "内容版本",
+        "top": 1345.640625,
+        "width": 52
+      }
+    ],
+    "targets": [
+      {
+        "bottom": 160,
+        "height": 44,
+        "name": "返回列表",
+        "top": 116,
+        "width": 68
+      },
+      {
+        "bottom": 201.015625,
+        "height": 45.4375,
+        "name": "继续整理",
+        "top": 155.578125,
+        "width": 120
+      },
+      {
+        "bottom": 321.59375,
+        "height": 44,
+        "name": "AI 辅助：查找相似题、提示与变式",
+        "top": 277.59375,
+        "width": 1100
+      },
+      {
+        "bottom": 498.765625,
+        "height": 44,
+        "name": "语义比较（最多 40 条）基础匹配（最多 8 条）",
+        "top": 454.765625,
+        "width": 1100
+      },
+      {
+        "bottom": 552.203125,
+        "height": 45.4375,
+        "name": "准备 / 刷新候选预览",
+        "top": 506.765625,
+        "width": 156.84375
+      },
+      {
+        "bottom": 811.171875,
+        "height": 44,
+        "name": "分步提示变式练习",
+        "top": 767.171875,
+        "width": 1100
+      },
+      {
+        "bottom": 863.171875,
+        "height": 44,
+        "name": "查看本次发送的文字（不发送图片）",
+        "top": 819.171875,
+        "width": 1100
+      },
+      {
+        "bottom": 953.609375,
+        "height": 44,
+        "name": "1 · 相关概念2 · 解题方向3 · 下一步操作",
+        "top": 909.609375,
+        "width": 1100
+      },
+      {
+        "bottom": 1015.609375,
+        "height": 44,
+        "name": "",
+        "top": 971.609375,
+        "width": 1100
+      },
+      {
+        "bottom": 1069.046875,
+        "height": 45.4375,
+        "name": "生成分步提示",
+        "top": 1023.609375,
+        "width": 120
+      },
+      {
+        "bottom": 1389.640625,
+        "height": 44,
+        "name": "分析与理解",
+        "top": 1345.640625,
+        "width": 65
+      },
+      {
+        "bottom": 1389.640625,
+        "height": 44,
+        "name": "复习历史 · 1",
+        "top": 1345.640625,
+        "width": 70.796875
+      },
+      {
+        "bottom": 1389.640625,
+        "height": 44,
+        "name": "内容版本",
+        "top": 1345.640625,
+        "width": 52
+      },
+      {
+        "bottom": 1355.46875,
+        "height": 45.4375,
+        "name": "主动练习",
+        "top": 1310.03125,
+        "width": 248
+      },
+      {
+        "bottom": 1445.0625,
+        "height": 44,
+        "name": "暂停复习计划",
+        "top": 1401.0625,
+        "width": 90
+      },
+      {
+        "bottom": 1627.5,
+        "height": 44,
+        "name": "选择记录R1测试：复数方程求解",
+        "top": 1583.5,
+        "width": 248
+      },
+      {
+        "bottom": 1717.9375,
+        "height": 44,
+        "name": "相似支撑对比包含词汇",
+        "top": 1673.9375,
+        "width": 248
+      },
+      {
+        "bottom": 1785.375,
+        "height": 45.4375,
+        "name": "添加关联",
+        "top": 1739.9375,
+        "width": 248
+      },
+      {
+        "bottom": 1930.265625,
+        "height": 63.09375,
+        "name": "移入回收站",
+        "top": 1867.171875,
+        "width": 94
+      }
+    ],
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  {
+    "state": "detail-first",
+    "client": 360,
+    "fields": [
+      {
+        "bottom": 1569.765625,
+        "height": 44,
+        "name": "关联记录选择记录R1测试：复数方程求解",
+        "radius": "4px",
+        "top": 1525.765625,
+        "width": 290
+      },
+      {
+        "bottom": 1660.203125,
+        "height": 44,
+        "name": "关联类型相似支撑对比包含词汇",
+        "radius": "4px",
+        "top": 1616.203125,
+        "width": 290
+      }
+    ],
+    "fontLoaded": true,
+    "heading": "26px",
+    "markdown": {
+      "lineHeight": "28.8px",
+      "size": "16px"
+    },
+    "plan": [
+      {
+        "tag": "H3",
+        "text": "安排下一次回看"
+      },
+      {
+        "tag": "P",
+        "text": "下次到期：2026-10-22已逾期 7 天"
+      },
+      {
+        "tag": "SPAN",
+        "text": "学习中"
+      },
+      {
+        "tag": "A",
+        "text": "主动练习"
+      },
+      {
+        "tag": "P",
+        "text": "主动练习只记录历史，不改变到期日期。"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "暂停复习计划"
+      }
+    ],
+    "scroll": 360,
+    "tabs": [
+      {
+        "border": "2px solid rgb(40, 98, 76)",
+        "bottom": 665.625,
+        "color": "rgb(40, 98, 76)",
+        "current": "true",
+        "height": 44,
+        "name": "分析与理解",
+        "top": 621.625,
+        "width": 65
+      },
+      {
+        "border": "2px solid rgba(0, 0, 0, 0)",
+        "bottom": 665.625,
+        "color": "rgb(36, 38, 34)",
+        "current": "false",
+        "height": 44,
+        "name": "复习历史 · 1",
+        "top": 621.625,
+        "width": 70.796875
+      },
+      {
+        "border": "2px solid rgba(0, 0, 0, 0)",
+        "bottom": 665.625,
+        "color": "rgb(36, 38, 34)",
+        "current": "false",
+        "height": 44,
+        "name": "内容版本",
+        "top": 621.625,
+        "width": 52
+      }
+    ],
+    "targets": [
+      {
+        "bottom": 134,
+        "height": 44,
+        "name": "返回列表",
+        "top": 90,
+        "width": 68
+      },
+      {
+        "bottom": 319.03125,
+        "height": 45.4375,
+        "name": "继续整理",
+        "top": 273.59375,
+        "width": 120
+      },
+      {
+        "bottom": 395.03125,
+        "height": 44,
+        "name": "AI 辅助：查找相似题、提示与变式",
+        "top": 351.03125,
+        "width": 324
+      },
+      {
+        "bottom": 665.625,
+        "height": 44,
+        "name": "分析与理解",
+        "top": 621.625,
+        "width": 65
+      },
+      {
+        "bottom": 665.625,
+        "height": 44,
+        "name": "复习历史 · 1",
+        "top": 621.625,
+        "width": 70.796875
+      },
+      {
+        "bottom": 665.625,
+        "height": 44,
+        "name": "内容版本",
+        "top": 621.625,
+        "width": 52
+      },
+      {
+        "bottom": 1308.734375,
+        "height": 45.4375,
+        "name": "主动练习",
+        "top": 1263.296875,
+        "width": 290
+      },
+      {
+        "bottom": 1398.328125,
+        "height": 44,
+        "name": "暂停复习计划",
+        "top": 1354.328125,
+        "width": 90
+      },
+      {
+        "bottom": 1569.765625,
+        "height": 44,
+        "name": "选择记录R1测试：复数方程求解",
+        "top": 1525.765625,
+        "width": 290
+      },
+      {
+        "bottom": 1660.203125,
+        "height": 44,
+        "name": "相似支撑对比包含词汇",
+        "top": 1616.203125,
+        "width": 290
+      },
+      {
+        "bottom": 1727.640625,
+        "height": 45.4375,
+        "name": "添加关联",
+        "top": 1682.203125,
+        "width": 290
+      },
+      {
+        "bottom": 1865.53125,
+        "height": 63.09375,
+        "name": "移入回收站",
+        "top": 1802.4375,
+        "width": 94
+      }
+    ],
+    "viewport": [
+      375,
+      812
+    ]
+  },
+  {
+    "state": "detail-plan",
+    "client": 360,
+    "fields": [
+      {
+        "bottom": 842.765625,
+        "height": 44,
+        "name": "关联记录选择记录R1测试：复数方程求解",
+        "radius": "4px",
+        "top": 798.765625,
+        "width": 290
+      },
+      {
+        "bottom": 933.203125,
+        "height": 44,
+        "name": "关联类型相似支撑对比包含词汇",
+        "radius": "4px",
+        "top": 889.203125,
+        "width": 290
+      }
+    ],
+    "fontLoaded": true,
+    "heading": "26px",
+    "markdown": {
+      "lineHeight": "28.8px",
+      "size": "16px"
+    },
+    "plan": [
+      {
+        "tag": "H3",
+        "text": "安排下一次回看"
+      },
+      {
+        "tag": "P",
+        "text": "下次到期：2026-10-22已逾期 7 天"
+      },
+      {
+        "tag": "SPAN",
+        "text": "学习中"
+      },
+      {
+        "tag": "A",
+        "text": "主动练习"
+      },
+      {
+        "tag": "P",
+        "text": "主动练习只记录历史，不改变到期日期。"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "暂停复习计划"
+      }
+    ],
+    "scroll": 360,
+    "tabs": [
+      {
+        "border": "2px solid rgb(40, 98, 76)",
+        "bottom": -61.375,
+        "color": "rgb(40, 98, 76)",
+        "current": "true",
+        "height": 44,
+        "name": "分析与理解",
+        "top": -105.375,
+        "width": 65
+      },
+      {
+        "border": "2px solid rgba(0, 0, 0, 0)",
+        "bottom": -61.375,
+        "color": "rgb(36, 38, 34)",
+        "current": "false",
+        "height": 44,
+        "name": "复习历史 · 1",
+        "top": -105.375,
+        "width": 70.796875
+      },
+      {
+        "border": "2px solid rgba(0, 0, 0, 0)",
+        "bottom": -61.375,
+        "color": "rgb(36, 38, 34)",
+        "current": "false",
+        "height": 44,
+        "name": "内容版本",
+        "top": -105.375,
+        "width": 52
+      }
+    ],
+    "targets": [
+      {
+        "bottom": -593,
+        "height": 44,
+        "name": "返回列表",
+        "top": -637,
+        "width": 68
+      },
+      {
+        "bottom": -407.96875,
+        "height": 45.4375,
+        "name": "继续整理",
+        "top": -453.40625,
+        "width": 120
+      },
+      {
+        "bottom": -331.96875,
+        "height": 44,
+        "name": "AI 辅助：查找相似题、提示与变式",
+        "top": -375.96875,
+        "width": 324
+      },
+      {
+        "bottom": -61.375,
+        "height": 44,
+        "name": "分析与理解",
+        "top": -105.375,
+        "width": 65
+      },
+      {
+        "bottom": -61.375,
+        "height": 44,
+        "name": "复习历史 · 1",
+        "top": -105.375,
+        "width": 70.796875
+      },
+      {
+        "bottom": -61.375,
+        "height": 44,
+        "name": "内容版本",
+        "top": -105.375,
+        "width": 52
+      },
+      {
+        "bottom": 581.734375,
+        "height": 45.4375,
+        "name": "主动练习",
+        "top": 536.296875,
+        "width": 290
+      },
+      {
+        "bottom": 671.328125,
+        "height": 44,
+        "name": "暂停复习计划",
+        "top": 627.328125,
+        "width": 90
+      },
+      {
+        "bottom": 842.765625,
+        "height": 44,
+        "name": "选择记录R1测试：复数方程求解",
+        "top": 798.765625,
+        "width": 290
+      },
+      {
+        "bottom": 933.203125,
+        "height": 44,
+        "name": "相似支撑对比包含词汇",
+        "top": 889.203125,
+        "width": 290
+      },
+      {
+        "bottom": 1000.640625,
+        "height": 45.4375,
+        "name": "添加关联",
+        "top": 955.203125,
+        "width": 290
+      },
+      {
+        "bottom": 1138.53125,
+        "height": 63.09375,
+        "name": "移入回收站",
+        "top": 1075.4375,
+        "width": 94
+      }
+    ],
+    "viewport": [
+      375,
+      812
+    ]
+  },
+  {
+    "state": "detail-ai-open",
+    "client": 360,
+    "fields": [
+      {
+        "bottom": 643.59375,
+        "height": 44,
+        "name": "候选范围语义比较（最多 40 条）基础匹",
+        "radius": "4px",
+        "top": 599.59375,
+        "width": 324
+      },
+      {
+        "bottom": 956,
+        "height": 44,
+        "name": "需要什么帮助分步提示变式练习",
+        "radius": "4px",
+        "top": 912,
+        "width": 324
+      },
+      {
+        "bottom": 1098.4375,
+        "height": 44,
+        "name": "提示深度1 · 相关概念2 · 解题方向",
+        "radius": "4px",
+        "top": 1054.4375,
+        "width": 324
+      },
+      {
+        "bottom": 2432.609375,
+        "height": 44,
+        "name": "关联记录选择记录R1测试：复数方程求解",
+        "radius": "4px",
+        "top": 2388.609375,
+        "width": 290
+      },
+      {
+        "bottom": 2523.046875,
+        "height": 44,
+        "name": "关联类型相似支撑对比包含词汇",
+        "radius": "4px",
+        "top": 2479.046875,
+        "width": 290
+      }
+    ],
+    "fontLoaded": true,
+    "heading": "26px",
+    "markdown": {
+      "lineHeight": "28.8px",
+      "size": "16px"
+    },
+    "plan": [
+      {
+        "tag": "H3",
+        "text": "安排下一次回看"
+      },
+      {
+        "tag": "P",
+        "text": "下次到期：2026-10-22已逾期 7 天"
+      },
+      {
+        "tag": "SPAN",
+        "text": "学习中"
+      },
+      {
+        "tag": "A",
+        "text": "主动练习"
+      },
+      {
+        "tag": "P",
+        "text": "主动练习只记录历史，不改变到期日期。"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "暂停复习计划"
+      }
+    ],
+    "scroll": 360,
+    "tabs": [
+      {
+        "border": "2px solid rgb(40, 98, 76)",
+        "bottom": 1528.46875,
+        "color": "rgb(40, 98, 76)",
+        "current": "true",
+        "height": 44,
+        "name": "分析与理解",
+        "top": 1484.46875,
+        "width": 65
+      },
+      {
+        "border": "2px solid rgba(0, 0, 0, 0)",
+        "bottom": 1528.46875,
+        "color": "rgb(36, 38, 34)",
+        "current": "false",
+        "height": 44,
+        "name": "复习历史 · 1",
+        "top": 1484.46875,
+        "width": 70.796875
+      },
+      {
+        "border": "2px solid rgba(0, 0, 0, 0)",
+        "bottom": 1528.46875,
+        "color": "rgb(36, 38, 34)",
+        "current": "false",
+        "height": 44,
+        "name": "内容版本",
+        "top": 1484.46875,
+        "width": 52
+      }
+    ],
+    "targets": [
+      {
+        "bottom": 134,
+        "height": 44,
+        "name": "返回列表",
+        "top": 90,
+        "width": 68
+      },
+      {
+        "bottom": 319.03125,
+        "height": 45.4375,
+        "name": "继续整理",
+        "top": 273.59375,
+        "width": 120
+      },
+      {
+        "bottom": 395.03125,
+        "height": 44,
+        "name": "AI 辅助：查找相似题、提示与变式",
+        "top": 351.03125,
+        "width": 324
+      },
+      {
+        "bottom": 643.59375,
+        "height": 44,
+        "name": "语义比较（最多 40 条）基础匹配（最多 8 条）",
+        "top": 599.59375,
+        "width": 324
+      },
+      {
+        "bottom": 697.03125,
+        "height": 45.4375,
+        "name": "准备 / 刷新候选预览",
+        "top": 651.59375,
+        "width": 156.84375
+      },
+      {
+        "bottom": 956,
+        "height": 44,
+        "name": "分步提示变式练习",
+        "top": 912,
+        "width": 324
+      },
+      {
+        "bottom": 1008,
+        "height": 44,
+        "name": "查看本次发送的文字（不发送图片）",
+        "top": 964,
+        "width": 324
+      },
+      {
+        "bottom": 1098.4375,
+        "height": 44,
+        "name": "1 · 相关概念2 · 解题方向3 · 下一步操作",
+        "top": 1054.4375,
+        "width": 324
+      },
+      {
+        "bottom": 1160.4375,
+        "height": 44,
+        "name": "",
+        "top": 1116.4375,
+        "width": 324
+      },
+      {
+        "bottom": 1213.875,
+        "height": 45.4375,
+        "name": "生成分步提示",
+        "top": 1168.4375,
+        "width": 120
+      },
+      {
+        "bottom": 1528.46875,
+        "height": 44,
+        "name": "分析与理解",
+        "top": 1484.46875,
+        "width": 65
+      },
+      {
+        "bottom": 1528.46875,
+        "height": 44,
+        "name": "复习历史 · 1",
+        "top": 1484.46875,
+        "width": 70.796875
+      },
+      {
+        "bottom": 1528.46875,
+        "height": 44,
+        "name": "内容版本",
+        "top": 1484.46875,
+        "width": 52
+      },
+      {
+        "bottom": 2171.578125,
+        "height": 45.4375,
+        "name": "主动练习",
+        "top": 2126.140625,
+        "width": 290
+      },
+      {
+        "bottom": 2261.171875,
+        "height": 44,
+        "name": "暂停复习计划",
+        "top": 2217.171875,
+        "width": 90
+      },
+      {
+        "bottom": 2432.609375,
+        "height": 44,
+        "name": "选择记录R1测试：复数方程求解",
+        "top": 2388.609375,
+        "width": 290
+      },
+      {
+        "bottom": 2523.046875,
+        "height": 44,
+        "name": "相似支撑对比包含词汇",
+        "top": 2479.046875,
+        "width": 290
+      },
+      {
+        "bottom": 2590.484375,
+        "height": 45.4375,
+        "name": "添加关联",
+        "top": 2545.046875,
+        "width": 290
+      },
+      {
+        "bottom": 2728.375,
+        "height": 63.09375,
+        "name": "移入回收站",
+        "top": 2665.28125,
+        "width": 94
+      }
+    ],
+    "viewport": [
+      375,
+      812
+    ]
+  },
+  {
+    "state": "library-batch-open",
+    "client": 1425,
+    "fields": [
+      {
+        "bottom": 305.84375,
+        "height": 48,
+        "name": "搜索记录",
+        "radius": "4px",
+        "top": 257.84375,
+        "width": 1100
+      },
+      {
+        "bottom": 369.84375,
+        "height": 48,
+        "name": "记录类型",
+        "radius": "4px",
+        "top": 321.84375,
+        "width": 160.65625
+      },
+      {
+        "bottom": 369.84375,
+        "height": 48,
+        "name": "科目",
+        "radius": "4px",
+        "top": 321.84375,
+        "width": 160.671875
+      },
+      {
+        "bottom": 369.84375,
+        "height": 48,
+        "name": "整理状态",
+        "radius": "4px",
+        "top": 321.84375,
+        "width": 160.65625
+      },
+      {
+        "bottom": 369.84375,
+        "height": 48,
+        "name": "知识点",
+        "radius": "4px",
+        "top": 321.84375,
+        "width": 160.671875
+      },
+      {
+        "bottom": 369.84375,
+        "height": 48,
+        "name": "错因",
+        "radius": "4px",
+        "top": 321.84375,
+        "width": 160.671875
+      },
+      {
+        "bottom": 369.84375,
+        "height": 48,
+        "name": "标签筛选",
+        "radius": "4px",
+        "top": 321.84375,
+        "width": 160.671875
+      },
+      {
+        "bottom": 606.234375,
+        "height": 44,
+        "name": "批量操作添加标签暂停复习计划",
+        "radius": "4px",
+        "top": 562.234375,
+        "width": 1029
+      },
+      {
+        "bottom": 888.484375,
+        "height": 48.5,
+        "name": "要添加的标签",
+        "radius": "4px",
+        "top": 839.984375,
+        "width": 1029
+      }
+    ],
+    "fontLoaded": true,
+    "heading": "32px",
+    "markdown": null,
+    "plan": null,
+    "scroll": 1425,
+    "tabs": [],
+    "targets": [
+      {
+        "bottom": 139.640625,
+        "height": 45.4375,
+        "name": "收集一条",
+        "top": 94.203125,
+        "width": 121
+      },
+      {
+        "bottom": 245.84375,
+        "height": 44,
+        "name": "清除筛选并回到第一页",
+        "top": 201.84375,
+        "width": 142
+      },
+      {
+        "bottom": 305.84375,
+        "height": 48,
+        "name": "搜索记录",
+        "top": 257.84375,
+        "width": 1100
+      },
+      {
+        "bottom": 369.84375,
+        "height": 48,
+        "name": "记录类型",
+        "top": 321.84375,
+        "width": 160.65625
+      },
+      {
+        "bottom": 369.84375,
+        "height": 48,
+        "name": "科目",
+        "top": 321.84375,
+        "width": 160.671875
+      },
+      {
+        "bottom": 369.84375,
+        "height": 48,
+        "name": "整理状态",
+        "top": 321.84375,
+        "width": 160.65625
+      },
+      {
+        "bottom": 369.84375,
+        "height": 48,
+        "name": "知识点",
+        "top": 321.84375,
+        "width": 160.671875
+      },
+      {
+        "bottom": 369.84375,
+        "height": 48,
+        "name": "错因",
+        "top": 321.84375,
+        "width": 160.671875
+      },
+      {
+        "bottom": 369.84375,
+        "height": 48,
+        "name": "标签筛选",
+        "top": 321.84375,
+        "width": 160.671875
+      },
+      {
+        "bottom": 369.84375,
+        "height": 48,
+        "name": "清除筛选",
+        "top": 321.84375,
+        "width": 64
+      },
+      {
+        "bottom": 471.84375,
+        "height": 44,
+        "name": "批量整理：标签与复习计划（仅当前页，最多 20 条）",
+        "top": 427.84375,
+        "width": 1058
+      },
+      {
+        "bottom": 606.234375,
+        "height": 44,
+        "name": "添加标签暂停复习计划",
+        "top": 562.234375,
+        "width": 1029
+      },
+      {
+        "bottom": 668.234375,
+        "height": 44,
+        "name": "",
+        "top": 624.234375,
+        "width": 1029
+      },
+      {
+        "bottom": 730.234375,
+        "height": 44,
+        "name": "",
+        "top": 686.234375,
+        "width": 1029
+      },
+      {
+        "bottom": 792.234375,
+        "height": 44,
+        "name": "",
+        "top": 748.234375,
+        "width": 1029
+      },
+      {
+        "bottom": 888.484375,
+        "height": 48.5,
+        "name": "",
+        "top": 839.984375,
+        "width": 1029
+      },
+      {
+        "bottom": 941.921875,
+        "height": 45.4375,
+        "name": "预览影响范围",
+        "top": 896.484375,
+        "width": 120
+      },
+      {
+        "bottom": 1116.265625,
+        "height": 53.59375,
+        "name": "R1测试：复数方程求解高等数学·数学错题·2026/10/26",
+        "top": 1062.671875,
+        "width": 957
+      },
+      {
+        "bottom": 1206.859375,
+        "height": 53.59375,
+        "name": "【示例】等价无穷小：先看运算结构高等数学·本地功能验证示例，可移入回收站·202",
+        "top": 1153.265625,
+        "width": 957
+      },
+      {
+        "bottom": 1289.859375,
+        "height": 44,
+        "name": "上一页",
+        "top": 1245.859375,
+        "width": 44
+      },
+      {
+        "bottom": 1289.859375,
+        "height": 44,
+        "name": "下一页",
+        "top": 1245.859375,
+        "width": 44
+      }
+    ],
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  {
+    "state": "library-batch-open",
+    "client": 360,
+    "fields": [
+      {
+        "bottom": -92.703125,
+        "height": 48,
+        "name": "搜索记录",
+        "radius": "4px",
+        "top": -140.703125,
+        "width": 324
+      },
+      {
+        "bottom": -2.90625,
+        "height": 48,
+        "name": "记录类型",
+        "radius": "4px",
+        "top": -50.90625,
+        "width": 324
+      },
+      {
+        "bottom": 82.890625,
+        "height": 48,
+        "name": "科目",
+        "radius": "4px",
+        "top": 34.890625,
+        "width": 156
+      },
+      {
+        "bottom": 82.890625,
+        "height": 48,
+        "name": "整理状态",
+        "radius": "4px",
+        "top": 34.890625,
+        "width": 156
+      },
+      {
+        "bottom": 168.6875,
+        "height": 48,
+        "name": "知识点",
+        "radius": "4px",
+        "top": 120.6875,
+        "width": 156
+      },
+      {
+        "bottom": 168.6875,
+        "height": 48,
+        "name": "错因",
+        "radius": "4px",
+        "top": 120.6875,
+        "width": 156
+      },
+      {
+        "bottom": 254.484375,
+        "height": 48,
+        "name": "标签筛选",
+        "radius": "4px",
+        "top": 206.484375,
+        "width": 324
+      },
+      {
+        "bottom": 619.15625,
+        "height": 44,
+        "name": "批量操作添加标签暂停复习计划",
+        "radius": "4px",
+        "top": 575.15625,
+        "width": 269
+      },
+      {
+        "bottom": 901.40625,
+        "height": 48.5,
+        "name": "要添加的标签",
+        "radius": "4px",
+        "top": 852.90625,
+        "width": 269
+      }
+    ],
+    "fontLoaded": true,
+    "heading": "26px",
+    "markdown": null,
+    "plan": null,
+    "scroll": 360,
+    "tabs": [],
+    "targets": [
+      {
+        "bottom": -152.703125,
+        "height": 44,
+        "name": "清除筛选并回到第一页",
+        "top": -196.703125,
+        "width": 142
+      },
+      {
+        "bottom": -92.703125,
+        "height": 48,
+        "name": "搜索记录",
+        "top": -140.703125,
+        "width": 324
+      },
+      {
+        "bottom": -2.90625,
+        "height": 48,
+        "name": "记录类型",
+        "top": -50.90625,
+        "width": 324
+      },
+      {
+        "bottom": 82.890625,
+        "height": 48,
+        "name": "科目",
+        "top": 34.890625,
+        "width": 156
+      },
+      {
+        "bottom": 82.890625,
+        "height": 48,
+        "name": "整理状态",
+        "top": 34.890625,
+        "width": 156
+      },
+      {
+        "bottom": 168.6875,
+        "height": 48,
+        "name": "知识点",
+        "top": 120.6875,
+        "width": 156
+      },
+      {
+        "bottom": 168.6875,
+        "height": 48,
+        "name": "错因",
+        "top": 120.6875,
+        "width": 156
+      },
+      {
+        "bottom": 254.484375,
+        "height": 48,
+        "name": "标签筛选",
+        "top": 206.484375,
+        "width": 324
+      },
+      {
+        "bottom": 314.484375,
+        "height": 48,
+        "name": "清除筛选",
+        "top": 266.484375,
+        "width": 324
+      },
+      {
+        "bottom": 439.265625,
+        "height": 66.78125,
+        "name": "批量整理：标签与复习计划（仅当前页，最多 20 条）",
+        "top": 372.484375,
+        "width": 298
+      },
+      {
+        "bottom": 619.15625,
+        "height": 44,
+        "name": "添加标签暂停复习计划",
+        "top": 575.15625,
+        "width": 269
+      },
+      {
+        "bottom": 681.15625,
+        "height": 44,
+        "name": "",
+        "top": 637.15625,
+        "width": 269
+      },
+      {
+        "bottom": 743.15625,
+        "height": 44,
+        "name": "",
+        "top": 699.15625,
+        "width": 269
+      },
+      {
+        "bottom": 805.15625,
+        "height": 44,
+        "name": "",
+        "top": 761.15625,
+        "width": 269
+      },
+      {
+        "bottom": 901.40625,
+        "height": 48.5,
+        "name": "",
+        "top": 852.90625,
+        "width": 269
+      },
+      {
+        "bottom": 954.84375,
+        "height": 45.4375,
+        "name": "预览影响范围",
+        "top": 909.40625,
+        "width": 120
+      },
+      {
+        "bottom": 1124.6875,
+        "height": 52.09375,
+        "name": "R1测试：复数方程求解高等数学·数学错题·2026/10/26",
+        "top": 1072.59375,
+        "width": 224
+      },
+      {
+        "bottom": 1213.78125,
+        "height": 52.09375,
+        "name": "【示例】等价无穷小：先看运算结构高等数学·本地功能验证示例，可移入回收站·202",
+        "top": 1161.6875,
+        "width": 224
+      },
+      {
+        "bottom": 1296.78125,
+        "height": 44,
+        "name": "上一页",
+        "top": 1252.78125,
+        "width": 44
+      },
+      {
+        "bottom": 1296.78125,
+        "height": 44,
+        "name": "下一页",
+        "top": 1252.78125,
+        "width": 44
+      }
+    ],
+    "viewport": [
+      375,
+      812
+    ]
+  },
+  {
+    "state": "detail-associations",
+    "client": 360,
+    "fields": [
+      {
+        "bottom": 391.765625,
+        "height": 44,
+        "name": "关联记录选择记录R1测试：复数方程求解",
+        "radius": "4px",
+        "top": 347.765625,
+        "width": 290
+      },
+      {
+        "bottom": 482.203125,
+        "height": 44,
+        "name": "关联类型相似支撑对比包含词汇",
+        "radius": "4px",
+        "top": 438.203125,
+        "width": 290
+      }
+    ],
+    "fontLoaded": true,
+    "heading": "26px",
+    "markdown": {
+      "lineHeight": "28.8px",
+      "size": "16px"
+    },
+    "plan": [
+      {
+        "tag": "H3",
+        "text": "安排下一次回看"
+      },
+      {
+        "tag": "P",
+        "text": "下次到期：2026-10-22已逾期 7 天"
+      },
+      {
+        "tag": "SPAN",
+        "text": "学习中"
+      },
+      {
+        "tag": "A",
+        "text": "主动练习"
+      },
+      {
+        "tag": "P",
+        "text": "主动练习只记录历史，不改变到期日期。"
+      },
+      {
+        "tag": "BUTTON",
+        "text": "暂停复习计划"
+      }
+    ],
+    "scroll": 360,
+    "tabs": [
+      {
+        "border": "2px solid rgb(40, 98, 76)",
+        "bottom": -512.375,
+        "color": "rgb(40, 98, 76)",
+        "current": "true",
+        "height": 44,
+        "name": "分析与理解",
+        "top": -556.375,
+        "width": 65
+      },
+      {
+        "border": "2px solid rgba(0, 0, 0, 0)",
+        "bottom": -512.375,
+        "color": "rgb(36, 38, 34)",
+        "current": "false",
+        "height": 44,
+        "name": "复习历史 · 1",
+        "top": -556.375,
+        "width": 70.796875
+      },
+      {
+        "border": "2px solid rgba(0, 0, 0, 0)",
+        "bottom": -512.375,
+        "color": "rgb(36, 38, 34)",
+        "current": "false",
+        "height": 44,
+        "name": "内容版本",
+        "top": -556.375,
+        "width": 52
+      }
+    ],
+    "targets": [
+      {
+        "bottom": -1044,
+        "height": 44,
+        "name": "返回列表",
+        "top": -1088,
+        "width": 68
+      },
+      {
+        "bottom": -858.96875,
+        "height": 45.4375,
+        "name": "继续整理",
+        "top": -904.40625,
+        "width": 120
+      },
+      {
+        "bottom": -782.96875,
+        "height": 44,
+        "name": "AI 辅助：查找相似题、提示与变式",
+        "top": -826.96875,
+        "width": 324
+      },
+      {
+        "bottom": -512.375,
+        "height": 44,
+        "name": "分析与理解",
+        "top": -556.375,
+        "width": 65
+      },
+      {
+        "bottom": -512.375,
+        "height": 44,
+        "name": "复习历史 · 1",
+        "top": -556.375,
+        "width": 70.796875
+      },
+      {
+        "bottom": -512.375,
+        "height": 44,
+        "name": "内容版本",
+        "top": -556.375,
+        "width": 52
+      },
+      {
+        "bottom": 130.734375,
+        "height": 45.4375,
+        "name": "主动练习",
+        "top": 85.296875,
+        "width": 290
+      },
+      {
+        "bottom": 220.328125,
+        "height": 44,
+        "name": "暂停复习计划",
+        "top": 176.328125,
+        "width": 90
+      },
+      {
+        "bottom": 391.765625,
+        "height": 44,
+        "name": "选择记录R1测试：复数方程求解",
+        "top": 347.765625,
+        "width": 290
+      },
+      {
+        "bottom": 482.203125,
+        "height": 44,
+        "name": "相似支撑对比包含词汇",
+        "top": 438.203125,
+        "width": 290
+      },
+      {
+        "bottom": 549.640625,
+        "height": 45.4375,
+        "name": "添加关联",
+        "top": 504.203125,
+        "width": 290
+      },
+      {
+        "bottom": 687.53125,
+        "height": 63.09375,
+        "name": "移入回收站",
+        "top": 624.4375,
+        "width": 94
+      }
+    ],
+    "viewport": [
+      375,
+      812
+    ]
+  }
+]

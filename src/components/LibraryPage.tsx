@@ -74,7 +74,7 @@ export default function LibraryPage({
   );
   useLibraryPosition(returnTo, !!data && !loading && q === debouncedQ);
   return (
-    <>
+    <div className={mode === "library" ? "journal-library" : undefined}>
       <div className="page-heading">
         <div>
           <div className="eyebrow">
@@ -304,6 +304,6 @@ export default function LibraryPage({
           </button>
         </div>
       </section>
-    </>
+    </div>
   );
 }

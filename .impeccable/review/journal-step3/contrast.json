@@ -1,0 +1,2538 @@
+[
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "你的知识，一点点成形。",
+    "ratio": 13.55
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "数学、408 与英语，让每份积累都能被重新找到。",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(40, 98, 76)",
+    "foreground": "rgb(255, 252, 246)",
+    "text": "收集一条",
+    "ratio": 6.97
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "显示默认范围 清除筛选并回到第一页",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "清除筛选并回到第一页",
+    "ratio": 6.33
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "搜索记录",
+    "ratio": 14.91
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "所有类型数学错题英语测试类型-3b-改（已归档）英语生词（已归档）",
+    "ratio": 14.91
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "所有科目高等数学测试科目-2d-改（已归档）测试科目-临时-改名（已归档）",
+    "ratio": 14.91
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "整理状态待整理已整理",
+    "ratio": 14.91
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "所有知识点测试知识点-2f极限",
+    "ratio": 14.91
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "所有错因概念条件测试错因-2d（已归档）",
+    "ratio": 14.91
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "标签筛选",
+    "ratio": 14.91
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "清除筛选",
+    "ratio": 6.33
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "批量整理：标签与复习计划（仅当前页，最多 20 条）",
+    "ratio": 13.55
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "勾选当前页内记录并核对范围。添加标签保留原标签，暂停计划保留作答历史；操作可撤销，发生后续编辑时会提",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "批量操作添加标签暂停复习计划",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "添加标签暂停复习计划",
+    "ratio": 14.91
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "选择当前页全部 2 条",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "R1测试：复数方程求解",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "【示例】等价无穷小：先看运算结构",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "要添加的标签",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": null,
+    "ratio": 14.91
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "预览影响范围",
+    "ratio": 6.33
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "学习记录 2 条",
+    "ratio": 13.55
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "2 条",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "最近更新优先",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "R1测试：复数方程求解高等数学·数学错题·2026/10/26",
+    "ratio": 13.55
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "R1测试：复数方程求解",
+    "ratio": 13.55
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "高等数学·数学错题·2026/10/26",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "待整理",
+    "ratio": 6.33
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": null,
+    "ratio": 6.33
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "【示例】等价无穷小：先看运算结构高等数学·本地功能验证示例，可移入回收站·2026/10/21",
+    "ratio": 13.55
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "【示例】等价无穷小：先看运算结构",
+    "ratio": 13.55
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "高等数学·本地功能验证示例，可移入回收站·2026/10/21",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "待整理",
+    "ratio": 6.33
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": null,
+    "ratio": 6.33
+  },
+  {
+    "state": "library-batch-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "第 1 页 · 共 1 页",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "【示例】等价无穷小：先看运算结构",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "高等数学 · 待整理 · 第 2 版 · 本地功能验证示例，可移入回收站",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(40, 98, 76)",
+    "foreground": "rgb(255, 252, 246)",
+    "text": "继续整理",
+    "ratio": 6.97
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "AI 辅助：查找相似题、提示与变式",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "原始材料",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "数学错题",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "计算极限：",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "lim⁡x→0sin⁡x−xx3\\lim_{x\\to 0}\\frac{\\sin x-x}{x^3}l",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "正确解法",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "由 Taylor 展开，sin⁡x=x−x36+o(x3)\\sin x=x-\\frac{x^3}{6",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "可复用总结",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "相减导致主要项抵消时，不能直接用等价无穷小替换。",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "一句话总结",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "先观察是否抵消，再决定展开到哪一阶。",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "安排下一次回看",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "下次到期：2026-10-22已逾期 7 天",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "已逾期 7 天",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "学习中",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(40, 98, 76)",
+    "foreground": "rgb(255, 252, 246)",
+    "text": "主动练习",
+    "ratio": 6.97
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "主动练习只记录历史，不改变到期日期。",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "暂停复习计划",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "知识之间，也有联系",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "关联记录选择记录R1测试：复数方程求解",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "选择记录R1测试：复数方程求解",
+    "ratio": 14.91
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "关联类型相似支撑对比包含词汇",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "相似支撑对比包含词汇",
+    "ratio": 14.91
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "添加关联",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-analysis",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "条件",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "【示例】等价无穷小：先看运算结构",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "高等数学 · 待整理 · 第 2 版 · 本地功能验证示例，可移入回收站",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(40, 98, 76)",
+    "foreground": "rgb(255, 252, 246)",
+    "text": "继续整理",
+    "ratio": 6.97
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "AI 辅助：查找相似题、提示与变式",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "原始材料",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "数学错题",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "计算极限：",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "lim⁡x→0sin⁡x−xx3\\lim_{x\\to 0}\\frac{\\sin x-x}{x^3}l",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "2026-10-21计划复习 · 2026/10/21 12:46:05掌握",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "计划复习 · 2026/10/21 12:46:05",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "掌握",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "安排下一次回看",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "下次到期：2026-10-22已逾期 7 天",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "已逾期 7 天",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "学习中",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(40, 98, 76)",
+    "foreground": "rgb(255, 252, 246)",
+    "text": "主动练习",
+    "ratio": 6.97
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "主动练习只记录历史，不改变到期日期。",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "暂停复习计划",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "知识之间，也有联系",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "关联记录选择记录R1测试：复数方程求解",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "选择记录R1测试：复数方程求解",
+    "ratio": 14.91
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "关联类型相似支撑对比包含词汇",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "相似支撑对比包含词汇",
+    "ratio": 14.91
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "添加关联",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-history",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "条件",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "【示例】等价无穷小：先看运算结构",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "高等数学 · 待整理 · 第 2 版 · 本地功能验证示例，可移入回收站",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(40, 98, 76)",
+    "foreground": "rgb(255, 252, 246)",
+    "text": "继续整理",
+    "ratio": 6.97
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "AI 辅助：查找相似题、提示与变式",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "原始材料",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "数学错题",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "计算极限：",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "lim⁡x→0sin⁡x−xx3\\lim_{x\\to 0}\\frac{\\sin x-x}{x^3}l",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "版本 1 · 2026/10/21 12:41:29 · AUTO",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "安排下一次回看",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "下次到期：2026-10-22已逾期 7 天",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "已逾期 7 天",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "学习中",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(40, 98, 76)",
+    "foreground": "rgb(255, 252, 246)",
+    "text": "主动练习",
+    "ratio": 6.97
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "主动练习只记录历史，不改变到期日期。",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "暂停复习计划",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "知识之间，也有联系",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "关联记录选择记录R1测试：复数方程求解",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "选择记录R1测试：复数方程求解",
+    "ratio": 14.91
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "关联类型相似支撑对比包含词汇",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "相似支撑对比包含词汇",
+    "ratio": 14.91
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "添加关联",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-versions",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "条件",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "【示例】等价无穷小：先看运算结构",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "高等数学 · 待整理 · 第 2 版 · 本地功能验证示例，可移入回收站",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(40, 98, 76)",
+    "foreground": "rgb(255, 252, 246)",
+    "text": "继续整理",
+    "ratio": 6.97
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "AI 辅助：查找相似题、提示与变式",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "AI 相似错题",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "基础检索按文字、标签与知识点匹配；语义比较额外纳入没有关键词重合的近期同科目题目，最多 40 条。确",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "候选范围语义比较（最多 40 条）基础匹配（最多 8 条）",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "语义比较（最多 40 条）基础匹配（最多 8 条）",
+    "ratio": 14.91
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "准备 / 刷新候选预览",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "AI 学习助手",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": null,
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "建议供核对参考，原始记录不会自动更改。",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "当前：deepseek-flash · api.deepseek.com",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "需要什么帮助分步提示变式练习",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "分步提示变式练习",
+    "ratio": 14.91
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "查看本次发送的文字（不发送图片）",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "提示深度1 · 相关概念2 · 解题方向3 · 下一步操作",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "1 · 相关概念2 · 解题方向3 · 下一步操作",
+    "ratio": 14.91
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "同意将上方预览的文字发送至当前 AI 服务",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "生成分步提示",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "原始材料",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "数学错题",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "计算极限：",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "lim⁡x→0sin⁡x−xx3\\lim_{x\\to 0}\\frac{\\sin x-x}{x^3}l",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "正确解法",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "由 Taylor 展开，sin⁡x=x−x36+o(x3)\\sin x=x-\\frac{x^3}{6",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "可复用总结",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "相减导致主要项抵消时，不能直接用等价无穷小替换。",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "一句话总结",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "先观察是否抵消，再决定展开到哪一阶。",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "安排下一次回看",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "下次到期：2026-10-22已逾期 7 天",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "已逾期 7 天",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "学习中",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(40, 98, 76)",
+    "foreground": "rgb(255, 252, 246)",
+    "text": "主动练习",
+    "ratio": 6.97
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "主动练习只记录历史，不改变到期日期。",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "暂停复习计划",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "知识之间，也有联系",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "关联记录选择记录R1测试：复数方程求解",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "选择记录R1测试：复数方程求解",
+    "ratio": 14.91
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "关联类型相似支撑对比包含词汇",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "相似支撑对比包含词汇",
+    "ratio": 14.91
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "添加关联",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 1440,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "条件",
+    "ratio": 6.33
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "你的知识，一点点成形。",
+    "ratio": 13.55
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "数学、408 与英语，让每份积累都能被重新找到。",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "显示默认范围 清除筛选并回到第一页",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "清除筛选并回到第一页",
+    "ratio": 6.33
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "搜索记录",
+    "ratio": 14.91
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "记录类型所有类型数学错题英语测试类型-3b-改（已归档）英语生词（已归档）",
+    "ratio": 13.55
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "所有类型数学错题英语测试类型-3b-改（已归档）英语生词（已归档）",
+    "ratio": 14.91
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "科目所有科目高等数学测试科目-2d-改（已归档）测试科目-临时-改名（已归档）",
+    "ratio": 13.55
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "所有科目高等数学测试科目-2d-改（已归档）测试科目-临时-改名（已归档）",
+    "ratio": 14.91
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "整理状态整理状态待整理已整理",
+    "ratio": 13.55
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "整理状态待整理已整理",
+    "ratio": 14.91
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "知识点所有知识点测试知识点-2f极限",
+    "ratio": 13.55
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "所有知识点测试知识点-2f极限",
+    "ratio": 14.91
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "错因所有错因概念条件测试错因-2d（已归档）",
+    "ratio": 13.55
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "所有错因概念条件测试错因-2d（已归档）",
+    "ratio": 14.91
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "标签",
+    "ratio": 13.55
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "标签筛选",
+    "ratio": 14.91
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "清除筛选",
+    "ratio": 6.33
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "批量整理：标签与复习计划（仅当前页，最多 20 条）",
+    "ratio": 13.55
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "勾选当前页内记录并核对范围。添加标签保留原标签，暂停计划保留作答历史；操作可撤销，发生后续编辑时会提",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "批量操作添加标签暂停复习计划",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "添加标签暂停复习计划",
+    "ratio": 14.91
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "选择当前页全部 2 条",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "R1测试：复数方程求解",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "【示例】等价无穷小：先看运算结构",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "要添加的标签",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": null,
+    "ratio": 14.91
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "预览影响范围",
+    "ratio": 6.33
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "学习记录 2 条",
+    "ratio": 13.55
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "2 条",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "最近更新优先",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "R1测试：复数方程求解高等数学·数学错题·2026/10/26",
+    "ratio": 13.55
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "R1测试：复数方程求解",
+    "ratio": 13.55
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "高等数学·数学错题·2026/10/26",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "待整理",
+    "ratio": 6.33
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "【示例】等价无穷小：先看运算结构高等数学·本地功能验证示例，可移入回收站·2026/10/21",
+    "ratio": 13.55
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "【示例】等价无穷小：先看运算结构",
+    "ratio": 13.55
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "高等数学·本地功能验证示例，可移入回收站·2026/10/21",
+    "ratio": 5.03
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "待整理",
+    "ratio": 6.33
+  },
+  {
+    "state": "library-batch-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "第 1 页 · 共 1 页",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "【示例】等价无穷小：先看运算结构",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "高等数学 · 待整理 · 第 2 版 · 本地功能验证示例，可移入回收站",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(40, 98, 76)",
+    "foreground": "rgb(255, 252, 246)",
+    "text": "继续整理",
+    "ratio": 6.97
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "AI 辅助：查找相似题、提示与变式",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "原始材料",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "数学错题",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "计算极限：",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "lim⁡x→0sin⁡x−xx3\\lim_{x\\to 0}\\frac{\\sin x-x}{x^3}l",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "正确解法",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "由 Taylor 展开，sin⁡x=x−x36+o(x3)\\sin x=x-\\frac{x^3}{6",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "可复用总结",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "相减导致主要项抵消时，不能直接用等价无穷小替换。",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "一句话总结",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "先观察是否抵消，再决定展开到哪一阶。",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "安排下一次回看",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "下次到期：2026-10-22已逾期 7 天",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "已逾期 7 天",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "学习中",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(40, 98, 76)",
+    "foreground": "rgb(255, 252, 246)",
+    "text": "主动练习",
+    "ratio": 6.97
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "主动练习只记录历史，不改变到期日期。",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "暂停复习计划",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "知识之间，也有联系",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "关联记录选择记录R1测试：复数方程求解",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "选择记录R1测试：复数方程求解",
+    "ratio": 14.91
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "关联类型相似支撑对比包含词汇",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "相似支撑对比包含词汇",
+    "ratio": 14.91
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "添加关联",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-analysis",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "条件",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "【示例】等价无穷小：先看运算结构",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "高等数学 · 待整理 · 第 2 版 · 本地功能验证示例，可移入回收站",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(40, 98, 76)",
+    "foreground": "rgb(255, 252, 246)",
+    "text": "继续整理",
+    "ratio": 6.97
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "AI 辅助：查找相似题、提示与变式",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "原始材料",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "数学错题",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "计算极限：",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "lim⁡x→0sin⁡x−xx3\\lim_{x\\to 0}\\frac{\\sin x-x}{x^3}l",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "2026-10-21计划复习 · 2026/10/21 12:46:05掌握",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "计划复习 · 2026/10/21 12:46:05",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "掌握",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "安排下一次回看",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "下次到期：2026-10-22已逾期 7 天",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "已逾期 7 天",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "学习中",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(40, 98, 76)",
+    "foreground": "rgb(255, 252, 246)",
+    "text": "主动练习",
+    "ratio": 6.97
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "主动练习只记录历史，不改变到期日期。",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "暂停复习计划",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "知识之间，也有联系",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "关联记录选择记录R1测试：复数方程求解",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "选择记录R1测试：复数方程求解",
+    "ratio": 14.91
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "关联类型相似支撑对比包含词汇",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "相似支撑对比包含词汇",
+    "ratio": 14.91
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "添加关联",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-history",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "条件",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "【示例】等价无穷小：先看运算结构",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "高等数学 · 待整理 · 第 2 版 · 本地功能验证示例，可移入回收站",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(40, 98, 76)",
+    "foreground": "rgb(255, 252, 246)",
+    "text": "继续整理",
+    "ratio": 6.97
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "AI 辅助：查找相似题、提示与变式",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "原始材料",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "数学错题",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "计算极限：",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "lim⁡x→0sin⁡x−xx3\\lim_{x\\to 0}\\frac{\\sin x-x}{x^3}l",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "版本 1 · 2026/10/21 12:41:29 · AUTO",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "安排下一次回看",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "下次到期：2026-10-22已逾期 7 天",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "已逾期 7 天",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "学习中",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(40, 98, 76)",
+    "foreground": "rgb(255, 252, 246)",
+    "text": "主动练习",
+    "ratio": 6.97
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "主动练习只记录历史，不改变到期日期。",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "暂停复习计划",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "知识之间，也有联系",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "关联记录选择记录R1测试：复数方程求解",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "选择记录R1测试：复数方程求解",
+    "ratio": 14.91
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "关联类型相似支撑对比包含词汇",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "相似支撑对比包含词汇",
+    "ratio": 14.91
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "添加关联",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-versions",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "条件",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "【示例】等价无穷小：先看运算结构",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "高等数学 · 待整理 · 第 2 版 · 本地功能验证示例，可移入回收站",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(40, 98, 76)",
+    "foreground": "rgb(255, 252, 246)",
+    "text": "继续整理",
+    "ratio": 6.97
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "AI 辅助：查找相似题、提示与变式",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "AI 相似错题",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "基础检索按文字、标签与知识点匹配；语义比较额外纳入没有关键词重合的近期同科目题目，最多 40 条。确",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "候选范围语义比较（最多 40 条）基础匹配（最多 8 条）",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "语义比较（最多 40 条）基础匹配（最多 8 条）",
+    "ratio": 14.91
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "准备 / 刷新候选预览",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "AI 学习助手",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": null,
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "建议供核对参考，原始记录不会自动更改。",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "当前：deepseek-flash · api.deepseek.com",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "需要什么帮助分步提示变式练习",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "分步提示变式练习",
+    "ratio": 14.91
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "查看本次发送的文字（不发送图片）",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "提示深度1 · 相关概念2 · 解题方向3 · 下一步操作",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "1 · 相关概念2 · 解题方向3 · 下一步操作",
+    "ratio": 14.91
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "同意将上方预览的文字发送至当前 AI 服务",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "生成分步提示",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "原始材料",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "数学错题",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "计算极限：",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "lim⁡x→0sin⁡x−xx3\\lim_{x\\to 0}\\frac{\\sin x-x}{x^3}l",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "正确解法",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "由 Taylor 展开，sin⁡x=x−x36+o(x3)\\sin x=x-\\frac{x^3}{6",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "可复用总结",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "相减导致主要项抵消时，不能直接用等价无穷小替换。",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "一句话总结",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "先观察是否抵消，再决定展开到哪一阶。",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "安排下一次回看",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "下次到期：2026-10-22已逾期 7 天",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "已逾期 7 天",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "学习中",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(40, 98, 76)",
+    "foreground": "rgb(255, 252, 246)",
+    "text": "主动练习",
+    "ratio": 6.97
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(102, 104, 94)",
+    "text": "主动练习只记录历史，不改变到期日期。",
+    "ratio": 5.03
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "暂停复习计划",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "知识之间，也有联系",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "关联记录选择记录R1测试：复数方程求解",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "选择记录R1测试：复数方程求解",
+    "ratio": 14.91
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "关联类型相似支撑对比包含词汇",
+    "ratio": 13.55
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(255, 252, 246)",
+    "foreground": "rgb(36, 38, 34)",
+    "text": "相似支撑对比包含词汇",
+    "ratio": 14.91
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "添加关联",
+    "ratio": 6.33
+  },
+  {
+    "state": "detail-ai-open",
+    "width": 375,
+    "background": "rgb(245, 241, 232)",
+    "foreground": "rgb(40, 98, 76)",
+    "text": "条件",
+    "ratio": 6.33
+  }
+]

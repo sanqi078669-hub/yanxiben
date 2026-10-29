@@ -66,10 +66,10 @@ export default function Detail({
   };
   if (!e)
     return (
-      <>
+      <div className="journal-detail">
         <ErrorBox text={error} />
         {!error && <div className="loading">正在读取思考…</div>}
-      </>
+      </div>
     );
   const contentPanelId = "entry-content-" + id;
   const overdueDays =
@@ -77,7 +77,7 @@ export default function Detail({
       ? overdueDaysForDate(e.review.due_on, settings.timezone)
       : 0;
   return (
-    <>
+    <div className="journal-detail">
       <div className="page-heading detail-page-heading">
         <div>
           <Link className="back-link" href={returnTo}>
@@ -384,6 +384,6 @@ export default function Detail({
           </button>
         </aside>
       </div>
-    </>
+    </div>
   );
 }

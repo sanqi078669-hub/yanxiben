@@ -1,0 +1,178 @@
+{
+  "wrapperChecks": {
+    "LibraryPage": true,
+    "Detail": true
+  },
+  "filterTabAriaAndOverdueLogicUnchanged": true,
+  "newSelectorsScoped": true,
+  "protectedTodayAndShellRulesUnchanged": true,
+  "excludedFilesUnchanged": true,
+  "oldFontGlyphsPreserved": true,
+  "font": {
+    "glyphs": 455,
+    "bytes": 148164
+  },
+  "contrast": {
+    "samples": 317,
+    "min": 5.03,
+    "low": []
+  },
+  "smallTargets": [],
+  "viewports": [
+    {
+      "state": "library-records",
+      "viewport": [
+        1440,
+        900
+      ],
+      "noHorizontalOverflow": true,
+      "heading": "32px",
+      "markdown": null
+    },
+    {
+      "state": "library-empty",
+      "viewport": [
+        1440,
+        900
+      ],
+      "noHorizontalOverflow": true,
+      "heading": "32px",
+      "markdown": null
+    },
+    {
+      "state": "library-records",
+      "viewport": [
+        375,
+        812
+      ],
+      "noHorizontalOverflow": true,
+      "heading": "26px",
+      "markdown": null
+    },
+    {
+      "state": "library-empty",
+      "viewport": [
+        375,
+        812
+      ],
+      "noHorizontalOverflow": true,
+      "heading": "26px",
+      "markdown": null
+    },
+    {
+      "state": "detail-first",
+      "viewport": [
+        1440,
+        900
+      ],
+      "noHorizontalOverflow": true,
+      "heading": "32px",
+      "markdown": {
+        "lineHeight": "28.8px",
+        "size": "16px"
+      }
+    },
+    {
+      "state": "detail-plan",
+      "viewport": [
+        1440,
+        900
+      ],
+      "noHorizontalOverflow": true,
+      "heading": "32px",
+      "markdown": {
+        "lineHeight": "28.8px",
+        "size": "16px"
+      }
+    },
+    {
+      "state": "detail-ai-open",
+      "viewport": [
+        1440,
+        900
+      ],
+      "noHorizontalOverflow": true,
+      "heading": "32px",
+      "markdown": {
+        "lineHeight": "28.8px",
+        "size": "16px"
+      }
+    },
+    {
+      "state": "detail-first",
+      "viewport": [
+        375,
+        812
+      ],
+      "noHorizontalOverflow": true,
+      "heading": "26px",
+      "markdown": {
+        "lineHeight": "28.8px",
+        "size": "16px"
+      }
+    },
+    {
+      "state": "detail-plan",
+      "viewport": [
+        375,
+        812
+      ],
+      "noHorizontalOverflow": true,
+      "heading": "26px",
+      "markdown": {
+        "lineHeight": "28.8px",
+        "size": "16px"
+      }
+    },
+    {
+      "state": "detail-ai-open",
+      "viewport": [
+        375,
+        812
+      ],
+      "noHorizontalOverflow": true,
+      "heading": "26px",
+      "markdown": {
+        "lineHeight": "28.8px",
+        "size": "16px"
+      }
+    },
+    {
+      "state": "library-batch-open",
+      "viewport": [
+        1440,
+        900
+      ],
+      "noHorizontalOverflow": true,
+      "heading": "32px",
+      "markdown": null
+    },
+    {
+      "state": "library-batch-open",
+      "viewport": [
+        375,
+        812
+      ],
+      "noHorizontalOverflow": true,
+      "heading": "26px",
+      "markdown": null
+    },
+    {
+      "state": "detail-associations",
+      "viewport": [
+        375,
+        812
+      ],
+      "noHorizontalOverflow": true,
+      "heading": "26px",
+      "markdown": {
+        "lineHeight": "28.8px",
+        "size": "16px"
+      }
+    }
+  ],
+  "checks": {
+    "tsc": "passed",
+    "lint": "passed"
+  }
+}
