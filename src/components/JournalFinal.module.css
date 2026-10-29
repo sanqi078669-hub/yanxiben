@@ -1,0 +1,652 @@
+@font-face {
+  font-family: "Yanxiben Journal UI";
+  src: url("/fonts/journal-serif.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+}
+
+.register,
+.adminPage,
+.adminGate {
+  min-height: 100svh;
+  background: #f5f1e8;
+  color: #242622;
+  font-family: Arial, "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+  color-scheme: light;
+}
+
+.register {
+  display: grid;
+  grid-template-rows: minmax(108px, 12svh) 1fr minmax(108px, 12svh);
+  padding-inline: 64px;
+}
+
+.masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid #d9d4c9;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-family: "Yanxiben Journal UI", "Songti SC", "SimSun", serif;
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.brand svg {
+  flex-shrink: 0;
+  color: #28624c;
+}
+
+.masthead > span {
+  color: #66685e;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+
+.spread {
+  display: grid;
+  grid-template-columns: minmax(0, 56fr) minmax(0, 44fr);
+  align-self: center;
+  min-width: 0;
+  min-height: 0;
+  max-width: none;
+  width: 100%;
+  margin: 0;
+  padding: 40px 0;
+}
+
+.story {
+  min-width: 0;
+  padding-right: 48px;
+}
+
+.story h1 {
+  margin: 0 0 28px;
+  font-family: "Yanxiben Journal UI", "Songti SC", "SimSun", serif;
+  font-size: 48px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+.story p {
+  margin: 0;
+  padding-left: 18px;
+  border-left: 2px solid #924d3c;
+  color: #66685e;
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.story img {
+  display: block;
+  width: min(100%, 480px);
+  height: auto;
+  margin-top: 24px;
+}
+
+.registerForm {
+  min-width: 0;
+  padding-left: 64px;
+  border-left: 1px solid #d9d4c9;
+}
+
+.registerForm h2,
+.admin h1,
+.admin h2,
+.restore h2,
+.restore h3,
+.gateContent h2 {
+  color: #242622;
+  font-family: "Yanxiben Journal UI", "Songti SC", "SimSun", serif;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0;
+}
+
+.registerForm h2 {
+  margin: 0 0 12px;
+}
+
+.registerForm > p:first-of-type {
+  margin: 0 0 24px;
+  color: #66685e;
+  font-size: 13px;
+}
+
+.registerForm label {
+  margin: 0 0 16px;
+  color: #242622;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.75;
+}
+
+.registerForm input,
+.admin input,
+.restore input {
+  min-width: 0;
+  max-width: 100%;
+  min-height: 48px;
+  height: 48px;
+  border: 1px solid #d9d4c9;
+  border-radius: 4px;
+  padding: 9px 14px;
+  background: #fffcf6;
+  color: #242622;
+  caret-color: #28624c;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 1.75;
+  box-shadow: none;
+}
+
+.registerForm :global(.password-field) input,
+.restore:global(.panel.form-panel) :global(.password-field) input {
+  margin-top: 0;
+  padding-right: 52px;
+}
+
+.registerForm :global(.password-field) {
+  margin-top: 7px;
+}
+
+.registerForm :global(.password-toggle),
+.restore :global(.password-toggle) {
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+  color: #66685e;
+}
+
+.registerForm :global(.button),
+.admin :global(.button),
+.restore :global(.button),
+.gateContent :global(.button) {
+  min-width: 44px;
+  min-height: 48px;
+  border: 1px solid #28624c;
+  border-radius: 4px;
+  padding: 10px 16px;
+  background: #28624c;
+  color: #fffcf6;
+  font-size: 13px;
+  box-shadow: none;
+  transform: none;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+.registerForm > :global(.button) {
+  width: 100%;
+  margin-top: 4px;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.admin :global(.button.outline),
+.restore :global(.button.outline) {
+  background: transparent;
+  color: #28624c;
+}
+
+.registerForm :global(.button):hover:not(:disabled),
+.admin :global(.button):hover:not(:disabled),
+.restore :global(.button):hover:not(:disabled),
+.gateContent :global(.button):hover {
+  transform: none;
+  background: #242622;
+  color: #fffcf6;
+}
+
+.admin :global(.button.outline):hover:not(:disabled),
+.restore :global(.button.outline):hover:not(:disabled) {
+  background: #ebe6dc;
+  color: #28624c;
+}
+
+.returnLink {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 20px 0 0;
+  padding-top: 8px;
+  border-top: 1px solid #d9d4c9;
+  color: #66685e;
+  font-size: 13px;
+}
+
+.returnLink a,
+.restore a:not(:global(.button)),
+.restore :global(.text-button) {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  color: #28624c;
+  font-size: 13px;
+}
+
+.returnLink a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  border-top: 1px solid #d9d4c9;
+  color: #66685e;
+  font-size: 13px;
+  line-height: 1.75;
+  letter-spacing: 0;
+}
+
+.adminPage {
+  max-width: none;
+  padding: 48px 64px;
+}
+
+.admin.admin {
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.admin :global(.eyebrow) {
+  display: none;
+}
+
+.admin :global(.page-heading) > div {
+  flex: 1;
+  min-width: 0;
+  max-width: 640px;
+}
+
+.admin :global(.page-heading) > :global(.button) {
+  display: inline-flex;
+}
+
+.slots {
+  margin-top: 20px;
+  padding-block: 14px;
+  border-block: 1px solid #d9d4c9;
+  color: #66685e;
+  font-size: 14px;
+}
+
+.admin :global(.table-scroll) {
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-color: #66685e #ebe6dc;
+  scrollbar-width: thin;
+}
+
+.admin table {
+  width: 100%;
+  min-width: 660px;
+  border-collapse: collapse;
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.admin caption {
+  padding: 16px 12px;
+  color: #66685e;
+  text-align: left;
+  font-size: 13px;
+}
+
+.admin tr,
+.admin th,
+.admin td {
+  background: transparent;
+}
+
+.admin th,
+.admin td {
+  padding: 16px 12px;
+  border-bottom: 1px solid #d9d4c9;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.admin thead {
+  border-top: 1px solid #d9d4c9;
+  color: #66685e;
+}
+
+.admin td:last-child {
+  min-width: 176px;
+  white-space: nowrap;
+}
+
+.admin :global(.badge) {
+  padding: 3px 8px;
+  border: 1px solid #28624c;
+  border-radius: 2px;
+  background: transparent;
+  color: #28624c;
+}
+
+.admin :global(.admin-status-danger) {
+  border-color: #924d3c;
+  color: #924d3c;
+}
+
+.admin :global(.danger-button),
+.restore .destructive {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 48px;
+  padding: 10px 16px;
+  border: 1px solid #924d3c;
+  border-radius: 4px;
+  background: transparent;
+  color: #924d3c;
+  font-size: 13px;
+}
+
+.admin :global(.danger-button):hover:not(:disabled),
+.restore .destructive:hover:not(:disabled) {
+  background: #ebe6dc;
+}
+
+.admin button:disabled,
+.restore button:disabled {
+  opacity: 1;
+  border-color: #d9d4c9;
+  background: #f5f1e8;
+  color: #66685e;
+}
+
+.registerForm button:disabled {
+  opacity: 1;
+}
+
+.admin dialog {
+  width: min(560px, calc(100% - 40px));
+  max-height: calc(100svh - 40px);
+  margin: auto;
+  padding: 24px;
+  overflow-y: auto;
+  border: 1px solid #d9d4c9;
+  border-radius: 2px;
+  background: #f5f1e8;
+  color: #242622;
+  box-shadow: none;
+}
+
+.admin dialog::backdrop {
+  background: rgb(36 38 34 / 35%);
+}
+
+.admin dialog h2 {
+  font-size: 24px;
+}
+
+.admin dialog > p,
+.warning,
+.restore .warning {
+  color: #924d3c;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.restore.restore {
+  padding: 24px 0;
+  border: 0;
+  border-block: 1px solid #d9d4c9;
+  border-radius: 2px;
+  background: transparent;
+  color: #242622;
+  box-shadow: none;
+}
+
+.restore h2 {
+  font-size: 22px;
+  color: #28624c;
+}
+
+.restore h3 {
+  font-size: 18px;
+  color: #28624c;
+}
+
+.restoreSteps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  list-style: none;
+  margin: 20px 0;
+  padding: 0;
+  border-block: 1px solid #d9d4c9;
+  color: #66685e;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.restoreSteps li {
+  padding: 12px 0;
+  border-bottom: 2px solid transparent;
+}
+
+.restoreSteps li[aria-current="step"] {
+  border-bottom-color: #28624c;
+  color: #28624c;
+}
+
+.restore fieldset {
+  min-width: 0;
+  margin: 20px 0;
+  padding: 16px 0;
+  border: 0;
+  border-block: 1px solid #d9d4c9;
+}
+
+.restore:global(.panel.form-panel) input[type="file"] {
+  padding: 0 8px 0 0;
+  font-size: 13px;
+}
+
+.restore input[type="file"]::file-selector-button {
+  min-height: 46px;
+  margin-right: 12px;
+  padding: 8px 12px;
+  border: 0;
+  border-right: 1px solid #d9d4c9;
+  border-radius: 0;
+  background: #ebe6dc;
+  color: #28624c;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.restore details > section {
+  margin-top: 20px;
+  padding: 20px 0;
+  border: 0;
+  border-top: 1px solid #d9d4c9;
+  background: transparent;
+}
+
+.restore details > section > p,
+.restore [role="status"] {
+  padding-block: 12px;
+  border-block: 1px solid #d9d4c9;
+}
+
+.registerForm :global(.error),
+.admin :global(.error),
+.gateContent :global(.error),
+.restore [role="alert"] {
+  margin-block: 12px;
+  padding: 12px 14px;
+  border: 1px solid #924d3c;
+  border-radius: 2px;
+  background: #fffcf6;
+  color: #924d3c;
+  font-size: 13px;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+
+.adminGate {
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.gateContent {
+  width: min(100%, 480px);
+  padding-block: 24px;
+  border-block: 1px solid #d9d4c9;
+}
+
+.gateContent p {
+  color: #66685e;
+}
+
+.register :is(a, button, input):focus-visible,
+.adminPage :is(a, button, input, [tabindex]):focus-visible,
+.restore :is(a, button, input, summary):focus-visible,
+.adminGate a:focus-visible {
+  outline: 3px solid #28624c;
+  outline-offset: 3px;
+}
+
+.register ::selection,
+.adminPage ::selection,
+.restore ::selection {
+  background: #28624c;
+  color: #fffcf6;
+}
+
+@media (max-width: 1100px) {
+  .register {
+    padding-inline: 40px;
+  }
+  .registerForm {
+    padding-left: 32px;
+  }
+  .story {
+    padding-right: 32px;
+  }
+  .story h1 {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 760px) {
+  .register {
+    grid-template-rows: auto 1fr auto;
+    padding-inline: 24px;
+  }
+  .masthead {
+    min-height: 72px;
+    gap: 12px;
+  }
+  .brand {
+    font-size: 22px;
+    gap: 12px;
+  }
+  .brand svg {
+    width: 30px;
+    height: 30px;
+  }
+  .masthead > span {
+    letter-spacing: 0;
+  }
+  .spread {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 480px;
+    justify-self: center;
+    align-self: start;
+    gap: 20px;
+    padding-block: 20px;
+  }
+  .story {
+    padding-right: 0;
+  }
+  .story h1 {
+    margin-bottom: 10px;
+    font-size: 26px;
+  }
+  .story p {
+    padding-left: 12px;
+    font-size: 13px;
+  }
+  .story img {
+    display: none;
+  }
+  .registerForm {
+    padding-left: 0;
+    border-left: 0;
+  }
+  .registerForm h2 {
+    margin-bottom: 8px;
+    font-size: 22px;
+  }
+  .registerForm > p:first-of-type {
+    margin-bottom: 16px;
+  }
+  .registerForm label {
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+  .registerForm input {
+    margin-top: 6px;
+  }
+  .registerForm :global(.password-field) {
+    margin-top: 6px;
+  }
+  .returnLink {
+    margin-top: 12px;
+  }
+  .footer {
+    min-height: 64px;
+    padding-block: 16px;
+  }
+  .adminPage {
+    padding: 28px 18px;
+  }
+  .admin h1 {
+    font-size: 26px;
+  }
+  .admin :global(.page-heading) {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .restoreSteps {
+    gap: 8px;
+  }
+  .restoreSteps li {
+    padding-block: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .register *,
+  .admin *,
+  .restore * {
+    transition-duration: 0.01ms;
+  }
+}

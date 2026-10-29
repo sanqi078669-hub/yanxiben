@@ -1,0 +1,25 @@
+{
+  "registerShown": "text",
+  "registerFocus": {
+    "label": "显示密码",
+    "offset": "3px",
+    "outline": "rgb(40, 98, 76) solid 3px"
+  },
+  "adminBehavior": {
+    "buttons": [
+      {
+        "disabled": true,
+        "text": "禁用",
+        "title": "不能对自己执行此操作"
+      },
+      {
+        "disabled": true,
+        "text": "删除",
+        "title": "不能对自己执行此操作"
+      }
+    ],
+    "focusOutline": "rgb(40, 98, 76) solid 3px",
+    "tableScroll": 321
+  },
+  "notes": "Read-only loads plus empty password toggle, keyboard table scrolling, restore sections expand/collapse only. No registration, credential input, disable/enable, delete, upload, reauth, restore validation or launch. Only owner exists, so delete modal cannot be opened without bypassing guards; source-only verification for protected states."
+}

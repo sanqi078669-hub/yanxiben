@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { api } from "../lib/request";
 import { ErrorBox } from "./ui";
+import styles from "./JournalFinal.module.css";
 
 type User = {
   id: string;
@@ -105,13 +106,16 @@ export default function AdminUsers() {
   }
 
   return (
-    <section className="panel form-panel" aria-busy={loading || busy}>
+    <section
+      className={`panel form-panel ${styles.admin}`}
+      aria-busy={loading || busy}
+    >
       <div className="page-heading">
         <div>
           <span className="eyebrow">ADMINISTRATION</span>
           <h1>账号管理</h1>
           {!loading && !error && (
-            <p>
+            <p className={styles.slots}>
               已注册 {users.length} / 7，剩余 {Math.max(7 - users.length, 0)}{" "}
               个名额
             </p>
@@ -125,7 +129,12 @@ export default function AdminUsers() {
       {loading ? (
         <p role="status">正在加载用户…</p>
       ) : (
-        <div className="table-scroll">
+        <div
+          className="table-scroll"
+          tabIndex={0}
+          role="region"
+          aria-label="注册用户列表，可横向滚动"
+        >
           <table>
             <caption>注册用户列表</caption>
             <thead>

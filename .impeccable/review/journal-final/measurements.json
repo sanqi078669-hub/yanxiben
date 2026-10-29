@@ -1,0 +1,1299 @@
+[
+  {
+    "state": "register-first",
+    "client": 1440,
+    "columns": "734.719px 577.266px",
+    "cta": {
+      "bottom": 639.171875,
+      "height": 50,
+      "text": "创建账号",
+      "width": 512.265625,
+      "x": 863.71875,
+      "y": 589.171875
+    },
+    "fields": [
+      {
+        "bottom": 371.171875,
+        "disabled": false,
+        "height": 48,
+        "name": "账号",
+        "padding": "9px 14px",
+        "radius": "4px",
+        "type": "text",
+        "width": 512.265625,
+        "x": 863.71875,
+        "y": 323.171875
+      },
+      {
+        "bottom": 470.171875,
+        "disabled": false,
+        "height": 48,
+        "name": "密码",
+        "padding": "9px 52px 9px 14px",
+        "radius": "4px",
+        "type": "password",
+        "width": 512.265625,
+        "x": 863.71875,
+        "y": 422.171875
+      },
+      {
+        "bottom": 569.171875,
+        "disabled": false,
+        "height": 48,
+        "name": "确认密码",
+        "padding": "9px 52px 9px 14px",
+        "radius": "4px",
+        "type": "password",
+        "width": 512.265625,
+        "x": 863.71875,
+        "y": 521.171875
+      }
+    ],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": 250.21875,
+      "height": 62.390625,
+      "size": "48px",
+      "text": "建立你的研习本",
+      "width": 686.71875,
+      "x": 64,
+      "y": 187.828125
+    },
+    "scope": "JournalFinal-module__wmkXIW__register",
+    "scroll": 1440,
+    "steps": [],
+    "tables": [],
+    "targets": [
+      {
+        "bottom": 371.171875,
+        "height": 48,
+        "name": "账号",
+        "width": 512.265625,
+        "x": 863.71875,
+        "y": 323.171875
+      },
+      {
+        "bottom": 470.171875,
+        "height": 48,
+        "name": "密码",
+        "width": 512.265625,
+        "x": 863.71875,
+        "y": 422.171875
+      },
+      {
+        "bottom": 468.171875,
+        "height": 44,
+        "name": "显示密码",
+        "width": 44,
+        "x": 1327.984375,
+        "y": 424.171875
+      },
+      {
+        "bottom": 569.171875,
+        "height": 48,
+        "name": "确认密码",
+        "width": 512.265625,
+        "x": 863.71875,
+        "y": 521.171875
+      },
+      {
+        "bottom": 567.171875,
+        "height": 44,
+        "name": "显示密码",
+        "width": 44,
+        "x": 1327.984375,
+        "y": 523.171875
+      },
+      {
+        "bottom": 639.171875,
+        "height": 50,
+        "name": "创建账号",
+        "width": 512.265625,
+        "x": 863.71875,
+        "y": 589.171875
+      },
+      {
+        "bottom": 712.171875,
+        "height": 44,
+        "name": "直接登录",
+        "width": 52,
+        "x": 932.71875,
+        "y": 668.171875
+      }
+    ],
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  {
+    "state": "register-first",
+    "client": 375,
+    "columns": "327px",
+    "cta": {
+      "bottom": 602.140625,
+      "height": 50,
+      "text": "创建账号",
+      "width": 327,
+      "x": 24,
+      "y": 552.140625
+    },
+    "fields": [
+      {
+        "bottom": 355.140625,
+        "disabled": false,
+        "height": 48,
+        "name": "账号",
+        "padding": "9px 14px",
+        "radius": "4px",
+        "type": "text",
+        "width": 327,
+        "x": 24,
+        "y": 307.140625
+      },
+      {
+        "bottom": 445.640625,
+        "disabled": false,
+        "height": 48,
+        "name": "密码",
+        "padding": "9px 52px 9px 14px",
+        "radius": "4px",
+        "type": "password",
+        "width": 327,
+        "x": 24,
+        "y": 397.640625
+      },
+      {
+        "bottom": 536.140625,
+        "disabled": false,
+        "height": 48,
+        "name": "确认密码",
+        "padding": "9px 52px 9px 14px",
+        "radius": "4px",
+        "type": "password",
+        "width": 327,
+        "x": 24,
+        "y": 488.140625
+      }
+    ],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": 125.796875,
+      "height": 33.796875,
+      "size": "26px",
+      "text": "建立你的研习本",
+      "width": 327,
+      "x": 24,
+      "y": 92
+    },
+    "scope": "JournalFinal-module__wmkXIW__register",
+    "scroll": 375,
+    "steps": [],
+    "tables": [],
+    "targets": [
+      {
+        "bottom": 355.140625,
+        "height": 48,
+        "name": "账号",
+        "width": 327,
+        "x": 24,
+        "y": 307.140625
+      },
+      {
+        "bottom": 445.640625,
+        "height": 48,
+        "name": "密码",
+        "width": 327,
+        "x": 24,
+        "y": 397.640625
+      },
+      {
+        "bottom": 443.640625,
+        "height": 44,
+        "name": "显示密码",
+        "width": 44,
+        "x": 303,
+        "y": 399.640625
+      },
+      {
+        "bottom": 536.140625,
+        "height": 48,
+        "name": "确认密码",
+        "width": 327,
+        "x": 24,
+        "y": 488.140625
+      },
+      {
+        "bottom": 534.140625,
+        "height": 44,
+        "name": "显示密码",
+        "width": 44,
+        "x": 303,
+        "y": 490.140625
+      },
+      {
+        "bottom": 602.140625,
+        "height": 50,
+        "name": "创建账号",
+        "width": 327,
+        "x": 24,
+        "y": 552.140625
+      },
+      {
+        "bottom": 667.140625,
+        "height": 44,
+        "name": "直接登录",
+        "width": 52,
+        "x": 93,
+        "y": 623.140625
+      }
+    ],
+    "viewport": [
+      375,
+      812
+    ]
+  },
+  {
+    "state": "register-focus",
+    "client": 375,
+    "columns": "327px",
+    "cta": {
+      "bottom": 602.140625,
+      "height": 50,
+      "text": "创建账号",
+      "width": 327,
+      "x": 24,
+      "y": 552.140625
+    },
+    "fields": [
+      {
+        "bottom": 355.140625,
+        "disabled": false,
+        "height": 48,
+        "name": "账号",
+        "padding": "9px 14px",
+        "radius": "4px",
+        "type": "text",
+        "width": 327,
+        "x": 24,
+        "y": 307.140625
+      },
+      {
+        "bottom": 445.640625,
+        "disabled": false,
+        "height": 48,
+        "name": "密码",
+        "padding": "9px 52px 9px 14px",
+        "radius": "4px",
+        "type": "password",
+        "width": 327,
+        "x": 24,
+        "y": 397.640625
+      },
+      {
+        "bottom": 536.140625,
+        "disabled": false,
+        "height": 48,
+        "name": "确认密码",
+        "padding": "9px 52px 9px 14px",
+        "radius": "4px",
+        "type": "password",
+        "width": 327,
+        "x": 24,
+        "y": 488.140625
+      }
+    ],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": 125.796875,
+      "height": 33.796875,
+      "size": "26px",
+      "text": "建立你的研习本",
+      "width": 327,
+      "x": 24,
+      "y": 92
+    },
+    "scope": "JournalFinal-module__wmkXIW__register",
+    "scroll": 375,
+    "steps": [],
+    "tables": [],
+    "targets": [
+      {
+        "bottom": 355.140625,
+        "height": 48,
+        "name": "账号",
+        "width": 327,
+        "x": 24,
+        "y": 307.140625
+      },
+      {
+        "bottom": 445.640625,
+        "height": 48,
+        "name": "密码",
+        "width": 327,
+        "x": 24,
+        "y": 397.640625
+      },
+      {
+        "bottom": 443.640625,
+        "height": 44,
+        "name": "显示密码",
+        "width": 44,
+        "x": 303,
+        "y": 399.640625
+      },
+      {
+        "bottom": 536.140625,
+        "height": 48,
+        "name": "确认密码",
+        "width": 327,
+        "x": 24,
+        "y": 488.140625
+      },
+      {
+        "bottom": 534.140625,
+        "height": 44,
+        "name": "显示密码",
+        "width": 44,
+        "x": 303,
+        "y": 490.140625
+      },
+      {
+        "bottom": 602.140625,
+        "height": 50,
+        "name": "创建账号",
+        "width": 327,
+        "x": 24,
+        "y": 552.140625
+      },
+      {
+        "bottom": 667.140625,
+        "height": 44,
+        "name": "直接登录",
+        "width": 52,
+        "x": 93,
+        "y": 623.140625
+      }
+    ],
+    "viewport": [
+      375,
+      812
+    ]
+  },
+  {
+    "state": "admin-list",
+    "client": 1440,
+    "columns": null,
+    "cta": {
+      "bottom": 0,
+      "height": 0,
+      "text": "确认删除",
+      "width": 0,
+      "x": 0,
+      "y": 0
+    },
+    "fields": [],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": 89.59375,
+      "height": 41.59375,
+      "size": "32px",
+      "text": "账号管理",
+      "width": 640,
+      "x": 64,
+      "y": 48
+    },
+    "scope": "panel form-panel JournalFinal-module__wmkXIW__admin",
+    "scroll": 1440,
+    "steps": [],
+    "tables": [
+      {
+        "client": 1312,
+        "left": 0,
+        "overflow": "auto",
+        "scroll": 1312,
+        "tabIndex": 0
+      }
+    ],
+    "targets": [
+      {
+        "bottom": 128.296875,
+        "height": 48,
+        "name": "返回研习本",
+        "width": 99,
+        "x": 1277,
+        "y": 80.296875
+      },
+      {
+        "bottom": 382.84375,
+        "height": 194.25,
+        "name": "注册用户列表，可横向滚动",
+        "width": 1312,
+        "x": 64,
+        "y": 188.59375
+      },
+      {
+        "bottom": 365.84375,
+        "height": 48,
+        "name": "禁用",
+        "width": 60,
+        "x": 936.921875,
+        "y": 317.84375
+      },
+      {
+        "bottom": 365.84375,
+        "height": 48,
+        "name": "删除",
+        "width": 60,
+        "x": 1000.8125,
+        "y": 317.84375
+      }
+    ],
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  {
+    "state": "admin-list",
+    "client": 375,
+    "columns": null,
+    "cta": {
+      "bottom": 0,
+      "height": 0,
+      "text": "确认删除",
+      "width": 0,
+      "x": 0,
+      "y": 0
+    },
+    "fields": [],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": 61.796875,
+      "height": 33.796875,
+      "size": "26px",
+      "text": "账号管理",
+      "width": 224,
+      "x": 18,
+      "y": 28
+    },
+    "scope": "panel form-panel JournalFinal-module__wmkXIW__admin",
+    "scroll": 375,
+    "steps": [],
+    "tables": [
+      {
+        "client": 339,
+        "left": 0,
+        "overflow": "auto",
+        "scroll": 660,
+        "tabIndex": 0
+      }
+    ],
+    "targets": [
+      {
+        "bottom": 76,
+        "height": 48,
+        "name": "返回研习本",
+        "width": 99,
+        "x": 258,
+        "y": 28
+      },
+      {
+        "bottom": 361.84375,
+        "height": 204.25,
+        "name": "注册用户列表，可横向滚动",
+        "width": 339,
+        "x": 18,
+        "y": 157.59375
+      },
+      {
+        "bottom": 334.84375,
+        "height": 48,
+        "name": "禁用",
+        "width": 60,
+        "x": 463.0625,
+        "y": 286.84375
+      },
+      {
+        "bottom": 334.84375,
+        "height": 48,
+        "name": "删除",
+        "width": 60,
+        "x": 526.953125,
+        "y": 286.84375
+      }
+    ],
+    "viewport": [
+      375,
+      812
+    ]
+  },
+  {
+    "state": "admin-actions",
+    "client": 375,
+    "columns": null,
+    "cta": {
+      "bottom": 0,
+      "height": 0,
+      "text": "确认删除",
+      "width": 0,
+      "x": 0,
+      "y": 0
+    },
+    "fields": [],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": 61.796875,
+      "height": 33.796875,
+      "size": "26px",
+      "text": "账号管理",
+      "width": 224,
+      "x": 18,
+      "y": 28
+    },
+    "scope": "panel form-panel JournalFinal-module__wmkXIW__admin",
+    "scroll": 375,
+    "steps": [],
+    "tables": [
+      {
+        "client": 339,
+        "left": 310,
+        "overflow": "auto",
+        "scroll": 660,
+        "tabIndex": 0
+      }
+    ],
+    "targets": [
+      {
+        "bottom": 76,
+        "height": 48,
+        "name": "返回研习本",
+        "width": 99,
+        "x": 258,
+        "y": 28
+      },
+      {
+        "bottom": 351.84375,
+        "height": 194.25,
+        "name": "注册用户列表，可横向滚动",
+        "width": 339,
+        "x": 18,
+        "y": 157.59375
+      },
+      {
+        "bottom": 334.84375,
+        "height": 48,
+        "name": "禁用",
+        "width": 60,
+        "x": 153.0625,
+        "y": 286.84375
+      },
+      {
+        "bottom": 334.84375,
+        "height": 48,
+        "name": "删除",
+        "width": 60,
+        "x": 216.953125,
+        "y": 286.84375
+      }
+    ],
+    "viewport": [
+      375,
+      812
+    ]
+  },
+  {
+    "state": "restore-steps",
+    "client": 1425,
+    "columns": null,
+    "cta": null,
+    "fields": [
+      {
+        "bottom": 823.296875,
+        "disabled": false,
+        "height": 48,
+        "name": "选择完整备份 ZIP",
+        "padding": "0px 8px 0px 0px",
+        "radius": "4px",
+        "type": "file",
+        "width": 1100,
+        "x": 281,
+        "y": 775.296875
+      },
+      {
+        "bottom": 920.796875,
+        "disabled": false,
+        "height": 48,
+        "name": "验证当前密码",
+        "padding": "9px 52px 9px 12px",
+        "radius": "4px",
+        "type": "password",
+        "width": 1100,
+        "x": 281,
+        "y": 872.796875
+      }
+    ],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": 463.984375,
+      "height": 28.59375,
+      "size": "22px",
+      "text": "备份状态与恢复向导",
+      "width": 1100,
+      "x": 281,
+      "y": 435.390625
+    },
+    "scope": "panel form-panel JournalFinal-module__wmkXIW__restore",
+    "scroll": 1425,
+    "steps": [
+      {
+        "current": "step",
+        "text": "1 · 选择备份"
+      },
+      {
+        "current": null,
+        "text": "2 · 隔离校验"
+      },
+      {
+        "current": null,
+        "text": "3 · 打开独立空间"
+      }
+    ],
+    "tables": [],
+    "targets": [
+      {
+        "bottom": 638.421875,
+        "height": 44.5,
+        "name": "从完整备份恢复到独立空间",
+        "width": 1100,
+        "x": 281,
+        "y": 593.921875
+      },
+      {
+        "bottom": 823.296875,
+        "height": 48,
+        "name": "选择完整备份 ZIP",
+        "width": 1100,
+        "x": 281,
+        "y": 775.296875
+      },
+      {
+        "bottom": 920.796875,
+        "height": 48,
+        "name": "验证当前密码",
+        "width": 1100,
+        "x": 281,
+        "y": 872.796875
+      },
+      {
+        "bottom": 918.796875,
+        "height": 44,
+        "name": "显示密码",
+        "width": 44,
+        "x": 1333,
+        "y": 874.796875
+      },
+      {
+        "bottom": 976.796875,
+        "height": 48,
+        "name": "校验并预览恢复内容",
+        "width": 151,
+        "x": 281,
+        "y": 928.796875
+      },
+      {
+        "bottom": 1058.296875,
+        "height": 44.5,
+        "name": "管理已有恢复工作区（0）",
+        "width": 1100,
+        "x": 281,
+        "y": 1013.796875
+      }
+    ],
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  {
+    "state": "restore-form",
+    "client": 1440,
+    "columns": null,
+    "cta": null,
+    "fields": [
+      {
+        "bottom": 418.109375,
+        "disabled": false,
+        "height": 48,
+        "name": "选择完整备份 ZIP",
+        "padding": "0px 8px 0px 0px",
+        "radius": "4px",
+        "type": "file",
+        "width": 1115,
+        "x": 281,
+        "y": 370.109375
+      },
+      {
+        "bottom": 515.609375,
+        "disabled": false,
+        "height": 48,
+        "name": "验证当前密码",
+        "padding": "9px 52px 9px 12px",
+        "radius": "4px",
+        "type": "password",
+        "width": 1115,
+        "x": 281,
+        "y": 467.609375
+      }
+    ],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": 83.984375,
+      "height": 28.59375,
+      "size": "22px",
+      "text": "备份状态与恢复向导",
+      "width": 1115,
+      "x": 281,
+      "y": 55.390625
+    },
+    "scope": "panel form-panel JournalFinal-module__wmkXIW__restore",
+    "scroll": 1440,
+    "steps": [
+      {
+        "current": "step",
+        "text": "1 · 选择备份"
+      },
+      {
+        "current": null,
+        "text": "2 · 隔离校验"
+      },
+      {
+        "current": null,
+        "text": "3 · 打开独立空间"
+      }
+    ],
+    "tables": [],
+    "targets": [
+      {
+        "bottom": 258.421875,
+        "height": 44.5,
+        "name": "从完整备份恢复到独立空间",
+        "width": 1100,
+        "x": 281,
+        "y": 213.921875
+      },
+      {
+        "bottom": 443.296875,
+        "height": 48,
+        "name": "选择完整备份 ZIP",
+        "width": 1100,
+        "x": 281,
+        "y": 395.296875
+      },
+      {
+        "bottom": 540.796875,
+        "height": 48,
+        "name": "验证当前密码",
+        "width": 1100,
+        "x": 281,
+        "y": 492.796875
+      },
+      {
+        "bottom": 538.796875,
+        "height": 44,
+        "name": "显示密码",
+        "width": 44,
+        "x": 1333,
+        "y": 494.796875
+      },
+      {
+        "bottom": 596.796875,
+        "height": 48,
+        "name": "校验并预览恢复内容",
+        "width": 151,
+        "x": 281,
+        "y": 548.796875
+      },
+      {
+        "bottom": 678.296875,
+        "height": 44.5,
+        "name": "管理已有恢复工作区（0）",
+        "width": 1100,
+        "x": 281,
+        "y": 633.796875
+      }
+    ],
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  {
+    "state": "restore-steps",
+    "client": 360,
+    "columns": null,
+    "cta": null,
+    "fields": [
+      {
+        "bottom": 851.5,
+        "disabled": false,
+        "height": 48,
+        "name": "选择完整备份 ZIP",
+        "padding": "0px 8px 0px 0px",
+        "radius": "4px",
+        "type": "file",
+        "width": 324,
+        "x": 18,
+        "y": 803.5
+      },
+      {
+        "bottom": 949,
+        "disabled": false,
+        "height": 48,
+        "name": "验证当前密码",
+        "padding": "9px 52px 9px 12px",
+        "radius": "4px",
+        "type": "password",
+        "width": 324,
+        "x": 18,
+        "y": 901
+      }
+    ],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": 420.625,
+      "height": 28.59375,
+      "size": "22px",
+      "text": "备份状态与恢复向导",
+      "width": 324,
+      "x": 18,
+      "y": 392.03125
+    },
+    "scope": "panel form-panel JournalFinal-module__wmkXIW__restore",
+    "scroll": 360,
+    "steps": [
+      {
+        "current": "step",
+        "text": "1 · 选择备份"
+      },
+      {
+        "current": null,
+        "text": "2 · 隔离校验"
+      },
+      {
+        "current": null,
+        "text": "3 · 打开独立空间"
+      }
+    ],
+    "tables": [],
+    "targets": [
+      {
+        "bottom": 616.25,
+        "height": 44.5,
+        "name": "从完整备份恢复到独立空间",
+        "width": 324,
+        "x": 18,
+        "y": 571.75
+      },
+      {
+        "bottom": 851.5,
+        "height": 48,
+        "name": "选择完整备份 ZIP",
+        "width": 324,
+        "x": 18,
+        "y": 803.5
+      },
+      {
+        "bottom": 949,
+        "height": 48,
+        "name": "验证当前密码",
+        "width": 324,
+        "x": 18,
+        "y": 901
+      },
+      {
+        "bottom": 947,
+        "height": 44,
+        "name": "显示密码",
+        "width": 44,
+        "x": 294,
+        "y": 903
+      },
+      {
+        "bottom": 1005,
+        "height": 48,
+        "name": "校验并预览恢复内容",
+        "width": 151,
+        "x": 18,
+        "y": 957
+      },
+      {
+        "bottom": 1086.5,
+        "height": 44.5,
+        "name": "管理已有恢复工作区（0）",
+        "width": 324,
+        "x": 18,
+        "y": 1042
+      }
+    ],
+    "viewport": [
+      375,
+      812
+    ]
+  },
+  {
+    "state": "restore-form",
+    "client": 375,
+    "columns": null,
+    "cta": null,
+    "fields": [
+      {
+        "bottom": 467.71875,
+        "disabled": false,
+        "height": 48,
+        "name": "选择完整备份 ZIP",
+        "padding": "0px 8px 0px 0px",
+        "radius": "4px",
+        "type": "file",
+        "width": 339,
+        "x": 18,
+        "y": 419.71875
+      },
+      {
+        "bottom": 565.21875,
+        "disabled": false,
+        "height": 48,
+        "name": "验证当前密码",
+        "padding": "9px 52px 9px 12px",
+        "radius": "4px",
+        "type": "password",
+        "width": 339,
+        "x": 18,
+        "y": 517.21875
+      }
+    ],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": 36.84375,
+      "height": 28.59375,
+      "size": "22px",
+      "text": "备份状态与恢复向导",
+      "width": 339,
+      "x": 18,
+      "y": 8.25
+    },
+    "scope": "panel form-panel JournalFinal-module__wmkXIW__restore",
+    "scroll": 375,
+    "steps": [
+      {
+        "current": "step",
+        "text": "1 · 选择备份"
+      },
+      {
+        "current": null,
+        "text": "2 · 隔离校验"
+      },
+      {
+        "current": null,
+        "text": "3 · 打开独立空间"
+      }
+    ],
+    "tables": [],
+    "targets": [
+      {
+        "bottom": 232.25,
+        "height": 44.5,
+        "name": "从完整备份恢复到独立空间",
+        "width": 324,
+        "x": 18,
+        "y": 187.75
+      },
+      {
+        "bottom": 467.5,
+        "height": 48,
+        "name": "选择完整备份 ZIP",
+        "width": 324,
+        "x": 18,
+        "y": 419.5
+      },
+      {
+        "bottom": 565,
+        "height": 48,
+        "name": "验证当前密码",
+        "width": 324,
+        "x": 18,
+        "y": 517
+      },
+      {
+        "bottom": 563,
+        "height": 44,
+        "name": "显示密码",
+        "width": 44,
+        "x": 294,
+        "y": 519
+      },
+      {
+        "bottom": 621,
+        "height": 48,
+        "name": "校验并预览恢复内容",
+        "width": 151,
+        "x": 18,
+        "y": 573
+      },
+      {
+        "bottom": 702.5,
+        "height": 44.5,
+        "name": "管理已有恢复工作区（0）",
+        "width": 324,
+        "x": 18,
+        "y": 658
+      }
+    ],
+    "viewport": [
+      375,
+      812
+    ]
+  },
+  {
+    "state": "restore-workspaces",
+    "client": 1425,
+    "columns": null,
+    "cta": null,
+    "fields": [
+      {
+        "bottom": 237.296875,
+        "disabled": false,
+        "height": 48,
+        "name": "选择完整备份 ZIP",
+        "padding": "0px 8px 0px 0px",
+        "radius": "4px",
+        "type": "file",
+        "width": 1100,
+        "x": 281,
+        "y": 189.296875
+      },
+      {
+        "bottom": 334.796875,
+        "disabled": false,
+        "height": 48,
+        "name": "验证当前密码",
+        "padding": "9px 52px 9px 12px",
+        "radius": "4px",
+        "type": "password",
+        "width": 1100,
+        "x": 281,
+        "y": 286.796875
+      }
+    ],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": -122.015625,
+      "height": 28.59375,
+      "size": "22px",
+      "text": "备份状态与恢复向导",
+      "width": 1100,
+      "x": 281,
+      "y": -150.609375
+    },
+    "scope": "panel form-panel JournalFinal-module__wmkXIW__restore",
+    "scroll": 1425,
+    "steps": [
+      {
+        "current": "step",
+        "text": "1 · 选择备份"
+      },
+      {
+        "current": null,
+        "text": "2 · 隔离校验"
+      },
+      {
+        "current": null,
+        "text": "3 · 打开独立空间"
+      }
+    ],
+    "tables": [],
+    "targets": [
+      {
+        "bottom": 52.421875,
+        "height": 44.5,
+        "name": "从完整备份恢复到独立空间",
+        "width": 1100,
+        "x": 281,
+        "y": 7.921875
+      },
+      {
+        "bottom": 237.296875,
+        "height": 48,
+        "name": "选择完整备份 ZIP",
+        "width": 1100,
+        "x": 281,
+        "y": 189.296875
+      },
+      {
+        "bottom": 334.796875,
+        "height": 48,
+        "name": "验证当前密码",
+        "width": 1100,
+        "x": 281,
+        "y": 286.796875
+      },
+      {
+        "bottom": 332.796875,
+        "height": 44,
+        "name": "显示密码",
+        "width": 44,
+        "x": 1333,
+        "y": 288.796875
+      },
+      {
+        "bottom": 390.796875,
+        "height": 48,
+        "name": "校验并预览恢复内容",
+        "width": 151,
+        "x": 281,
+        "y": 342.796875
+      },
+      {
+        "bottom": 472.296875,
+        "height": 44.5,
+        "name": "管理已有恢复工作区（0）",
+        "width": 1100,
+        "x": 281,
+        "y": 427.796875
+      },
+      {
+        "bottom": 555.484375,
+        "height": 44,
+        "name": "刷新工作区列表",
+        "width": 103,
+        "x": 281,
+        "y": 511.484375
+      }
+    ],
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  {
+    "state": "restore-workspaces",
+    "client": 360,
+    "columns": null,
+    "cta": null,
+    "fields": [
+      {
+        "bottom": 193.5,
+        "disabled": false,
+        "height": 48,
+        "name": "选择完整备份 ZIP",
+        "padding": "0px 8px 0px 0px",
+        "radius": "4px",
+        "type": "file",
+        "width": 324,
+        "x": 18,
+        "y": 145.5
+      },
+      {
+        "bottom": 291,
+        "disabled": false,
+        "height": 48,
+        "name": "验证当前密码",
+        "padding": "9px 52px 9px 12px",
+        "radius": "4px",
+        "type": "password",
+        "width": 324,
+        "x": 18,
+        "y": 243
+      }
+    ],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": -237.375,
+      "height": 28.59375,
+      "size": "22px",
+      "text": "备份状态与恢复向导",
+      "width": 324,
+      "x": 18,
+      "y": -265.96875
+    },
+    "scope": "panel form-panel JournalFinal-module__wmkXIW__restore",
+    "scroll": 360,
+    "steps": [
+      {
+        "current": "step",
+        "text": "1 · 选择备份"
+      },
+      {
+        "current": null,
+        "text": "2 · 隔离校验"
+      },
+      {
+        "current": null,
+        "text": "3 · 打开独立空间"
+      }
+    ],
+    "tables": [],
+    "targets": [
+      {
+        "bottom": -41.75,
+        "height": 44.5,
+        "name": "从完整备份恢复到独立空间",
+        "width": 324,
+        "x": 18,
+        "y": -86.25
+      },
+      {
+        "bottom": 193.5,
+        "height": 48,
+        "name": "选择完整备份 ZIP",
+        "width": 324,
+        "x": 18,
+        "y": 145.5
+      },
+      {
+        "bottom": 291,
+        "height": 48,
+        "name": "验证当前密码",
+        "width": 324,
+        "x": 18,
+        "y": 243
+      },
+      {
+        "bottom": 289,
+        "height": 44,
+        "name": "显示密码",
+        "width": 44,
+        "x": 294,
+        "y": 245
+      },
+      {
+        "bottom": 347,
+        "height": 48,
+        "name": "校验并预览恢复内容",
+        "width": 151,
+        "x": 18,
+        "y": 299
+      },
+      {
+        "bottom": 428.5,
+        "height": 44.5,
+        "name": "管理已有恢复工作区（0）",
+        "width": 324,
+        "x": 18,
+        "y": 384
+      },
+      {
+        "bottom": 562.0625,
+        "height": 44,
+        "name": "刷新工作区列表",
+        "width": 103,
+        "x": 18,
+        "y": 518.0625
+      }
+    ],
+    "viewport": [
+      375,
+      812
+    ]
+  }
+]

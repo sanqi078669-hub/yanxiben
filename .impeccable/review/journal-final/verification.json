@@ -1,0 +1,293 @@
+{
+  "baseline": "867331d",
+  "branch": "ui/style-v2",
+  "behaviorSourceComparison": {
+    "src/components/Register.tsx": {
+      "handlers": true,
+      "hooks": true,
+      "guards": true,
+      "inputAndDisabledRules": true,
+      "handlerCount": 4
+    },
+    "src/components/RestoreWizard.tsx": {
+      "handlers": true,
+      "hooks": true,
+      "guards": true,
+      "inputAndDisabledRules": true,
+      "handlerCount": 9
+    },
+    "src/components/AdminUsers.tsx": {
+      "handlers": true,
+      "hooks": true,
+      "guards": true,
+      "inputAndDisabledRules": true,
+      "handlerCount": 6
+    },
+    "src/app/admin/page.tsx": {
+      "handlers": true,
+      "hooks": true,
+      "guards": true,
+      "inputAndDisabledRules": true,
+      "handlerCount": 0
+    }
+  },
+  "protectedFilesUnchanged": true,
+  "protectedChanges": "",
+  "scope": "New CSS Module only; Register, RestoreWizard, AdminUsers and admin page receive local styles. Restore step bar reads existing state only. No journal/global/Login stylesheet changes.",
+  "fonts": {
+    "prior": 658,
+    "current": 670,
+    "oldCharactersPreserved": true,
+    "bytes": 247072,
+    "oflUnchanged": true
+  },
+  "checks": {
+    "tsc": "pass",
+    "lint": "pass",
+    "diffCheck": "pass"
+  },
+  "limits": [
+    "Current admin list contains owner only; all owner mutation actions remain disabled. No mutation or delete dialog bypass.",
+    "Current admin UI has no reset action or capacity metric; only existing slots/records/actions restyled.",
+    "Restore opens isolated space, does not overwrite live data; original validation, reauth and confirmation unchanged.",
+    "Only local blank password visibility and section expansion exercised; busy/error/completion states source checked only."
+  ],
+  "measurements": {
+    "states": 12,
+    "noPageOverflow": true,
+    "fontsLoaded": true,
+    "smallTargets": [],
+    "smallFields": [],
+    "registerCta": [
+      {
+        "viewport": [
+          1440,
+          900
+        ],
+        "cta": {
+          "bottom": 639.171875,
+          "height": 50,
+          "text": "创建账号",
+          "width": 512.265625,
+          "x": 863.71875,
+          "y": 589.171875
+        },
+        "visible": true,
+        "columns": "734.719px 577.266px"
+      },
+      {
+        "viewport": [
+          375,
+          812
+        ],
+        "cta": {
+          "bottom": 602.140625,
+          "height": 50,
+          "text": "创建账号",
+          "width": 327,
+          "x": 24,
+          "y": 552.140625
+        },
+        "visible": true,
+        "columns": "327px"
+      }
+    ],
+    "adminScroll": [
+      {
+        "state": "admin-list",
+        "viewport": [
+          1440,
+          900
+        ],
+        "tables": [
+          {
+            "client": 1312,
+            "left": 0,
+            "overflow": "auto",
+            "scroll": 1312,
+            "tabIndex": 0
+          }
+        ]
+      },
+      {
+        "state": "admin-list",
+        "viewport": [
+          375,
+          812
+        ],
+        "tables": [
+          {
+            "client": 339,
+            "left": 0,
+            "overflow": "auto",
+            "scroll": 660,
+            "tabIndex": 0
+          }
+        ]
+      },
+      {
+        "state": "admin-actions",
+        "viewport": [
+          375,
+          812
+        ],
+        "tables": [
+          {
+            "client": 339,
+            "left": 310,
+            "overflow": "auto",
+            "scroll": 660,
+            "tabIndex": 0
+          }
+        ]
+      }
+    ],
+    "restoreFile": [
+      {
+        "viewport": [
+          1440,
+          900
+        ],
+        "fields": [
+          {
+            "bottom": 418.109375,
+            "disabled": false,
+            "height": 48,
+            "name": "选择完整备份 ZIP",
+            "padding": "0px 8px 0px 0px",
+            "radius": "4px",
+            "type": "file",
+            "width": 1115,
+            "x": 281,
+            "y": 370.109375
+          },
+          {
+            "bottom": 515.609375,
+            "disabled": false,
+            "height": 48,
+            "name": "验证当前密码",
+            "padding": "9px 52px 9px 12px",
+            "radius": "4px",
+            "type": "password",
+            "width": 1115,
+            "x": 281,
+            "y": 467.609375
+          }
+        ]
+      },
+      {
+        "viewport": [
+          375,
+          812
+        ],
+        "fields": [
+          {
+            "bottom": 467.71875,
+            "disabled": false,
+            "height": 48,
+            "name": "选择完整备份 ZIP",
+            "padding": "0px 8px 0px 0px",
+            "radius": "4px",
+            "type": "file",
+            "width": 339,
+            "x": 18,
+            "y": 419.71875
+          },
+          {
+            "bottom": 565.21875,
+            "disabled": false,
+            "height": 48,
+            "name": "验证当前密码",
+            "padding": "9px 52px 9px 12px",
+            "radius": "4px",
+            "type": "password",
+            "width": 339,
+            "x": 18,
+            "y": 517.21875
+          }
+        ]
+      }
+    ]
+  },
+  "screenshots": [
+    {
+      "name": "admin-actions-375.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "admin-list-1440x900.jpg",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "admin-list-375x812.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "register-first-1440x900.jpg",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "register-first-375x812.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "register-focus-375.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "restore-form-1440x900.jpg",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "restore-form-375x812.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "restore-steps-1440x900.jpg",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "restore-steps-375x812.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "restore-workspaces-1440x900.jpg",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "restore-workspaces-375x812.jpg",
+      "width": 375,
+      "height": 812
+    }
+  ],
+  "screenshotDimensionsMatch": true,
+  "captureNotes": "All 12 captures opened individually and valid. Register recaptured after resetting inherited global main minimum height. Temporary viewport reset. Local admin table scroll allowed; no document horizontal overflow.",
+  "styleIsolation": {
+    "file": "src/components/JournalFinal.module.css",
+    "rules": 97,
+    "noLocalSelectorRules": [],
+    "newCustomProperties": [],
+    "sameFontAlias": "Yanxiben Journal UI"
+  },
+  "changedFiles": [
+    "src/components/Register.tsx",
+    "src/components/RestoreWizard.tsx",
+    "src/components/AdminUsers.tsx",
+    "src/app/admin/page.tsx",
+    "src/components/JournalFinal.module.css",
+    "public/fonts/README.md",
+    "public/fonts/journal-serif.source.json",
+    "public/fonts/journal-serif.woff2"
+  ]
+}

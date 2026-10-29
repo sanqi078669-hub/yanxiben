@@ -2,6 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 import { api, request } from "../lib/request";
 import PasswordInput from "./PasswordInput";
+import styles from "./JournalFinal.module.css";
 type Preview = {
   id: string;
   counts: Record<string, number>;
@@ -61,8 +62,15 @@ export function RestoreWizard() {
     };
   }, []);
   return (
-    <section className="panel form-panel">
+    <section className={`panel form-panel ${styles.restore}`}>
       <h2>备份状态与恢复向导</h2>
+      <ol className={styles.restoreSteps} aria-label="恢复步骤">
+        <li aria-current={!file ? "step" : undefined}>1 · 选择备份</li>
+        <li aria-current={file && !preview ? "step" : undefined}>
+          2 · 隔离校验
+        </li>
+        <li aria-current={preview ? "step" : undefined}>3 · 打开独立空间</li>
+      </ol>
       <p>
         上次生成完整备份：{last ? new Date(last).toLocaleString() : "尚无记录"}
         。生成记录不代表 ZIP 已保存到安全位置，请核对下载文件。
@@ -220,7 +228,7 @@ export function RestoreWizard() {
       )}
       <details>
         <summary>管理已有恢复工作区（{spaces.length}）</summary>
-        <p>
+        <p className={styles.warning}>
           未启动的预览保留 7
           天，在下次校验时清理；启动过的空间仅手动删除。删除只影响选定的隔离目录，请先导出需要保留的学习内容。
         </p>
@@ -271,7 +279,7 @@ export function RestoreWizard() {
               {space.running ? "停止服务，保留数据" : "启动此恢复空间"}
             </button>
             <button
-              className="text-button"
+              className={`text-button ${styles.destructive}`}
               disabled={busy || space.running}
               onClick={async () => {
                 if (

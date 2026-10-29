@@ -6,6 +6,7 @@ import Link from "next/link";
 import { api, RequestError } from "@/lib/request";
 import AdminUsers from "@/components/AdminUsers";
 import { ErrorBox } from "@/components/ui";
+import styles from "@/components/JournalFinal.module.css";
 
 export default function AdminPage() {
   const router = useRouter();
@@ -37,15 +38,15 @@ export default function AdminPage() {
   }, [router]);
   if (status === "loading")
     return (
-      <div className="loading" role="status">
+      <div className={`loading ${styles.adminGate}`} role="status">
         正在加载…
       </div>
     );
   if (status === "unauth") return null;
   if (status !== "ok")
     return (
-      <div className="login-page">
-        <div className="login-form">
+      <div className={styles.adminGate}>
+        <div className={styles.gateContent}>
           <h2>{status === "forbidden" ? "无权访问" : "暂时无法加载"}</h2>
           {status === "forbidden" ? (
             <p className="muted">此页面仅限管理员访问。</p>
@@ -59,7 +60,7 @@ export default function AdminPage() {
       </div>
     );
   return (
-    <main className="admin-page">
+    <main className={`admin-page ${styles.adminPage}`}>
       <AdminUsers />
     </main>
   );
