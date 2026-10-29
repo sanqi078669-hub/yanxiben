@@ -2418,3 +2418,20 @@ footer span {
 .login-entry .password-field input {
   padding-right: 52px;
 }
+
+/* Today-only task text; shared cards, badges and app navigation keep defaults. */
+.today-stats .stat > span {
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+}
+.today-stats .stat p,
+.today-stats .stat strong small {
+  color: var(--muted);
+  font-size: 12px;
+}
+.today-recent .entry-row > .badge {
+  color: var(--green);
+  font-size: 12px;
+  flex-shrink: 0;
+}

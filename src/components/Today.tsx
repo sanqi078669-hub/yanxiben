@@ -105,7 +105,7 @@ export default function Today({ profile }: { profile: typeof defaults }) {
         </Link>
       </div>
       <ErrorBox text={error || dictionaryError} />
-      <div className="stats">
+      <div className="stats today-stats">
         <Link href="/review" className="stat">
           <span>
             待复习 <RotateCcw size={17} />
@@ -192,7 +192,7 @@ export default function Today({ profile }: { profile: typeof defaults }) {
         </section>
       </div>
       <div className="dashboard-bottom">
-        <section className="panel recent">
+        <section className="panel recent today-recent">
           <div className="section-title">
             <h2>最近留下的思考</h2>
             <Link href="/library">
