@@ -2447,3 +2447,23 @@ footer span {
   font-size: 12px;
   flex-shrink: 0;
 }
+
+.detail-page-heading .back-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--muted);
+  /* Use the existing heading gap for the larger hit area. */
+  margin: -13px 0 3px;
+}
+.detail-reading .detail-overdue {
+  display: block;
+  margin-top: 4px;
+  color: var(--green);
+  font-weight: 600;
+}
+.detail-reading .detail-plan-toggle {
+  min-height: 44px;
+}

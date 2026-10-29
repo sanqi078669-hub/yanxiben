@@ -21,7 +21,18 @@ import {
 import { TypeIcon, Badge, Empty, ErrorBox } from "./ui";
 import { useLoad } from "./useLoad";
 import { DictionaryLabel, useDictionary } from "./DictionaryContext";
+import { localDate } from "../modules/review/schedule";
 type Any = Record<string, any>;
+
+function overdueDaysForDate(dueOn: string, timezone: string, now = new Date()) {
+  const today = localDate(timezone, now);
+  return Math.max(
+    0,
+    (Date.parse(today + "T00:00:00Z") - Date.parse(dueOn + "T00:00:00Z")) /
+      86_400_000,
+  );
+}
+
 export default function Detail({
   id,
   notify,
@@ -42,6 +53,7 @@ export default function Detail({
     [relation, setRelation] = useState("SIMILAR"),
     [actionError, setActionError] = useState("");
   const { data: choices } = useLoad("entries?limit=100");
+  const { data: settings } = useLoad<{ timezone: string }>("settings");
   const action = async (fn: () => Promise<unknown>, message: string) => {
     setActionError("");
     try {
@@ -59,6 +71,11 @@ export default function Detail({
         {!error && <div className="loading">正在读取思考…</div>}
       </>
     );
+  const contentPanelId = "entry-content-" + id;
+  const overdueDays =
+    e.review && settings
+      ? overdueDaysForDate(e.review.due_on, settings.timezone)
+      : 0;
   return (
     <>
       <div className="page-heading detail-page-heading">
@@ -107,18 +124,24 @@ export default function Detail({
             <div className="tabs">
               <button
                 className={tab === "analysis" ? "selected" : ""}
+                aria-pressed={tab === "analysis"}
+                aria-controls={contentPanelId}
                 onClick={() => setTab("analysis")}
               >
                 分析与理解
               </button>
               <button
                 className={tab === "history" ? "selected" : ""}
+                aria-pressed={tab === "history"}
+                aria-controls={contentPanelId}
                 onClick={() => setTab("history")}
               >
                 复习历史 · {e.history.length}
               </button>
               <button
                 className={tab === "versions" ? "selected" : ""}
+                aria-pressed={tab === "versions"}
+                aria-controls={contentPanelId}
                 onClick={async () => {
                   setTab("versions");
                   try {
@@ -131,34 +154,36 @@ export default function Detail({
                 内容版本
               </button>
             </div>
-            {tab === "analysis" ? (
-              <Analysis e={e as Entry} />
-            ) : tab === "history" ? (
-              e.history.length ? (
-                e.history.map((h: Any) => <HistoryRow key={h.id} h={h} />)
+            <div id={contentPanelId}>
+              {tab === "analysis" ? (
+                <Analysis e={e as Entry} />
+              ) : tab === "history" ? (
+                e.history.length ? (
+                  e.history.map((h: Any) => <HistoryRow key={h.id} h={h} />)
+                ) : (
+                  <Empty
+                    title="还没有练习历史"
+                    text="从一次独立作答开始检验理解。"
+                  />
+                )
+              ) : revisions.length ? (
+                revisions.map((r) => (
+                  <details className="revision" key={r.id}>
+                    <summary>
+                      版本 {r.version} ·{" "}
+                      {new Date(r.created_at).toLocaleString("zh-CN")} ·{" "}
+                      {r.reason}
+                    </summary>
+                    <RevisionContent raw={r.snapshot} />
+                  </details>
+                ))
               ) : (
                 <Empty
-                  title="还没有练习历史"
-                  text="从一次独立作答开始检验理解。"
+                  title="还没有历史快照"
+                  text="手动保存及重要操作时会保留历史版本。"
                 />
-              )
-            ) : revisions.length ? (
-              revisions.map((r) => (
-                <details className="revision" key={r.id}>
-                  <summary>
-                    版本 {r.version} ·{" "}
-                    {new Date(r.created_at).toLocaleString("zh-CN")} ·{" "}
-                    {r.reason}
-                  </summary>
-                  <RevisionContent raw={r.snapshot} />
-                </details>
-              ))
-            ) : (
-              <Empty
-                title="还没有历史快照"
-                text="手动保存及重要操作时会保留历史版本。"
-              />
-            )}
+              )}
+            </div>
           </section>
         </div>
         <aside>
@@ -170,6 +195,11 @@ export default function Detail({
                   {e.review.stage === "PAUSED"
                     ? "计划已暂停"
                     : "下次到期：" + e.review.due_on}
+                  {overdueDays > 0 && (
+                    <span className="detail-overdue">
+                      已逾期 {overdueDays} 天
+                    </span>
+                  )}
                 </p>
                 <Badge>
                   {
@@ -183,29 +213,6 @@ export default function Detail({
                     )[e.review.stage]
                   }
                 </Badge>
-                <button
-                  className="button outline full"
-                  onClick={() =>
-                    action(
-                      () =>
-                        api(
-                          "review-items/" + e.review.id,
-                          {
-                            expectedVersion: e.review.version,
-                            paused: e.review.stage !== "PAUSED",
-                          },
-                          "PATCH",
-                        ),
-                      e.review.stage === "PAUSED"
-                        ? "已恢复，保留原到期日，可能已逾期"
-                        : "已暂停计划",
-                    )
-                  }
-                >
-                  {e.review.stage === "PAUSED"
-                    ? "恢复复习计划"
-                    : "暂停复习计划"}
-                </button>
               </>
             ) : (
               <>
@@ -227,13 +234,42 @@ export default function Detail({
               </>
             )}
             <Link
-              className="button outline full"
+              className={e.review ? "button full" : "button outline full"}
               href={"/review?practice=" + id}
             >
               <Target size={17} />
               主动练习
             </Link>
             <p className="tip">主动练习只记录历史，不改变到期日期。</p>
+            {e.review && (
+              <button
+                className="text-button detail-plan-toggle"
+                type="button"
+                onClick={() => {
+                  if (
+                    e.review.stage !== "PAUSED" &&
+                    !confirm("暂停这条记录的复习计划？已有历史和到期日会保留。")
+                  )
+                    return;
+                  return action(
+                    () =>
+                      api(
+                        "review-items/" + e.review.id,
+                        {
+                          expectedVersion: e.review.version,
+                          paused: e.review.stage !== "PAUSED",
+                        },
+                        "PATCH",
+                      ),
+                    e.review.stage === "PAUSED"
+                      ? "已恢复，保留原到期日，可能已逾期"
+                      : "已暂停计划",
+                  );
+                }}
+              >
+                {e.review.stage === "PAUSED" ? "恢复复习计划" : "暂停复习计划"}
+              </button>
+            )}
           </section>
           <section className="panel form-panel">
             <h3>知识之间，也有联系</h3>
