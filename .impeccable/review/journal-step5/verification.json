@@ -1,0 +1,345 @@
+{
+  "baseline": "55cd14f",
+  "branch": "ui/style-v2",
+  "componentLogicUnchangedAfterRemovingVisualWrappersAndCapacityPresentation": {
+    "SettingsPage": true,
+    "KnowledgePage": true,
+    "LibraryPage": true
+  },
+  "existingCssPrefixUnchanged": true,
+  "appendedRuleCount": 100,
+  "outOfScopeSelectors": [],
+  "newVariables": [],
+  "changedFiles": [
+    "public/fonts/README.md",
+    "public/fonts/journal-serif.source.json",
+    "public/fonts/journal-serif.woff2",
+    "src/components/KnowledgePage.tsx",
+    "src/components/LibraryPage.tsx",
+    "src/components/SettingsPage.tsx",
+    "src/components/journal.css"
+  ],
+  "outOfScopeFiles": [],
+  "fonts": {
+    "priorGlyphs": 552,
+    "currentGlyphs": 658,
+    "oldGlyphsPreserved": true,
+    "bytes": 242160,
+    "oflUnchanged": true
+  },
+  "measurements": {
+    "states": 21,
+    "noOverflow": true,
+    "fontLoaded": true,
+    "smallTargets": [],
+    "smallFields": [],
+    "headings": [
+      {
+        "state": "settings-first",
+        "viewport": [
+          1440,
+          900
+        ],
+        "heading": {
+          "bottom": 157.59375,
+          "height": 41.59375,
+          "size": "32px",
+          "text": "按自己的节奏，慢慢来。",
+          "width": 352,
+          "x": 281,
+          "y": 116
+        }
+      },
+      {
+        "state": "settings-first",
+        "viewport": [
+          375,
+          812
+        ],
+        "heading": {
+          "bottom": 193.890625,
+          "height": 33.796875,
+          "size": "26px",
+          "text": "按自己的节奏，慢慢来。",
+          "width": 300,
+          "x": 18,
+          "y": 160.09375
+        }
+      },
+      {
+        "state": "knowledge-first",
+        "viewport": [
+          1440,
+          900
+        ],
+        "heading": {
+          "bottom": 157.59375,
+          "height": 41.59375,
+          "size": "32px",
+          "text": "让知识，彼此连接。",
+          "width": 375,
+          "x": 281,
+          "y": 116
+        }
+      },
+      {
+        "state": "knowledge-first",
+        "viewport": [
+          375,
+          812
+        ],
+        "heading": {
+          "bottom": 123.796875,
+          "height": 33.796875,
+          "size": "26px",
+          "text": "让知识，彼此连接。",
+          "width": 324,
+          "x": 18,
+          "y": 90
+        }
+      },
+      {
+        "state": "trash-first",
+        "viewport": [
+          1440,
+          900
+        ],
+        "heading": {
+          "bottom": 157.59375,
+          "height": 41.59375,
+          "size": "32px",
+          "text": "回收站",
+          "width": 390,
+          "x": 281,
+          "y": 116
+        }
+      },
+      {
+        "state": "trash-first",
+        "viewport": [
+          375,
+          812
+        ],
+        "heading": {
+          "bottom": 123.796875,
+          "height": 33.796875,
+          "size": "26px",
+          "text": "回收站",
+          "width": 324,
+          "x": 18,
+          "y": 90
+        }
+      }
+    ],
+    "nodes": [
+      {
+        "viewport": [
+          1440,
+          900
+        ],
+        "nodes": [
+          {
+            "bottom": 378.421875,
+            "height": 54.578125,
+            "overflow": "visible",
+            "text": "测试知识点-2f测试科目-2d-改（已归档） · 已归档 · 阶段 2f 自定义科目验收节点",
+            "textOverflow": "clip",
+            "whiteSpace": "normal",
+            "width": 665,
+            "x": 311,
+            "y": 323.84375
+          },
+          {
+            "bottom": 466,
+            "height": 54.578125,
+            "overflow": "visible",
+            "text": "极限高等数学",
+            "textOverflow": "clip",
+            "whiteSpace": "normal",
+            "width": 691,
+            "x": 311,
+            "y": 411.421875
+          }
+        ]
+      },
+      {
+        "viewport": [
+          375,
+          812
+        ],
+        "nodes": [
+          {
+            "bottom": 389.265625,
+            "height": 77.96875,
+            "overflow": "visible",
+            "text": "测试知识点-2f测试科目-2d-改（已归档） · 已归档 · 阶段 2f 自定义科目验收节点",
+            "textOverflow": "clip",
+            "whiteSpace": "normal",
+            "width": 294,
+            "x": 48,
+            "y": 311.296875
+          },
+          {
+            "bottom": 532.84375,
+            "height": 54.578125,
+            "overflow": "visible",
+            "text": "极限高等数学",
+            "textOverflow": "clip",
+            "whiteSpace": "normal",
+            "width": 294,
+            "x": 48,
+            "y": 478.265625
+          }
+        ]
+      }
+    ],
+    "capacity": [
+      {
+        "viewport": [
+          1440,
+          900
+        ],
+        "progress": [
+          {
+            "background": "rgb(235, 230, 220)",
+            "max": "",
+            "value": ""
+          }
+        ]
+      },
+      {
+        "viewport": [
+          375,
+          812
+        ],
+        "progress": [
+          {
+            "background": "rgb(235, 230, 220)",
+            "max": "",
+            "value": ""
+          }
+        ]
+      }
+    ]
+  },
+  "checks": {
+    "tsc": "pass",
+    "lint": "pass",
+    "diffCheck": "pass"
+  },
+  "screenshotDimensions": [
+    {
+      "name": "knowledge-expanded-1440x900.jpg",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "knowledge-expanded-375x812.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "knowledge-first-1440x900.jpg",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "knowledge-first-375x812.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "settings-ai-1440x900.jpg",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "settings-ai-375x812.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "settings-dictionary-1440x900.jpg",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "settings-dictionary-375x812.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "settings-dictionary-open-375.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "settings-first-1440x900.jpg",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "settings-first-375x812.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "settings-model-draft-375.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "settings-restore-1440x900.jpg",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "settings-restore-375x812.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "settings-security-1440x900.jpg",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "settings-security-375x812.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "trash-empty-1440x900.jpg",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "trash-empty-375x812.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "trash-first-1440x900.jpg",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "trash-first-375x812.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "trash-records-375.jpg",
+      "width": 375,
+      "height": 812
+    }
+  ],
+  "screenshotDimensionsMatchRequested": true,
+  "captureNotes": "All remaining 21 screenshots individually opened and visually verified after recapture. Optional malformed form-only export discarded. Native keyboard Control_L+Home/End used for reliable document positioning. Browser viewport reset.",
+  "scopeLimits": [
+    "No permanent-delete entry action exists in current Trash UI; no new deletion logic added.",
+    "Capacity table/progress reuse existing bytes/limit; original policy paragraph retained.",
+    "Mobile secondary links preceding SettingsPage belong to existing shell and are unchanged.",
+    "Current knowledge data has two roots; nested tree connectors verified in scoped CSS, not exercised by creating user data."
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "passwordShown": "text",
+  "passwordRestoredAndFocus": {
+    "currentType": "password",
+    "focused": "显示密码",
+    "offset": "3px",
+    "outline": "rgb(40, 98, 76) solid 3px"
+  },
+  "initialKnowledgeDetails": [
+    {
+      "name": "学习诊断与统计（默认折叠）",
+      "open": false
+    },
+    {
+      "name": "知识点别名与同义合并",
+      "open": false
+    }
+  ],
+  "notes": "Read-only page/status loads, local expand/collapse and blank draft open/cancel only. Trash empty produced with search, then cleared. No config/dictionary/node/save/restore/export/delete/reauth/AI generation or test actions."
+}

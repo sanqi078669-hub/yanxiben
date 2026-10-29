@@ -86,7 +86,7 @@ export default function KnowledgePage({
         </div>
       ));
   return (
-    <>
+    <div className="journal-knowledge">
       <div className="page-heading">
         <div>
           <div className="eyebrow">CONNECT THE DOTS</div>
@@ -201,6 +201,6 @@ export default function KnowledgePage({
         <LearningStatistics key={timezone} timezone={timezone} />
       </details>
       <KnowledgeTools nodes={nodes || []} onChange={reload} />
-    </>
+    </div>
   );
 }

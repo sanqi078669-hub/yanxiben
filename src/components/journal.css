@@ -1931,3 +1931,728 @@
     padding: 16px;
   }
 }
+/* Settings, knowledge and trash pilot: only these page scopes may change. */
+.journal-settings,
+.journal-knowledge,
+.journal-trash {
+  color: #242622;
+  font-family: Arial, "Microsoft YaHei", "PingFang SC", sans-serif;
+  overflow-wrap: anywhere;
+}
+
+.journal-settings ::selection,
+.journal-knowledge ::selection,
+.journal-trash ::selection {
+  background: #28624c;
+  color: #fffcf6;
+}
+
+.journal-settings .page-heading h1,
+.journal-knowledge .page-heading h1,
+.journal-trash .page-heading h1 {
+  color: #242622;
+  font-family: "Yanxiben Journal UI", "Songti SC", "SimSun", serif;
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+
+.journal-settings .eyebrow,
+.journal-knowledge .eyebrow,
+.journal-trash .eyebrow {
+  display: none;
+}
+
+.journal-settings .page-heading p,
+.journal-knowledge .page-heading p,
+.journal-trash .page-heading p {
+  color: #66685e;
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+.journal-settings .panel,
+.journal-knowledge .panel,
+.journal-trash .panel {
+  min-width: 0;
+  padding: 24px 0;
+  border: 0;
+  border-top: 1px solid #d9d4c9;
+  border-radius: 2px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.journal-settings h2,
+.journal-knowledge h2,
+.journal-trash .section-title h2,
+.journal-settings h3,
+.journal-knowledge h3 {
+  color: #28624c;
+  font-family: "Yanxiben Journal UI", "Songti SC", "SimSun", serif;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+.journal-settings h3,
+.journal-knowledge h3 {
+  font-size: 18px;
+}
+
+.journal-settings p,
+.journal-knowledge p,
+.journal-trash .filter-panel p {
+  color: #242622;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.journal-settings .muted,
+.journal-settings .tip,
+.journal-settings .dictionary-name .muted,
+.journal-knowledge .muted,
+.journal-knowledge .tip,
+.journal-knowledge small,
+.journal-trash .muted,
+.journal-trash .pagination {
+  color: #66685e;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.journal-settings .button,
+.journal-knowledge .button,
+.journal-trash .button {
+  min-width: 44px;
+  min-height: 48px;
+  padding: 10px 16px;
+  border: 1px solid #28624c;
+  border-radius: 4px;
+  background: #28624c;
+  color: #fffcf6;
+  font-size: 13px;
+  box-shadow: none;
+  transform: none;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+.journal-settings .button.outline,
+.journal-knowledge .button.outline,
+.journal-trash .button.outline {
+  background: transparent;
+  color: #28624c;
+}
+
+.journal-settings .button:hover:not(:disabled),
+.journal-knowledge .button:hover:not(:disabled),
+.journal-trash .button:hover:not(:disabled) {
+  background: #28624c;
+  color: #fffcf6;
+  transform: none;
+  box-shadow: none;
+}
+
+.journal-settings .button.outline:hover:not(:disabled),
+.journal-knowledge .button.outline:hover:not(:disabled),
+.journal-trash .button.outline:hover:not(:disabled) {
+  background: #ebe6dc;
+  color: #28624c;
+}
+
+.journal-settings .text-button,
+.journal-knowledge .text-button,
+.journal-trash .text-button {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  color: #28624c;
+  font-size: 13px;
+}
+
+.journal-settings .text-button:hover:not(:disabled),
+.journal-knowledge .text-button:hover:not(:disabled),
+.journal-trash .text-button:hover:not(:disabled) {
+  background: #ebe6dc;
+}
+
+.journal-settings label,
+.journal-knowledge label {
+  color: #242622;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.75;
+}
+
+.journal-settings input:not([type="checkbox"]):not([type="radio"]),
+.journal-settings select,
+.journal-settings textarea,
+.journal-knowledge input:not([type="checkbox"]):not([type="radio"]),
+.journal-knowledge select,
+.journal-knowledge textarea,
+.journal-trash input,
+.journal-trash select {
+  min-width: 0;
+  max-width: 100%;
+  min-height: 48px;
+  border: 1px solid #d9d4c9;
+  border-radius: 4px;
+  background: #fffcf6;
+  color: #242622;
+  caret-color: #28624c;
+  font-size: 16px;
+  box-shadow: none;
+}
+
+.journal-settings input:not([type="checkbox"]):not([type="radio"]),
+.journal-settings select,
+.journal-knowledge input:not([type="checkbox"]):not([type="radio"]),
+.journal-knowledge select,
+.journal-trash input,
+.journal-trash select {
+  height: 48px;
+  padding: 9px 12px;
+  line-height: 1.5;
+}
+
+.journal-settings textarea,
+.journal-knowledge textarea {
+  padding: 12px;
+  line-height: 1.8;
+}
+
+.journal-settings input::placeholder,
+.journal-settings textarea::placeholder,
+.journal-knowledge input::placeholder,
+.journal-knowledge textarea::placeholder,
+.journal-trash input::placeholder {
+  color: #66685e;
+  opacity: 1;
+}
+
+.journal-settings .password-field input {
+  padding-right: 52px;
+}
+
+.journal-settings .password-toggle {
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+  color: #66685e;
+}
+
+.journal-settings button:disabled,
+.journal-knowledge button:disabled,
+.journal-trash button:disabled {
+  opacity: 1;
+  background: #f5f1e8;
+  color: #66685e;
+  border-color: #d9d4c9;
+}
+
+.journal-settings summary,
+.journal-knowledge summary {
+  min-height: 44px;
+  padding-block: 10px;
+  color: #242622;
+  font-size: 14px;
+  line-height: 1.75;
+  cursor: pointer;
+}
+
+.journal-settings a:not(.button),
+.journal-knowledge p > a {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  color: #28624c;
+}
+
+.journal-settings .checkbox-label,
+.journal-knowledge .checkbox-label {
+  min-height: 44px;
+}
+
+.journal-settings .dictionary-row,
+.journal-settings .ai-profile {
+  padding: 16px 0;
+  border-bottom: 1px solid #d9d4c9;
+  background: transparent;
+}
+
+.journal-settings .dictionary-name strong {
+  display: block;
+  color: #242622;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.6;
+}
+
+.journal-settings .dictionary-actions button,
+.journal-settings .dictionary-create button,
+.journal-settings .dictionary-rename button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+
+.journal-settings .dictionary-archived {
+  border-bottom: 1px solid #d9d4c9;
+}
+
+.journal-settings .dictionary-archived summary {
+  min-height: 44px;
+  color: #66685e;
+}
+
+.journal-settings .dictionary-rename {
+  padding: 12px 0;
+}
+
+.journal-settings .dictionary-inline input,
+.journal-settings .dictionary-inline select {
+  flex: 1 1 160px;
+}
+
+.journal-settings .ai-panel,
+.journal-settings details.panel,
+.journal-knowledge details.panel {
+  padding: 20px 0;
+  border-bottom: 1px solid #d9d4c9;
+}
+
+.journal-settings details > .panel,
+.journal-knowledge details > .panel {
+  margin: 20px 0 0;
+}
+
+.journal-settings .ai-profile span {
+  color: #66685e;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.journal-settings .ai-result,
+.journal-knowledge .ai-result {
+  padding: 20px 0;
+  border-top: 1px solid #d9d4c9;
+  border-radius: 2px;
+  background: transparent;
+}
+
+.journal-settings fieldset,
+.journal-knowledge fieldset {
+  min-width: 0;
+  margin: 20px 0;
+  padding: 16px;
+  border: 1px solid #d9d4c9;
+  border-radius: 2px;
+}
+
+.journal-settings table,
+.journal-knowledge table {
+  width: 100%;
+  border-collapse: collapse;
+  color: #242622;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.journal-settings tr,
+.journal-settings th,
+.journal-settings td,
+.journal-knowledge tr,
+.journal-knowledge th,
+.journal-knowledge td {
+  background: transparent;
+}
+
+.journal-settings th,
+.journal-settings td,
+.journal-knowledge th,
+.journal-knowledge td {
+  padding: 12px;
+  border-bottom: 1px solid #d9d4c9;
+  text-align: left;
+}
+
+.journal-settings thead,
+.journal-knowledge thead {
+  border-top: 1px solid #d9d4c9;
+  border-bottom: 1px solid #d9d4c9;
+  color: #66685e;
+}
+
+.journal-settings .capacity-section table {
+  margin-block: 16px;
+  table-layout: fixed;
+}
+
+.journal-settings .capacity-section td {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.journal-settings .capacity-section progress {
+  display: block;
+  width: 100%;
+  height: 8px;
+  margin-block: 20px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 2px;
+  appearance: none;
+  background: #ebe6dc;
+  color: #28624c;
+  accent-color: #28624c;
+}
+
+.journal-settings .capacity-section progress::-webkit-progress-bar {
+  background: #ebe6dc;
+}
+
+.journal-settings .capacity-section progress::-webkit-progress-value {
+  background: #28624c;
+}
+
+.journal-settings .capacity-section progress::-moz-progress-bar {
+  background: #28624c;
+}
+
+.journal-settings .danger-button,
+.journal-settings details > section.panel > button.text-button:last-child,
+.journal-settings .ai-profile > button:last-child,
+.journal-trash .danger-button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 10px 14px;
+  border: 1px solid #924d3c;
+  border-radius: 4px;
+  background: transparent;
+  color: #924d3c;
+}
+
+.journal-settings .error,
+.journal-settings .error-box,
+.journal-settings [role="alert"],
+.journal-knowledge .error,
+.journal-knowledge .error-box,
+.journal-knowledge [role="alert"],
+.journal-trash .error {
+  padding: 12px 14px;
+  border: 1px solid #924d3c;
+  border-radius: 2px;
+  background: #fffcf6;
+  color: #924d3c;
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.journal-knowledge .knowledge-map {
+  align-items: start;
+}
+
+.journal-knowledge .section-title {
+  min-height: 44px;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.journal-knowledge .badge {
+  padding: 2px 7px;
+  border: 1px solid #d9d4c9;
+  border-radius: 2px;
+  background: transparent;
+  color: #28624c;
+  font-size: 13px;
+}
+
+.journal-knowledge .knowledge-node {
+  min-width: 0;
+  margin-top: 0;
+}
+
+.journal-knowledge .knowledge-node > div {
+  min-width: 0;
+  padding: 16px 0;
+  gap: 12px;
+  border-bottom: 1px solid #d9d4c9;
+  background: transparent;
+  color: #28624c;
+}
+
+.journal-knowledge .knowledge-node .knowledge-node {
+  /* Override the existing inline 18px indent only in this page's tree. */
+  margin-left: clamp(2px, 1vw, 18px) !important;
+  padding-left: 10px;
+  border-left: 1px solid #d9d4c9;
+}
+
+.journal-knowledge .knowledge-node a {
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: visible;
+  white-space: normal;
+  text-overflow: clip;
+  color: #242622;
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.journal-knowledge .knowledge-node a b {
+  font-family: "Yanxiben Journal UI", "Songti SC", "SimSun", serif;
+  font-weight: 500;
+}
+
+.journal-knowledge .knowledge-node small {
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+}
+
+.journal-knowledge .knowledge-node > div > svg {
+  flex-shrink: 0;
+}
+
+.journal-knowledge .knowledge-node .text-button {
+  flex-shrink: 0;
+  border: 1px solid #d9d4c9;
+  padding-inline: 12px;
+}
+
+.journal-knowledge .empty,
+.journal-trash .empty {
+  padding: 28px 0;
+  border-bottom: 1px solid #d9d4c9;
+  color: #66685e;
+  text-align: left;
+}
+
+.journal-knowledge .empty > svg,
+.journal-trash .empty > svg {
+  display: none;
+}
+
+.journal-knowledge .empty h3,
+.journal-trash .empty h3 {
+  color: #242622;
+  font-family: "Yanxiben Journal UI", "Songti SC", "SimSun", serif;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.journal-knowledge .empty p,
+.journal-trash .empty p {
+  color: #66685e;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.journal-trash .filter-panel {
+  padding: 16px 0;
+  border: 0;
+  border-block: 1px solid #d9d4c9;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.journal-trash .filter-panel p {
+  color: #66685e;
+  font-size: 13px;
+}
+
+.journal-trash .search-input input {
+  padding-left: 40px;
+}
+
+.journal-trash .search-input svg {
+  top: 15px;
+  color: #66685e;
+}
+
+.journal-trash .dictionary-filters {
+  gap: 12px;
+}
+
+.journal-trash .dictionary-filters select,
+.journal-trash .dictionary-filters .tag-filter {
+  min-width: 120px;
+  max-width: 100%;
+  width: auto;
+  flex: 1 1 130px;
+  font-size: 13px;
+}
+
+.journal-trash .dictionary-filters > .text-button {
+  min-height: 48px;
+  margin-left: 0;
+}
+
+.journal-trash .section-title {
+  min-height: 56px;
+  margin: 0;
+  padding: 12px 0;
+  border-bottom: 1px solid #d9d4c9;
+}
+
+.journal-trash .section-title h2 small {
+  color: #66685e;
+  font-family: Arial, "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: 13px;
+}
+
+.journal-trash .entry-row {
+  padding: 18px 0;
+  border: 0;
+  border-bottom: 1px solid #d9d4c9;
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+  transition: background-color 120ms ease;
+}
+
+.journal-trash .entry-row:hover {
+  background: #ebe6dc;
+}
+
+.journal-trash .entry-main h3 {
+  color: #242622;
+  font-family: "Yanxiben Journal UI", "Songti SC", "SimSun", serif;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.journal-trash .entry-main p {
+  color: #66685e;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.journal-trash .type-icon {
+  width: 28px;
+  height: 32px;
+  border-radius: 0;
+  background: transparent;
+  color: #28624c;
+}
+
+.journal-trash .pagination button {
+  width: 44px;
+  height: 44px;
+  border: 1px solid #d9d4c9;
+  border-radius: 4px;
+  color: #66685e;
+}
+
+.journal-settings
+  :is(a, button, input, select, textarea, summary):focus-visible,
+.journal-knowledge
+  :is(a, button, input, select, textarea, summary):focus-visible,
+.journal-trash :is(a, button, input, select, textarea, summary):focus-visible {
+  outline: 3px solid #28624c;
+  outline-offset: 3px;
+}
+
+@media (max-width: 620px) {
+  .journal-settings .page-heading h1,
+  .journal-knowledge .page-heading h1,
+  .journal-trash .page-heading h1 {
+    font-size: 26px;
+  }
+
+  .journal-settings .settings-grid,
+  .journal-knowledge .knowledge-map {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .journal-settings .dictionary-actions {
+    width: 100%;
+  }
+
+  .journal-settings .dictionary-actions button {
+    flex: 1 1 56px;
+    padding-inline: 8px;
+  }
+
+  .journal-settings .export-actions {
+    flex-wrap: wrap;
+  }
+
+  .journal-settings .export-actions > .button {
+    flex: 1 1 160px;
+  }
+
+  .journal-settings .capacity-section th,
+  .journal-settings .capacity-section td {
+    padding: 12px 4px;
+  }
+
+  .journal-knowledge .knowledge-node > div {
+    flex-wrap: wrap;
+  }
+
+  .journal-knowledge .knowledge-node > div > a {
+    flex-basis: calc(100% - 36px);
+  }
+
+  .journal-knowledge .knowledge-node .knowledge-node {
+    padding-left: 2px;
+  }
+
+  .journal-knowledge .knowledge-node .text-button {
+    margin-left: 30px;
+  }
+
+  .journal-trash .entry-row {
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+  }
+
+  .journal-trash .entry-row > .button,
+  .journal-trash .entry-row > .danger-button {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .journal-trash .entry-main h3 {
+    font-size: 17px;
+  }
+
+  .journal-trash .dictionary-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .journal-trash .dictionary-filters > .dictionary-filter {
+    min-width: 0;
+  }
+
+  .journal-trash .dictionary-filters select,
+  .journal-trash .dictionary-filters .tag-filter {
+    min-width: 0;
+    width: 100%;
+    font-size: 13px;
+  }
+
+  .journal-trash .dictionary-filter-type,
+  .journal-trash .dictionary-filter-tag,
+  .journal-trash .dictionary-filters > .text-button {
+    grid-column: 1 / -1;
+  }
+}

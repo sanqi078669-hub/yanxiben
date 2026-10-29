@@ -102,7 +102,7 @@ export default function SettingsPage({
     }
   }
   return (
-    <>
+    <div className="journal-settings">
       <div className="page-heading">
         <div>
           <div className="eyebrow">MAKE ROOM FOR YOUR OWN RHYTHM</div>
@@ -113,12 +113,41 @@ export default function SettingsPage({
       <ErrorBox text={error} />
       {downloadProgress && <p role="status">{downloadProgress}</p>}
       {capacity && (
-        <p className="tip">
-          当前账号数据约 {(capacity.bytes / 1048576).toFixed(1)}{" "}
-          MiB。正式受邀实例维护上限 80 MiB（含历史和附件），60 MiB 起预警。
-          {capacity.warning ? "已接近上限，请导出并联系维护人。" : ""}单附件 10
-          MiB；学习 ZIP 200 MiB；解压 500 MiB。
-        </p>
+        <section
+          className="panel capacity-section"
+          aria-labelledby="journal-capacity-title"
+        >
+          <h2 id="journal-capacity-title">账号容量</h2>
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">项目</th>
+                <th scope="col">容量</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">当前账号数据</th>
+                <td>{(capacity.bytes / 1048576).toFixed(1)} MiB</td>
+              </tr>
+              <tr>
+                <th scope="row">受邀实例维护上限</th>
+                <td>{(capacity.limit / 1048576).toFixed(0)} MiB</td>
+              </tr>
+            </tbody>
+          </table>
+          <progress
+            aria-label="当前账号数据占维护上限"
+            value={capacity.bytes}
+            max={capacity.limit}
+          />
+          <p className="tip">
+            当前账号数据约 {(capacity.bytes / 1048576).toFixed(1)}{" "}
+            MiB。正式受邀实例维护上限 80 MiB（含历史和附件），60 MiB 起预警。
+            {capacity.warning ? "已接近上限，请导出并联系维护人。" : ""}单附件
+            10 MiB；学习 ZIP 200 MiB；解压 500 MiB。
+          </p>
+        </section>
       )}
       <DictionaryManager />
       <AiSettings />
@@ -312,6 +341,6 @@ export default function SettingsPage({
           </form>
         </div>
       </div>
-    </>
+    </div>
   );
 }

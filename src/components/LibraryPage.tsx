@@ -74,7 +74,15 @@ export default function LibraryPage({
   );
   useLibraryPosition(returnTo, !!data && !loading && q === debouncedQ);
   return (
-    <div className={mode === "library" ? "journal-library" : undefined}>
+    <div
+      className={
+        mode === "library"
+          ? "journal-library"
+          : mode === "trash"
+            ? "journal-trash"
+            : undefined
+      }
+    >
       <div className="page-heading">
         <div>
           <div className="eyebrow">
