@@ -17,7 +17,7 @@ export default function Login({
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false);
   return (
-    <div className="login-page">
+    <div className="login-page login-entry">
       <div className="login-story">
         <BookOpen size={36} />
         <span className="eyebrow">研习本 / PRIVATE LEARNING SPACE</span>

@@ -88,7 +88,7 @@ export default function Detail({
         <AiRelated key={id} entryId={id} onLinked={reload} />
         <AiStudy key={id + "study"} entry={e} actions={["hint", "variant"]} />
       </details>
-      <div className="detail-grid">
+      <div className="detail-grid detail-reading">
         <div>
           <section className="panel form-panel">
             <div className="section-title">

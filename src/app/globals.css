@@ -2332,3 +2332,89 @@ footer span {
     min-height: 44px;
   }
 }
+
+/* Detail reading roles stay local; shared editor/review typography is unchanged. */
+.detail-reading > div > .form-panel > .section-title h2 {
+  color: var(--green);
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.5;
+  text-wrap: balance;
+}
+.detail-reading > div .analysis-section > h3,
+.detail-reading > div .context-card > h3,
+.detail-reading > div .takeaway > h3 {
+  color: var(--green);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.6;
+  margin: 0 0 12px;
+  text-wrap: balance;
+}
+.detail-reading > div .markdown {
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.85;
+  max-width: 70ch;
+  text-wrap: pretty;
+}
+.detail-reading > div .markdown p {
+  margin: 0 0 1em;
+}
+.detail-reading > div .markdown p:last-child {
+  margin-bottom: 0;
+}
+.detail-reading > div .markdown :is(h1, h2, h3, h4, h5, h6) {
+  color: var(--text);
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: normal;
+  margin: 1.5em 0 0.6em;
+  padding: 0;
+  border: 0;
+  text-wrap: balance;
+}
+.detail-reading > div .markdown > :first-child {
+  margin-top: 0;
+}
+.detail-reading > div .markdown h1 {
+  font-size: 24px;
+}
+.detail-reading > div .markdown h2 {
+  font-size: 20px;
+}
+.detail-reading > div .markdown h3 {
+  font-size: 18px;
+}
+.detail-reading > div .markdown :is(h4, h5, h6) {
+  font-size: 16px;
+}
+.detail-reading > div .markdown code {
+  font-size: 0.875em;
+}
+.detail-reading .tabs button {
+  min-height: 44px;
+  padding: 10px 0;
+  color: var(--text);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+.detail-reading .tabs button.selected {
+  color: var(--green);
+  font-weight: 600;
+}
+
+/* Login-only help and touch targets; registration uses the shared defaults. */
+.login-entry .login-hint {
+  color: var(--muted);
+  font-size: 12px !important;
+}
+.login-entry .password-toggle {
+  width: 44px;
+  height: 44px;
+}
+.login-entry .password-field input {
+  padding-right: 52px;
+}
