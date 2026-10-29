@@ -258,7 +258,7 @@ export default function ReviewPage({
     setSubmissionRejected(false);
   };
   return (
-    <>
+    <div className="journal-review">
       <div className="page-heading">
         <div>
           <div className="eyebrow">REVISIT · RETRIEVE · REFLECT</div>
@@ -799,6 +799,6 @@ export default function ReviewPage({
           </div>
         </section>
       )}
-    </>
+    </div>
   );
 }

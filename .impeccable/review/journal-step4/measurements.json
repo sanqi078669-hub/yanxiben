@@ -1,0 +1,3256 @@
+[
+  {
+    "state": "editor-saved",
+    "client": 360,
+    "fields": [
+      {
+        "bottom": 533.546875,
+        "height": 48,
+        "maxLength": null,
+        "name": "为这次思考起个名字（选填）",
+        "radius": "4px",
+        "rows": null,
+        "width": 324,
+        "x": 18,
+        "y": 485.546875
+      },
+      {
+        "bottom": 666.640625,
+        "height": 83.59375,
+        "maxLength": null,
+        "name": "输入题目，支持 Markdown、$公式$ 和代码块…",
+        "radius": "4px",
+        "rows": null,
+        "width": 324,
+        "x": 18,
+        "y": 583.046875
+      },
+      {
+        "bottom": 1303.75,
+        "height": 48,
+        "maxLength": null,
+        "name": "例如：张宇高数 18 讲 · 第 3 讲 · 例 5",
+        "radius": "4px",
+        "rows": null,
+        "width": 324,
+        "x": 18,
+        "y": 1255.75
+      },
+      {
+        "bottom": 1573.78125,
+        "height": 48,
+        "maxLength": null,
+        "name": "需要什么帮助辅助整理错因分析",
+        "radius": "4px",
+        "rows": null,
+        "width": 324,
+        "x": 18,
+        "y": 1525.78125
+      },
+      {
+        "bottom": 1997.671875,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录我的原解法…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 324,
+        "x": 18,
+        "y": 1885.28125
+      },
+      {
+        "bottom": 2167.0625,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录错误步骤…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 324,
+        "x": 18,
+        "y": 2054.671875
+      },
+      {
+        "bottom": 2336.453125,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录正确解法…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 324,
+        "x": 18,
+        "y": 2224.0625
+      },
+      {
+        "bottom": 2505.84375,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录适用条件…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 324,
+        "x": 18,
+        "y": 2393.453125
+      },
+      {
+        "bottom": 2675.234375,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录方法选择…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 324,
+        "x": 18,
+        "y": 2562.84375
+      },
+      {
+        "bottom": 2844.625,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录可复用总结…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 324,
+        "x": 18,
+        "y": 2732.234375
+      },
+      {
+        "bottom": 2985.21875,
+        "height": 83.59375,
+        "maxLength": null,
+        "name": "下次遇到类似问题，我会先…",
+        "radius": "4px",
+        "rows": null,
+        "width": 324,
+        "x": 18,
+        "y": 2901.625
+      },
+      {
+        "bottom": 3200.21875,
+        "height": 48,
+        "maxLength": null,
+        "name": "科目请选择科目高等数学",
+        "radius": "4px",
+        "rows": null,
+        "width": 290,
+        "x": 35,
+        "y": 3152.21875
+      },
+      {
+        "bottom": 3357.71875,
+        "height": 48,
+        "maxLength": null,
+        "name": "整理状态待整理已整理",
+        "radius": "4px",
+        "rows": null,
+        "width": 290,
+        "x": 35,
+        "y": 3309.71875
+      },
+      {
+        "bottom": 3785.71875,
+        "height": 48,
+        "maxLength": null,
+        "name": "用中文逗号或英文逗号分隔",
+        "radius": "4px",
+        "rows": null,
+        "width": 290,
+        "x": 35,
+        "y": 3737.71875
+      }
+    ],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": 175.796875,
+      "height": 33.796875,
+      "lineHeight": "33.8px",
+      "size": "26px",
+      "text": "让思路，变得清晰。",
+      "width": 324,
+      "x": 18,
+      "y": 142
+    },
+    "headingBlock": {
+      "bottom": 214.046875,
+      "height": 124.046875,
+      "width": 324,
+      "x": 18,
+      "y": 90
+    },
+    "ratingColumns": null,
+    "ratings": [],
+    "saveBar": {
+      "bottom": 278.046875,
+      "height": 48,
+      "width": 324,
+      "x": 18,
+      "y": 230.046875
+    },
+    "saveState": "已保存到本地服务",
+    "scroll": 360,
+    "steps": [],
+    "targets": [
+      {
+        "bottom": 134,
+        "height": 44,
+        "name": "返回记录",
+        "width": 68,
+        "x": 18,
+        "y": 90
+      },
+      {
+        "bottom": 278.046875,
+        "height": 48,
+        "name": "保存记录",
+        "width": 112,
+        "x": 230,
+        "y": 230.046875
+      },
+      {
+        "bottom": 366.046875,
+        "height": 44,
+        "name": "预览 Markdown",
+        "width": 123.578125,
+        "x": 218.421875,
+        "y": 322.046875
+      },
+      {
+        "bottom": 434.046875,
+        "height": 48,
+        "name": "∑数学错题",
+        "width": 113,
+        "x": 18,
+        "y": 386.046875
+      },
+      {
+        "bottom": 434.046875,
+        "height": 48,
+        "name": "◇英语",
+        "width": 87,
+        "x": 139,
+        "y": 386.046875
+      },
+      {
+        "bottom": 533.546875,
+        "height": 48,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": 485.546875
+      },
+      {
+        "bottom": 666.640625,
+        "height": 83.59375,
+        "name": "计算极限：\n\n$$\\lim_{x\\to 0}\\frac{\\sin x-x}{x^3}$$",
+        "width": 324,
+        "x": 18,
+        "y": 583.046875
+      },
+      {
+        "bottom": 815.328125,
+        "height": 48,
+        "name": "",
+        "width": 86,
+        "x": 35,
+        "y": 767.328125
+      },
+      {
+        "bottom": 1124.25,
+        "height": 44,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": 1080.25
+      },
+      {
+        "bottom": 1180.25,
+        "height": 48,
+        "name": "识别图片",
+        "width": 86,
+        "x": 18,
+        "y": 1132.25
+      },
+      {
+        "bottom": 1303.75,
+        "height": 48,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": 1255.75
+      },
+      {
+        "bottom": 1573.78125,
+        "height": 48,
+        "name": "辅助整理错因分析",
+        "width": 324,
+        "x": 18,
+        "y": 1525.78125
+      },
+      {
+        "bottom": 1625.78125,
+        "height": 44,
+        "name": "查看本次发送的文字（不发送图片）",
+        "width": 324,
+        "x": 18,
+        "y": 1581.78125
+      },
+      {
+        "bottom": 1687.78125,
+        "height": 44,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": 1643.78125
+      },
+      {
+        "bottom": 1743.78125,
+        "height": 48,
+        "name": "生成辅助整理",
+        "width": 112,
+        "x": 18,
+        "y": 1695.78125
+      },
+      {
+        "bottom": 1997.671875,
+        "height": 112.390625,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": 1885.28125
+      },
+      {
+        "bottom": 2167.0625,
+        "height": 112.390625,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": 2054.671875
+      },
+      {
+        "bottom": 2336.453125,
+        "height": 112.390625,
+        "name": "由 Taylor 展开，$\\sin x=x-\\frac{x^3}{6}+o(x^3)$，所",
+        "width": 324,
+        "x": 18,
+        "y": 2224.0625
+      },
+      {
+        "bottom": 2505.84375,
+        "height": 112.390625,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": 2393.453125
+      },
+      {
+        "bottom": 2675.234375,
+        "height": 112.390625,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": 2562.84375
+      },
+      {
+        "bottom": 2844.625,
+        "height": 112.390625,
+        "name": "相减导致主要项抵消时，不能直接用等价无穷小替换。",
+        "width": 324,
+        "x": 18,
+        "y": 2732.234375
+      },
+      {
+        "bottom": 2985.21875,
+        "height": 83.59375,
+        "name": "先观察是否抵消，再决定展开到哪一阶。",
+        "width": 324,
+        "x": 18,
+        "y": 2901.625
+      },
+      {
+        "bottom": 3200.21875,
+        "height": 48,
+        "name": "请选择科目高等数学",
+        "width": 290,
+        "x": 35,
+        "y": 3152.21875
+      },
+      {
+        "bottom": 3260.21875,
+        "height": 48,
+        "name": "＋ 新建科目",
+        "width": 102.625,
+        "x": 35,
+        "y": 3212.21875
+      },
+      {
+        "bottom": 3357.71875,
+        "height": 48,
+        "name": "待整理已整理",
+        "width": 290,
+        "x": 35,
+        "y": 3309.71875
+      },
+      {
+        "bottom": 3529.71875,
+        "height": 44,
+        "name": "",
+        "width": 290,
+        "x": 35,
+        "y": 3485.71875
+      },
+      {
+        "bottom": 3628.21875,
+        "height": 44,
+        "name": "概念",
+        "width": 48,
+        "x": 35,
+        "y": 3584.21875
+      },
+      {
+        "bottom": 3628.21875,
+        "height": 44,
+        "name": "条件",
+        "width": 48,
+        "x": 90,
+        "y": 3584.21875
+      },
+      {
+        "bottom": 3688.21875,
+        "height": 48,
+        "name": "＋ 新建错因",
+        "width": 102.625,
+        "x": 35,
+        "y": 3640.21875
+      },
+      {
+        "bottom": 3785.71875,
+        "height": 48,
+        "name": "",
+        "width": 290,
+        "x": 35,
+        "y": 3737.71875
+      }
+    ],
+    "typeChips": [
+      {
+        "border": "1px solid rgb(40, 98, 76)",
+        "bottom": 434.046875,
+        "color": "rgb(40, 98, 76)",
+        "disabled": true,
+        "height": 48,
+        "iconOpacity": "0.45",
+        "opacity": "1",
+        "text": "∑数学错题",
+        "width": 113,
+        "x": 18,
+        "y": 386.046875
+      },
+      {
+        "border": "1px solid rgb(217, 212, 201)",
+        "bottom": 434.046875,
+        "color": "rgb(36, 38, 34)",
+        "disabled": true,
+        "height": 48,
+        "iconOpacity": "0.45",
+        "opacity": "1",
+        "text": "◇英语",
+        "width": 87,
+        "x": 139,
+        "y": 386.046875
+      }
+    ],
+    "viewport": [
+      375,
+      812
+    ]
+  },
+  {
+    "state": "review-first",
+    "client": 1425,
+    "fields": [
+      {
+        "bottom": 766.421875,
+        "height": 198.78125,
+        "maxLength": "50000",
+        "name": "写下答案、推导过程或你的理解…（也可以先在纸上完成）",
+        "radius": "4px",
+        "rows": "6",
+        "width": 830,
+        "x": 281,
+        "y": 567.640625
+      }
+    ],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": 153.0625,
+      "height": 36.390625,
+      "lineHeight": "36.4px",
+      "size": "28px",
+      "text": "回看，是为了走得更远。",
+      "width": 330.015625,
+      "x": 281,
+      "y": 116.671875
+    },
+    "headingBlock": {
+      "bottom": 191.3125,
+      "height": 74.640625,
+      "width": 330.015625,
+      "x": 281,
+      "y": 116.671875
+    },
+    "ratingColumns": null,
+    "ratings": [],
+    "saveBar": null,
+    "saveState": null,
+    "scroll": 1425,
+    "steps": [],
+    "targets": [
+      {
+        "bottom": 178,
+        "height": 48,
+        "name": "专注模式",
+        "width": 86,
+        "x": 1073,
+        "y": 130
+      },
+      {
+        "bottom": 178,
+        "height": 48,
+        "name": "稍后继续",
+        "width": 86,
+        "x": 1171,
+        "y": 130
+      },
+      {
+        "bottom": 178,
+        "height": 48,
+        "name": "复习历史",
+        "width": 112,
+        "x": 1269,
+        "y": 130
+      },
+      {
+        "bottom": 518.140625,
+        "height": 44,
+        "name": "需要帮助？展开 AI 分步提示",
+        "width": 830,
+        "x": 281,
+        "y": 474.140625
+      },
+      {
+        "bottom": 766.421875,
+        "height": 198.78125,
+        "name": "",
+        "width": 830,
+        "x": 281,
+        "y": 567.640625
+      },
+      {
+        "bottom": 854.421875,
+        "height": 48,
+        "name": "已尝试，展开解析",
+        "width": 164,
+        "x": 281,
+        "y": 806.421875
+      },
+      {
+        "bottom": 854.421875,
+        "height": 48,
+        "name": "需要提示，先看看思路",
+        "width": 164,
+        "x": 457,
+        "y": 806.421875
+      },
+      {
+        "bottom": 852.421875,
+        "height": 44,
+        "name": "暂时跳过",
+        "width": 64,
+        "x": 633,
+        "y": 808.421875
+      }
+    ],
+    "typeChips": [],
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  {
+    "state": "review-first",
+    "client": 360,
+    "fields": [
+      {
+        "bottom": 869.046875,
+        "height": 198.78125,
+        "maxLength": "50000",
+        "name": "写下答案、推导过程或你的理解…（也可以先在纸上完成）",
+        "radius": "4px",
+        "rows": "6",
+        "width": 324,
+        "x": 18,
+        "y": 670.265625
+      }
+    ],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": 123.796875,
+      "height": 33.796875,
+      "lineHeight": "33.8px",
+      "size": "26px",
+      "text": "回看，是为了走得更远。",
+      "width": 324,
+      "x": 18,
+      "y": 90
+    },
+    "headingBlock": {
+      "bottom": 188.296875,
+      "height": 98.296875,
+      "width": 324,
+      "x": 18,
+      "y": 90
+    },
+    "ratingColumns": null,
+    "ratings": [],
+    "saveBar": null,
+    "saveState": null,
+    "scroll": 360,
+    "steps": [],
+    "targets": [
+      {
+        "bottom": 248.296875,
+        "height": 48,
+        "name": "专注模式",
+        "width": 91.328125,
+        "x": 18,
+        "y": 200.296875
+      },
+      {
+        "bottom": 248.296875,
+        "height": 48,
+        "name": "稍后继续",
+        "width": 91.34375,
+        "x": 121.328125,
+        "y": 200.296875
+      },
+      {
+        "bottom": 248.296875,
+        "height": 48,
+        "name": "复习历史",
+        "width": 117.328125,
+        "x": 224.671875,
+        "y": 200.296875
+      },
+      {
+        "bottom": 620.765625,
+        "height": 44,
+        "name": "需要帮助？展开 AI 分步提示",
+        "width": 324,
+        "x": 18,
+        "y": 576.765625
+      },
+      {
+        "bottom": 869.046875,
+        "height": 198.78125,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": 670.265625
+      },
+      {
+        "bottom": 957.046875,
+        "height": 48,
+        "name": "已尝试，展开解析",
+        "width": 164,
+        "x": 18,
+        "y": 909.046875
+      },
+      {
+        "bottom": 1017.046875,
+        "height": 48,
+        "name": "需要提示，先看看思路",
+        "width": 164,
+        "x": 18,
+        "y": 969.046875
+      },
+      {
+        "bottom": 1015.046875,
+        "height": 44,
+        "name": "暂时跳过",
+        "width": 64,
+        "x": 194,
+        "y": 971.046875
+      }
+    ],
+    "typeChips": [],
+    "viewport": [
+      375,
+      812
+    ]
+  },
+  {
+    "state": "review-ratings",
+    "client": 1440,
+    "fields": [
+      {
+        "bottom": -75.578125,
+        "height": 198.78125,
+        "maxLength": "50000",
+        "name": "写下答案、推导过程或你的理解…（也可以先在纸上完成）",
+        "radius": "4px",
+        "rows": "6",
+        "width": 830,
+        "x": 281,
+        "y": -274.359375
+      }
+    ],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": -644.9375,
+      "height": 36.390625,
+      "lineHeight": "36.4px",
+      "size": "28px",
+      "text": "回看，是为了走得更远。",
+      "width": 330.015625,
+      "x": 281,
+      "y": -681.328125
+    },
+    "headingBlock": {
+      "bottom": -606.6875,
+      "height": 74.640625,
+      "width": 330.015625,
+      "x": 281,
+      "y": -681.328125
+    },
+    "ratingColumns": "200px 200px 200px 200px",
+    "ratings": [
+      {
+        "bg": "rgba(0, 0, 0, 0)",
+        "border": "1px solid rgb(217, 212, 201)",
+        "bottom": 687.671875,
+        "disabled": false,
+        "height": 81.28125,
+        "selected": "false",
+        "text": "不会需要重新理解",
+        "width": 200,
+        "x": 281,
+        "y": 606.390625
+      },
+      {
+        "bg": "rgba(0, 0, 0, 0)",
+        "border": "1px solid rgb(217, 212, 201)",
+        "bottom": 687.671875,
+        "disabled": false,
+        "height": 81.28125,
+        "selected": "false",
+        "text": "困难有思路，仍卡顿",
+        "width": 200,
+        "x": 491,
+        "y": 606.390625
+      },
+      {
+        "bg": "rgb(255, 252, 246)",
+        "border": "2px solid rgb(40, 98, 76)",
+        "bottom": 687.671875,
+        "disabled": false,
+        "height": 81.28125,
+        "selected": "true",
+        "text": "掌握能独立完成",
+        "width": 200,
+        "x": 701,
+        "y": 606.390625
+      },
+      {
+        "bg": "rgba(0, 0, 0, 0)",
+        "border": "1px solid rgb(217, 212, 201)",
+        "bottom": 687.671875,
+        "disabled": false,
+        "height": 81.28125,
+        "selected": "false",
+        "text": "熟练清晰、顺畅地完成",
+        "width": 200,
+        "x": 911,
+        "y": 606.390625
+      }
+    ],
+    "saveBar": null,
+    "saveState": null,
+    "scroll": 1440,
+    "steps": [],
+    "targets": [
+      {
+        "bottom": -620,
+        "height": 48,
+        "name": "专注模式",
+        "width": 86,
+        "x": 1073,
+        "y": -668
+      },
+      {
+        "bottom": -620,
+        "height": 48,
+        "name": "稍后继续",
+        "width": 86,
+        "x": 1171,
+        "y": -668
+      },
+      {
+        "bottom": -620,
+        "height": 48,
+        "name": "复习历史",
+        "width": 112,
+        "x": 1269,
+        "y": -668
+      },
+      {
+        "bottom": -75.578125,
+        "height": 198.78125,
+        "name": "",
+        "width": 830,
+        "x": 281,
+        "y": -274.359375
+      },
+      {
+        "bottom": 387.953125,
+        "height": 44,
+        "name": "需要核对？展开 AI 作答点评",
+        "width": 830,
+        "x": 281,
+        "y": 343.953125
+      },
+      {
+        "bottom": 449.953125,
+        "height": 44,
+        "name": "",
+        "width": 830,
+        "x": 281,
+        "y": 405.953125
+      },
+      {
+        "bottom": 565.390625,
+        "height": 44,
+        "name": "",
+        "width": 796,
+        "x": 298,
+        "y": 521.390625
+      },
+      {
+        "bottom": 687.671875,
+        "height": 81.28125,
+        "name": "不会需要重新理解",
+        "width": 200,
+        "x": 281,
+        "y": 606.390625
+      },
+      {
+        "bottom": 687.671875,
+        "height": 81.28125,
+        "name": "困难有思路，仍卡顿",
+        "width": 200,
+        "x": 491,
+        "y": 606.390625
+      },
+      {
+        "bottom": 687.671875,
+        "height": 81.28125,
+        "name": "掌握能独立完成",
+        "width": 200,
+        "x": 701,
+        "y": 606.390625
+      },
+      {
+        "bottom": 687.671875,
+        "height": 81.28125,
+        "name": "熟练清晰、顺畅地完成",
+        "width": 200,
+        "x": 911,
+        "y": 606.390625
+      },
+      {
+        "bottom": 769.671875,
+        "height": 48,
+        "name": "完成本次复习",
+        "width": 830,
+        "x": 281,
+        "y": 721.671875
+      }
+    ],
+    "typeChips": [],
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  {
+    "state": "review-ratings",
+    "client": 360,
+    "fields": [
+      {
+        "bottom": -345.953125,
+        "height": 198.78125,
+        "maxLength": "50000",
+        "name": "写下答案、推导过程或你的理解…（也可以先在纸上完成）",
+        "radius": "4px",
+        "rows": "6",
+        "width": 324,
+        "x": 18,
+        "y": -544.734375
+      }
+    ],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": -1047.203125,
+      "height": 33.796875,
+      "lineHeight": "33.8px",
+      "size": "26px",
+      "text": "回看，是为了走得更远。",
+      "width": 324,
+      "x": 18,
+      "y": -1081
+    },
+    "headingBlock": {
+      "bottom": -982.703125,
+      "height": 98.296875,
+      "width": 324,
+      "x": 18,
+      "y": -1081
+    },
+    "ratingColumns": "157px 157px",
+    "ratings": [
+      {
+        "bg": "rgba(0, 0, 0, 0)",
+        "border": "1px solid rgb(217, 212, 201)",
+        "bottom": 473.609375,
+        "disabled": false,
+        "height": 80,
+        "selected": "false",
+        "text": "不会需要重新理解",
+        "width": 157,
+        "x": 18,
+        "y": 393.609375
+      },
+      {
+        "bg": "rgba(0, 0, 0, 0)",
+        "border": "1px solid rgb(217, 212, 201)",
+        "bottom": 473.609375,
+        "disabled": false,
+        "height": 80,
+        "selected": "false",
+        "text": "困难有思路，仍卡顿",
+        "width": 157,
+        "x": 185,
+        "y": 393.609375
+      },
+      {
+        "bg": "rgb(255, 252, 246)",
+        "border": "2px solid rgb(40, 98, 76)",
+        "bottom": 564.890625,
+        "disabled": false,
+        "height": 81.28125,
+        "selected": "true",
+        "text": "掌握能独立完成",
+        "width": 157,
+        "x": 18,
+        "y": 483.609375
+      },
+      {
+        "bg": "rgba(0, 0, 0, 0)",
+        "border": "1px solid rgb(217, 212, 201)",
+        "bottom": 564.890625,
+        "disabled": false,
+        "height": 81.28125,
+        "selected": "false",
+        "text": "熟练清晰、顺畅地完成",
+        "width": 157,
+        "x": 185,
+        "y": 483.609375
+      }
+    ],
+    "saveBar": null,
+    "saveState": null,
+    "scroll": 360,
+    "steps": [],
+    "targets": [
+      {
+        "bottom": -922.703125,
+        "height": 48,
+        "name": "专注模式",
+        "width": 91.328125,
+        "x": 18,
+        "y": -970.703125
+      },
+      {
+        "bottom": -922.703125,
+        "height": 48,
+        "name": "稍后继续",
+        "width": 91.34375,
+        "x": 121.328125,
+        "y": -970.703125
+      },
+      {
+        "bottom": -922.703125,
+        "height": 48,
+        "name": "复习历史",
+        "width": 117.328125,
+        "x": 224.671875,
+        "y": -970.703125
+      },
+      {
+        "bottom": -345.953125,
+        "height": 198.78125,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": -544.734375
+      },
+      {
+        "bottom": 175.171875,
+        "height": 44,
+        "name": "需要核对？展开 AI 作答点评",
+        "width": 324,
+        "x": 18,
+        "y": 131.171875
+      },
+      {
+        "bottom": 237.171875,
+        "height": 44,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": 193.171875
+      },
+      {
+        "bottom": 352.609375,
+        "height": 44,
+        "name": "",
+        "width": 290,
+        "x": 35,
+        "y": 308.609375
+      },
+      {
+        "bottom": 473.609375,
+        "height": 80,
+        "name": "不会需要重新理解",
+        "width": 157,
+        "x": 18,
+        "y": 393.609375
+      },
+      {
+        "bottom": 473.609375,
+        "height": 80,
+        "name": "困难有思路，仍卡顿",
+        "width": 157,
+        "x": 185,
+        "y": 393.609375
+      },
+      {
+        "bottom": 564.890625,
+        "height": 81.28125,
+        "name": "掌握能独立完成",
+        "width": 157,
+        "x": 18,
+        "y": 483.609375
+      },
+      {
+        "bottom": 564.890625,
+        "height": 81.28125,
+        "name": "熟练清晰、顺畅地完成",
+        "width": 157,
+        "x": 185,
+        "y": 483.609375
+      },
+      {
+        "bottom": 646.890625,
+        "height": 48,
+        "name": "完成本次复习",
+        "width": 324,
+        "x": 18,
+        "y": 598.890625
+      }
+    ],
+    "typeChips": [],
+    "viewport": [
+      375,
+      812
+    ]
+  },
+  {
+    "state": "editor-step-1",
+    "client": 1425,
+    "fields": [
+      {
+        "bottom": 865.84375,
+        "height": 48,
+        "maxLength": null,
+        "name": "为这次思考起个名字（选填）",
+        "radius": "4px",
+        "rows": null,
+        "width": 1100,
+        "x": 281,
+        "y": 817.84375
+      },
+      {
+        "bottom": 998.9375,
+        "height": 83.59375,
+        "maxLength": null,
+        "name": "输入题目，支持 Markdown、$公式$ 和代码块…",
+        "radius": "4px",
+        "rows": null,
+        "width": 1100,
+        "x": 281,
+        "y": 915.34375
+      },
+      {
+        "bottom": 1532.265625,
+        "height": 48,
+        "maxLength": null,
+        "name": "例如：张宇高数 18 讲 · 第 3 讲 · 例 5",
+        "radius": "4px",
+        "rows": null,
+        "width": 1100,
+        "x": 281,
+        "y": 1484.265625
+      },
+      {
+        "bottom": 1753.765625,
+        "height": 48,
+        "maxLength": null,
+        "name": "科目请选择科目高等数学",
+        "radius": "4px",
+        "rows": null,
+        "width": 1058,
+        "x": 302,
+        "y": 1705.765625
+      },
+      {
+        "bottom": 1911.265625,
+        "height": 48,
+        "maxLength": null,
+        "name": "整理状态待整理已整理",
+        "radius": "4px",
+        "rows": null,
+        "width": 1058,
+        "x": 302,
+        "y": 1863.265625
+      },
+      {
+        "bottom": 2295.265625,
+        "height": 48,
+        "maxLength": null,
+        "name": "用中文逗号或英文逗号分隔",
+        "radius": "4px",
+        "rows": null,
+        "width": 1058,
+        "x": 302,
+        "y": 2247.265625
+      }
+    ],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": 209.59375,
+      "height": 41.59375,
+      "lineHeight": "41.6px",
+      "size": "32px",
+      "text": "把这个疑问留下来。",
+      "width": 315,
+      "x": 281,
+      "y": 168
+    },
+    "headingBlock": {
+      "bottom": 247.84375,
+      "height": 131.84375,
+      "width": 315,
+      "x": 281,
+      "y": 116
+    },
+    "ratingColumns": null,
+    "ratings": [],
+    "saveBar": {
+      "bottom": 205.921875,
+      "height": 48,
+      "width": 180,
+      "x": 1201,
+      "y": 157.921875
+    },
+    "saveState": "未保存",
+    "scroll": 1425,
+    "steps": [
+      {
+        "bottom": 379.59375,
+        "current": "step",
+        "height": 56,
+        "text": "1 · 录入材料",
+        "width": 361.328125,
+        "x": 281,
+        "y": 323.59375
+      },
+      {
+        "bottom": 379.59375,
+        "current": null,
+        "height": 56,
+        "text": "2 · 整理分析（可跳过）",
+        "width": 361.328125,
+        "x": 650.328125,
+        "y": 323.59375
+      },
+      {
+        "bottom": 379.59375,
+        "current": null,
+        "height": 56,
+        "text": "3 · 核对保存",
+        "width": 361.34375,
+        "x": 1019.65625,
+        "y": 323.59375
+      }
+    ],
+    "targets": [
+      {
+        "bottom": 160,
+        "height": 44,
+        "name": "返回收集箱",
+        "width": 81,
+        "x": 281,
+        "y": 116
+      },
+      {
+        "bottom": 205.921875,
+        "height": 48,
+        "name": "核对后保存",
+        "width": 125,
+        "x": 1256,
+        "y": 157.921875
+      },
+      {
+        "bottom": 379.59375,
+        "height": 56,
+        "name": "1 · 录入材料",
+        "width": 361.328125,
+        "x": 281,
+        "y": 323.59375
+      },
+      {
+        "bottom": 379.59375,
+        "height": 56,
+        "name": "2 · 整理分析（可跳过）",
+        "width": 361.328125,
+        "x": 650.328125,
+        "y": 323.59375
+      },
+      {
+        "bottom": 379.59375,
+        "height": 56,
+        "name": "3 · 核对保存",
+        "width": 361.34375,
+        "x": 1019.65625,
+        "y": 323.59375
+      },
+      {
+        "bottom": 471.34375,
+        "height": 44,
+        "name": "下一步",
+        "width": 51,
+        "x": 281,
+        "y": 427.34375
+      },
+      {
+        "bottom": 576.34375,
+        "height": 44,
+        "name": "预览 Markdown",
+        "width": 123.578125,
+        "x": 1257.421875,
+        "y": 532.34375
+      },
+      {
+        "bottom": 644.34375,
+        "height": 48,
+        "name": "∑数学错题",
+        "width": 113,
+        "x": 281,
+        "y": 596.34375
+      },
+      {
+        "bottom": 644.34375,
+        "height": 48,
+        "name": "◇英语",
+        "width": 87,
+        "x": 402,
+        "y": 596.34375
+      },
+      {
+        "bottom": 712.34375,
+        "height": 48,
+        "name": "＋ 新建类型",
+        "width": 102.625,
+        "x": 281,
+        "y": 664.34375
+      },
+      {
+        "bottom": 768.34375,
+        "height": 44,
+        "name": "从预设添加",
+        "width": 1100,
+        "x": 281,
+        "y": 724.34375
+      },
+      {
+        "bottom": 865.84375,
+        "height": 48,
+        "name": "",
+        "width": 1100,
+        "x": 281,
+        "y": 817.84375
+      },
+      {
+        "bottom": 998.9375,
+        "height": 83.59375,
+        "name": "",
+        "width": 1100,
+        "x": 281,
+        "y": 915.34375
+      },
+      {
+        "bottom": 1091.4375,
+        "height": 48,
+        "name": "",
+        "width": 86,
+        "x": 1278,
+        "y": 1043.4375
+      },
+      {
+        "bottom": 1352.765625,
+        "height": 44,
+        "name": "",
+        "width": 1100,
+        "x": 281,
+        "y": 1308.765625
+      },
+      {
+        "bottom": 1408.765625,
+        "height": 48,
+        "name": "识别图片",
+        "width": 86,
+        "x": 281,
+        "y": 1360.765625
+      },
+      {
+        "bottom": 1532.265625,
+        "height": 48,
+        "name": "",
+        "width": 1100,
+        "x": 281,
+        "y": 1484.265625
+      },
+      {
+        "bottom": 1753.765625,
+        "height": 48,
+        "name": "请选择科目高等数学",
+        "width": 1058,
+        "x": 302,
+        "y": 1705.765625
+      },
+      {
+        "bottom": 1813.765625,
+        "height": 48,
+        "name": "＋ 新建科目",
+        "width": 102.625,
+        "x": 302,
+        "y": 1765.765625
+      },
+      {
+        "bottom": 1911.265625,
+        "height": 48,
+        "name": "待整理已整理",
+        "width": 1058,
+        "x": 302,
+        "y": 1863.265625
+      },
+      {
+        "bottom": 2137.765625,
+        "height": 44,
+        "name": "概念",
+        "width": 48,
+        "x": 302,
+        "y": 2093.765625
+      },
+      {
+        "bottom": 2137.765625,
+        "height": 44,
+        "name": "条件",
+        "width": 48,
+        "x": 357,
+        "y": 2093.765625
+      },
+      {
+        "bottom": 2197.765625,
+        "height": 48,
+        "name": "＋ 新建错因",
+        "width": 102.625,
+        "x": 302,
+        "y": 2149.765625
+      },
+      {
+        "bottom": 2295.265625,
+        "height": 48,
+        "name": "",
+        "width": 1058,
+        "x": 302,
+        "y": 2247.265625
+      }
+    ],
+    "typeChips": [
+      {
+        "border": "1px solid rgb(40, 98, 76)",
+        "bottom": 644.34375,
+        "color": "rgb(40, 98, 76)",
+        "disabled": false,
+        "height": 48,
+        "iconOpacity": "1",
+        "opacity": "1",
+        "text": "∑数学错题",
+        "width": 113,
+        "x": 281,
+        "y": 596.34375
+      },
+      {
+        "border": "1px solid rgb(217, 212, 201)",
+        "bottom": 644.34375,
+        "color": "rgb(36, 38, 34)",
+        "disabled": false,
+        "height": 48,
+        "iconOpacity": "1",
+        "opacity": "1",
+        "text": "◇英语",
+        "width": 87,
+        "x": 402,
+        "y": 596.34375
+      }
+    ],
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  {
+    "state": "editor-step-2",
+    "client": 1425,
+    "fields": [
+      {
+        "bottom": 733.375,
+        "height": 48,
+        "maxLength": null,
+        "name": "需要什么帮助辅助整理错因分析",
+        "radius": "4px",
+        "rows": null,
+        "width": 785,
+        "x": 281,
+        "y": 685.375
+      },
+      {
+        "bottom": 1157.265625,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录我的原解法…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 785,
+        "x": 281,
+        "y": 1044.875
+      },
+      {
+        "bottom": 1326.65625,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录错误步骤…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 785,
+        "x": 281,
+        "y": 1214.265625
+      },
+      {
+        "bottom": 1496.046875,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录正确解法…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 785,
+        "x": 281,
+        "y": 1383.65625
+      },
+      {
+        "bottom": 1665.4375,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录适用条件…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 785,
+        "x": 281,
+        "y": 1553.046875
+      },
+      {
+        "bottom": 1834.828125,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录方法选择…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 785,
+        "x": 281,
+        "y": 1722.4375
+      },
+      {
+        "bottom": 2004.21875,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录可复用总结…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 785,
+        "x": 281,
+        "y": 1891.828125
+      },
+      {
+        "bottom": 2144.8125,
+        "height": 83.59375,
+        "maxLength": null,
+        "name": "下次遇到类似问题，我会先…",
+        "radius": "4px",
+        "rows": null,
+        "width": 785,
+        "x": 281,
+        "y": 2061.21875
+      },
+      {
+        "bottom": 656.84375,
+        "height": 48,
+        "maxLength": null,
+        "name": "科目请选择科目高等数学",
+        "radius": "4px",
+        "rows": null,
+        "width": 248,
+        "x": 1112,
+        "y": 608.84375
+      },
+      {
+        "bottom": 814.34375,
+        "height": 48,
+        "maxLength": null,
+        "name": "整理状态待整理已整理",
+        "radius": "4px",
+        "rows": null,
+        "width": 248,
+        "x": 1112,
+        "y": 766.34375
+      },
+      {
+        "bottom": 1243.84375,
+        "height": 48,
+        "maxLength": null,
+        "name": "用中文逗号或英文逗号分隔",
+        "radius": "4px",
+        "rows": null,
+        "width": 248,
+        "x": 1112,
+        "y": 1195.84375
+      }
+    ],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": 209.59375,
+      "height": 41.59375,
+      "lineHeight": "41.6px",
+      "size": "32px",
+      "text": "把这个疑问留下来。",
+      "width": 315,
+      "x": 281,
+      "y": 168
+    },
+    "headingBlock": {
+      "bottom": 247.84375,
+      "height": 131.84375,
+      "width": 315,
+      "x": 281,
+      "y": 116
+    },
+    "ratingColumns": null,
+    "ratings": [],
+    "saveBar": {
+      "bottom": 205.921875,
+      "height": 48,
+      "width": 180,
+      "x": 1201,
+      "y": 157.921875
+    },
+    "saveState": "未保存",
+    "scroll": 1425,
+    "steps": [
+      {
+        "bottom": 379.59375,
+        "current": null,
+        "height": 56,
+        "text": "1 · 录入材料",
+        "width": 361.328125,
+        "x": 281,
+        "y": 323.59375
+      },
+      {
+        "bottom": 379.59375,
+        "current": "step",
+        "height": 56,
+        "text": "2 · 整理分析（可跳过）",
+        "width": 361.328125,
+        "x": 650.328125,
+        "y": 323.59375
+      },
+      {
+        "bottom": 379.59375,
+        "current": null,
+        "height": 56,
+        "text": "3 · 核对保存",
+        "width": 361.34375,
+        "x": 1019.65625,
+        "y": 323.59375
+      }
+    ],
+    "targets": [
+      {
+        "bottom": 160,
+        "height": 44,
+        "name": "返回收集箱",
+        "width": 81,
+        "x": 281,
+        "y": 116
+      },
+      {
+        "bottom": 205.921875,
+        "height": 48,
+        "name": "核对后保存",
+        "width": 125,
+        "x": 1256,
+        "y": 157.921875
+      },
+      {
+        "bottom": 379.59375,
+        "height": 56,
+        "name": "1 · 录入材料",
+        "width": 361.328125,
+        "x": 281,
+        "y": 323.59375
+      },
+      {
+        "bottom": 379.59375,
+        "height": 56,
+        "name": "2 · 整理分析（可跳过）",
+        "width": 361.328125,
+        "x": 650.328125,
+        "y": 323.59375
+      },
+      {
+        "bottom": 379.59375,
+        "height": 56,
+        "name": "3 · 核对保存",
+        "width": 361.34375,
+        "x": 1019.65625,
+        "y": 323.59375
+      },
+      {
+        "bottom": 471.34375,
+        "height": 44,
+        "name": "下一步",
+        "width": 51,
+        "x": 281,
+        "y": 427.34375
+      },
+      {
+        "bottom": 733.375,
+        "height": 48,
+        "name": "辅助整理错因分析",
+        "width": 785,
+        "x": 281,
+        "y": 685.375
+      },
+      {
+        "bottom": 785.375,
+        "height": 44,
+        "name": "查看本次发送的文字（不发送图片）",
+        "width": 785,
+        "x": 281,
+        "y": 741.375
+      },
+      {
+        "bottom": 847.375,
+        "height": 44,
+        "name": "",
+        "width": 785,
+        "x": 281,
+        "y": 803.375
+      },
+      {
+        "bottom": 903.375,
+        "height": 48,
+        "name": "生成辅助整理",
+        "width": 112,
+        "x": 281,
+        "y": 855.375
+      },
+      {
+        "bottom": 1157.265625,
+        "height": 112.390625,
+        "name": "",
+        "width": 785,
+        "x": 281,
+        "y": 1044.875
+      },
+      {
+        "bottom": 1326.65625,
+        "height": 112.390625,
+        "name": "",
+        "width": 785,
+        "x": 281,
+        "y": 1214.265625
+      },
+      {
+        "bottom": 1496.046875,
+        "height": 112.390625,
+        "name": "",
+        "width": 785,
+        "x": 281,
+        "y": 1383.65625
+      },
+      {
+        "bottom": 1665.4375,
+        "height": 112.390625,
+        "name": "",
+        "width": 785,
+        "x": 281,
+        "y": 1553.046875
+      },
+      {
+        "bottom": 1834.828125,
+        "height": 112.390625,
+        "name": "",
+        "width": 785,
+        "x": 281,
+        "y": 1722.4375
+      },
+      {
+        "bottom": 2004.21875,
+        "height": 112.390625,
+        "name": "",
+        "width": 785,
+        "x": 281,
+        "y": 1891.828125
+      },
+      {
+        "bottom": 2144.8125,
+        "height": 83.59375,
+        "name": "",
+        "width": 785,
+        "x": 281,
+        "y": 2061.21875
+      },
+      {
+        "bottom": 656.84375,
+        "height": 48,
+        "name": "请选择科目高等数学",
+        "width": 248,
+        "x": 1112,
+        "y": 608.84375
+      },
+      {
+        "bottom": 716.84375,
+        "height": 48,
+        "name": "＋ 新建科目",
+        "width": 102.625,
+        "x": 1112,
+        "y": 668.84375
+      },
+      {
+        "bottom": 814.34375,
+        "height": 48,
+        "name": "待整理已整理",
+        "width": 248,
+        "x": 1112,
+        "y": 766.34375
+      },
+      {
+        "bottom": 1086.34375,
+        "height": 44,
+        "name": "概念",
+        "width": 48,
+        "x": 1112,
+        "y": 1042.34375
+      },
+      {
+        "bottom": 1086.34375,
+        "height": 44,
+        "name": "条件",
+        "width": 48,
+        "x": 1167,
+        "y": 1042.34375
+      },
+      {
+        "bottom": 1146.34375,
+        "height": 48,
+        "name": "＋ 新建错因",
+        "width": 102.625,
+        "x": 1112,
+        "y": 1098.34375
+      },
+      {
+        "bottom": 1243.84375,
+        "height": 48,
+        "name": "",
+        "width": 248,
+        "x": 1112,
+        "y": 1195.84375
+      }
+    ],
+    "typeChips": [],
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  {
+    "state": "editor-step-3",
+    "client": 1425,
+    "fields": [],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": 209.59375,
+      "height": 41.59375,
+      "lineHeight": "41.6px",
+      "size": "32px",
+      "text": "把这个疑问留下来。",
+      "width": 315,
+      "x": 281,
+      "y": 168
+    },
+    "headingBlock": {
+      "bottom": 247.84375,
+      "height": 131.84375,
+      "width": 315,
+      "x": 281,
+      "y": 116
+    },
+    "ratingColumns": null,
+    "ratings": [],
+    "saveBar": {
+      "bottom": 205.921875,
+      "height": 48,
+      "width": 219,
+      "x": 1162,
+      "y": 157.921875
+    },
+    "saveState": "未保存",
+    "scroll": 1425,
+    "steps": [
+      {
+        "bottom": 404.84375,
+        "current": null,
+        "height": 56,
+        "text": "1 · 录入材料",
+        "width": 361.328125,
+        "x": 281,
+        "y": 348.84375
+      },
+      {
+        "bottom": 404.84375,
+        "current": null,
+        "height": 56,
+        "text": "2 · 整理分析（可跳过）",
+        "width": 361.328125,
+        "x": 650.328125,
+        "y": 348.84375
+      },
+      {
+        "bottom": 404.84375,
+        "current": "step",
+        "height": 56,
+        "text": "3 · 核对保存",
+        "width": 361.34375,
+        "x": 1019.65625,
+        "y": 348.84375
+      }
+    ],
+    "targets": [
+      {
+        "bottom": 160,
+        "height": 44,
+        "name": "返回收集箱",
+        "width": 81,
+        "x": 281,
+        "y": 116
+      },
+      {
+        "bottom": 205.921875,
+        "height": 48,
+        "name": "确认保存到收集箱",
+        "width": 164,
+        "x": 1217,
+        "y": 157.921875
+      },
+      {
+        "bottom": 335.84375,
+        "height": 48,
+        "name": "返回选择科目",
+        "width": 112,
+        "x": 489,
+        "y": 287.84375
+      },
+      {
+        "bottom": 404.84375,
+        "height": 56,
+        "name": "1 · 录入材料",
+        "width": 361.328125,
+        "x": 281,
+        "y": 348.84375
+      },
+      {
+        "bottom": 404.84375,
+        "height": 56,
+        "name": "2 · 整理分析（可跳过）",
+        "width": 361.328125,
+        "x": 650.328125,
+        "y": 348.84375
+      },
+      {
+        "bottom": 404.84375,
+        "height": 56,
+        "name": "3 · 核对保存",
+        "width": 361.34375,
+        "x": 1019.65625,
+        "y": 348.84375
+      }
+    ],
+    "typeChips": [],
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  {
+    "state": "editor-step-1",
+    "client": 360,
+    "fields": [
+      {
+        "bottom": 896.046875,
+        "height": 48,
+        "maxLength": null,
+        "name": "为这次思考起个名字（选填）",
+        "radius": "4px",
+        "rows": null,
+        "width": 324,
+        "x": 18,
+        "y": 848.046875
+      },
+      {
+        "bottom": 1029.140625,
+        "height": 83.59375,
+        "maxLength": null,
+        "name": "输入题目，支持 Markdown、$公式$ 和代码块…",
+        "radius": "4px",
+        "rows": null,
+        "width": 324,
+        "x": 18,
+        "y": 945.546875
+      },
+      {
+        "bottom": 1666.25,
+        "height": 48,
+        "maxLength": null,
+        "name": "例如：张宇高数 18 讲 · 第 3 讲 · 例 5",
+        "radius": "4px",
+        "rows": null,
+        "width": 324,
+        "x": 18,
+        "y": 1618.25
+      },
+      {
+        "bottom": 1873.75,
+        "height": 48,
+        "maxLength": null,
+        "name": "科目请选择科目高等数学",
+        "radius": "4px",
+        "rows": null,
+        "width": 290,
+        "x": 35,
+        "y": 1825.75
+      },
+      {
+        "bottom": 2031.25,
+        "height": 48,
+        "maxLength": null,
+        "name": "整理状态待整理已整理",
+        "radius": "4px",
+        "rows": null,
+        "width": 290,
+        "x": 35,
+        "y": 1983.25
+      },
+      {
+        "bottom": 2438,
+        "height": 48,
+        "maxLength": null,
+        "name": "用中文逗号或英文逗号分隔",
+        "radius": "4px",
+        "rows": null,
+        "width": 290,
+        "x": 35,
+        "y": 2390
+      }
+    ],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": 175.796875,
+      "height": 33.796875,
+      "lineHeight": "33.8px",
+      "size": "26px",
+      "text": "把这个疑问留下来。",
+      "width": 324,
+      "x": 18,
+      "y": 142
+    },
+    "headingBlock": {
+      "bottom": 214.046875,
+      "height": 124.046875,
+      "width": 324,
+      "x": 18,
+      "y": 90
+    },
+    "ratingColumns": null,
+    "ratings": [],
+    "saveBar": {
+      "bottom": 278.046875,
+      "height": 48,
+      "width": 324,
+      "x": 18,
+      "y": 230.046875
+    },
+    "saveState": "未保存",
+    "scroll": 360,
+    "steps": [
+      {
+        "bottom": 412.796875,
+        "current": "step",
+        "height": 64,
+        "text": "1 · 录入材料",
+        "width": 102.65625,
+        "x": 18,
+        "y": 348.796875
+      },
+      {
+        "bottom": 412.796875,
+        "current": null,
+        "height": 64,
+        "text": "2 · 整理分析（可跳过）",
+        "width": 102.671875,
+        "x": 128.65625,
+        "y": 348.796875
+      },
+      {
+        "bottom": 412.796875,
+        "current": null,
+        "height": 64,
+        "text": "3 · 核对保存",
+        "width": 102.65625,
+        "x": 239.328125,
+        "y": 348.796875
+      }
+    ],
+    "targets": [
+      {
+        "bottom": 134,
+        "height": 44,
+        "name": "返回收集箱",
+        "width": 81,
+        "x": 18,
+        "y": 90
+      },
+      {
+        "bottom": 278.046875,
+        "height": 48,
+        "name": "核对后保存",
+        "width": 125,
+        "x": 217,
+        "y": 230.046875
+      },
+      {
+        "bottom": 412.796875,
+        "height": 64,
+        "name": "1 · 录入材料",
+        "width": 102.65625,
+        "x": 18,
+        "y": 348.796875
+      },
+      {
+        "bottom": 412.796875,
+        "height": 64,
+        "name": "2 · 整理分析（可跳过）",
+        "width": 102.671875,
+        "x": 128.65625,
+        "y": 348.796875
+      },
+      {
+        "bottom": 412.796875,
+        "height": 64,
+        "name": "3 · 核对保存",
+        "width": 102.65625,
+        "x": 239.328125,
+        "y": 348.796875
+      },
+      {
+        "bottom": 504.546875,
+        "height": 44,
+        "name": "下一步",
+        "width": 51,
+        "x": 18,
+        "y": 460.546875
+      },
+      {
+        "bottom": 606.546875,
+        "height": 44,
+        "name": "预览 Markdown",
+        "width": 123.578125,
+        "x": 218.421875,
+        "y": 562.546875
+      },
+      {
+        "bottom": 674.546875,
+        "height": 48,
+        "name": "∑数学错题",
+        "width": 113,
+        "x": 18,
+        "y": 626.546875
+      },
+      {
+        "bottom": 674.546875,
+        "height": 48,
+        "name": "◇英语",
+        "width": 87,
+        "x": 139,
+        "y": 626.546875
+      },
+      {
+        "bottom": 742.546875,
+        "height": 48,
+        "name": "＋ 新建类型",
+        "width": 102.625,
+        "x": 18,
+        "y": 694.546875
+      },
+      {
+        "bottom": 798.546875,
+        "height": 44,
+        "name": "从预设添加",
+        "width": 324,
+        "x": 18,
+        "y": 754.546875
+      },
+      {
+        "bottom": 896.046875,
+        "height": 48,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": 848.046875
+      },
+      {
+        "bottom": 1029.140625,
+        "height": 83.59375,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": 945.546875
+      },
+      {
+        "bottom": 1177.828125,
+        "height": 48,
+        "name": "",
+        "width": 86,
+        "x": 35,
+        "y": 1129.828125
+      },
+      {
+        "bottom": 1486.75,
+        "height": 44,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": 1442.75
+      },
+      {
+        "bottom": 1542.75,
+        "height": 48,
+        "name": "识别图片",
+        "width": 86,
+        "x": 18,
+        "y": 1494.75
+      },
+      {
+        "bottom": 1666.25,
+        "height": 48,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": 1618.25
+      },
+      {
+        "bottom": 1873.75,
+        "height": 48,
+        "name": "请选择科目高等数学",
+        "width": 290,
+        "x": 35,
+        "y": 1825.75
+      },
+      {
+        "bottom": 1933.75,
+        "height": 48,
+        "name": "＋ 新建科目",
+        "width": 102.625,
+        "x": 35,
+        "y": 1885.75
+      },
+      {
+        "bottom": 2031.25,
+        "height": 48,
+        "name": "待整理已整理",
+        "width": 290,
+        "x": 35,
+        "y": 1983.25
+      },
+      {
+        "bottom": 2280.5,
+        "height": 44,
+        "name": "概念",
+        "width": 48,
+        "x": 35,
+        "y": 2236.5
+      },
+      {
+        "bottom": 2280.5,
+        "height": 44,
+        "name": "条件",
+        "width": 48,
+        "x": 90,
+        "y": 2236.5
+      },
+      {
+        "bottom": 2340.5,
+        "height": 48,
+        "name": "＋ 新建错因",
+        "width": 102.625,
+        "x": 35,
+        "y": 2292.5
+      },
+      {
+        "bottom": 2438,
+        "height": 48,
+        "name": "",
+        "width": 290,
+        "x": 35,
+        "y": 2390
+      }
+    ],
+    "typeChips": [
+      {
+        "border": "1px solid rgb(40, 98, 76)",
+        "bottom": 674.546875,
+        "color": "rgb(40, 98, 76)",
+        "disabled": false,
+        "height": 48,
+        "iconOpacity": "1",
+        "opacity": "1",
+        "text": "∑数学错题",
+        "width": 113,
+        "x": 18,
+        "y": 626.546875
+      },
+      {
+        "border": "1px solid rgb(217, 212, 201)",
+        "bottom": 674.546875,
+        "color": "rgb(36, 38, 34)",
+        "disabled": false,
+        "height": 48,
+        "iconOpacity": "1",
+        "opacity": "1",
+        "text": "◇英语",
+        "width": 87,
+        "x": 139,
+        "y": 626.546875
+      }
+    ],
+    "viewport": [
+      375,
+      812
+    ]
+  },
+  {
+    "state": "editor-step-2",
+    "client": 360,
+    "fields": [
+      {
+        "bottom": 786.328125,
+        "height": 48,
+        "maxLength": null,
+        "name": "需要什么帮助辅助整理错因分析",
+        "radius": "4px",
+        "rows": null,
+        "width": 324,
+        "x": 18,
+        "y": 738.328125
+      },
+      {
+        "bottom": 1210.21875,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录我的原解法…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 324,
+        "x": 18,
+        "y": 1097.828125
+      },
+      {
+        "bottom": 1379.609375,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录错误步骤…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 324,
+        "x": 18,
+        "y": 1267.21875
+      },
+      {
+        "bottom": 1549,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录正确解法…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 324,
+        "x": 18,
+        "y": 1436.609375
+      },
+      {
+        "bottom": 1718.390625,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录适用条件…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 324,
+        "x": 18,
+        "y": 1606
+      },
+      {
+        "bottom": 1887.78125,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录方法选择…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 324,
+        "x": 18,
+        "y": 1775.390625
+      },
+      {
+        "bottom": 2057.171875,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录可复用总结…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 324,
+        "x": 18,
+        "y": 1944.78125
+      },
+      {
+        "bottom": 2197.765625,
+        "height": 83.59375,
+        "maxLength": null,
+        "name": "下次遇到类似问题，我会先…",
+        "radius": "4px",
+        "rows": null,
+        "width": 324,
+        "x": 18,
+        "y": 2114.171875
+      },
+      {
+        "bottom": 2412.765625,
+        "height": 48,
+        "maxLength": null,
+        "name": "科目请选择科目高等数学",
+        "radius": "4px",
+        "rows": null,
+        "width": 290,
+        "x": 35,
+        "y": 2364.765625
+      },
+      {
+        "bottom": 2570.265625,
+        "height": 48,
+        "maxLength": null,
+        "name": "整理状态待整理已整理",
+        "radius": "4px",
+        "rows": null,
+        "width": 290,
+        "x": 35,
+        "y": 2522.265625
+      },
+      {
+        "bottom": 2977.015625,
+        "height": 48,
+        "maxLength": null,
+        "name": "用中文逗号或英文逗号分隔",
+        "radius": "4px",
+        "rows": null,
+        "width": 290,
+        "x": 35,
+        "y": 2929.015625
+      }
+    ],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": 175.796875,
+      "height": 33.796875,
+      "lineHeight": "33.8px",
+      "size": "26px",
+      "text": "把这个疑问留下来。",
+      "width": 324,
+      "x": 18,
+      "y": 142
+    },
+    "headingBlock": {
+      "bottom": 214.046875,
+      "height": 124.046875,
+      "width": 324,
+      "x": 18,
+      "y": 90
+    },
+    "ratingColumns": null,
+    "ratings": [],
+    "saveBar": {
+      "bottom": 278.046875,
+      "height": 48,
+      "width": 324,
+      "x": 18,
+      "y": 230.046875
+    },
+    "saveState": "未保存",
+    "scroll": 360,
+    "steps": [
+      {
+        "bottom": 412.796875,
+        "current": null,
+        "height": 64,
+        "text": "1 · 录入材料",
+        "width": 102.65625,
+        "x": 18,
+        "y": 348.796875
+      },
+      {
+        "bottom": 412.796875,
+        "current": "step",
+        "height": 64,
+        "text": "2 · 整理分析（可跳过）",
+        "width": 102.671875,
+        "x": 128.65625,
+        "y": 348.796875
+      },
+      {
+        "bottom": 412.796875,
+        "current": null,
+        "height": 64,
+        "text": "3 · 核对保存",
+        "width": 102.65625,
+        "x": 239.328125,
+        "y": 348.796875
+      }
+    ],
+    "targets": [
+      {
+        "bottom": 134,
+        "height": 44,
+        "name": "返回收集箱",
+        "width": 81,
+        "x": 18,
+        "y": 90
+      },
+      {
+        "bottom": 278.046875,
+        "height": 48,
+        "name": "核对后保存",
+        "width": 125,
+        "x": 217,
+        "y": 230.046875
+      },
+      {
+        "bottom": 412.796875,
+        "height": 64,
+        "name": "1 · 录入材料",
+        "width": 102.65625,
+        "x": 18,
+        "y": 348.796875
+      },
+      {
+        "bottom": 412.796875,
+        "height": 64,
+        "name": "2 · 整理分析（可跳过）",
+        "width": 102.671875,
+        "x": 128.65625,
+        "y": 348.796875
+      },
+      {
+        "bottom": 412.796875,
+        "height": 64,
+        "name": "3 · 核对保存",
+        "width": 102.65625,
+        "x": 239.328125,
+        "y": 348.796875
+      },
+      {
+        "bottom": 527.296875,
+        "height": 44,
+        "name": "下一步",
+        "width": 51,
+        "x": 18,
+        "y": 483.296875
+      },
+      {
+        "bottom": 786.328125,
+        "height": 48,
+        "name": "辅助整理错因分析",
+        "width": 324,
+        "x": 18,
+        "y": 738.328125
+      },
+      {
+        "bottom": 838.328125,
+        "height": 44,
+        "name": "查看本次发送的文字（不发送图片）",
+        "width": 324,
+        "x": 18,
+        "y": 794.328125
+      },
+      {
+        "bottom": 900.328125,
+        "height": 44,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": 856.328125
+      },
+      {
+        "bottom": 956.328125,
+        "height": 48,
+        "name": "生成辅助整理",
+        "width": 112,
+        "x": 18,
+        "y": 908.328125
+      },
+      {
+        "bottom": 1210.21875,
+        "height": 112.390625,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": 1097.828125
+      },
+      {
+        "bottom": 1379.609375,
+        "height": 112.390625,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": 1267.21875
+      },
+      {
+        "bottom": 1549,
+        "height": 112.390625,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": 1436.609375
+      },
+      {
+        "bottom": 1718.390625,
+        "height": 112.390625,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": 1606
+      },
+      {
+        "bottom": 1887.78125,
+        "height": 112.390625,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": 1775.390625
+      },
+      {
+        "bottom": 2057.171875,
+        "height": 112.390625,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": 1944.78125
+      },
+      {
+        "bottom": 2197.765625,
+        "height": 83.59375,
+        "name": "",
+        "width": 324,
+        "x": 18,
+        "y": 2114.171875
+      },
+      {
+        "bottom": 2412.765625,
+        "height": 48,
+        "name": "请选择科目高等数学",
+        "width": 290,
+        "x": 35,
+        "y": 2364.765625
+      },
+      {
+        "bottom": 2472.765625,
+        "height": 48,
+        "name": "＋ 新建科目",
+        "width": 102.625,
+        "x": 35,
+        "y": 2424.765625
+      },
+      {
+        "bottom": 2570.265625,
+        "height": 48,
+        "name": "待整理已整理",
+        "width": 290,
+        "x": 35,
+        "y": 2522.265625
+      },
+      {
+        "bottom": 2819.515625,
+        "height": 44,
+        "name": "概念",
+        "width": 48,
+        "x": 35,
+        "y": 2775.515625
+      },
+      {
+        "bottom": 2819.515625,
+        "height": 44,
+        "name": "条件",
+        "width": 48,
+        "x": 90,
+        "y": 2775.515625
+      },
+      {
+        "bottom": 2879.515625,
+        "height": 48,
+        "name": "＋ 新建错因",
+        "width": 102.625,
+        "x": 35,
+        "y": 2831.515625
+      },
+      {
+        "bottom": 2977.015625,
+        "height": 48,
+        "name": "",
+        "width": 290,
+        "x": 35,
+        "y": 2929.015625
+      }
+    ],
+    "typeChips": [],
+    "viewport": [
+      375,
+      812
+    ]
+  },
+  {
+    "state": "editor-step-3",
+    "client": 360,
+    "fields": [],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": 175.796875,
+      "height": 33.796875,
+      "lineHeight": "33.8px",
+      "size": "26px",
+      "text": "把这个疑问留下来。",
+      "width": 324,
+      "x": 18,
+      "y": 142
+    },
+    "headingBlock": {
+      "bottom": 214.046875,
+      "height": 124.046875,
+      "width": 324,
+      "x": 18,
+      "y": 90
+    },
+    "ratingColumns": null,
+    "ratings": [],
+    "saveBar": {
+      "bottom": 278.046875,
+      "height": 48,
+      "width": 324,
+      "x": 18,
+      "y": 230.046875
+    },
+    "saveState": "未保存",
+    "scroll": 360,
+    "steps": [
+      {
+        "bottom": 438.046875,
+        "current": null,
+        "height": 64,
+        "text": "1 · 录入材料",
+        "width": 102.65625,
+        "x": 18,
+        "y": 374.046875
+      },
+      {
+        "bottom": 438.046875,
+        "current": null,
+        "height": 64,
+        "text": "2 · 整理分析（可跳过）",
+        "width": 102.671875,
+        "x": 128.65625,
+        "y": 374.046875
+      },
+      {
+        "bottom": 438.046875,
+        "current": "step",
+        "height": 64,
+        "text": "3 · 核对保存",
+        "width": 102.65625,
+        "x": 239.328125,
+        "y": 374.046875
+      }
+    ],
+    "targets": [
+      {
+        "bottom": 134,
+        "height": 44,
+        "name": "返回收集箱",
+        "width": 81,
+        "x": 18,
+        "y": 90
+      },
+      {
+        "bottom": 278.046875,
+        "height": 48,
+        "name": "确认保存到收集箱",
+        "width": 164,
+        "x": 178,
+        "y": 230.046875
+      },
+      {
+        "bottom": 361.046875,
+        "height": 48,
+        "name": "返回选择科目",
+        "width": 112,
+        "x": 226,
+        "y": 313.046875
+      },
+      {
+        "bottom": 438.046875,
+        "height": 64,
+        "name": "1 · 录入材料",
+        "width": 102.65625,
+        "x": 18,
+        "y": 374.046875
+      },
+      {
+        "bottom": 438.046875,
+        "height": 64,
+        "name": "2 · 整理分析（可跳过）",
+        "width": 102.671875,
+        "x": 128.65625,
+        "y": 374.046875
+      },
+      {
+        "bottom": 438.046875,
+        "height": 64,
+        "name": "3 · 核对保存",
+        "width": 102.65625,
+        "x": 239.328125,
+        "y": 374.046875
+      }
+    ],
+    "typeChips": [],
+    "viewport": [
+      375,
+      812
+    ]
+  },
+  {
+    "state": "editor-saved",
+    "client": 1425,
+    "fields": [
+      {
+        "bottom": 508.34375,
+        "height": 48,
+        "maxLength": null,
+        "name": "为这次思考起个名字（选填）",
+        "radius": "4px",
+        "rows": null,
+        "width": 785,
+        "x": 281,
+        "y": 460.34375
+      },
+      {
+        "bottom": 641.4375,
+        "height": 83.59375,
+        "maxLength": null,
+        "name": "输入题目，支持 Markdown、$公式$ 和代码块…",
+        "radius": "4px",
+        "rows": null,
+        "width": 785,
+        "x": 281,
+        "y": 557.84375
+      },
+      {
+        "bottom": 1174.765625,
+        "height": 48,
+        "maxLength": null,
+        "name": "例如：张宇高数 18 讲 · 第 3 讲 · 例 5",
+        "radius": "4px",
+        "rows": null,
+        "width": 785,
+        "x": 281,
+        "y": 1126.765625
+      },
+      {
+        "bottom": 1447.796875,
+        "height": 48,
+        "maxLength": null,
+        "name": "需要什么帮助辅助整理错因分析",
+        "radius": "4px",
+        "rows": null,
+        "width": 785,
+        "x": 281,
+        "y": 1399.796875
+      },
+      {
+        "bottom": 1871.6875,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录我的原解法…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 785,
+        "x": 281,
+        "y": 1759.296875
+      },
+      {
+        "bottom": 2041.078125,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录错误步骤…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 785,
+        "x": 281,
+        "y": 1928.6875
+      },
+      {
+        "bottom": 2210.46875,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录正确解法…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 785,
+        "x": 281,
+        "y": 2098.078125
+      },
+      {
+        "bottom": 2379.859375,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录适用条件…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 785,
+        "x": 281,
+        "y": 2267.46875
+      },
+      {
+        "bottom": 2549.25,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录方法选择…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 785,
+        "x": 281,
+        "y": 2436.859375
+      },
+      {
+        "bottom": 2718.640625,
+        "height": 112.390625,
+        "maxLength": null,
+        "name": "记录可复用总结…",
+        "radius": "4px",
+        "rows": "3",
+        "width": 785,
+        "x": 281,
+        "y": 2606.25
+      },
+      {
+        "bottom": 2859.234375,
+        "height": 83.59375,
+        "maxLength": null,
+        "name": "下次遇到类似问题，我会先…",
+        "radius": "4px",
+        "rows": null,
+        "width": 785,
+        "x": 281,
+        "y": 2775.640625
+      },
+      {
+        "bottom": 421.34375,
+        "height": 48,
+        "maxLength": null,
+        "name": "科目请选择科目高等数学",
+        "radius": "4px",
+        "rows": null,
+        "width": 248,
+        "x": 1112,
+        "y": 373.34375
+      },
+      {
+        "bottom": 578.84375,
+        "height": 48,
+        "maxLength": null,
+        "name": "整理状态待整理已整理",
+        "radius": "4px",
+        "rows": null,
+        "width": 248,
+        "x": 1112,
+        "y": 530.84375
+      },
+      {
+        "bottom": 1006.84375,
+        "height": 48,
+        "maxLength": null,
+        "name": "用中文逗号或英文逗号分隔",
+        "radius": "4px",
+        "rows": null,
+        "width": 248,
+        "x": 1112,
+        "y": 958.84375
+      }
+    ],
+    "fontLoaded": true,
+    "heading": {
+      "bottom": 209.59375,
+      "height": 41.59375,
+      "lineHeight": "41.6px",
+      "size": "32px",
+      "text": "让思路，变得清晰。",
+      "width": 315,
+      "x": 281,
+      "y": 168
+    },
+    "headingBlock": {
+      "bottom": 247.84375,
+      "height": 131.84375,
+      "width": 315,
+      "x": 281,
+      "y": 116
+    },
+    "ratingColumns": null,
+    "ratings": [],
+    "saveBar": {
+      "bottom": 205.921875,
+      "height": 48,
+      "width": 232,
+      "x": 1149,
+      "y": 157.921875
+    },
+    "saveState": "已保存到本地服务",
+    "scroll": 1425,
+    "steps": [],
+    "targets": [
+      {
+        "bottom": 160,
+        "height": 44,
+        "name": "返回记录",
+        "width": 68,
+        "x": 281,
+        "y": 116
+      },
+      {
+        "bottom": 205.921875,
+        "height": 48,
+        "name": "保存记录",
+        "width": 112,
+        "x": 1269,
+        "y": 157.921875
+      },
+      {
+        "bottom": 340.84375,
+        "height": 44,
+        "name": "预览 Markdown",
+        "width": 123.578125,
+        "x": 942.421875,
+        "y": 296.84375
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "∑数学错题",
+        "width": 113,
+        "x": 281,
+        "y": 360.84375
+      },
+      {
+        "bottom": 408.84375,
+        "height": 48,
+        "name": "◇英语",
+        "width": 87,
+        "x": 402,
+        "y": 360.84375
+      },
+      {
+        "bottom": 508.34375,
+        "height": 48,
+        "name": "",
+        "width": 785,
+        "x": 281,
+        "y": 460.34375
+      },
+      {
+        "bottom": 641.4375,
+        "height": 83.59375,
+        "name": "计算极限：\n\n$$\\lim_{x\\to 0}\\frac{\\sin x-x}{x^3}$$",
+        "width": 785,
+        "x": 281,
+        "y": 557.84375
+      },
+      {
+        "bottom": 733.9375,
+        "height": 48,
+        "name": "",
+        "width": 86,
+        "x": 963,
+        "y": 685.9375
+      },
+      {
+        "bottom": 995.265625,
+        "height": 44,
+        "name": "",
+        "width": 785,
+        "x": 281,
+        "y": 951.265625
+      },
+      {
+        "bottom": 1051.265625,
+        "height": 48,
+        "name": "识别图片",
+        "width": 86,
+        "x": 281,
+        "y": 1003.265625
+      },
+      {
+        "bottom": 1174.765625,
+        "height": 48,
+        "name": "",
+        "width": 785,
+        "x": 281,
+        "y": 1126.765625
+      },
+      {
+        "bottom": 1447.796875,
+        "height": 48,
+        "name": "辅助整理错因分析",
+        "width": 785,
+        "x": 281,
+        "y": 1399.796875
+      },
+      {
+        "bottom": 1499.796875,
+        "height": 44,
+        "name": "查看本次发送的文字（不发送图片）",
+        "width": 785,
+        "x": 281,
+        "y": 1455.796875
+      },
+      {
+        "bottom": 1561.796875,
+        "height": 44,
+        "name": "",
+        "width": 785,
+        "x": 281,
+        "y": 1517.796875
+      },
+      {
+        "bottom": 1617.796875,
+        "height": 48,
+        "name": "生成辅助整理",
+        "width": 112,
+        "x": 281,
+        "y": 1569.796875
+      },
+      {
+        "bottom": 1871.6875,
+        "height": 112.390625,
+        "name": "",
+        "width": 785,
+        "x": 281,
+        "y": 1759.296875
+      },
+      {
+        "bottom": 2041.078125,
+        "height": 112.390625,
+        "name": "",
+        "width": 785,
+        "x": 281,
+        "y": 1928.6875
+      },
+      {
+        "bottom": 2210.46875,
+        "height": 112.390625,
+        "name": "由 Taylor 展开，$\\sin x=x-\\frac{x^3}{6}+o(x^3)$，所",
+        "width": 785,
+        "x": 281,
+        "y": 2098.078125
+      },
+      {
+        "bottom": 2379.859375,
+        "height": 112.390625,
+        "name": "",
+        "width": 785,
+        "x": 281,
+        "y": 2267.46875
+      },
+      {
+        "bottom": 2549.25,
+        "height": 112.390625,
+        "name": "",
+        "width": 785,
+        "x": 281,
+        "y": 2436.859375
+      },
+      {
+        "bottom": 2718.640625,
+        "height": 112.390625,
+        "name": "相减导致主要项抵消时，不能直接用等价无穷小替换。",
+        "width": 785,
+        "x": 281,
+        "y": 2606.25
+      },
+      {
+        "bottom": 2859.234375,
+        "height": 83.59375,
+        "name": "先观察是否抵消，再决定展开到哪一阶。",
+        "width": 785,
+        "x": 281,
+        "y": 2775.640625
+      },
+      {
+        "bottom": 421.34375,
+        "height": 48,
+        "name": "请选择科目高等数学",
+        "width": 248,
+        "x": 1112,
+        "y": 373.34375
+      },
+      {
+        "bottom": 481.34375,
+        "height": 48,
+        "name": "＋ 新建科目",
+        "width": 102.625,
+        "x": 1112,
+        "y": 433.34375
+      },
+      {
+        "bottom": 578.84375,
+        "height": 48,
+        "name": "待整理已整理",
+        "width": 248,
+        "x": 1112,
+        "y": 530.84375
+      },
+      {
+        "bottom": 750.84375,
+        "height": 44,
+        "name": "",
+        "width": 248,
+        "x": 1112,
+        "y": 706.84375
+      },
+      {
+        "bottom": 849.34375,
+        "height": 44,
+        "name": "概念",
+        "width": 48,
+        "x": 1112,
+        "y": 805.34375
+      },
+      {
+        "bottom": 849.34375,
+        "height": 44,
+        "name": "条件",
+        "width": 48,
+        "x": 1167,
+        "y": 805.34375
+      },
+      {
+        "bottom": 909.34375,
+        "height": 48,
+        "name": "＋ 新建错因",
+        "width": 102.625,
+        "x": 1112,
+        "y": 861.34375
+      },
+      {
+        "bottom": 1006.84375,
+        "height": 48,
+        "name": "",
+        "width": 248,
+        "x": 1112,
+        "y": 958.84375
+      }
+    ],
+    "typeChips": [
+      {
+        "border": "1px solid rgb(40, 98, 76)",
+        "bottom": 408.84375,
+        "color": "rgb(40, 98, 76)",
+        "disabled": true,
+        "height": 48,
+        "iconOpacity": "0.45",
+        "opacity": "1",
+        "text": "∑数学错题",
+        "width": 113,
+        "x": 281,
+        "y": 360.84375
+      },
+      {
+        "border": "1px solid rgb(217, 212, 201)",
+        "bottom": 408.84375,
+        "color": "rgb(36, 38, 34)",
+        "disabled": true,
+        "height": 48,
+        "iconOpacity": "0.45",
+        "opacity": "1",
+        "text": "◇英语",
+        "width": 87,
+        "x": 402,
+        "y": 360.84375
+      }
+    ],
+    "viewport": [
+      1440,
+      900
+    ]
+  }
+]

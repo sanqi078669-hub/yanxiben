@@ -1,0 +1,429 @@
+{
+  "baseline": "8f24fc6",
+  "branch": "ui/style-v2",
+  "componentLogicUnchanged": {
+    "ReviewPage": true,
+    "Editor": true
+  },
+  "originalCssPrefixUnchanged": true,
+  "appendedRuleCount": 101,
+  "outOfScopeSelectors": [],
+  "newVariables": [],
+  "protectedFilesUnchanged": true,
+  "protectedChanges": "",
+  "fonts": {
+    "priorGlyphs": 455,
+    "currentGlyphs": 552,
+    "oldGlyphsPreserved": true,
+    "bytes": 205268,
+    "oflPresent": true
+  },
+  "measurements": {
+    "states": 12,
+    "noOverflow": true,
+    "fontLoaded": true,
+    "shortTargets": [],
+    "smallFields": [],
+    "mobileHeadings": [
+      {
+        "state": "editor-saved",
+        "bottom": 175.796875,
+        "height": 33.796875,
+        "lineHeight": "33.8px",
+        "size": "26px",
+        "text": "让思路，变得清晰。",
+        "width": 324,
+        "x": 18,
+        "y": 142
+      },
+      {
+        "state": "review-first",
+        "bottom": 123.796875,
+        "height": 33.796875,
+        "lineHeight": "33.8px",
+        "size": "26px",
+        "text": "回看，是为了走得更远。",
+        "width": 324,
+        "x": 18,
+        "y": 90
+      },
+      {
+        "state": "review-ratings",
+        "bottom": -1047.203125,
+        "height": 33.796875,
+        "lineHeight": "33.8px",
+        "size": "26px",
+        "text": "回看，是为了走得更远。",
+        "width": 324,
+        "x": 18,
+        "y": -1081
+      },
+      {
+        "state": "editor-step-1",
+        "bottom": 175.796875,
+        "height": 33.796875,
+        "lineHeight": "33.8px",
+        "size": "26px",
+        "text": "把这个疑问留下来。",
+        "width": 324,
+        "x": 18,
+        "y": 142
+      },
+      {
+        "state": "editor-step-2",
+        "bottom": 175.796875,
+        "height": 33.796875,
+        "lineHeight": "33.8px",
+        "size": "26px",
+        "text": "把这个疑问留下来。",
+        "width": 324,
+        "x": 18,
+        "y": 142
+      },
+      {
+        "state": "editor-step-3",
+        "bottom": 175.796875,
+        "height": 33.796875,
+        "lineHeight": "33.8px",
+        "size": "26px",
+        "text": "把这个疑问留下来。",
+        "width": 324,
+        "x": 18,
+        "y": 142
+      }
+    ],
+    "ratingColumns": [
+      {
+        "viewport": [
+          1440,
+          900
+        ],
+        "columns": "200px 200px 200px 200px",
+        "ratings": [
+          {
+            "bg": "rgba(0, 0, 0, 0)",
+            "border": "1px solid rgb(217, 212, 201)",
+            "bottom": 687.671875,
+            "disabled": false,
+            "height": 81.28125,
+            "selected": "false",
+            "text": "不会需要重新理解",
+            "width": 200,
+            "x": 281,
+            "y": 606.390625
+          },
+          {
+            "bg": "rgba(0, 0, 0, 0)",
+            "border": "1px solid rgb(217, 212, 201)",
+            "bottom": 687.671875,
+            "disabled": false,
+            "height": 81.28125,
+            "selected": "false",
+            "text": "困难有思路，仍卡顿",
+            "width": 200,
+            "x": 491,
+            "y": 606.390625
+          },
+          {
+            "bg": "rgb(255, 252, 246)",
+            "border": "2px solid rgb(40, 98, 76)",
+            "bottom": 687.671875,
+            "disabled": false,
+            "height": 81.28125,
+            "selected": "true",
+            "text": "掌握能独立完成",
+            "width": 200,
+            "x": 701,
+            "y": 606.390625
+          },
+          {
+            "bg": "rgba(0, 0, 0, 0)",
+            "border": "1px solid rgb(217, 212, 201)",
+            "bottom": 687.671875,
+            "disabled": false,
+            "height": 81.28125,
+            "selected": "false",
+            "text": "熟练清晰、顺畅地完成",
+            "width": 200,
+            "x": 911,
+            "y": 606.390625
+          }
+        ]
+      },
+      {
+        "viewport": [
+          375,
+          812
+        ],
+        "columns": "157px 157px",
+        "ratings": [
+          {
+            "bg": "rgba(0, 0, 0, 0)",
+            "border": "1px solid rgb(217, 212, 201)",
+            "bottom": 473.609375,
+            "disabled": false,
+            "height": 80,
+            "selected": "false",
+            "text": "不会需要重新理解",
+            "width": 157,
+            "x": 18,
+            "y": 393.609375
+          },
+          {
+            "bg": "rgba(0, 0, 0, 0)",
+            "border": "1px solid rgb(217, 212, 201)",
+            "bottom": 473.609375,
+            "disabled": false,
+            "height": 80,
+            "selected": "false",
+            "text": "困难有思路，仍卡顿",
+            "width": 157,
+            "x": 185,
+            "y": 393.609375
+          },
+          {
+            "bg": "rgb(255, 252, 246)",
+            "border": "2px solid rgb(40, 98, 76)",
+            "bottom": 564.890625,
+            "disabled": false,
+            "height": 81.28125,
+            "selected": "true",
+            "text": "掌握能独立完成",
+            "width": 157,
+            "x": 18,
+            "y": 483.609375
+          },
+          {
+            "bg": "rgba(0, 0, 0, 0)",
+            "border": "1px solid rgb(217, 212, 201)",
+            "bottom": 564.890625,
+            "disabled": false,
+            "height": 81.28125,
+            "selected": "false",
+            "text": "熟练清晰、顺畅地完成",
+            "width": 157,
+            "x": 185,
+            "y": 483.609375
+          }
+        ]
+      }
+    ],
+    "mobileSaveBar": [
+      {
+        "state": "editor-saved",
+        "saveBar": {
+          "bottom": 278.046875,
+          "height": 48,
+          "width": 324,
+          "x": 18,
+          "y": 230.046875
+        },
+        "headingBlock": {
+          "bottom": 214.046875,
+          "height": 124.046875,
+          "width": 324,
+          "x": 18,
+          "y": 90
+        }
+      },
+      {
+        "state": "editor-step-1",
+        "saveBar": {
+          "bottom": 278.046875,
+          "height": 48,
+          "width": 324,
+          "x": 18,
+          "y": 230.046875
+        },
+        "headingBlock": {
+          "bottom": 214.046875,
+          "height": 124.046875,
+          "width": 324,
+          "x": 18,
+          "y": 90
+        }
+      },
+      {
+        "state": "editor-step-2",
+        "saveBar": {
+          "bottom": 278.046875,
+          "height": 48,
+          "width": 324,
+          "x": 18,
+          "y": 230.046875
+        },
+        "headingBlock": {
+          "bottom": 214.046875,
+          "height": 124.046875,
+          "width": 324,
+          "x": 18,
+          "y": 90
+        }
+      },
+      {
+        "state": "editor-step-3",
+        "saveBar": {
+          "bottom": 278.046875,
+          "height": 48,
+          "width": 324,
+          "x": 18,
+          "y": 230.046875
+        },
+        "headingBlock": {
+          "bottom": 214.046875,
+          "height": 124.046875,
+          "width": 324,
+          "x": 18,
+          "y": 90
+        }
+      }
+    ],
+    "reviewAnswerLimits": [
+      {
+        "state": "review-first",
+        "viewport": [
+          1440,
+          900
+        ],
+        "fields": [
+          {
+            "name": "写下答案、推导过程或你的理解…（也可以先在纸上完成）",
+            "maxLength": "50000",
+            "rows": "6"
+          }
+        ]
+      },
+      {
+        "state": "review-first",
+        "viewport": [
+          375,
+          812
+        ],
+        "fields": [
+          {
+            "name": "写下答案、推导过程或你的理解…（也可以先在纸上完成）",
+            "maxLength": "50000",
+            "rows": "6"
+          }
+        ]
+      },
+      {
+        "state": "review-ratings",
+        "viewport": [
+          1440,
+          900
+        ],
+        "fields": [
+          {
+            "name": "写下答案、推导过程或你的理解…（也可以先在纸上完成）",
+            "maxLength": "50000",
+            "rows": "6"
+          }
+        ]
+      },
+      {
+        "state": "review-ratings",
+        "viewport": [
+          375,
+          812
+        ],
+        "fields": [
+          {
+            "name": "写下答案、推导过程或你的理解…（也可以先在纸上完成）",
+            "maxLength": "50000",
+            "rows": "6"
+          }
+        ]
+      }
+    ]
+  },
+  "checks": {
+    "tsc": "pass",
+    "lint": "pass",
+    "diffCheck": "pass"
+  },
+  "screenshotDimensions": [
+    {
+      "name": "editor-material-1440.jpg",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "editor-material-375.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "editor-saved-1440x900.jpg",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "editor-saved-375x812.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "editor-step1-1440x900.jpg",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "editor-step1-375x812.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "editor-step2-1440x900.jpg",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "editor-step2-375x812.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "editor-step3-1440x900.jpg",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "editor-step3-375x812.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "review-causes-375.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "review-first-1440x900.jpg",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "review-first-375x812.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "review-hint-limit-375.jpg",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "review-ratings-1440x900.jpg",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "review-ratings-375x812.jpg",
+      "width": 375,
+      "height": 812
+    }
+  ],
+  "screenshotDimensionsMatchRequested": true,
+  "captureNotes": "Browser screenshots captured with explicit viewport dimensions and current scroll offsets; all 16 files visually opened and verified after recapture."
+}

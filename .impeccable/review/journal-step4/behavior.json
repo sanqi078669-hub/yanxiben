@@ -1,0 +1,14 @@
+{
+  "hintLimit": {
+    "easyDisabled": true,
+    "limitText": "本次使用了提示，最高可选掌握",
+    "maxLength": "50000",
+    "selected": "掌握能独立完成"
+  },
+  "keyboardFocus": {
+    "offset": "3px",
+    "outline": "rgb(40, 98, 76) solid 3px",
+    "text": "已尝试，展开解析"
+  },
+  "notes": "Only local reveal/rating/hint-checkbox/cause-checkbox states were exercised. No review submit or server hint action; no save/upload/AI generation or OCR request. Routine model-status reads ran on page mount."
+}

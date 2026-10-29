@@ -335,14 +335,14 @@ export default function Editor({ id }: { id?: string }) {
   }
   if (!loaded)
     return (
-      <>
+      <div className="journal-editor">
         <ErrorBox text={error} />
         <div className="loading">正在读取记录…</div>
-      </>
+      </div>
     );
   if (loadError)
     return (
-      <section className="panel form-panel">
+      <section className="panel form-panel journal-editor">
         <h1>无法读取这条记录</h1>
         <ErrorBox text={loadError} />
         <button className="button" onClick={() => setLoadAttempt((v) => v + 1)}>
@@ -354,7 +354,7 @@ export default function Editor({ id }: { id?: string }) {
       </section>
     );
   return (
-    <>
+    <div className="journal-editor">
       <div className="page-heading">
         <div>
           <Link className="back-link" href={id ? "/entries/" + id : "/inbox"}>
@@ -1022,6 +1022,6 @@ export default function Editor({ id }: { id?: string }) {
           </div>
         </aside>
       </fieldset>
-    </>
+    </div>
   );
 }
